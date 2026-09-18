@@ -16,7 +16,7 @@ jobs:
       - name: Télécharger et préparer un échantillon réel
         run: |
           mkdir -p data
-          curl -L --fail "https://www.data.gouv.fr/api/1/datasets/r/5b0f44f2-e6ea-4a58-874d-6fe364b40342" -o /tmp/acceslibre.csv
+          curl -L --fail "https://www.data.gouv.fr/api/1/datasets/r/93ae96a7-1db7-4cb4-a9f1-6d778370b640" -o /tmp/acceslibre.csv
           python scripts/build_acceslibre_sample.py /tmp/acceslibre.csv data/acceslibre-poitiers.json
       - name: Enregistrer les données mises à jour
         run: |
