@@ -1,0 +1,27 @@
+name: Préparer les données Acceslibre
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 4 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Télécharger et préparer un échantillon réel
+        run: |
+          mkdir -p data
+          curl -L --fail "https://www.data.gouv.fr/api/1/datasets/r/5b0f44f2-e6ea-4a58-874d-6fe364b40342" -o /tmp/acceslibre.csv
+          python scripts/build_acceslibre_sample.py /tmp/acceslibre.csv data/acceslibre-poitiers.json
+      - name: Enregistrer les données mises à jour
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/acceslibre-poitiers.json
+          git diff --cached --quiet || git commit -m "Mettre à jour les données Acceslibre"
+          git push
