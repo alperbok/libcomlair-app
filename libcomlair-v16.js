@@ -1,4 +1,4 @@
-const categories=["Tous","Restaurants","Hôtels","Bars","Loisirs","Services"], accessibilityFilters=["Entrée sans marche","Toilettes accessibles","Ascenseur","Stationnement adapté","Chambre accessible"];
+const categories=["Tous","Restaurants","Hôtels","Bars","Loisirs","Services","Transports"], accessibilityFilters=["Entrée sans marche","Toilettes accessibles","Ascenseur","Stationnement adapté","Chambre accessible"];
 const demoPlaces=[
 {name:"Exemple – Café accessible",city:"Poitiers",category:"Restaurants",address:"Centre-ville, Poitiers",lat:46.583,lon:.34,phone:"05 49 00 00 01",hours:"Aujourd’hui : 08:00–19:00",website:"https://example.com",access:["Entrée sans marche","Toilettes accessibles"],details:["Entrée accessible de plain-pied","Toilettes adaptées","Espace de circulation accessible"]},
 {name:"Exemple – Hôtel accessible",city:"Poitiers",category:"Hôtels",address:"Poitiers",lat:46.578,lon:.333,phone:"05 49 00 00 02",hours:"Accueil : 24 h/24",website:"https://example.com",access:["Ascenseur","Chambre accessible","Stationnement adapté"],details:["Ascenseur desservant les étages","Chambre accessible","Accès adapté à l'entrée","Stationnement adapté"]},
