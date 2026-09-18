@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#ffffff"><title>Libcomlair</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=map1">
 </head>
 <body>
 <header><div><strong>Libcomlair</strong><small>Des lieux accessibles, plus faciles à trouver</small></div></header>
@@ -12,6 +12,7 @@
 <label for="search">Rechercher un lieu ou une ville</label><input id="search" type="search" placeholder="Ex. restaurant, Poitiers…">
 </section>
 <section><h2>Catégories</h2><div id="categories" class="grid"></div></section>
+<section class="map-section"><h2>Carte</h2><div class="map-placeholder" role="img" aria-label="Emplacement réservé à la future carte des lieux accessibles"><div class="map-pin">●</div><strong>Carte des lieux accessibles</strong><p>La carte interactive affichera ici les établissements provenant d’Acceslibre.</p></div></section>
 <section><h2>Lieux</h2><div id="places" class="places"></div><p id="empty" hidden>Aucun lieu ne correspond à votre recherche.</p></section>
 <section id="detail" class="detail" hidden aria-live="polite">
 <button id="closeDetail" class="back-btn" type="button">← Retour aux lieux</button>
