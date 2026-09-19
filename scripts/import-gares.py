@@ -8,6 +8,9 @@ Le script n'invente aucune donnée d'accessibilité : les champs absents restent
 """
 import json, sys
 from pathlib import Path
+from urllib.request import Request, urlopen
+
+SNCF_API = "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/gares-de-voyageurs/records?limit=100"
 
 OUT = Path("data/gares-officielles.json")
 
@@ -52,10 +55,15 @@ def normalize(row):
         "officialSource": "Données officielles de transport"
     }
 
+def load_source():
+    if len(sys.argv) == 2:
+        return json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+    req = Request(SNCF_API, headers={"Accept": "application/json", "User-Agent": "Libcomlair/1.0"})
+    with urlopen(req, timeout=30) as response:
+        return json.load(response)
+
 def main():
-    if len(sys.argv) != 2:
-        raise SystemExit("Usage: python scripts/import-gares.py source.json")
-    raw = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+    raw = load_source()
     rows = raw.get("results", raw.get("records", raw)) if isinstance(raw, dict) else raw
     stations = [s for s in (normalize(r) for r in rows) if s]
     stations.sort(key=lambda x: (x["city"].casefold(), x["name"].casefold()))
