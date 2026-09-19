@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "préparation Libcomlair — import métro à venir",
+  "source": {
+    "name": "Île-de-France Mobilités — PRIM",
+    "datasets": [
+      "Gares et stations du réseau ferré d'Île-de-France",
+      "Accessibilité en gare",
+      "Référentiel des arrêts : Accès"
+    ],
+    "note": "Les informations absentes restent inconnues. Ne jamais déduire qu'une station est accessible ou non accessible à partir d'un champ absent."
+  },
+  "stations": []
+}
