@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Libcomlair — Modération test</title>
+  <link rel="stylesheet" href="admin-test.css">
+</head>
+<body>
+  <main>
+    <h1>Libcomlair — Modération test</h1>
+    <p>Interface de préparation. La clé administrateur n'est jamais enregistrée dans ce fichier.</p>
+    <section aria-labelledby="authTitle">
+      <h2 id="authTitle">Connexion administrateur</h2>
+      <label for="adminKey">Clé administrateur</label>
+      <input id="adminKey" type="password" autocomplete="off">
+      <button id="loadButton" type="button">Charger les propositions</button>
+      <button id="clearButton" type="button">Effacer la clé</button>
+      <p id="status" role="status"></p>
+    </section>
+    <section aria-labelledby="queueTitle">
+      <h2 id="queueTitle">Propositions en attente</h2>
+      <div id="queue"></div>
+    </section>
+  </main>
+  <script src="admin-test.js"></script>
+</body>
+</html>
