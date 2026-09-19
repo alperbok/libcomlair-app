@@ -1,0 +1,24 @@
+name: Mettre à jour les gares officielles
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "35 4 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Importer les gares SNCF
+        run: python scripts/import-gares.py
+      - name: Enregistrer les données mises à jour
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/gares-officielles.json
+          git diff --cached --quiet || git commit -m "Mettre à jour les gares officielles"
+          git push
