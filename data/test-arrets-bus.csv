@@ -1,0 +1,6 @@
+stop_id,stop_name,stop_lat,stop_lon,location_type,wheelchair_boarding
+P001,Gare Léon Blum,46.580100,0.340100,0,1
+P002,Place du Marché,46.583200,0.342900,0,0
+P003,Campus,46.570500,0.381200,0,2
+P004,Gare Léon Blum,46.580101,0.340101,0,1
+ZONE1,Pôle d'échanges,46.581000,0.341000,1,1
