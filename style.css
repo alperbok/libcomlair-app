@@ -9,3 +9,9 @@
 #accessNeedsSection details>summary.details-btn{display:block;width:100%;margin:10px 0 14px;border:2px solid #17202a;background:#fff;border-radius:10px;padding:14px;font:inherit;font-weight:700;cursor:pointer;list-style:none;box-sizing:border-box}#accessNeedsSection details>summary.details-btn::-webkit-details-marker{display:none}#accessNeedsSection details>summary.details-btn::before{content:"▶ ";}#accessNeedsSection details[open]>summary.details-btn::before{content:"▼ ";}#accessNeedsSection details[open]{padding-bottom:8px}
 
 .detail-actions{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.75rem}.detail-actions .details-btn{max-width:100%;white-space:normal}#detailActions{margin:1rem 0}#detailActions>summary{width:100%;box-sizing:border-box;cursor:pointer}
+
+/* Security test review rating: compact, aligned, and independent of global input styles */
+#placeFeedback #reviewStars{display:grid;grid-template-rows:repeat(5,28px);gap:0;margin:4px 0 14px;padding:0}
+#placeFeedback #reviewStars .review-star-row{display:grid;grid-template-columns:190px 28px;align-items:center;gap:8px;height:28px;margin:0;padding:0;line-height:28px}
+#placeFeedback #reviewStars .review-star-row span{display:block;margin:0;padding:0;line-height:28px}
+#placeFeedback #reviewStars .review-star-row input[type="radio"]{appearance:auto;-webkit-appearance:radio;width:22px;height:22px;min-width:22px;min-height:22px;margin:0;padding:0;border:0;border-radius:50%}
