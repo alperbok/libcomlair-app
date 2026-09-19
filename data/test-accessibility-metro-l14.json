@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "testType": "accessibility-model",
+  "place": {
+    "name": "Ligne 14 du métro — test de référence",
+    "city": "Paris / Île-de-France",
+    "category": "Transports",
+    "transportType": "Métro",
+    "line": "14"
+  },
+  "accessibility": {
+    "mobilite": {
+      "fauteuilRoulant": "oui",
+      "entreeSansMarche": "inconnue",
+      "ascenseur": "oui",
+      "toilettesAdaptees": "inconnue",
+      "stationnementPMR": "inconnue"
+    },
+    "visuel": {
+      "guidageTactile": "inconnue",
+      "bandesEveilVigilance": "oui",
+      "balisesSonores": "inconnue",
+      "brailleOuRelief": "inconnue"
+    },
+    "auditif": {
+      "informationVisuelle": "oui",
+      "boucleMagnetique": "inconnue"
+    },
+    "cognitif": {
+      "signaletiqueSimplifiee": "inconnue",
+      "faciliteOrientation": "inconnue"
+    },
+    "assistance": {
+      "personnelDisponible": "inconnue",
+      "assistanceSurDemande": "inconnue"
+    }
+  },
+  "equipmentStatus": {
+    "ascenseur": "a_verifier_en_temps_reel"
+  },
+  "source": {
+    "name": "Île-de-France Mobilités",
+    "checkedAt": "2026-09-19",
+    "note": "La ligne 14 est annoncée 100 % accessible à tous les handicaps. L'état des ascenseurs doit être vérifié dynamiquement pour un trajet réel."
+  }
+}
