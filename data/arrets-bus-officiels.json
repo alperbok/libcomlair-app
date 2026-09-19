@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "préparation Libcomlair — import bus à venir",
+  "source": {
+    "name": "Point d’Accès National transport.data.gouv.fr — Arrêts de transport en France",
+    "status": "expérimental",
+    "note": "Le jeu national agrège les arrêts GTFS et peut contenir des doublons. Ne pas interpréter une information d’accessibilité absente comme non accessible."
+  },
+  "stops": []
+}
