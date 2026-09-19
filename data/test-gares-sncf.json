@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "Nom_Gare": "Poitiers",
+      "Code_UIC": "87575001",
+      "Position géographique": {
+        "lat": 46.5822,
+        "lon": 0.3333
+      }
+    },
+    {
+      "Nom_Gare": "Paris Montparnasse",
+      "Code_UIC": "87391003",
+      "Position géographique": {
+        "lat": 48.8408,
+        "lon": 2.3193
+      }
+    },
+    {
+      "Nom_Gare": "Bordeaux Saint-Jean",
+      "Code_UIC": "87581009",
+      "Position géographique": {
+        "lat": 44.8259,
+        "lon": -0.5563
+      }
+    }
+  ]
+}
