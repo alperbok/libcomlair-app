@@ -1,14 +1,46 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "préparation Libcomlair — import métro à venir",
-  "source": {
-    "name": "Île-de-France Mobilités — PRIM",
-    "datasets": [
-      "Gares et stations du réseau ferré d'Île-de-France",
-      "Accessibilité en gare",
-      "Référentiel des arrêts : Accès"
-    ],
-    "note": "Les informations absentes restent inconnues. Ne jamais déduire qu'une station est accessible ou non accessible à partir d'un champ absent."
-  },
-  "stations": []
+  "generatedBy": "scripts/import-metro.py",
+  "stationsCount": 3,
+  "stations": [
+    {
+      "name": "Station Exemple A",
+      "city": "Paris",
+      "category": "Transports",
+      "transportType": "Métro",
+      "sourceId": "IDFM:StopPlace:TEST-A:",
+      "lat": 48.8566,
+      "lon": 2.3522,
+      "accessibilityLevel": "3",
+      "access": [],
+      "details": [],
+      "officialSource": "Île-de-France Mobilités — PRIM"
+    },
+    {
+      "name": "Station Exemple B",
+      "city": "Paris",
+      "category": "Transports",
+      "transportType": "Métro",
+      "sourceId": "IDFM:StopPlace:TEST-B:",
+      "lat": 48.86,
+      "lon": 2.34,
+      "accessibilityLevel": "inconnue",
+      "access": [],
+      "details": [],
+      "officialSource": "Île-de-France Mobilités — PRIM"
+    },
+    {
+      "name": "Station Exemple C",
+      "city": "Paris",
+      "category": "Transports",
+      "transportType": "Métro",
+      "sourceId": "IDFM:StopPlace:TEST-C:",
+      "lat": 48.85,
+      "lon": 2.37,
+      "accessibilityLevel": "1",
+      "access": [],
+      "details": [],
+      "officialSource": "Île-de-France Mobilités — PRIM"
+    }
+  ]
 }
