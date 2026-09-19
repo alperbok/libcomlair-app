@@ -1,11 +1,54 @@
 {
   "schemaVersion": 1,
-  "source": {
-    "name": "SNCF Gares & Connexions / transport.data.gouv.fr",
-    "accessibilityDataset": "Cheminements piétons - accessibilité des gares",
-    "stationDataset": "Gares de voyageurs du réseau ferré national",
-    "updatePolicy": "Le fichier NeTEx d’accessibilité est mis à jour chaque semaine."
-  },
-  "generated": "2026-09-19",
-  "stations": []
+  "generatedBy": "scripts/import-gares.py",
+  "stations": [
+    {
+      "name": "Bordeaux Saint-Jean",
+      "city": "",
+      "category": "Transports",
+      "transportType": "Train / Gare",
+      "uic": "87581009",
+      "lat": 44.8259,
+      "lon": -0.5563,
+      "address": "",
+      "phone": "3635",
+      "pmrPhone": "3635 puis #45",
+      "website": "",
+      "access": [],
+      "details": [],
+      "officialSource": "Données officielles de transport"
+    },
+    {
+      "name": "Paris Montparnasse",
+      "city": "",
+      "category": "Transports",
+      "transportType": "Train / Gare",
+      "uic": "87391003",
+      "lat": 48.8408,
+      "lon": 2.3193,
+      "address": "",
+      "phone": "3635",
+      "pmrPhone": "3635 puis #45",
+      "website": "",
+      "access": [],
+      "details": [],
+      "officialSource": "Données officielles de transport"
+    },
+    {
+      "name": "Poitiers",
+      "city": "",
+      "category": "Transports",
+      "transportType": "Train / Gare",
+      "uic": "87575001",
+      "lat": 46.5822,
+      "lon": 0.3333,
+      "address": "",
+      "phone": "3635",
+      "pmrPhone": "3635 puis #45",
+      "website": "",
+      "access": [],
+      "details": [],
+      "officialSource": "Données officielles de transport"
+    }
+  ]
 }
