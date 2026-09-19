@@ -1,0 +1,5 @@
+nom;commune;mode;id;latitude;longitude;niveau_accessibilite
+Station Exemple A;Paris;METRO;IDFM:StopPlace:TEST-A:;48.8566;2.3522;3
+Station Exemple B;Paris;Métro;IDFM:StopPlace:TEST-B:;48.8600;2.3400;
+Station Exemple C;Paris;METRO;IDFM:StopPlace:TEST-C:;48.8500;2.3700;1
+Arrêt Bus Exemple;Paris;BUS;IDFM:StopPlace:TEST-BUS:;48.8550;2.3600;2
