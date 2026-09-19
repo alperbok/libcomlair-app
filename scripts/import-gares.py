@@ -19,12 +19,18 @@ def pick(d, *keys):
 
 def normalize(row):
     fields = row.get("fields", row)
+    # Opendatasoft v2 renvoie les champs dans "record" selon certains exports.
+    if isinstance(fields, dict) and isinstance(fields.get("record"), dict):
+        fields = fields["record"]
     name = pick(fields, "Nom_Gare", "nom_gare", "nom", "name", "gare", "libelle", "stop_name")
     city = pick(fields, "commune", "city", "ville")
     uic = pick(fields, "Code_UIC", "code_uic", "uic", "uic_code")
     lat = pick(fields, "latitude", "lat")
     lon = pick(fields, "longitude", "lon", "lng")
     geo = pick(fields, "Position géographique", "position_geographique", "coordonnees_geographiques", "geopoint", "coordinates")
+    if isinstance(geo, dict):
+        lat = lat or geo.get("lat") or geo.get("latitude")
+        lon = lon or geo.get("lon") or geo.get("lng") or geo.get("longitude")
     if isinstance(geo, (list, tuple)) and len(geo) >= 2:
         lat, lon = lat or geo[0], lon or geo[1]
     if not name:
