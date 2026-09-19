@@ -19,12 +19,12 @@ def pick(d, *keys):
 
 def normalize(row):
     fields = row.get("fields", row)
-    name = pick(fields, "nom", "name", "gare", "libelle", "stop_name")
+    name = pick(fields, "nom_gare", "Nom_Gare", "nom", "name", "gare", "libelle", "stop_name")
     city = pick(fields, "commune", "city", "ville")
-    uic = pick(fields, "uic", "code_uic", "uic_code")
+    uic = pick(fields, "code_uic", "Code_UIC", "uic", "uic_code")
     lat = pick(fields, "latitude", "lat")
     lon = pick(fields, "longitude", "lon", "lng")
-    geo = pick(fields, "coordonnees_geographiques", "geopoint", "coordinates")
+    geo = pick(fields, "position_geographique", "Position géographique", "coordonnees_geographiques", "geopoint", "coordinates")
     if isinstance(geo, (list, tuple)) and len(geo) >= 2:
         lat, lon = lat or geo[0], lon or geo[1]
     if not name:
