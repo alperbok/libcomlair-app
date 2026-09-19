@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "testType": "accessibility-model",
+  "place": {
+    "name": "Gare de Poitiers",
+    "city": "Poitiers",
+    "category": "Transports",
+    "transportType": "Train / Gare"
+  },
+  "accessibility": {
+    "mobilite": {
+      "fauteuilRoulant": "oui",
+      "entreeSansMarche": "oui",
+      "ascenseur": "oui",
+      "toilettesAdaptees": "oui",
+      "stationnementPMR": "inconnue"
+    },
+    "visuel": {
+      "guidageTactile": "oui",
+      "bandesEveilVigilance": "oui",
+      "balisesSonores": "oui",
+      "brailleOuRelief": "inconnue"
+    },
+    "auditif": {
+      "informationVisuelle": "oui",
+      "boucleMagnetique": "inconnue"
+    },
+    "cognitif": {
+      "signaletiqueSimplifiee": "inconnue",
+      "faciliteOrientation": "inconnue"
+    },
+    "assistance": {
+      "personnelDisponible": "oui",
+      "assistanceSurDemande": "oui"
+    }
+  },
+  "equipmentStatus": {
+    "ascenseur": "en_service"
+  },
+  "source": {
+    "name": "SNCF Gares & Connexions",
+    "url": "https://www.garesetconnexions.sncf/fr/gares-services/poitiers/accessibilite",
+    "checkedAt": "2026-09-19"
+  }
+}
