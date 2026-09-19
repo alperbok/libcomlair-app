@@ -1,4 +1,8 @@
 const categories=["Tous","Restaurants","Hôtels","Bars","Loisirs","Services","Transports"], transportTypes=["🚆 Train / Gare","🚌 Bus / Arrêt","🚇 Métro","🚊 Tramway","🚕 Taxi / transport adapté","⛴️ Bateau / ferry"], accessibilityFilters=["Entrée sans marche","Toilettes accessibles","Ascenseur","Stationnement adapté","Chambre accessible"];
+const officialStations=[
+{name:"Gare de Poitiers",city:"Poitiers",category:"Transports",transportType:"Train / Gare",address:"Poitiers",lat:46.5822,lon:.3333,phone:"",hours:"",website:"https://www.garesetconnexions.sncf/fr/gares-services/poitiers",access:[],details:["Données officielles SNCF à compléter avec le jeu Accessibilité des gares"],officialSource:"SNCF — données ouvertes"},
+{name:"Gare de Paris-Montparnasse",city:"Paris",category:"Transports",transportType:"Train / Gare",address:"Paris",lat:48.8408,lon:2.3193,phone:"",hours:"",website:"https://www.garesetconnexions.sncf/fr/gares-services/paris-montparnasse",access:[],details:["Données officielles SNCF à compléter avec le jeu Accessibilité des gares"],officialSource:"SNCF — données ouvertes"},
+{name:"Gare de Bordeaux-Saint-Jean",city:"Bordeaux",category:"Transports",transportType:"Train / Gare",address:"Bordeaux",lat:44.8259,lon:-.5563,phone:"",hours:"",website:"https://www.garesetconnexions.sncf/fr/gares-services/bordeaux-saint-jean",access:[],details:["Données officielles SNCF à compléter avec le jeu Accessibilité des gares"],officialSource:"SNCF — données ouvertes"}];
 const demoPlaces=[
 {name:"Exemple – Café accessible",city:"Poitiers",category:"Restaurants",address:"Centre-ville, Poitiers",lat:46.583,lon:.34,phone:"05 49 00 00 01",hours:"Aujourd’hui : 08:00–19:00",website:"https://example.com",access:["Entrée sans marche","Toilettes accessibles"],details:["Entrée accessible de plain-pied","Toilettes adaptées","Espace de circulation accessible"]},
 {name:"Exemple – Hôtel accessible",city:"Poitiers",category:"Hôtels",address:"Poitiers",lat:46.578,lon:.333,phone:"05 49 00 00 02",hours:"Accueil : 24 h/24",website:"https://example.com",access:["Ascenseur","Chambre accessible","Stationnement adapté"],details:["Ascenseur desservant les étages","Chambre accessible","Accès adapté à l'entrée","Stationnement adapté"]},
@@ -6,7 +10,7 @@ const demoPlaces=[
 const STORAGE_KEY="libcomlair-proposals-v13";
 function proposalKey(p){return ((p.name||"").replace(" — Proposition à vérifier","").trim()+"|"+(p.city||"").trim()+"|"+(p.category||"")).toLowerCase()}
 function loadSavedProposals(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");if(!Array.isArray(saved))return [];const seen={};const clean=[];saved.forEach(p=>{const k=proposalKey(p);if(!seen[k]){seen[k]=true;clean.push(p)}});localStorage.setItem(STORAGE_KEY,JSON.stringify(clean));return clean}catch(e){return []}}
-let places=[...demoPlaces,...loadSavedProposals()];
+let places=[...demoPlaces,...officialStations,...loadSavedProposals()];
 function saveProposals(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(places.filter(p=>p.userProposal)));return true}catch(e){return false}}
 let active="Tous",selectedAccess=new Set(),userMarker,userLat=null,userLon=null;
 const cats=document.querySelector("#categories"),filters=document.querySelector("#accessFilters"),list=document.querySelector("#places"),search=document.querySelector("#search"),empty=document.querySelector("#empty");
