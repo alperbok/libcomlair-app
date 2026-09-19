@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "SNCF Gares & Connexions / transport.data.gouv.fr",
+    "accessibilityDataset": "Cheminements piétons - accessibilité des gares",
+    "stationDataset": "Gares de voyageurs du réseau ferré national",
+    "updatePolicy": "Le fichier NeTEx d’accessibilité est mis à jour chaque semaine."
+  },
+  "generated": "2026-09-19",
+  "stations": []
+}
