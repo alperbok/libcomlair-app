@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "préparation Libcomlair — état des ascenseurs à venir",
+  "source": {
+    "name": "Île-de-France Mobilités — PRIM — État des ascenseurs",
+    "datasetId": "etat-des-ascenseurs",
+    "access": "authentification_requise",
+    "note": "Donnée dynamique : conserver séparément de l'accessibilité permanente d'une gare ou station."
+  },
+  "statusValues": [
+    "en_service",
+    "hors_service",
+    "inconnu"
+  ],
+  "elevators": []
+}
