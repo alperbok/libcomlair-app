@@ -6,13 +6,17 @@ on:
     - cron: "20 4 * * 1"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Télécharger et préparer un échantillon réel
         run: |
           mkdir -p data
@@ -24,4 +28,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/acceslibre-poitiers.json
           git diff --cached --quiet || git commit -m "Mettre à jour les données Acceslibre"
-          git push
+          git push "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref_name }}
