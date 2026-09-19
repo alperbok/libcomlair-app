@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "description": "Modèle commun d'accessibilité Libcomlair — ne jamais déduire une information absente.",
+  "statusValues": ["oui", "non", "partiel", "inconnue"],
+  "accessibility": {
+    "mobilite": {
+      "fauteuilRoulant": "inconnue",
+      "entreeSansMarche": "inconnue",
+      "ascenseur": "inconnue",
+      "toilettesAdaptees": "inconnue",
+      "stationnementPMR": "inconnue"
+    },
+    "visuel": {
+      "guidageTactile": "inconnue",
+      "bandesEveilVigilance": "inconnue",
+      "balisesSonores": "inconnue",
+      "brailleOuRelief": "inconnue"
+    },
+    "auditif": {
+      "informationVisuelle": "inconnue",
+      "boucleMagnetique": "inconnue"
+    },
+    "cognitif": {
+      "signaletiqueSimplifiee": "inconnue",
+      "faciliteOrientation": "inconnue"
+    },
+    "assistance": {
+      "personnelDisponible": "inconnue",
+      "assistanceSurDemande": "inconnue"
+    }
+  },
+  "equipmentStatus": {
+    "ascenseur": "inconnue"
+  },
+  "source": {
+    "name": "",
+    "url": "",
+    "updatedAt": ""
+  }
+}
