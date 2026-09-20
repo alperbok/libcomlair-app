@@ -1,4 +1,4 @@
-const categories=["Tous","Restaurants","Hôtels","Bars","Loisirs","Services","Transports"], transportTypes=["🚆 Train / Gare","🚌 Bus / Arrêt","🚇 Métro","🚊 Tramway","🚕 Taxi / transport adapté","⛴️ Bateau / ferry"], accessibilityFilters=["Entrée sans marche","Toilettes accessibles","Ascenseur","Stationnement adapté","Chambre accessible"];
+const categories=["Tous","Restaurants","Hôtels","Bars","Loisirs","Services","Transports"], transportTypes=["🚆 Train / Gare","🚌 Bus / Arrêt","🚇 Métro","🚊 Tramway","🚕 Taxi / transport adapté","⛴️ Bateau / ferry"], accessibilityFilters=["Entrée sans marche","Toilettes accessibles","Ascenseur","Stationnement adapté","Chambre accessible","Guidage tactile","Bandes d’éveil à la vigilance","Balises sonores","Braille ou relief","Information visuelle","Boucle magnétique","Signalétique simplifiée","Orientation facilitée","Personnel disponible","Assistance sur demande","Chien guide / d’assistance accepté","Espace calme disponible"];
 const officialStations=[
 {name:"Gare de Poitiers",city:"Poitiers",category:"Transports",transportType:"Train / Gare",address:"2 Boulevard Pont Achard, 86000 Poitiers",lat:46.5822,lon:.3333,phone:"3635",pmrPhone:"3635 puis #45",hours:"",website:"https://www.garesetconnexions.sncf/fr/gares-services/poitiers",access:["Entrée sans marche","Toilettes accessibles","Ascenseur"],details:["Personnel présent en gare","Assistance pour accéder aux quais et monter / descendre du train","Fauteuil roulant à disposition","Bandes d’éveil de vigilance sur les quais","Écrans d’information et information sonore","Accès au point information ou vente par ascenseur, rampe ou de plain-pied","Balises sonores et bandes podotactiles de guidage","Toilettes adaptées aux personnes en fauteuil roulant","État des ascenseurs / élévateurs PMR communiqué en temps réel sur le site officiel"],officialSource:"SNCF Gares & Connexions — accessibilité"},
 {name:"Gare de Paris-Montparnasse",city:"Paris",category:"Transports",transportType:"Train / Gare",address:"17 Boulevard de Vaugirard, 75015 Paris",lat:48.8408,lon:2.3193,phone:"3635",pmrPhone:"3635 puis #45",hours:"",website:"https://www.garesetconnexions.sncf/fr/gares-services/paris-montparnasse",access:["Entrée sans marche","Toilettes accessibles","Ascenseur"],details:["Personnel présent en gare","Assistance pour accéder aux quais et monter / descendre du train","Fauteuil roulant à disposition","Bandes d’éveil de vigilance sur les quais","Écrans d’information et information sonore","Accès au point information ou vente par ascenseur, rampe ou de plain-pied","Toilettes adaptées aux personnes en fauteuil roulant","Service d’Assistance Voyageur Handicapé : Hall 1, niveau 2, près de la voie 24, couloir Taxis","Dépose PMR : 35 Boulevard de Vaugirard, 75015 Paris","État des ascenseurs / élévateurs PMR communiqué en temps réel sur le site officiel"],officialSource:"SNCF Gares & Connexions — accessibilité"},
@@ -80,9 +80,23 @@ const ACCESS_PROFILE_KEY="libcomlair-access-profile-v1";
 const accessWelcome=document.getElementById("accessWelcome");
 function readAccessProfile(){try{const v=JSON.parse(localStorage.getItem(ACCESS_PROFILE_KEY)||"null");return v&&Array.isArray(v.needs)?v:null}catch{return null}}
 function saveAccessProfile(needs){const allowed=new Set(["mobility","vision","hearing","cognitive","assistance"]);const clean=[...new Set(needs.filter(x=>allowed.has(x)))];try{localStorage.setItem(ACCESS_PROFILE_KEY,JSON.stringify({needs:clean}));return true}catch{return false}}
+function syncNeedFilters(needs){
+  const groups={
+    mobility:["Entrée sans marche","Toilettes accessibles","Ascenseur","Stationnement adapté","Chambre accessible"],
+    vision:["Guidage tactile","Bandes d’éveil à la vigilance","Balises sonores","Braille ou relief","Chien guide / d’assistance accepté"],
+    hearing:["Information visuelle","Boucle magnétique"],
+    cognitive:["Signalétique simplifiée","Orientation facilitée","Espace calme disponible"],
+    assistance:["Personnel disponible","Assistance sur demande","Chien guide / d’assistance accepté"]
+  };
+  const wanted=new Set(needs.flatMap(n=>groups[n]||[]));
+  selectedAccess.clear();
+  wanted.forEach(v=>selectedAccess.add(v));
+  document.querySelectorAll("#accessFilters .category").forEach(btn=>btn.setAttribute("aria-pressed",wanted.has(btn.textContent)?"true":"false"));
+}
 function applyAccessProfileToPage(needs){
   document.documentElement.dataset.accessNeeds=needs.join(" ");
   document.querySelectorAll('input[name="accessProfile"]').forEach(x=>x.checked=needs.includes(x.value));
+  if(typeof selectedAccess!=="undefined")syncNeedFilters(needs);
 }
 function closeAccessWelcome(){accessWelcome.hidden=true}
 const storedAccessProfile=readAccessProfile();
