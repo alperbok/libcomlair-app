@@ -171,7 +171,7 @@ function setupVisionVoiceCommands(){
       if(step==="categories"&&found){
         const btn=[...document.querySelectorAll("#categories .category")].find(x=>x.textContent.trim()===found[1]);if(btn)btn.click();
         status.textContent="Choix reconnu : "+found[1]+".";
-        speak(found[1]+" sélectionné. Souhaitez-vous choisir des critères d'accessibilité ou entendre les résultats ? Dites critères ou résultats.");step="afterCategory";return
+        speak(found[1]+" sélectionné. Souhaitez-vous choisir des critères d'accessibilité ou entendre les résultats ? Les choix sont : critères, ou résultats. Appuyez ensuite sur le micro en haut à droite et dites votre choix.");step="afterCategory";return
       }
       if(said.includes("critere")){document.querySelector("#accessNeedsSection details")?.setAttribute("open","");document.getElementById("accessNeedsSection")?.scrollIntoView({behavior:"smooth"});announceCriteria();return}
       if(said.includes("resultat")){document.getElementById("places")?.scrollIntoView({behavior:"smooth"});const n=document.getElementById("resultsCount")?.textContent||"";speak((n||"Résultats affichés")+". Vous pouvez parcourir la liste avec TalkBack.");step="results";return}
