@@ -105,7 +105,10 @@ function applyAccessProfileToPage(needs){
   if(summary)summary.textContent=needs.length?"Profil actif : "+needs.map(n=>labels[n]).filter(Boolean).join(", "):"Aucune adaptation particulière sélectionnée.";
   const voiceNav=document.getElementById("visionVoiceControls");if(voiceNav)voiceNav.hidden=!needs.includes("vision");
   document.querySelectorAll('input[name="accessProfile"]').forEach(x=>x.checked=needs.includes(x.value));
-  if(typeof selectedAccess!=="undefined")syncNeedFilters(needs);
+  // Le profil personnel adapte la présentation mais ne filtre jamais automatiquement les lieux.
+  // Les critères d’accessibilité ne deviennent des filtres que lorsque l’utilisateur les choisit explicitement.
+  if(typeof selectedAccess!=="undefined"){ selectedAccess.clear(); document.querySelectorAll("#accessFilters .category").forEach(btn=>btn.setAttribute("aria-pressed","false")); }
+  if(typeof render==="function")render();
 }
 function closeAccessWelcome(){accessWelcome.hidden=true}
 const storedAccessProfile=readAccessProfile();
