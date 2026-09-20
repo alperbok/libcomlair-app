@@ -177,3 +177,30 @@ function setupVisionVoiceCommands(){
   });
 }
 setupVisionVoiceCommands();
+
+
+function setupVisionSpeechOutput(){
+  const read=document.getElementById("visionReadPage"),stop=document.getElementById("visionStopReading");
+  if(!read||!stop)return;
+  if(!("speechSynthesis" in window)){read.hidden=true;stop.hidden=true;return}
+  function visionEnabled(){const p=readAccessProfile();return !!(p&&p.needs.includes("vision"))}
+  function speak(text){if(!visionEnabled()||!text)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="fr-FR";u.rate=0.9;window.speechSynthesis.speak(u)}
+  read.addEventListener("click",()=>{
+    const detail=document.getElementById("detail");
+    if(detail&&!detail.hidden){
+      const title=document.getElementById("detailTitle")?.textContent||"";
+      const lists=[...document.querySelectorAll("#accessibilityProfile li")].map(x=>x.textContent).join(". ");
+      speak("Fiche du lieu. "+title+". Accessibilité. "+lists);
+    }else{
+      const profile=readAccessProfile();
+      const needs=profile?.needs||[];
+      const labels={mobility:"mobilité",vision:"vision",hearing:"audition",cognitive:"compréhension et cognition",assistance:"assistance et accompagnement"};
+      const selected=needs.map(x=>labels[x]).filter(Boolean).join(", ");
+      const count=document.getElementById("resultsCount")?.textContent||"";
+      speak("Libcomlair. Profil actif : "+(selected||"aucune adaptation particulière")+". Vous pouvez rechercher un lieu, choisir une catégorie, consulter la liste des lieux ou modifier vos besoins d’accessibilité. "+count);
+    }
+  });
+  stop.addEventListener("click",()=>window.speechSynthesis.cancel());
+  window.addEventListener("beforeunload",()=>window.speechSynthesis.cancel());
+}
+setupVisionSpeechOutput();
