@@ -107,3 +107,37 @@ document.getElementById("applyAccessProfile").addEventListener("click",()=>{
 });
 document.getElementById("skipAccessProfile").addEventListener("click",()=>{saveAccessProfile([]);applyAccessProfileToPage([]);closeAccessWelcome()});
 document.getElementById("changeAccessProfile").addEventListener("click",()=>{const p=readAccessProfile();applyAccessProfileToPage(p?p.needs:[]);accessWelcome.hidden=false;accessWelcome.scrollIntoView({behavior:"smooth"});document.getElementById("accessWelcomeTitle").focus?.()});
+
+
+function setupVoiceDictation(){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const buttons=[...document.querySelectorAll(".voice-dictate")];
+  const panel=document.getElementById("voiceStatusPanel"),status=document.getElementById("voiceStatus");
+  if(!SpeechRecognition){
+    buttons.forEach(b=>{b.hidden=true});
+    return;
+  }
+  let active=null;
+  buttons.forEach(button=>button.addEventListener("click",()=>{
+    if(active){active.stop();active=null}
+    const target=document.getElementById(button.dataset.target);
+    if(!target)return;
+    const recognition=new SpeechRecognition();
+    active=recognition;
+    recognition.lang="fr-FR";
+    recognition.interimResults=false;
+    recognition.continuous=false;
+    recognition.maxAlternatives=1;
+    panel.hidden=false;status.textContent="Microphone activé. Parlez maintenant.";
+    button.setAttribute("aria-pressed","true");
+    recognition.onresult=e=>{
+      const spoken=e.results?.[0]?.[0]?.transcript||"";
+      if(spoken){const space=target.value.trim()?" ":"";target.value=(target.value+space+spoken).slice(0,Number(target.maxLength)>0?Number(target.maxLength):1000);target.dispatchEvent(new Event("input",{bubbles:true}));}
+      status.textContent="Dictée terminée. Vérifiez le texte avant de l’enregistrer.";
+    };
+    recognition.onerror=()=>{status.textContent="La dictée vocale n’a pas pu être utilisée. Vous pouvez continuer avec le clavier.";};
+    recognition.onend=()=>{button.setAttribute("aria-pressed","false");active=null;setTimeout(()=>{panel.hidden=true},5000)};
+    try{recognition.start()}catch{status.textContent="Le microphone n’a pas pu démarrer.";button.setAttribute("aria-pressed","false");active=null}
+  }));
+}
+setupVoiceDictation();
