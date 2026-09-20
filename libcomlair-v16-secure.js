@@ -95,6 +95,9 @@ function syncNeedFilters(needs){
 }
 function applyAccessProfileToPage(needs){
   document.documentElement.dataset.accessNeeds=needs.join(" ");
+  const labels={mobility:"Mobilité",vision:"Vision",hearing:"Audition",cognitive:"Compréhension / cognition",assistance:"Assistance / accompagnement"};
+  const summary=document.getElementById("activeAccessProfile");
+  if(summary)summary.textContent=needs.length?"Profil actif : "+needs.map(n=>labels[n]).filter(Boolean).join(", "):"Aucune adaptation particulière sélectionnée.";
   const voiceNav=document.getElementById("visionVoiceControls");if(voiceNav)voiceNav.hidden=!needs.includes("vision");
   document.querySelectorAll('input[name="accessProfile"]').forEach(x=>x.checked=needs.includes(x.value));
   if(typeof selectedAccess!=="undefined")syncNeedFilters(needs);
