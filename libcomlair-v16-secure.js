@@ -95,6 +95,7 @@ function syncNeedFilters(needs){
 }
 function applyAccessProfileToPage(needs){
   document.documentElement.dataset.accessNeeds=needs.join(" ");
+  const voiceNav=document.getElementById("visionVoiceControls");if(voiceNav)voiceNav.hidden=!needs.includes("vision");
   document.querySelectorAll('input[name="accessProfile"]').forEach(x=>x.checked=needs.includes(x.value));
   if(typeof selectedAccess!=="undefined")syncNeedFilters(needs);
 }
@@ -141,3 +142,35 @@ function setupVoiceDictation(){
   }));
 }
 setupVoiceDictation();
+
+
+function setupVisionVoiceCommands(){
+  const button=document.getElementById("visionVoiceCommand");
+  if(!button)return;
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRecognition){button.hidden=true;return}
+  button.addEventListener("click",()=>{
+    const profile=readAccessProfile();
+    if(!profile||!profile.needs.includes("vision"))return;
+    const recognition=new SpeechRecognition();recognition.lang="fr-FR";recognition.interimResults=false;recognition.continuous=false;
+    const status=document.getElementById("voiceStatus"),panel=document.getElementById("voiceStatusPanel");
+    panel.hidden=false;status.textContent="Commande vocale activée. Parlez maintenant.";
+    recognition.onresult=e=>{
+      const said=(e.results?.[0]?.[0]?.transcript||"").toLowerCase();
+      const names=["restaurants","hôtels","loisirs","transports"];
+      const match=names.find(n=>said.includes(n.normalize("NFD").replace(/[\u0300-\u036f]/g,""))||said.includes(n));
+      if(match){
+        const wanted=match[0].toUpperCase()+match.slice(1);
+        const btn=[...document.querySelectorAll("#categories .category")].find(x=>x.textContent.trim()===wanted);
+        if(btn){btn.click();status.textContent="Commande reconnue : "+wanted+"."}
+      }else if(said.includes("favori")){document.getElementById("onlyFavorites").click();status.textContent="Commande reconnue : Mes favoris."}
+      else if(said.includes("autour")){document.getElementById("nearMe").click();status.textContent="Commande reconnue : Autour de moi."}
+      else if(said.includes("retour")){const back=document.getElementById("closeDetail");if(!document.getElementById("detail").hidden)back.click();status.textContent="Commande reconnue : Retour."}
+      else status.textContent="Commande non reconnue. Aucune action n’a été effectuée.";
+    };
+    recognition.onerror=()=>{status.textContent="La commande vocale n’a pas pu être utilisée. Aucune action n’a été effectuée.";};
+    recognition.onend=()=>setTimeout(()=>{panel.hidden=true},5000);
+    try{recognition.start()}catch{status.textContent="Le microphone n’a pas pu démarrer."}
+  });
+}
+setupVisionVoiceCommands();
