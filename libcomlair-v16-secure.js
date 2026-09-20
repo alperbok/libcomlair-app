@@ -122,7 +122,7 @@ function applyAccessProfileToPage(needs){
   if(typeof selectedAccess!=="undefined"){ selectedAccess.clear(); document.querySelectorAll("#accessFilters .category").forEach(btn=>btn.setAttribute("aria-pressed","false")); }
   if(typeof render==="function")render();
 }
-function closeAccessWelcome(){accessWelcome.hidden=true}
+function closeAccessWelcome(){if(!accessWelcome)return;accessWelcome.hidden=true;accessWelcome.setAttribute("hidden","");accessWelcome.style.display="none";const main=document.querySelector("main");if(main)main.scrollIntoView({behavior:"smooth",block:"start"})}
 const storedAccessProfile=readAccessProfile();
 if(storedAccessProfile){applyAccessProfileToPage(storedAccessProfile.needs);closeAccessWelcome()}
 document.getElementById("applyAccessProfile").addEventListener("click",()=>{
