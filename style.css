@@ -28,3 +28,12 @@ button,.details-btn,.back-btn,summary.category{min-height:44px}
 .accessibility-profile h4{margin:0 0 8px}
 @media(max-width:480px){.accessibility-profile{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+.access-welcome{border:2px solid #17202a;border-radius:14px;padding:20px;margin-bottom:20px;background:#fff}
+.access-welcome fieldset{display:grid;gap:10px;border:0;padding:8px 0;margin:0}
+.access-welcome label{display:flex;align-items:center;gap:10px;min-height:44px;padding:8px;border:1px solid #ccd2d8;border-radius:10px}
+.access-welcome input[type="checkbox"]{width:24px;height:24px;flex:0 0 24px}
+.welcome-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.welcome-actions .details-btn{flex:1 1 240px}
+html[data-access-needs~="vision"] body{font-size:1.08rem;line-height:1.6}
+html[data-access-needs~="cognitive"] .data-note{font-size:1rem;line-height:1.6}
