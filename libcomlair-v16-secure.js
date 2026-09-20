@@ -189,7 +189,7 @@ function setupVisionVoiceCommands(){
       const categories=[["restaurant","Restaurants"],["hotel","Hôtels"],["bar","Bars"],["magasin","Magasins"],["loisir","Loisirs"],["service","Services"],["transport","Transports"]];
       const found=categories.find(([w])=>said.includes(w));
       if(step==="categories"&&found){
-        const btn=[...document.querySelectorAll("#categories .category")].find(x=>x.textContent.trim()===found[1]);if(btn)btn.click();
+        const btn=[...document.querySelectorAll("#categories .category")].find(x=>x.textContent.trim()===found[1]);if(btn)btn.click();else if(found[1]==="Transports"){active="Transports";activeShop=null;activeTransport=null;document.querySelectorAll("#categories .category").forEach(x=>x.setAttribute("aria-pressed","false"));document.querySelectorAll("#transportTypes .category").forEach(x=>x.setAttribute("aria-pressed","false"));render()}
         status.textContent="Choix reconnu : "+found[1]+".";if(found[1]==="Magasins"){const sd=document.getElementById("shopDetails");if(sd)sd.open=true;speak("Magasins sélectionné. Quel type de magasin recherchez-vous ? Tous les magasins, alimentation, vêtements, pharmacie ou parapharmacie, centre commercial, maison ou bricolage, électronique, beauté, ou culture et loisirs. Appuyez ensuite sur le micro en haut à droite et dites votre choix.");step="shops";return}
         speak(found[1]+" sélectionné. Souhaitez-vous choisir des critères d'accessibilité ou entendre les résultats ? Les choix sont : critères, résultats, ou changer de catégorie. Appuyez ensuite sur le micro en haut à droite et dites votre choix.");step="afterCategory";return
       }
