@@ -148,32 +148,44 @@ setupVoiceDictation();
 
 
 function setupVisionVoiceCommands(){
-  const button=document.getElementById("visionVoiceCommand");
-  if(!button)return;
+  const mic=document.getElementById("visionVoiceCommand"),start=document.getElementById("visionGuideStart"),prompt=document.getElementById("visionGuidePrompt");
+  if(!mic||!start)return;
   const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SpeechRecognition){button.hidden=true;return}
-  button.addEventListener("click",()=>{
-    const profile=readAccessProfile();
-    if(!profile||!profile.needs.includes("vision"))return;
-    const recognition=new SpeechRecognition();recognition.lang="fr-FR";recognition.interimResults=false;recognition.continuous=false;
-    const status=document.getElementById("voiceStatus"),panel=document.getElementById("voiceStatusPanel");
-    panel.hidden=false;status.textContent="Commande vocale activée. Parlez maintenant.";
-    recognition.onresult=e=>{
-      const said=(e.results?.[0]?.[0]?.transcript||"").toLowerCase();
-      const names=["restaurants","hôtels","loisirs","transports"];
-      const match=names.find(n=>said.includes(n.normalize("NFD").replace(/[\u0300-\u036f]/g,""))||said.includes(n));
-      if(match){
-        const wanted=match[0].toUpperCase()+match.slice(1);
-        const btn=[...document.querySelectorAll("#categories .category")].find(x=>x.textContent.trim()===wanted);
-        if(btn){btn.click();status.textContent="Commande reconnue : "+wanted+"."}
-      }else if(said.includes("favori")){document.getElementById("onlyFavorites").click();status.textContent="Commande reconnue : Mes favoris."}
-      else if(said.includes("autour")){document.getElementById("nearMe").click();status.textContent="Commande reconnue : Autour de moi."}
-      else if(said.includes("retour")){const back=document.getElementById("closeDetail");if(!document.getElementById("detail").hidden)back.click();status.textContent="Commande reconnue : Retour."}
-      else status.textContent="Commande non reconnue. Aucune action n’a été effectuée.";
+  const canSpeak="speechSynthesis" in window;
+  let step="categories";
+  const normalize=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  function speak(text){if(prompt)prompt.textContent=text;if(!canSpeak)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="fr-FR";u.rate=.9;window.speechSynthesis.speak(u)}
+  function announceCategories(){step="categories";speak("Que souhaitez-vous consulter ? Restaurants, hôtels, bars, loisirs, services, transports, mes favoris, ou autour de moi. Après l'annonce, appuyez sur Répondre au micro et dites votre choix.")}
+  function announceCriteria(){step="criteria";speak("Vous êtes dans les critères d'accessibilité. Vous pouvez choisir : guidage tactile, bandes d'éveil, balises sonores, braille ou relief, ou chien guide accepté. Vous pouvez aussi dire résultats ou retour.")}
+  start.addEventListener("click",announceCategories);
+  if(!SpeechRecognition){mic.disabled=true;mic.textContent="🎙 Micro indisponible";return}
+  mic.addEventListener("click",()=>{
+    const p=readAccessProfile();if(!p||!p.needs.includes("vision"))return;
+    if(canSpeak)window.speechSynthesis.cancel();
+    const r=new SpeechRecognition();r.lang="fr-FR";r.interimResults=false;r.continuous=false;r.maxAlternatives=1;
+    const status=document.getElementById("voiceStatus"),panel=document.getElementById("voiceStatusPanel");panel.hidden=false;status.textContent="Microphone activé. Dites votre choix.";
+    r.onresult=e=>{
+      const raw=e.results?.[0]?.[0]?.transcript||"",said=normalize(raw);
+      const categories=[["restaurant","Restaurants"],["hotel","Hôtels"],["bar","Bars"],["loisir","Loisirs"],["service","Services"],["transport","Transports"]];
+      const found=categories.find(([w])=>said.includes(w));
+      if(step==="categories"&&found){
+        const btn=[...document.querySelectorAll("#categories .category")].find(x=>x.textContent.trim()===found[1]);if(btn)btn.click();
+        status.textContent="Choix reconnu : "+found[1]+".";
+        speak(found[1]+" sélectionné. Souhaitez-vous choisir des critères d'accessibilité ou entendre les résultats ? Dites critères ou résultats.");step="afterCategory";return
+      }
+      if(said.includes("critere")){document.querySelector("#accessNeedsSection details")?.setAttribute("open","");document.getElementById("accessNeedsSection")?.scrollIntoView({behavior:"smooth"});announceCriteria();return}
+      if(said.includes("resultat")){document.getElementById("places")?.scrollIntoView({behavior:"smooth"});const n=document.getElementById("resultsCount")?.textContent||"";speak((n||"Résultats affichés")+". Vous pouvez parcourir la liste avec TalkBack.");step="results";return}
+      if(said.includes("favori")){const f=document.getElementById("onlyFavorites");if(f&&!f.checked)f.click();speak("Mes favoris sélectionnés. Les résultats sont affichés.");return}
+      if(said.includes("autour")){document.getElementById("nearMe")?.click();speak("Recherche autour de moi demandée. Votre téléphone peut demander l'autorisation de localisation.");return}
+      if(said.includes("retour")){announceCategories();return}
+      const filters=[["guidage tactile","Guidage tactile"],["bande","Bandes d’éveil à la vigilance"],["balise","Balises sonores"],["braille","Braille ou relief"],["chien guide","Chien guide / d’assistance accepté"]];
+      const f=filters.find(([w])=>said.includes(normalize(w)));
+      if(step==="criteria"&&f){const b=[...document.querySelectorAll("#accessFilters .category")].find(x=>x.textContent.trim()===f[1]);if(b)b.click();speak(f[1]+" sélectionné. Vous pouvez choisir un autre critère, dire résultats, ou retour.");return}
+      status.textContent="Choix non reconnu. Aucune action n'a été effectuée.";speak("Je n'ai pas reconnu ce choix. Appuyez sur Répondre au micro pour réessayer, ou utilisez les boutons avec TalkBack.");
     };
-    recognition.onerror=()=>{status.textContent="La commande vocale n’a pas pu être utilisée. Aucune action n’a été effectuée.";};
-    recognition.onend=()=>setTimeout(()=>{panel.hidden=true},5000);
-    try{recognition.start()}catch{status.textContent="Le microphone n’a pas pu démarrer."}
+    r.onerror=()=>{status.textContent="La reconnaissance vocale n'a pas fonctionné.";speak("Le microphone n'a pas fonctionné. Vous pouvez continuer avec les boutons et TalkBack.")};
+    r.onend=()=>setTimeout(()=>{panel.hidden=true},5000);
+    try{r.start()}catch{status.textContent="Le microphone n'a pas pu démarrer."}
   });
 }
 setupVisionVoiceCommands();
