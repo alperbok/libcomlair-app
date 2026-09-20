@@ -15,3 +15,16 @@
 #placeFeedback #reviewStars .review-star-row{display:grid;grid-template-columns:190px 28px;align-items:center;gap:8px;height:28px;margin:0;padding:0;line-height:28px}
 #placeFeedback #reviewStars .review-star-row span{display:block;margin:0;padding:0;line-height:28px}
 #placeFeedback #reviewStars .review-star-row input[type="radio"]{appearance:auto;-webkit-appearance:radio;width:22px;height:22px;min-width:22px;min-height:22px;margin:0;padding:0;border:0;border-radius:50%}
+
+
+/* Accessibility baseline for the security test */
+.skip-link{position:absolute;left:12px;top:-80px;z-index:10000;background:#fff;color:#17202a;border:2px solid currentColor;border-radius:8px;padding:12px 16px;font-weight:700}
+.skip-link:focus{top:12px}
+:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+button,a,input,select,textarea,summary{font:inherit}
+button,.details-btn,.back-btn,summary.category{min-height:44px}
+.accessibility-profile{display:grid;gap:12px}
+.accessibility-profile section{border:1px solid #ccd2d8;border-radius:12px;padding:12px}
+.accessibility-profile h4{margin:0 0 8px}
+@media(max-width:480px){.accessibility-profile{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
