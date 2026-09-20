@@ -157,7 +157,7 @@ function setupVisionVoiceCommands(){
   function speak(text){if(prompt)prompt.textContent=text;if(!canSpeak)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="fr-FR";u.rate=.9;window.speechSynthesis.speak(u)}
   function announceCategories(){step="categories";speak("Que souhaitez-vous consulter ? Restaurants, hôtels, bars, loisirs, services, transports, mes favoris, ou autour de moi. Après l'annonce, appuyez sur Répondre au micro et dites votre choix.")}
   function announceCriteria(){step="criteria";speak("Vous êtes dans les critères d'accessibilité. Vous pouvez choisir : guidage tactile, bandes d'éveil, balises sonores, braille ou relief, ou chien guide accepté. Vous pouvez aussi dire résultats ou retour.")}
-  start.addEventListener("click",announceCategories);
+  start.addEventListener("click",()=>{announceCategories();document.getElementById("categories")?.closest("section")?.scrollIntoView({behavior:"smooth",block:"start"});});
   if(!SpeechRecognition){mic.disabled=true;mic.textContent="🎙 Micro indisponible";return}
   mic.addEventListener("click",()=>{
     const p=readAccessProfile();if(!p||!p.needs.includes("vision"))return;
