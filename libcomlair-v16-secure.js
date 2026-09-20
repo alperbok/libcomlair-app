@@ -16,16 +16,29 @@ const accessibilityProfileFields={
   accessCognitive:["Signalétique simplifiée","Orientation facilitée"],
   accessAssistance:["Personnel disponible","Assistance sur demande"]
 };
+const accessProfileOrder={mobility:"accessMobility",vision:"accessVisual",hearing:"accessHearing",cognitive:"accessCognitive",assistance:"accessAssistance"};
+function currentAccessNeeds(){try{const v=JSON.parse(localStorage.getItem("libcomlair-access-profile-v1")||"null");return v&&Array.isArray(v.needs)?v.needs:[]}catch{return []}}
 function renderAccessibilityProfile(place){
-  const known=Array.isArray(place&&place.access)?place.access:[];
+  const known=[...(Array.isArray(place&&place.access)?place.access:[]),...(Array.isArray(place&&place.details)?place.details:[])];
+  const selected=currentAccessNeeds();
+  const profile=document.getElementById("accessibilityProfile");
+  if(profile){
+    const sections=[...profile.querySelectorAll(":scope > section")];
+    const ids=selected.map(x=>accessProfileOrder[x]).filter(Boolean);
+    sections.sort((a,b)=>{const ai=ids.indexOf(a.querySelector("ul")?.id),bi=ids.indexOf(b.querySelector("ul")?.id);return (ai<0?999:ai)-(bi<0?999:bi)});
+    sections.forEach(section=>profile.appendChild(section));
+  }
   Object.entries(accessibilityProfileFields).forEach(([id,labels])=>{
     const list=document.getElementById(id);if(!list)return;list.replaceChildren();
     labels.forEach(label=>{
       const li=document.createElement("li");
-      const match=known.find(v=>typeof v==="string"&&v.toLowerCase().includes(label.toLowerCase()));
-      li.textContent=(match?"✓ ":"— ")+label+" : "+(match?"indiqué — à vérifier":"Non renseigné");
+      const words=label.toLowerCase().split(/\s+/).filter(x=>x.length>4);
+      const match=known.find(v=>typeof v==="string"&&words.some(w=>v.toLowerCase().includes(w)));
+      li.textContent=(match?"✓ ":"— ")+label+" : "+(match?"information disponible — à vérifier":"Non renseigné");
       list.appendChild(li);
     });
+    const section=list.closest("section");
+    if(section)section.classList.toggle("access-priority",selected.some(x=>accessProfileOrder[x]===id));
   });
 }
 function safeHttpUrl(value){try{const u=new URL(String(value||""));return (u.protocol==="https:"||u.protocol==="http:")?u.href:null}catch(e){return null}}function safeMapPopup(name,address){const box=document.createElement("div");const strong=document.createElement("strong");strong.textContent=name||"";box.appendChild(strong);if(address){box.appendChild(document.createElement("br"));box.appendChild(document.createTextNode(address))}return box}
