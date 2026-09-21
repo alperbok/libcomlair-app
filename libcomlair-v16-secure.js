@@ -87,11 +87,16 @@ if(osmTestBtn)osmTestBtn.onclick=()=>{
   osmTestStatus.textContent="Test en cours…";
   navigator.geolocation.getCurrentPosition(pos=>{
     const lat=pos.coords.latitude,lon=pos.coords.longitude;
-    const q='[out:json][timeout:10];nwr(around:1000,'+lat+','+lon+')[amenity~"restaurant|cafe|bar|pub"];out center tags 20;';
-    fetch("https://overpass-api.de/api/interpreter?data="+encodeURIComponent(q))
-      .then(res=>{if(!res.ok)throw new Error("HTTP "+res.status);return res.json()})
-      .then(data=>{const named=(data.elements||[]).filter(e=>e.tags&&e.tags.name);osmTestStatus.textContent=named.length?"OpenStreetMap répond correctement : "+named.length+" lieux nommés trouvés dans ce test.":"OpenStreetMap répond correctement, mais aucun lieu nommé n’a été trouvé dans ce test.";})
-      .catch(()=>{osmTestStatus.textContent="Le service OpenStreetMap de recherche ne répond pas pour le moment.";});
+    const q='[out:json][timeout:12];nwr(around:1000,'+lat+','+lon+')[amenity~"restaurant|cafe|bar|pub"];out center tags 20;';
+    const endpoints=["https://overpass.kumi.systems/api/interpreter","https://overpass.nchc.org.tw/api/interpreter"];
+    const tryEndpoint=i=>{
+      if(i>=endpoints.length){osmTestStatus.textContent="Les services de recherche OpenStreetMap testés ne répondent pas pour le moment.";return}
+      fetch(endpoints[i],{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:"data="+encodeURIComponent(q)})
+        .then(res=>{if(!res.ok)throw new Error("HTTP "+res.status);return res.json()})
+        .then(data=>{const named=(data.elements||[]).filter(e=>e.tags&&e.tags.name);osmTestStatus.textContent=named.length?"OpenStreetMap répond correctement : "+named.length+" lieux nommés trouvés dans ce test.":"OpenStreetMap répond correctement, mais aucun lieu nommé n’a été trouvé dans ce test.";})
+        .catch(()=>tryEndpoint(i+1));
+    };
+    tryEndpoint(0);
   },()=>{osmTestStatus.textContent="La localisation n’a pas été autorisée.";},{enableHighAccuracy:false,timeout:10000,maximumAge:60000});
 };
 const addBtn=document.querySelector("#addPlaceBtn"),addPanel=document.querySelector("#addPlacePanel"),addForm=document.querySelector("#addPlaceForm"),addStatus=document.querySelector("#addPlaceStatus");
