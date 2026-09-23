@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Construit un index compact arrêt -> lignes -> directions depuis le GTFS IDFM."""
+"""Construit des index compacts arrêt -> lignes -> directions depuis le GTFS IDFM."""
 
 import csv
 import io
 import json
+import shutil
 import sys
 import zipfile
 from collections import defaultdict
@@ -21,10 +22,12 @@ def reader(zf, filename):
 
 def main():
     if len(sys.argv) < 2:
-        raise SystemExit("Usage: import-idfm-directions.py GTFS.zip [sortie.json]")
+        raise SystemExit("Usage: import-idfm-directions.py GTFS.zip [repertoire-sortie]")
     src=Path(sys.argv[1])
-    out=Path(sys.argv[2] if len(sys.argv)>2 else "data/idfm-directions.json")
-    out.parent.mkdir(parents=True, exist_ok=True)
+    out_dir=Path(sys.argv[2] if len(sys.argv)>2 else "data/idfm-directions")
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     with zipfile.ZipFile(src) as zf:
         routes={}
@@ -72,13 +75,34 @@ def main():
         lines.sort(key=lambda x: (x.get("shortName") or x.get("longName") or x.get("id") or "").casefold())
         stops[sid]=lines
 
-    payload={
+    generated=datetime.now(timezone.utc).isoformat()
+    shards=defaultdict(dict)
+    for sid, lines in stops.items():
+        prefix=sid[:2] if len(sid)>=2 else sid.zfill(2)
+        shards[prefix][sid]=lines
+
+    for prefix, shard_stops in shards.items():
+        payload={
+            "version":"idfm-directions-static-v155",
+            "generatedAt":generated,
+            "stops":shard_stops
+        }
+        (out_dir/f"{prefix}.json").write_text(
+            json.dumps(payload,ensure_ascii=False,separators=(",",":")),
+            encoding="utf-8"
+        )
+
+    manifest={
         "version":"idfm-directions-static-v155",
-        "generatedAt":datetime.now(timezone.utc).isoformat(),
-        "stops":stops
+        "generatedAt":generated,
+        "stops":len(stops),
+        "shards":sorted(shards),
     }
-    out.write_text(json.dumps(payload,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
-    print(f"{len(stops)} arrêts indexés -> {out}")
+    (out_dir/"manifest.json").write_text(
+        json.dumps(manifest,ensure_ascii=False,separators=(",",":")),
+        encoding="utf-8"
+    )
+    print(f"{len(stops)} arrêts indexés dans {len(shards)} fichiers -> {out_dir}")
 
 if __name__=="__main__":
     main()
