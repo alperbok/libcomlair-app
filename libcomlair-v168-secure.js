@@ -617,23 +617,38 @@ function setupTutorialSpeech(){
     readServiceTutorial:"Comment sont classés les services. Libcomlair se base sur la fonction principale du lieu ou de l'organisme. Les sous-catégories sont santé ou soins, administrations ou services publics, banques, poste, services sociaux, aide à domicile, toilettes publiques accessibles, accueil ou information, et services spécialisés handicap. Si la fonction précise n'est pas connue, le lieu reste dans tous les services.",
     readTransportTutorial:"Comment sont classés les transports. Libcomlair utilise les informations des réseaux et sources de transport disponibles pour identifier le mode de transport et les arrêts ou gares. Les sous-catégories sont train ou gare, bus ou arrêt, métro, tramway, taxi ou transport adapté, et bateau ou ferry. Lorsque le mode exact n'est pas suffisamment identifié, le point de transport reste dans tous les transports. Les informations officielles peuvent évoluer avec les mises à jour des réseaux."
   };
-  const buttons=Object.keys(speeches).map(id=>document.getElementById(id)).filter(Boolean);
+  const ids=new Set(Object.keys(speeches));
+  const buttons=[...document.querySelectorAll("button")].filter(button=>ids.has(button.id));
   if(!buttons.length)return;
+
   if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance!=="function"){
     buttons.forEach(button=>button.hidden=true);
     return;
   }
+
   function speak(text){
-    window.speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(text);
-    u.lang="fr-FR";
-    u.rate=0.9;
-    window.speechSynthesis.speak(u);
+    try{
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text);
+      u.lang="fr-FR";
+      u.rate=0.9;
+      u.volume=1;
+      window.speechSynthesis.speak(u);
+      setTimeout(()=>{
+        if(window.speechSynthesis.paused)window.speechSynthesis.resume();
+      },120);
+    }catch(e){}
   }
-  Object.entries(speeches).forEach(([id,text])=>{
-    const button=document.getElementById(id);
-    if(button)button.addEventListener("click",()=>speak(text));
-  });
+
+  document.addEventListener("click",event=>{
+    let target=event.target;
+    if(target&&target.nodeType===3)target=target.parentElement;
+    const button=target&&target.closest?target.closest("button"):null;
+    if(!button||!ids.has(button.id))return;
+    event.preventDefault();
+    event.stopPropagation();
+    speak(speeches[button.id]);
+  },true);
 }
 setupTutorialSpeech();
 maybeAutoReadVisionIntro();
