@@ -13,20 +13,24 @@
     if(runtimeErrors.length>20)runtimeErrors.shift();
   }
 
-  window.addEventListener("error",e=>recordError(e&&e.message,e&&e.filename,e&&e.lineno,e&&e.colno));
+  window.addEventListener("error",e=>{
+    recordError(e&&e.message,e&&e.filename,e&&e.lineno,e&&e.colno);
+  });
+
   window.addEventListener("unhandledrejection",e=>{
     const reason=e&&e.reason;
     recordError(reason&&reason.message?reason.message:String(reason||"Promesse rejetée"),"promise",0,0);
   });
 
-  function check(name,ok,detail){return {name,ok:!!ok,detail:String(detail||"")}}
+  function check(name,ok,detail){
+    return {name,ok:!!ok,detail:String(detail||"")};
+  }
 
   function run(){
     const voiceEngine=window.LibcomlairVoice;
     let voiceState=null;
     try{voiceState=voiceEngine&&typeof voiceEngine.status==="function"?voiceEngine.status():null}catch(_){}
-    const voiceHadRealFailure=!!(voiceState&&voiceState.last&&voiceState.last.state==="error");
-    const voiceMode=voiceState&&voiceState.mode==="fallback"?"voix de secours Piper active":voiceState&&voiceState.mode==="normal"?"voix normale active":"moteur hybride prêt";
+    const voiceHadRealFailure=!!(voiceState&&voiceState.last&&voiceState.last.state==="error"); const voiceMode=voiceState&&voiceState.activeEngine==="piper"?"voix de secours active":voiceState&&voiceState.activeEngine==="web"?"voix normale active":"moteur vocal hybride prêt";
     const checks=[
       check("Voix",!!(voiceEngine&&voiceEngine.version==="v181"&&typeof voiceEngine.speak==="function"&&typeof voiceEngine.testDetailed==="function"&&!voiceHadRealFailure),voiceHadRealFailure?"dernier test vocal en échec":voiceMode),
       check("Catégories",!!(window.LibcomlairCategories&&Array.isArray(window.LibcomlairCategories.categories)&&window.LibcomlairCategories.categories.length>=8),"listes et sous-catégories"),
@@ -38,14 +42,19 @@
       check("Réparation",!!(window.LibcomlairRepair&&typeof window.LibcomlairRepair.repair==="function"),"réparation automatique")
     ];
     const failed=checks.filter(x=>!x.ok);
-    const result={ok:failed.length===0&&runtimeErrors.length===0,checks,failed,runtimeErrors:[...runtimeErrors],voice:voiceState,version:"v181"};
+    const result={
+      ok:failed.length===0&&runtimeErrors.length===0,
+      checks,
+      failed,
+      runtimeErrors:[...runtimeErrors],
+      version:"v181"
+    };
     window.__libcomlairLastDiagnostic=result;
 
     const box=document.getElementById("systemDiagnosticResult");
     if(box){
       if(result.ok){
-        const suffix=voiceState&&voiceState.mode==="fallback"?" Voix : secours Piper active.":voiceState&&voiceState.mode==="normal"?" Voix : normale active.":"";
-        box.textContent="✓ Diagnostic réussi : les 8 contrôles principaux sont opérationnels."+suffix;
+        box.textContent="✓ Diagnostic réussi : les 8 contrôles principaux sont opérationnels.";
       }else{
         const parts=[];
         if(failed.length)parts.push("Moteurs en échec : "+failed.map(x=>x.name).join(", "));
@@ -53,7 +62,9 @@
         box.textContent="⚠ "+parts.join(" — ")+" — Une réparation automatique est disponible ci-dessous.";
       }
     }
-    try{document.documentElement.dataset.libcomlairDiagnostic=result.ok?"ok":"error"}catch(_){}
+    try{
+      document.documentElement.dataset.libcomlairDiagnostic=result.ok?"ok":"error";
+    }catch(_){}
     return result;
   }
 
@@ -79,8 +90,11 @@
       repairButton.dataset.bound="true";
       repairButton.addEventListener("click",()=>{
         if(repairBox)repairBox.textContent="Réparation automatique en cours…";
-        if(window.LibcomlairRepair&&typeof window.LibcomlairRepair.repair==="function")window.LibcomlairRepair.repair();
-        else if(repairBox)repairBox.textContent="⚠ Le moteur de réparation n’est pas chargé.";
+        if(window.LibcomlairRepair&&typeof window.LibcomlairRepair.repair==="function"){
+          window.LibcomlairRepair.repair();
+        }else if(repairBox){
+          repairBox.textContent="⚠ Le moteur de réparation n’est pas chargé.";
+        }
       });
     }
     if(box&&!box.textContent)box.textContent="Diagnostic prêt.";
