@@ -7,14 +7,17 @@
   const fallbackAvailable=!!(fallback&&typeof fallback.speak==="function"&&typeof fallback.prepare==="function");
   const available=webAvailable||fallbackAvailable;
 
+  const WEB_START_TIMEOUT_MS=2600;
+  const WEB_RETRY_COOLDOWN_MS=45000;
+
   let recognitionActive=false;
   let queued=null;
   let generation=0;
   let activeEngine="none";
-  let webDisabled=false;
+  let lastWebFailureAt=0;
+  let lastWebFailureReason="";
   let lastStatus={state:"idle",engine:"none",error:"",time:0};
   let lastOutcome={ok:null,reason:"",engine:"none",time:0};
-  try{webDisabled=sessionStorage.getItem("libcomlair-webspeech-failed-v185")==="1"}catch(_){}
 
   function indicator(){
     const el=document.getElementById("voiceEngineMode");
@@ -22,12 +25,13 @@
     if(recognitionActive){el.textContent="Moteur vocal : microphone actif.";return}
     if(lastStatus.state==="queued"){el.textContent="Moteur vocal : réponse en attente de la fin du microphone.";return}
     if(lastStatus.state==="preparing-fallback"){el.textContent="Moteur vocal : préparation de la voix de secours meSpeak…";return}
+    if(lastStatus.state==="probing-web"){el.textContent="Moteur vocal : essai de la voix naturelle…";return}
     if(lastStatus.state==="speaking"){
-      el.textContent=activeEngine==="mespeak"?"Moteur vocal : voix de secours meSpeak active.":"Moteur vocal : voix normale active.";
+      el.textContent=activeEngine==="mespeak"?"Moteur vocal : voix de secours meSpeak active.":"Moteur vocal : voix naturelle active.";
       return;
     }
     if(lastOutcome.ok===true){
-      el.textContent=lastOutcome.engine==="mespeak"?"Moteur vocal : voix de secours meSpeak validée.":"Moteur vocal : voix normale validée.";
+      el.textContent=lastOutcome.engine==="mespeak"?"Moteur vocal : voix de secours meSpeak validée.":"Moteur vocal : voix naturelle validée.";
       return;
     }
     if(lastOutcome.ok===false){el.textContent="Moteur vocal : dernière lecture en échec.";return}
@@ -40,18 +44,39 @@
     try{window.dispatchEvent(new CustomEvent("libcomlair-voice-status",{detail:{...lastStatus}}))}catch(_){}
   }
 
-  function frenchVoice(){
-    if(!webAvailable)return null;
-    let voices=[];
-    try{voices=synth.getVoices()||[]}catch(_){}
-    return voices.find(v=>v.localService===true&&String(v.lang||"").toLowerCase().startsWith("fr"))
-      ||voices.find(v=>String(v.lang||"").toLowerCase().startsWith("fr"))
+  function voices(){
+    if(!webAvailable)return [];
+    try{return synth.getVoices()||[]}catch(_){return []}
+  }
+
+  function preferredFrenchVoice(){
+    const list=voices();
+    return list.find(v=>v.default===true&&String(v.lang||"").toLowerCase().startsWith("fr"))
+      ||list.find(v=>v.localService===true&&String(v.lang||"").toLowerCase().startsWith("fr"))
+      ||list.find(v=>String(v.lang||"").toLowerCase().startsWith("fr"))
       ||null;
   }
 
-  function markWebFailed(){
-    webDisabled=true;
-    try{sessionStorage.setItem("libcomlair-webspeech-failed-v185","1")}catch(_){}
+  function webCandidates(){
+    const out=[{voice:null,label:"voix système française"}];
+    const preferred=preferredFrenchVoice();
+    if(preferred){
+      out.push({
+        voice:preferred,
+        label:(preferred.name||"voix française")+" ["+(preferred.lang||"fr")+"]"
+      });
+    }
+    return out;
+  }
+
+  function markWebFailed(reason){
+    lastWebFailureAt=Date.now();
+    lastWebFailureReason=String(reason||"web_failed");
+  }
+
+  function clearWebFailure(){
+    lastWebFailureAt=0;
+    lastWebFailureReason="";
   }
 
   function cancel(){
@@ -111,90 +136,102 @@
     }
   }
 
+  function runWebSequence(text,opts,myGen){
+    const candidates=webCandidates();
+    let index=0;
+    const reasons=[];
+
+    function next(){
+      if(myGen!==generation)return;
+      if(index>=candidates.length){
+        const reason=reasons.filter(Boolean).join(" | ")||"web_all_candidates_failed";
+        markWebFailed(reason);
+        runFallback(text,opts,myGen,reason);
+        return;
+      }
+
+      const candidate=candidates[index++];
+      let settled=false;
+      try{
+        try{if(synth.speaking||synth.pending)synth.cancel()}catch(_){}
+        const u=new SpeechSynthesisUtterance(text);
+        window.__libcomlairVoiceUtterance=u;
+        u.lang="fr-FR";
+        u.rate=Number.isFinite(opts.rate)?opts.rate:0.9;
+        u.volume=1;
+        u.pitch=1;
+        if(candidate.voice){
+          u.voice=candidate.voice;
+          u.lang=candidate.voice.lang||"fr-FR";
+        }
+
+        const timer=setTimeout(()=>{
+          if(settled||myGen!==generation)return;
+          settled=true;
+          reasons.push(candidate.label+": timeout");
+          try{synth.cancel()}catch(_){}
+          setTimeout(next,120);
+        },WEB_START_TIMEOUT_MS);
+
+        u.onstart=()=>{
+          if(settled||myGen!==generation)return;
+          settled=true;
+          clearTimeout(timer);
+          clearWebFailure();
+          activeEngine="web";
+          lastOutcome={ok:true,reason:"started",engine:"web",time:Date.now()};
+          emit("speaking",{voice:candidate.label,engine:"web"});
+          if(typeof opts.onstart==="function")opts.onstart({voice:candidate.label,engine:"web",mode:"normal"});
+        };
+
+        u.onend=()=>{
+          if(myGen!==generation||activeEngine!=="web")return;
+          lastOutcome={ok:true,reason:"ended",engine:"web",time:Date.now()};
+          activeEngine="none";
+          emit("idle",{voice:candidate.label,engine:"web"});
+          indicator();
+          if(typeof opts.onend==="function")opts.onend({voice:candidate.label,engine:"web",mode:"normal"});
+        };
+
+        u.onerror=e=>{
+          if(settled||myGen!==generation)return;
+          settled=true;
+          clearTimeout(timer);
+          const reason=e&&e.error?String(e.error):"speech_error";
+          reasons.push(candidate.label+": "+reason);
+          try{synth.cancel()}catch(_){}
+          setTimeout(next,120);
+        };
+
+        emit("probing-web",{voice:candidate.label,candidate:index,total:candidates.length});
+        synth.speak(u);
+      }catch(error){
+        reasons.push(candidate.label+": "+(error&&error.message?error.message:String(error)));
+        setTimeout(next,120);
+      }
+    }
+
+    next();
+  }
+
   function run(text,options){
     const clean=String(text||"").replace(/\s+/g," ").trim();
     if(!clean||!available)return false;
     const opts=options||{};
     const myGen=++generation;
 
-    if(!webAvailable||webDisabled){
-      runFallback(clean,opts,myGen,webAvailable?"web_disabled":"web_unavailable");
+    if(!webAvailable){
+      runFallback(clean,opts,myGen,"web_unavailable");
       return true;
     }
 
-    let started=false;
-    let finished=false;
-    let startAt=0;
-    let startTimer=null;
-
-    function fallbackNow(reason){
-      if(finished||myGen!==generation)return;
-      finished=true;
-      if(startTimer)clearTimeout(startTimer);
-      try{synth.cancel()}catch(_){}
-      markWebFailed();
-      activeEngine="none";
-      emit("web-failed",{error:String(reason||"speech_error"),engine:"web"});
-      runFallback(clean,opts,myGen,String(reason||"speech_error"));
+    const cooling=lastWebFailureAt>0&&(Date.now()-lastWebFailureAt)<WEB_RETRY_COOLDOWN_MS;
+    if(cooling&&!opts.forceWebProbe){
+      runFallback(clean,opts,myGen,"web_retry_cooldown");
+      return true;
     }
 
-    try{
-      if(synth.speaking||synth.pending)synth.cancel();
-      const u=new SpeechSynthesisUtterance(clean);
-      window.__libcomlairVoiceUtterance=u;
-      u.lang="fr-FR";
-      u.rate=Number.isFinite(opts.rate)?opts.rate:0.9;
-      u.volume=1;
-      u.pitch=1;
-      const v=frenchVoice();
-      if(v){u.voice=v;u.lang=v.lang||"fr-FR"}
-      const label=v?((v.name||"voix française")+" ["+(v.lang||"fr")+"]"):"voix française par défaut";
-      const wordCount=clean.split(/\s+/).filter(Boolean).length;
-      const minExpectedMs=wordCount>=4?Math.min(5000,Math.max(700,wordCount*180)):0;
-
-      startTimer=setTimeout(()=>{
-        if(started||finished||myGen!==generation)return;
-        fallbackNow("web_start_timeout");
-      },1400);
-
-      u.onstart=()=>{
-        if(finished||myGen!==generation)return;
-        started=true;
-        startAt=Date.now();
-        if(startTimer)clearTimeout(startTimer);
-        activeEngine="web";
-        lastOutcome={ok:null,reason:"started",engine:"web",time:Date.now()};
-        emit("speaking",{voice:label,engine:"web"});
-        if(typeof opts.onstart==="function")opts.onstart({voice:label,engine:"web",mode:"normal"});
-      };
-
-      u.onend=()=>{
-        if(finished||myGen!==generation||activeEngine!=="web")return;
-        const elapsed=startAt?Date.now()-startAt:0;
-        if(minExpectedMs&&elapsed>0&&elapsed<minExpectedMs){
-          fallbackNow("web_ended_too_early");
-          return;
-        }
-        finished=true;
-        if(startTimer)clearTimeout(startTimer);
-        lastOutcome={ok:true,reason:"ended",engine:"web",time:Date.now()};
-        activeEngine="none";
-        emit("idle",{voice:label,engine:"web",durationMs:elapsed});
-        indicator();
-        if(typeof opts.onend==="function")opts.onend({voice:label,engine:"web",mode:"normal",durationMs:elapsed});
-      };
-
-      u.onerror=e=>{
-        if(finished||myGen!==generation)return;
-        const reason=e&&e.error?String(e.error):"speech_error";
-        fallbackNow(reason);
-      };
-
-      emit("preparing-web",{voice:label});
-      synth.speak(u);
-    }catch(error){
-      fallbackNow(error&&error.message?error.message:String(error));
-    }
+    runWebSequence(clean,opts,myGen);
     return true;
   }
 
@@ -226,9 +263,9 @@
   }
 
   function status(){
-    let voices=[];
-    try{voices=webAvailable&&typeof synth.getVoices==="function"?synth.getVoices():[]}catch(_){}
+    const list=voices();
     const fbStatus=fallbackAvailable&&typeof fallback.status==="function"?fallback.status():null;
+    const retryIn=Math.max(0,WEB_RETRY_COOLDOWN_MS-(Date.now()-lastWebFailureAt));
     return {
       version:"v185",
       available,
@@ -236,12 +273,15 @@
       fallbackAvailable,
       fallbackReady:!!(fbStatus&&fbStatus.ready),
       activeEngine,
-      webDisabled,
+      webDisabled:false,
+      webRetryCooldownMs:WEB_RETRY_COOLDOWN_MS,
+      webRetryInMs:lastWebFailureAt?retryIn:0,
+      lastWebFailureReason,
       recognitionActive,
       queued:!!queued,
-      voiceCount:voices.length,
-      frenchVoiceCount:voices.filter(v=>String(v.lang||"").toLowerCase().startsWith("fr")).length,
-      localFrenchVoiceCount:voices.filter(v=>v.localService===true&&String(v.lang||"").toLowerCase().startsWith("fr")).length,
+      voiceCount:list.length,
+      frenchVoiceCount:list.filter(v=>String(v.lang||"").toLowerCase().startsWith("fr")).length,
+      localFrenchVoiceCount:list.filter(v=>v.localService===true&&String(v.lang||"").toLowerCase().startsWith("fr")).length,
       lastOutcome:{...lastOutcome},
       last:{...lastStatus},
       fallbackStatus:fbStatus
@@ -255,7 +295,8 @@
       const finish=x=>{if(!done){done=true;resolve(x)}};
       const ok=speak("Assistance vocale Libcomlair activée.",{
         rate:0.9,
-        onend:meta=>finish({ok:true,reason:"ended",meta,status:status()}),
+        forceWebProbe:true,
+        onstart:meta=>finish({ok:true,reason:"started",meta,status:status()}),
         onerror:e=>finish({ok:false,reason:e&&e.error?e.error:"voice_failed",meta:e,status:status()})
       });
       if(!ok){finish({ok:false,reason:"speak_returned_false",status:status()});return}
@@ -263,7 +304,7 @@
     });
   }
 
-  function test(){return speak("Assistance vocale Libcomlair activée.",{rate:0.9})}
+  function test(){return speak("Assistance vocale Libcomlair activée.",{rate:0.9,forceWebProbe:true})}
 
   indicator();
   window.LibcomlairVoice={
