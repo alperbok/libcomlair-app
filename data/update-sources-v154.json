@@ -1,0 +1,43 @@
+{
+  "version": "v154",
+  "defaultRefreshHours": 24,
+  "behavior": "Les sources locales sont rafraîchies automatiquement quand la localisation est disponible. Une recherche Autour de moi force une actualisation.",
+  "sources": [
+    {
+      "id": "geoapify",
+      "mode": "live-nearby",
+      "refreshHours": 24,
+      "categories": [
+        "Restaurants",
+        "Hôtels",
+        "Bars",
+        "Magasins",
+        "Loisirs",
+        "Services"
+      ],
+      "notes": "Les catégories parentes Geoapify sont interrogées afin d'inclure automatiquement leurs nouvelles sous-catégories."
+    },
+    {
+      "id": "idfm",
+      "mode": "live-nearby",
+      "refreshHours": 24,
+      "categories": [
+        "Transports"
+      ],
+      "notes": "Les arrêts et lignes sont lus depuis les données officielles Île-de-France Mobilités."
+    },
+    {
+      "id": "vitalis",
+      "mode": "scheduled-import",
+      "refreshHours": 24,
+      "categories": [
+        "Transports"
+      ],
+      "notes": "Le GTFS officiel Vitalis est importé chaque jour par GitHub Actions."
+    }
+  ],
+  "futureCategories": {
+    "rule": "Toute nouvelle catégorie doit déclarer sa source ici. Si elle utilise une source déjà active, elle bénéficie du même rafraîchissement sans modifier le mécanisme général.",
+    "fallback": "Une nouvelle source externe nécessite un adaptateur une seule fois, puis elle rejoint le cycle automatique."
+  }
+}
