@@ -31,8 +31,8 @@
     if(!el)return;
     if(recognitionActive){el.textContent="Moteur vocal : microphone actif.";return}
     if(lastStatus.state==="queued"){el.textContent="Moteur vocal : réponse en attente de la fin du microphone.";return}
-    if(lastStatus.state==="preparing-piper"){el.textContent="Moteur vocal : préparation de la voix française Render…";return}
-    if(lastStatus.state==="generating-piper"){el.textContent="Moteur vocal : génération de la voix sur Render…";return}
+    if(lastStatus.state==="preparing-render"){el.textContent="Moteur vocal : préparation de la voix française Render…";return}
+    if(lastStatus.state==="generating-render"){el.textContent="Moteur vocal : génération de la voix sur Render…";return}
     if(lastStatus.state==="probing-web"){el.textContent="Moteur vocal : essai de la voix système…";return}
     if(lastStatus.state==="preparing-fallback"){el.textContent="Moteur vocal : préparation de la voix de secours meSpeak…";return}
     if(lastStatus.state==="speaking"){
@@ -231,10 +231,10 @@
     }
 
     try{
-      emit("preparing-piper");
+      emit("preparing-render");
       await renderVoice.prepare();
       if(myGen!==generation)return;
-      emit("generating-piper");
+      emit("generating-render");
       await renderVoice.speak(text,{
         onstart:meta=>{
           if(myGen!==generation)return;
@@ -243,7 +243,7 @@
           activeEngine="render";
           lastOutcome={ok:true,reason:"started",engine:"render",time:Date.now()};
           emit("speaking",{voice:"voix française Render",engine:"render"});
-          if(typeof opts.onstart==="function")opts.onstart({voice:"voix française Render",engine:"render",mode:"local",...(meta||{})});
+          if(typeof opts.onstart==="function")opts.onstart({voice:"voix française Render",engine:"render",mode:"server",...(meta||{})});
         },
         onend:meta=>{
           if(myGen!==generation)return;
@@ -251,7 +251,7 @@
           activeEngine="none";
           emit("idle",{voice:"voix française Render",engine:"render"});
           indicator();
-          if(typeof opts.onend==="function")opts.onend({voice:"voix française Render",engine:"render",mode:"local",...(meta||{})});
+          if(typeof opts.onend==="function")opts.onend({voice:"voix française Render",engine:"render",mode:"server",...(meta||{})});
         }
       });
     }catch(error){
