@@ -49,9 +49,8 @@
     generation++;
     pendingText="";
     pendingOptions=null;
-    if(!available)return;
-    try{synth.cancel()}catch(_){}
-    try{if(window.LibcomlairFallbackVoice)window.LibcomlairFallbackVoice.stop()}catch(_){}
+    try{if(window.LibcomlairFallbackVoice&&typeof window.LibcomlairFallbackVoice.stop==="function")window.LibcomlairFallbackVoice.stop()}catch(_){}
+    if(available){try{synth.cancel()}catch(_){}}
     emit("cancelled");
   }
 
@@ -65,34 +64,38 @@
     let index=0;
     let finished=false;
 
-    async function finishError(error){
+    function finishError(error){
       if(finished||myGeneration!==generation)return;
       const fallback=window.LibcomlairFallbackVoice;
       if(fallback&&typeof fallback.speak==="function"){
-        attempts.push("Voix de secours française");
         emit("fallback-loading",{error:String(error||"all_voices_failed"),attempts:[...attempts]});
-        const ok=await fallback.speak(clean,{
-          onstart:()=>{
+        fallback.speak(clean,{
+          onstart:meta=>{
             if(finished||myGeneration!==generation)return;
             finished=true;
-            emit("started",{voice:"Voix de secours française",engine:"fallback",attempts:[...attempts]});
-            if(typeof opts.onstart==="function")opts.onstart({voice:"Voix de secours française",engine:"fallback",attempts:[...attempts]});
+            emit("started",{voice:(meta&&meta.voice)||"meSpeak français",mode:"fallback",attempts:[...attempts]});
+            if(typeof opts.onstart==="function")opts.onstart({voice:(meta&&meta.voice)||"meSpeak français",mode:"fallback",attempts:[...attempts]});
           },
-          onend:()=>{
-            emit("ended",{voice:"Voix de secours française",engine:"fallback",attempts:[...attempts]});
-            if(typeof opts.onend==="function")opts.onend({voice:"Voix de secours française",engine:"fallback",attempts:[...attempts]});
+          onend:meta=>{
+            emit("ended",{voice:(meta&&meta.voice)||"meSpeak français",mode:"fallback",attempts:[...attempts]});
+            if(typeof opts.onend==="function")opts.onend({voice:(meta&&meta.voice)||"meSpeak français",mode:"fallback",attempts:[...attempts]});
           },
-          onerror:fallbackError=>{
+          onerror:err=>{
             if(finished||myGeneration!==generation)return;
             finished=true;
-            const msg=fallbackError&&fallbackError.message?fallbackError.message:String(fallbackError||error||"all_voices_failed");
-            emit("error",{error:msg,engine:"fallback",attempts:[...attempts]});
-            if(typeof opts.onerror==="function")opts.onerror({error:msg,attempts:[...attempts]});
+            const message=err&&err.message?err.message:String(error||"fallback_failed");
+            emit("error",{error:message,mode:"fallback",attempts:[...attempts]});
+            if(typeof opts.onerror==="function")opts.onerror({error:message,attempts:[...attempts],mode:"fallback"});
           }
+        }).catch(err=>{
+          if(finished||myGeneration!==generation)return;
+          finished=true;
+          const message=err&&err.message?err.message:String(error||"fallback_failed");
+          emit("error",{error:message,mode:"fallback",attempts:[...attempts]});
+          if(typeof opts.onerror==="function")opts.onerror({error:message,attempts:[...attempts],mode:"fallback"});
         });
-        if(ok)return;
+        return;
       }
-      if(finished||myGeneration!==generation)return;
       finished=true;
       emit("error",{error:String(error||"all_voices_failed"),attempts:[...attempts]});
       if(typeof opts.onerror==="function")opts.onerror({error:String(error||"all_voices_failed"),attempts:[...attempts]});
@@ -101,7 +104,7 @@
     function tryNext(){
       if(finished||myGeneration!==generation)return;
       if(index>=candidates.length){
-        void finishError("all_voices_failed");
+        finishError("all_voices_failed");
         return;
       }
       const voice=candidates[index++];
@@ -145,7 +148,7 @@
           if(startTimer)clearTimeout(startTimer);
           const error=e&&e.error?String(e.error):"speech_error";
           if(error==="not-allowed"){
-            void finishError(error);
+            finishError(error);
             return;
           }
           setTimeout(tryNext,0);
@@ -175,7 +178,15 @@
 
   function speak(text,options){
     const clean=String(text||"").trim();
-    if(!clean||!available)return false;
+    if(!clean)return false;
+    if(!available){
+      const fallback=window.LibcomlairFallbackVoice;
+      if(fallback&&typeof fallback.speak==="function"){
+        fallback.speak(clean,options||{}).catch(()=>{});
+        return true;
+      }
+      return false;
+    }
     if(recognitionActive){
       pendingText=clean;
       pendingOptions=options||{};
@@ -196,7 +207,8 @@
   function setRecognitionActive(active){
     recognitionActive=!!active;
     if(recognitionActive){
-      try{if(synth.speaking||synth.pending)synth.cancel()}catch(_){}
+      try{if(synth&& (synth.speaking||synth.pending))synth.cancel()}catch(_){}
+      try{if(window.LibcomlairFallbackVoice&&typeof window.LibcomlairFallbackVoice.stop==="function")window.LibcomlairFallbackVoice.stop()}catch(_){}
       emit("listening",{recognitionActive:true});
       return;
     }
@@ -207,6 +219,14 @@
   function testDetailed(timeoutMs){
     return new Promise(resolve=>{
       if(!available){
+        const fallback=window.LibcomlairFallbackVoice;
+        if(fallback&&typeof fallback.speak==="function"){
+          fallback.speak("Assistance vocale Libcomlair activée.",{
+            onstart:meta=>resolve({ok:true,reason:"fallback",meta,status:status()}),
+            onerror:err=>resolve({ok:false,reason:err&&err.message?err.message:"fallback_failed",status:status()})
+          }).catch(err=>resolve({ok:false,reason:err&&err.message?err.message:"fallback_failed",status:status()}));
+          return;
+        }
         resolve({ok:false,reason:"unavailable",status:status()});
         return;
       }
