@@ -1,0 +1,35 @@
+name: Mettre à jour les directions IDFM
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/update-idfm-directions.yml"
+      - "scripts/import-idfm-directions.py"
+  schedule:
+    - cron: "17 6,12,16 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: Télécharger le GTFS officiel IDFM
+        run: |
+          curl -L --fail --retry 3 "https://eu.ftp.opendatasoft.com/stif/GTFS/IDFM-gtfs.zip" -o /tmp/idfm-gtfs.zip
+      - name: Construire l'index des directions
+        run: python scripts/import-idfm-directions.py /tmp/idfm-gtfs.zip data/idfm-directions.json
+      - name: Enregistrer les directions mises à jour
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/idfm-directions.json
+          git diff --cached --quiet || git commit -m "Mettre à jour les directions IDFM"
+          git push "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref_name }}
