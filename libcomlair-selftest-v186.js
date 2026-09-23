@@ -27,8 +27,12 @@
     try{voiceState=voiceEngine&&typeof voiceEngine.status==="function"?voiceEngine.status():null}catch(_){}
     const voiceHadFailure=!!(voiceState&&voiceState.lastOutcome&&voiceState.lastOutcome.ok===false);
     let voiceMode="moteur vocal prêt";
-    if(voiceState&&voiceState.activeEngine==="piper")voiceMode="voix Piper française active";\n    else if(voiceState&&voiceState.activeEngine==="mespeak")voiceMode="voix de secours meSpeak active";\n    else if(voiceState&&voiceState.activeEngine==="web")voiceMode="voix système active";
-    else if(voiceState&&voiceState.lastOutcome&&voiceState.lastOutcome.ok===true&&voiceState.lastOutcome.engine==="piper")voiceMode="voix Piper française validée";\n    else if(voiceState&&voiceState.lastOutcome&&voiceState.lastOutcome.ok===true&&voiceState.lastOutcome.engine==="mespeak")voiceMode="voix de secours meSpeak validée";\n    else if(voiceState&&voiceState.lastOutcome&&voiceState.lastOutcome.ok===true&&voiceState.lastOutcome.engine==="web")voiceMode="voix système validée";
+    if(voiceState&&voiceState.activeEngine==="piper")voiceMode="voix Piper française active";
+    else if(voiceState&&voiceState.activeEngine==="mespeak")voiceMode="voix de secours meSpeak active";
+    else if(voiceState&&voiceState.activeEngine==="web")voiceMode="voix système active";
+    else if(voiceState&&voiceState.lastOutcome&&voiceState.lastOutcome.ok===true&&voiceState.lastOutcome.engine==="piper")voiceMode="voix Piper française validée";
+    else if(voiceState&&voiceState.lastOutcome&&voiceState.lastOutcome.ok===true&&voiceState.lastOutcome.engine==="mespeak")voiceMode="voix de secours meSpeak validée";
+    else if(voiceState&&voiceState.lastOutcome&&voiceState.lastOutcome.ok===true&&voiceState.lastOutcome.engine==="web")voiceMode="voix système validée";
     else if(voiceHadFailure)voiceMode="dernière lecture vocale en échec";
 
     const checks=[
