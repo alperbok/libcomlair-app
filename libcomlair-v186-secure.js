@@ -339,9 +339,7 @@ function startVisionIntroSpeech(fromGesture=false){
   if(window.__libcomlairVisionIntroPlayed)return true;
   const engine=window.LibcomlairVoice;
   if(!engine||!engine.available)return false;
-  const ok=engine.speak(visionIntroText(),{
-    rate:0.9,
-    onstart:()=>{
+  const ok=engine.speak(visionIntroText(),{\n    rate:0.9,\n    naturalOnlyUntilGesture:!fromGesture,\n    onstart:()=>{
       window.__libcomlairVisionIntroPlayed=true;
       removeVisionIntroFallback();
     },
