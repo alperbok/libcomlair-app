@@ -499,10 +499,10 @@ function setupVisionSpeechOutput(){
     const status=document.getElementById("visionGuidePrompt");
     if(status)status.textContent="Test réel de l’assistance vocale en cours…";
     if(engine&&engine.available&&typeof engine.testDetailed==="function"){
-      engine.testDetailed(90000).then(result=>{
+      engine.testDetailed(12000).then(result=>{
         if(!status)return;
         if(result&&result.ok){
-          const voice=result&&result.meta&&result.meta.voice?result.meta.voice:"voix disponible"; const mode=result&&result.meta&&result.meta.mode==="fallback"?"Voix de secours active":"Voix normale active"; status.textContent="✓ "+mode+" : "+voice+".";
+          const voice=result&&result.meta&&result.meta.voice?result.meta.voice:"voix disponible"; const engineName=result&&result.meta&&result.meta.engine==="piper"?"voix de secours":"voix normale"; status.textContent="✓ Lecture vocale démarrée avec : "+voice+" ("+engineName+").";
         }else{
           const reason=result&&result.reason?String(result.reason):"erreur inconnue";
           const state=result&&result.status?result.status:null;
@@ -530,20 +530,6 @@ function setupVisionSpeechOutput(){
   });
 }
 setupVisionSpeechOutput();
-window.addEventListener("libcomlair-voice-status",e=>{
-  const d=e&&e.detail?e.detail:{};
-  const status=document.getElementById("visionGuidePrompt");
-  if(!status)return;
-  if(d.state==="fallback-loading"){
-    status.textContent=d.progress!=null?"Préparation de la voix de secours : "+d.progress+" %…":"Préparation de la voix de secours…";
-  }else if(d.state==="fallback-generating"){
-    status.textContent="Génération de la voix de secours…";
-  }else if(d.state==="fallback-started"){
-    status.textContent="✓ Voix de secours active.";
-  }else if(d.state==="started"){
-    status.textContent="✓ Voix normale active.";
-  }
-});
 
 function setupTutorialSpeech(){
   const speeches={
