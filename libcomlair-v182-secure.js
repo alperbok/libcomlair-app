@@ -498,11 +498,11 @@ function setupVisionSpeechOutput(){
   if(test)test.addEventListener("click",()=>{
     const status=document.getElementById("visionGuidePrompt");
     if(status)status.textContent="Test réel de l’assistance vocale en cours…";
-    if(engine&&typeof engine.testDetailed==="function"){
-      engine.testDetailed(12000).then(result=>{
+    if(engine&&engine.available&&typeof engine.testDetailed==="function"){
+      engine.testDetailed(90000).then(result=>{
         if(!status)return;
         if(result&&result.ok){
-          const voice=result&&result.meta&&result.meta.voice?result.meta.voice:"voix disponible"; const mode=result&&result.meta&&result.meta.mode==="fallback"?"Voix de secours active":"Voix normale active"; status.textContent="✓ "+mode+" : "+voice+".";
+          const voice=result&&result.meta&&result.meta.voice?result.meta.voice:"voix disponible"; const engineName=result&&result.meta&&(result.meta.engine==="piper"||result.meta.mode==="fallback")?"voix de secours":"voix normale"; status.textContent="✓ Lecture vocale démarrée avec : "+voice+" ("+engineName+").";
         }else{
           const reason=result&&result.reason?String(result.reason):"erreur inconnue";
           const state=result&&result.status?result.status:null;
