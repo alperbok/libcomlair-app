@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: idfm-directions-refresh
+  cancel-in-progress: true
+
 jobs:
   build:
     permissions:
@@ -31,5 +35,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A data/idfm-directions data/idfm-directions.json
-          git diff --cached --quiet || git commit -m "Mettre à jour les directions IDFM"
-          git push "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref_name }}
+          if ! git diff --cached --quiet; then
+            git commit -m "Mettre à jour les directions IDFM"
+            git pull --rebase "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" "${{ github.ref_name }}"
+            git push "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref_name }}
+          fi
