@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Libcomlair V181 — Piper compatible</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#18202a;background:#f4f6f8}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 20px 48px;background:#f4f6f8}
+main{max-width:760px;margin:auto;background:#fff;border-radius:24px;padding:28px;box-shadow:0 8px 26px rgba(0,0,0,.08)}
+h1{font-size:2rem;margin-top:0}p{font-size:1.12rem;line-height:1.5}.note{color:#5b6670}
+button{display:block;width:100%;margin:18px 0;padding:20px;border:3px solid #18202a;border-radius:18px;background:#fff;color:#18202a;font-size:1.2rem;font-weight:700}
+button:disabled{opacity:.55}
+#status{min-height:80px;padding:16px;background:#eef2f5;border-radius:14px;font-weight:600;overflow-wrap:anywhere}
+#details{font-size:1rem;overflow-wrap:anywhere}
+audio{width:100%;margin-top:14px}
+footer{margin-top:28px;text-align:center;color:#66717b}
+</style>
+</head>
+<body>
+<main>
+<h1>🔊 Test Piper compatible</h1>
+<p>Cette version n’utilise plus les identifiants numériques produits par le phonémiseur. Elle convertit les phonèmes avec la table exacte de la voix française, puis lance ONNX en WebAssembly mono-thread.</p>
+<p class="note">Cette page reste totalement isolée de l’application principale. La voix française fait environ 28 Mo au premier chargement.</p>
+<p id="details" class="note">Prêt pour le diagnostic phonétique.</p>
+<button id="prepareVoice" type="button">1️⃣ Générer la voix compatible</button>
+<button id="listenVoice" type="button" hidden>2️⃣ Écouter le test</button>
+<p id="status" aria-live="polite">Prêt pour le test.</p>
+<audio id="audio" controls hidden></audio>
+<footer>Libcomlair • Version de test V181 • Piper compatible</footer>
+</main>
+<script type="module" src="libcomlair-piper-compatible-v181.js?v=181"></script>
+</body>
+</html>
