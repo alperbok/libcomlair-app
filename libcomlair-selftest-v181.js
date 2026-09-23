@@ -32,15 +32,14 @@
     try{voiceState=voiceEngine&&typeof voiceEngine.status==="function"?voiceEngine.status():null}catch(_){}
     const voiceHadRealFailure=!!(voiceState&&voiceState.last&&voiceState.last.state==="error");
     const checks=[
-      check("Voix",!!(voiceEngine&&voiceEngine.version==="v178"&&typeof voiceEngine.speak==="function"&&typeof voiceEngine.testDetailed==="function"&&!voiceHadRealFailure),voiceHadRealFailure?"dernier test vocal en échec":"moteur vocal avec secours autonome"),
+      check("Voix",!!(voiceEngine&&voiceEngine.version==="v181"&&typeof voiceEngine.speak==="function"&&typeof voiceEngine.testDetailed==="function"&&window.LibcomlairFallbackVoice&&window.LibcomlairFallbackVoice.version==="mespeak-v181"&&!voiceHadRealFailure),voiceHadRealFailure?"dernier test vocal en échec":"voix normale + voix de secours"),
       check("Catégories",!!(window.LibcomlairCategories&&Array.isArray(window.LibcomlairCategories.categories)&&window.LibcomlairCategories.categories.length>=8),"listes et sous-catégories"),
       check("Accessibilité",!!(window.LibcomlairAccessibility&&typeof window.LibcomlairAccessibility.read==="function"&&typeof window.LibcomlairAccessibility.save==="function"),"profil et critères"),
       check("Données",!!(window.LibcomlairData&&typeof window.LibcomlairData.isFresh==="function"&&typeof window.LibcomlairData.loadState==="function"),"cache et actualisation"),
       check("Détails",!!(window.LibcomlairDetails&&typeof window.LibcomlairDetails.renderRestaurantPractical==="function"&&typeof window.LibcomlairDetails.enrichRestaurant==="function"),"fiches détaillées"),
       check("Transports",!!(window.LibcomlairTransport&&typeof window.LibcomlairTransport.normalizeNearbyStops==="function"),"normalisation transport"),
       check("Interface",!!(document.getElementById("visionVoiceCommand")&&document.getElementById("restaurantDetails")&&document.getElementById("detail")&&document.getElementById("places")),"éléments essentiels"),
-      check("Réparation",!!(window.LibcomlairRepair&&typeof window.LibcomlairRepair.repair==="function"),"réparation automatique"),
-      check("Voix secours",!!(window.LibcomlairFallbackVoice&&typeof window.LibcomlairFallbackVoice.speak==="function"),"moteur de secours vocal")
+      check("Réparation",!!(window.LibcomlairRepair&&typeof window.LibcomlairRepair.repair==="function"),"réparation automatique")
     ];
     const failed=checks.filter(x=>!x.ok);
     const result={
@@ -55,7 +54,7 @@
     const box=document.getElementById("systemDiagnosticResult");
     if(box){
       if(result.ok){
-        box.textContent="✓ Diagnostic réussi : les 9 contrôles principaux sont opérationnels.";
+        box.textContent="✓ Diagnostic réussi : les 8 contrôles principaux sont opérationnels.";
       }else{
         const parts=[];
         if(failed.length)parts.push("Moteurs en échec : "+failed.map(x=>x.name).join(", "));
