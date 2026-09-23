@@ -25,11 +25,11 @@ jobs:
         run: |
           curl -L --fail --retry 3 "https://eu.ftp.opendatasoft.com/stif/GTFS/IDFM-gtfs.zip" -o /tmp/idfm-gtfs.zip
       - name: Construire l'index des directions
-        run: python scripts/import-idfm-directions.py /tmp/idfm-gtfs.zip data/idfm-directions.json
+        run: python scripts/import-idfm-directions.py /tmp/idfm-gtfs.zip data/idfm-directions
       - name: Enregistrer les directions mises à jour
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/idfm-directions.json
+          git add -A data/idfm-directions data/idfm-directions.json
           git diff --cached --quiet || git commit -m "Mettre à jour les directions IDFM"
           git push "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref_name }}
