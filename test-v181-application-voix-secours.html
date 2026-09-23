@@ -1,0 +1,179 @@
+<!doctype html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' https://unpkg.com; img-src 'self' data: https://*.tile.openstreetmap.org https://unpkg.com; connect-src 'self' https://*.tile.openstreetmap.org https://libcomlair-backend.onrender.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; media-src 'none'; worker-src 'self'; upgrade-insecure-requests"><title>Libcomlair V16 — test sécurité</title><link rel="stylesheet" href="style.css?v=accessibility-v42"><style>#reviewStars label{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:14px!important;margin:0!important;padding:2px 0!important;min-height:0!important;height:34px!important;font-weight:650}#reviewStars input[type="radio"]{width:24px!important;height:24px!important;padding:0!important;margin:0!important;flex:0 0 24px!important}#reviewStars label span{min-width:145px;line-height:1!important}#reviewStars{display:flex!important;flex-direction:column!important;gap:0!important;margin:4px 0 12px!important;padding:0!important}#reviewStars label{display:grid!important;grid-template-columns:170px 28px!important;align-items:center!important;justify-content:start!important;column-gap:10px!important;margin:0!important;padding:0!important;height:32px!important;min-height:32px!important;max-height:32px!important;line-height:32px!important}#reviewStars label span{display:block!important;min-width:0!important;line-height:32px!important;margin:0!important;padding:0!important}#reviewStars input[type="radio"]{appearance:auto!important;-webkit-appearance:radio!important;box-sizing:border-box!important;width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;margin:0!important;padding:0!important;border:0!important}</style><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><style id="reviewCompactV26">
+#placeFeedback #reviewStars{display:block!important;margin:4px 0 12px!important;padding:0!important}
+#placeFeedback #reviewStars .review-star-row{display:flex!important;align-items:center!important;gap:12px!important;margin:0!important;padding:0!important;height:30px!important;min-height:30px!important;max-height:30px!important;line-height:30px!important}
+#placeFeedback #reviewStars .review-star-row span{display:inline-block!important;width:175px!important;min-width:175px!important;margin:0!important;padding:0!important;line-height:30px!important}
+#placeFeedback #reviewStars .review-star-row input[type="radio"]{all:revert!important;appearance:auto!important;-webkit-appearance:radio!important;width:22px!important;height:22px!important;margin:0!important;padding:0!important;flex:0 0 22px!important}
+</style><style id="reviewCompactV27">
+#placeFeedback #reviewStars{display:grid!important;grid-template-rows:repeat(5,30px)!important;gap:0!important;margin:4px 0 12px!important;padding:0!important}
+#placeFeedback #reviewStars .review-star-row{display:grid!important;grid-template-columns:175px 24px!important;align-items:center!important;gap:10px!important;margin:0!important;padding:0!important;height:30px!important;min-height:0!important;max-height:30px!important}
+#placeFeedback #reviewStars .review-star-row span{display:block!important;margin:0!important;padding:0!important;line-height:30px!important}
+#placeFeedback #reviewStars .review-star-row input[type="radio"]{all:revert!important;appearance:auto!important;-webkit-appearance:radio!important;width:22px!important;height:22px!important;margin:0!important;padding:0!important}
+</style><style id="reviewCompactApproved">
+#placeFeedback #reviewStars{display:grid!important;grid-template-rows:repeat(5,24px)!important;row-gap:0!important;margin:4px 0 14px!important;padding:0!important}
+#placeFeedback #reviewStars .review-star-row{display:grid!important;grid-template-columns:195px 24px!important;align-items:center!important;column-gap:10px!important;margin:0!important;padding:0!important;height:24px!important;min-height:24px!important;max-height:24px!important;line-height:24px!important}
+#placeFeedback #reviewStars .review-star-row span{display:block!important;margin:0!important;padding:0!important;line-height:24px!important}
+#placeFeedback #reviewStars .review-star-row input[type="radio"]{all:revert!important;appearance:auto!important;-webkit-appearance:radio!important;box-sizing:border-box!important;width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;margin:0!important;padding:0!important}
+</style><style id="v160-hide-top-category-grid">#categories{display:none!important}</style></head><body><a class="skip-link" href="#mainContent">Aller directement au contenu</a><header><div><strong>Libcomlair</strong><small>Des lieux accessibles, plus faciles à trouver</small></div></header><main id="mainContent" tabindex="-1"><section id="accessWelcome" class="access-welcome" aria-labelledby="accessWelcomeTitle">
+<h1 id="accessWelcomeTitle">Comment souhaitez-vous utiliser Libcomlair ?</h1>
+<p>Choisissez un ou plusieurs besoins. Ce choix est facultatif et reste uniquement sur cet appareil.</p>
+<fieldset><legend><strong>Mes besoins</strong></legend>
+<label><input type="checkbox" name="accessProfile" value="mobility"> ♿ Mobilité</label>
+<label><input type="checkbox" name="accessProfile" value="vision"> 👁 Vision</label>
+<label><input type="checkbox" name="accessProfile" value="hearing"> 👂 Audition</label>
+<label><input type="checkbox" name="accessProfile" value="cognitive"> 🧭 Compréhension / cognition</label>
+<label><input type="checkbox" name="accessProfile" value="assistance"> 🤝 Assistance / accompagnement</label>
+</fieldset>
+<div class="welcome-actions"><button id="applyAccessProfile" class="details-btn" type="button">Utiliser mes choix</button><button id="skipAccessProfile" class="details-btn" type="button">Continuer sans adaptation particulière</button></div>
+<p id="accessWelcomeStatus" class="data-note" aria-live="polite"></p>
+</section><section id="accessNeedsSection">
+<h2>Mes besoins d’accessibilité</h2>
+<p id="activeAccessProfile" class="data-note" aria-live="polite"></p>
+<button id="changeAccessProfile" class="details-btn" type="button">Modifier mon profil d’accessibilité</button>
+</section>
+<section class="hero">
+<div id="speechChoiceControls">
+<button id="visionReadPage" class="details-btn" type="button">🔊 Présentation Libcomlair</button>
+<button id="visionStopReading" class="details-btn" type="button">■ Arrêter la lecture</button>
+<p class="data-note">La présentation vocale de Libcomlair annonce l’application et les choix disponibles.<br><small>V181 : moteur de secours vocal de test activé si la synthèse Web échoue.</small></p>
+</div>
+<div id="visionVoiceControls" hidden>
+<button id="visionGuideStart" class="details-btn" type="button">▶ Navigation vocale guidée</button>
+<button id="visionVoiceTest" class="details-btn" type="button">🔊 Tester l’assistance vocale</button>
+<button id="visionVoiceCommand" class="details-btn vision-mic-fixed" type="button" aria-label="Répondre au micro, bouton fixe en haut à droite">🎙 <span class="vision-mic-label">Micro</span></button>
+<p id="visionGuidePrompt" class="data-note" aria-live="polite">Mode Vision : Libcomlair vous annonce d’abord les choix disponibles, puis vous pouvez répondre au microphone.</p>
+</div>
+<details id="accessCriteriaDetails">
+<summary class="details-btn"><strong>Afficher les critères d’accessibilité</strong></summary>
+<div id="accessFilters" class="grid"></div>
+</details>
+<details id="libcomlairTutorial">
+<summary class="details-btn"><strong>ℹ️ Comment fonctionne Libcomlair ?</strong></summary>
+<div id="libcomlairTutorialText" class="detail">
+<p><strong>Les lieux :</strong> Libcomlair récupère des lieux à partir de sources externes et peut aussi afficher des informations ajoutées ou vérifiées dans l’application.</p>
+<p><strong>Le classement :</strong> les catégories et sous-catégories sont attribuées automatiquement lorsque les données disponibles permettent de les reconnaître.</p>
+<p><strong>L’accessibilité :</strong> Libcomlair n’invente pas une information d’accessibilité. Lorsqu’elle n’est pas connue ou confirmée, elle reste indiquée comme « à vérifier ».</p>
+<p><strong>Les mises à jour :</strong> le nombre de lieux, leur classement et leurs informations peuvent évoluer lorsque les sources sont actualisées.</p>
+<button id="readLibcomlairTutorial" class="details-btn" type="button">🔊 Lire cette explication</button>
+</div>
+</details>
+<details id="systemDiagnostic">
+<summary class="details-btn"><strong>🧪 Diagnostic de fonctionnement</strong></summary>
+<p class="data-note">Ce contrôle vérifie que les principaux moteurs de Libcomlair sont bien chargés avant de poursuivre les tests.</p>
+<button id="runSystemDiagnostic" class="details-btn" type="button" onclick="var r=document.getElementById('systemDiagnosticResult');if(r)r.textContent='Diagnostic lancé…';setTimeout(function(){if(window.LibcomlairDiagnostics&&typeof window.LibcomlairDiagnostics.run==='function'){window.LibcomlairDiagnostics.run()}else if(r){r.textContent='⚠ Le moteur de diagnostic n’est pas chargé.'}},80)">Lancer le diagnostic</button>
+<p id="systemDiagnosticResult" class="data-note" aria-live="polite"></p>
+<hr>
+<h3>Réparation automatique</h3>
+<p class="data-note">En cas de problème après une mise à jour, cette fonction nettoie uniquement les données techniques temporaires et recharge une copie propre de Libcomlair. Les favoris, avis, signalements, lieux ajoutés et le profil d’accessibilité sont conservés.</p>
+<button id="runSystemRepair" class="details-btn" type="button" onclick="var r=document.getElementById('systemRepairResult');if(r)r.textContent='Réparation automatique en cours…';if(window.LibcomlairRepair&&typeof window.LibcomlairRepair.repair==='function'){window.LibcomlairRepair.repair()}else if(r){r.textContent='⚠ Le moteur de réparation n’est pas chargé.'}">🔧 Réparer automatiquement l’application</button>
+<p id="systemRepairResult" class="data-note" aria-live="polite"></p>
+</details>
+<h1>Trouvez un lieu accessible</h1><p>Restaurants, hôtels, loisirs et services avec des informations d’accessibilité claires.</p><label for="search">Rechercher un lieu ou une ville</label><input id="search" type="search" placeholder="Ex. restaurant, Poitiers…"></section><section><h2>Catégories</h2><div id="categories" class="grid" hidden aria-hidden="true"></div>
+
+<details id="shopDetails" hidden>
+<summary class="category"><strong>Magasins ▸</strong></summary>
+<details id="shopTutorial">
+<summary class="details-btn"><strong>ℹ️ Comment sont classés les magasins ?</strong></summary>
+<div class="detail">
+<p>Libcomlair utilise le type de commerce indiqué par les sources disponibles.</p>
+<p>Les magasins peuvent être rangés dans <strong>Alimentation</strong>, <strong>Vêtements</strong>, <strong>Pharmacie / parapharmacie</strong>, <strong>Centre commercial</strong>, <strong>Maison / bricolage</strong>, <strong>Électronique</strong>, <strong>Beauté</strong> ou <strong>Culture / loisirs</strong>.</p>
+<p>Si le type précis n’est pas suffisamment identifié, le lieu reste visible dans <strong>Tous les magasins</strong> sans classement incertain.</p>
+<button id="readShopTutorial" class="details-btn" type="button">🔊 Lire cette explication</button>
+</div>
+</details>
+<div id="shopTypes" class="grid"></div>
+</details>
+
+<details id="barDetails" hidden>
+<summary class="category"><strong>Bars ▸</strong></summary>
+<details id="barTutorial">
+<summary class="details-btn"><strong>ℹ️ Comment sont classés les bars ?</strong></summary>
+<div class="detail">
+<p>Libcomlair classe les établissements selon le type indiqué dans les données disponibles.</p>
+<p>Les sous-catégories sont <strong>Bar / café</strong>, <strong>Pub</strong>, <strong>Bar à cocktails</strong>, <strong>Bar musical</strong>, <strong>Bar d’hôtel</strong> et <strong>Bar-restaurant</strong>.</p>
+<p>Lorsqu’un type précis n’est pas confirmé, l’établissement reste dans <strong>Tous les bars</strong>.</p>
+<button id="readBarTutorial" class="details-btn" type="button">🔊 Lire cette explication</button>
+</div>
+</details>
+<div id="barTypes" class="grid"></div>
+</details>
+
+<details id="hotelDetails" hidden>
+<summary class="category"><strong>Hôtels ▸</strong></summary>
+<details id="hotelTutorial">
+<summary class="details-btn"><strong>ℹ️ Comment sont classés les hébergements ?</strong></summary>
+<div class="detail">
+<p>Libcomlair utilise la nature de l’hébergement indiquée par les sources.</p>
+<p>Les sous-catégories sont <strong>Hôtel</strong>, <strong>Appart’hôtel</strong>, <strong>Auberge / hostel</strong>, <strong>Chambre d’hôtes</strong>, <strong>Résidence de tourisme</strong> et <strong>Camping / hébergement de plein air</strong>.</p>
+<p>Si le type n’est pas suffisamment précis, le lieu reste dans <strong>Tous les hébergements</strong>.</p>
+<button id="readHotelTutorial" class="details-btn" type="button">🔊 Lire cette explication</button>
+</div>
+</details>
+<div id="hotelTypes" class="grid"></div>
+</details>
+
+<details id="restaurantDetails" hidden>
+<summary class="category"><strong>Restaurants ▸</strong></summary>
+<details id="restaurantTutorial">
+<summary class="details-btn"><strong>ℹ️ Comment sont classés les restaurants ?</strong></summary>
+<div id="restaurantTutorialText" class="detail">
+<p>Libcomlair utilise les informations disponibles dans les sources pour classer automatiquement les restaurants.</p>
+<p><strong>Pizzeria</strong>, <strong>Fast-food</strong> et <strong>Café / salon de thé</strong> sont attribués lorsque le type est clairement identifié.</p>
+<p><strong>Cuisine du monde</strong> regroupe les cuisines identifiées par origine ou spécialité. Les restaurants génériques sont classés dans <strong>Restaurant traditionnel</strong>.</p>
+<p><strong>Gastronomique</strong> n’est pas attribué automatiquement sans information suffisamment fiable.</p>
+<p>Un établissement peut donc changer de sous-catégorie si de nouvelles données plus précises deviennent disponibles.</p>
+<button id="readRestaurantTutorial" class="details-btn" type="button">🔊 Lire cette explication</button>
+</div>
+</details>
+<div id="restaurantTypes" class="grid"></div>
+</details>
+
+<details id="leisureDetails" hidden>
+<summary class="category"><strong>Loisirs ▸</strong></summary>
+<details id="leisureTutorial">
+<summary class="details-btn"><strong>ℹ️ Comment sont classés les loisirs ?</strong></summary>
+<div class="detail">
+<p>Libcomlair classe les lieux selon l’activité principale indiquée par les sources.</p>
+<p>Les sous-catégories sont <strong>Cinéma</strong>, <strong>Musée</strong>, <strong>Théâtre / spectacle</strong>, <strong>Bibliothèque / médiathèque</strong>, <strong>Sport</strong>, <strong>Piscine</strong>, <strong>Parc / jardin</strong>, <strong>Parc d’attractions</strong> et <strong>Activités culturelles</strong>.</p>
+<p>Si l’activité n’est pas assez précise, le lieu reste visible dans <strong>Tous les loisirs</strong>.</p>
+<button id="readLeisureTutorial" class="details-btn" type="button">🔊 Lire cette explication</button>
+</div>
+</details>
+<div id="leisureTypes" class="grid"></div>
+</details>
+
+<details id="serviceDetails" hidden>
+<summary class="category"><strong>Services ▸</strong></summary>
+<details id="serviceTutorial">
+<summary class="details-btn"><strong>ℹ️ Comment sont classés les services ?</strong></summary>
+<div class="detail">
+<p>Libcomlair se base sur la fonction principale du lieu ou de l’organisme.</p>
+<p>Les sous-catégories sont <strong>Santé / soins</strong>, <strong>Administrations / services publics</strong>, <strong>Banques</strong>, <strong>Poste</strong>, <strong>Services sociaux</strong>, <strong>Aide à domicile</strong>, <strong>Toilettes publiques accessibles</strong>, <strong>Accueil / information</strong> et <strong>Services spécialisés handicap</strong>.</p>
+<p>Si la fonction précise n’est pas connue, le lieu reste dans <strong>Tous les services</strong>.</p>
+<button id="readServiceTutorial" class="details-btn" type="button">🔊 Lire cette explication</button>
+</div>
+</details>
+<div id="serviceTypes" class="grid"></div>
+</details>
+
+<details id="transportDetails" hidden>
+<summary class="category"><strong>Transports ▸</strong></summary>
+<details id="transportTutorial">
+<summary class="details-btn"><strong>ℹ️ Comment sont classés les transports ?</strong></summary>
+<div class="detail">
+<p>Libcomlair utilise les informations des réseaux et sources de transport disponibles pour identifier le mode de transport et les arrêts ou gares.</p>
+<p>Les sous-catégories sont <strong>Train / Gare</strong>, <strong>Bus / Arrêt</strong>, <strong>Métro</strong>, <strong>Tramway</strong>, <strong>Taxi / transport adapté</strong> et <strong>Bateau / ferry</strong>.</p>
+<p>Lorsque le mode exact n’est pas suffisamment identifié, le point de transport reste dans <strong>Tous les transports</strong>. Les informations officielles, comme les directions disponibles, peuvent évoluer avec les mises à jour des réseaux.</p>
+<button id="readTransportTutorial" class="details-btn" type="button">🔊 Lire cette explication</button>
+</div>
+</details>
+<div id="transportTypes" class="grid"></div>
+</details></section><section class="map-section" aria-labelledby="mapTitle"><h2 id="mapTitle">Carte</h2><p class="data-note">La carte est facultative : tous les lieux et leurs informations restent accessibles dans la liste ci-dessous.</p><button id="nearMe" class="details-btn near-me">⌖ Autour de moi</button><p id="locationStatus" class="data-note"></p><div id="map" class="map-placeholder" role="region" aria-label="Carte des lieux. Utilisez la liste des lieux si la carte n’est pas adaptée à votre navigation."></div></section><section><h2>Contribuer</h2><button id="addPlaceBtn" class="details-btn" type="button">＋ Ajouter / signaler un lieu accessible</button><div id="addPlacePanel" hidden><div id="addPlaceForm" class="detail"><p><label for="newPlaceName"><strong>Nom du lieu</strong></label><br><input id="newPlaceName" type="text" required></p><p><label for="newPlaceCity"><strong>Ville</strong></label><br><input id="newPlaceCity" type="text" required></p><p><label for="newPlaceAddress"><strong>Adresse précise</strong></label><br><input id="newPlaceAddress" type="text" placeholder="Ex. 10 rue..."></p><p><label for="newPlacePhone"><strong>Téléphone</strong></label><br><input id="newPlacePhone" type="tel"></p><p><label for="newPlaceWebsite"><strong>Site internet</strong></label><br><input id="newPlaceWebsite" type="url" placeholder="https://..."></p><p><label for="newPlaceCategory"><strong>Catégorie</strong></label><br><select id="newPlaceCategory"><option>Restaurants</option><option>Hôtels</option><option>Bars</option><option>Magasins</option><option>Loisirs</option><option>Services</option><option>Transports</option></select></p><p><label for="newPlaceComment"><strong>Commentaire sur l’accessibilité</strong></label><br><textarea id="newPlaceComment" rows="4" placeholder="Ex. rampe à l’entrée, porte large..."></textarea><br><button class="details-btn voice-dictate" type="button" data-target="newPlaceComment">🎙 Dicter ce commentaire</button></p><h3>Emplacement sur la carte</h3><p class="data-note">Touchez la carte à l’endroit du lieu, ou utilisez votre position si vous êtes sur place.</p><button id="proposalNearMe" class="details-btn" type="button">⌖ Utiliser ma position</button><p id="proposalMapStatus" class="data-note" aria-live="polite"></p><div id="proposalMap" class="map-placeholder" role="region" aria-label="Carte facultative pour choisir l’emplacement du lieu"></div><fieldset><legend><strong>Accessibilité du lieu</strong></legend><p class="data-note">Cochez les informations que vous connaissez.</p><div id="newPlaceAccess" class="grid"></div></fieldset><button id="submitPlaceBtn" class="details-btn" type="button">Enregistrer la modification</button><p id="addPlaceStatus" class="data-note" aria-live="polite"></p></div></div></section><section id="favoritesSection"><details><summary class="details-btn"><strong>★ Mes favoris <span id="favoritesBadge">(0)</span></strong></summary><p id="favoritesCount" class="data-note"></p><div id="favoritesList" class="places"></div><p id="favoritesEmpty" class="data-note">Aucun lieu enregistré en favori.</p></details></section><section><h2>Lieux</h2><p id="resultsCount" class="data-note" aria-live="polite"></p><p id="activeFilters" class="data-note" aria-live="polite"></p><details id="placesFilters"><summary class="details-btn"><strong>Filtres et tri</strong></summary><label><input id="onlyFavorites" type="checkbox"> ★ Afficher uniquement mes favoris</label><br><label><input id="onlyProposals" type="checkbox"> Afficher uniquement mes propositions</label><br><label><input id="onlyMapped" type="checkbox"> Afficher uniquement les lieux positionnés sur la carte</label><br><label><input id="onlyWithWebsite" type="checkbox"> Afficher uniquement les lieux avec un site internet</label><br><label><input id="onlyWithPhone" type="checkbox"> Afficher uniquement les lieux avec un numéro de téléphone</label><button id="resetSearch" class="details-btn" type="button">Effacer la recherche et les filtres</button><p><label for="sortPlaces"><strong>Trier les lieux</strong></label><br><select id="sortPlaces"><option value="default">Mes propositions en premier</option><option value="name">Nom A–Z</option><option value="city">Ville A–Z</option><option value="category">Catégorie A–Z</option><option value="access">Plus d’informations d’accessibilité</option></select></p></details><div id="places" class="places"></div><p id="empty" hidden>Aucun lieu ne correspond à vos critères.</p></section><section id="detail" class="detail" hidden><button id="closeDetail" class="back-btn" type="button">← Retour aux lieux</button><h2 id="detailTitle"></h2><p id="detailMeta"></p><p id="detailStatus" class="data-note"></p><h3>Informations pratiques</h3><p id="detailRestaurantTypeRow" hidden><strong>Type de restaurant :</strong> <span id="detailRestaurantType"></span></p><p id="detailCuisineRow" hidden><strong>Cuisine :</strong> <span id="detailCuisine"></span></p><p><strong>Téléphone :</strong> <span id="detailPhone"></span></p><p id="detailPmrPhoneRow" hidden><strong>☎ Assistance handicap / PMR :</strong> <span id="detailPmrPhone"></span></p><p><strong>Horaires :</strong> <span id="detailHours"></span></p><p id="detailWebsiteRow" hidden><strong>Site internet :</strong> <span id="detailWebsiteInfo"></span></p><details id="detailActions"><summary class="details-btn"><strong>Actions possibles</strong></summary><div class="detail-actions"><a id="detailCall" class="details-btn">Appeler</a> <a id="detailPmrCall" class="details-btn" href="tel:3635">Appeler assistance PMR</a> <a id="detailWebsite" class="details-btn" target="_blank" rel="noopener noreferrer">Ouvrir le site internet</a> <a id="detailRoute" class="details-btn" target="_blank" rel="noopener noreferrer">📍 Itinéraire</a> <button id="detailMap" class="details-btn" type="button">🗺 Voir sur la carte</button> <button id="detailShare" class="details-btn" type="button">↗ Partager ce lieu</button> <button id="detailCopyAddress" class="details-btn" type="button">📋 Copier l’adresse</button> <button id="favoriteBtn" class="details-btn" type="button">☆ Ajouter aux favoris</button> <button id="reportErrorBtn" class="details-btn" type="button">⚠ Signaler une erreur</button></div></details><details id="placeReportSection"><summary class="details-btn"><strong>⚠ Signalement sur ce lieu</strong></summary><div id="placeReportHistory"></div><div id="placeReportUpdate"></div></details><details id="placeFeedback"><summary class="details-btn"><strong>💬 Avis et commentaires</strong></summary><p><strong>Votre note d’accessibilité</strong></p><div id="reviewStars" role="radiogroup" aria-label="Note sur 5 étoiles"><div class="review-star-row"><span>★</span><input type="radio" name="reviewRating" value="1" aria-label="1 étoile"></div><div class="review-star-row"><span>★★</span><input type="radio" name="reviewRating" value="2" aria-label="2 étoiles"></div><div class="review-star-row"><span>★★★</span><input type="radio" name="reviewRating" value="3" aria-label="3 étoiles"></div><div class="review-star-row"><span>★★★★</span><input type="radio" name="reviewRating" value="4" aria-label="4 étoiles"></div><div class="review-star-row"><span>★★★★★</span><input type="radio" name="reviewRating" value="5" aria-label="5 étoiles"></div></div><p><label for="reviewComment"><strong>Commentaire</strong></label><br><textarea id="reviewComment" rows="3" maxlength="1000" placeholder="Votre expérience concernant l’accessibilité de ce lieu..."></textarea><br><button class="details-btn voice-dictate" type="button" data-target="reviewComment">🎙 Dicter mon avis</button></p><button id="saveReview" class="details-btn" type="button">Enregistrer mon avis</button><p id="reviewStatus" class="data-note"></p><div id="placeReviews"></div></details><div id="reportErrorPanel" hidden><p><label for="reportErrorText"><strong>Quelle information est incorrecte ?</strong></label><br><textarea id="reportErrorText" rows="3" placeholder="Ex. adresse, téléphone, accessibilité..."></textarea><br><button class="details-btn voice-dictate" type="button" data-target="reportErrorText">🎙 Dicter le signalement</button></p><button id="saveReportError" class="details-btn" type="button">Enregistrer le signalement</button><p id="reportErrorStatus" class="data-note"></p></div></p><h3>Accessibilité</h3>
+<div id="accessibilityProfile" class="accessibility-profile" aria-label="Profil d’accessibilité détaillé">
+  <section><h4>♿ Mobilité</h4><ul id="accessMobility" class="access-list"></ul></section>
+  <section><h4>👁 Déficience visuelle</h4><ul id="accessVisual" class="access-list"></ul></section>
+  <section><h4>👂 Déficience auditive</h4><ul id="accessHearing" class="access-list"></ul></section>
+  <section><h4>🧭 Compréhension et orientation</h4><ul id="accessCognitive" class="access-list"></ul></section>
+  <section><h4>🤝 Assistance</h4><ul id="accessAssistance" class="access-list"></ul></section>
+</div>
+<p class="data-note">« Non renseigné » signifie que Libcomlair ne dispose pas encore d’une information vérifiée.</p>
+<ul id="detailAccess" class="access-list"></ul><div id="detailCommentBox" hidden><h3>Commentaire sur l’accessibilité</h3><p id="detailComment"></p></div><p id="detailSourceNote" class="data-note">Informations fictives de démonstration.</p></section><section id="voiceStatusPanel" class="voice-status" hidden aria-live="assertive"><strong id="voiceStatus"></strong></section></main><footer>Libcomlair • Version de test V181</footer><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://cdn.jsdelivr.net/gh/btopro/mespeak@master/mespeak.js"></script><script src="libcomlair-fallback-voice-v181.js?v=181"></script><script src="libcomlair-voice-engine-v181.js?v=181"></script><script src="libcomlair-category-engine-v173.js?v=181"></script><script src="libcomlair-accessibility-engine-v173.js?v=181"></script><script src="libcomlair-data-engine-v173.js?v=181"></script><script src="libcomlair-detail-engine-v173.js?v=181"></script><script src="libcomlair-transport-engine-v173.js?v=181"></script><script src="libcomlair-repair-engine-v175.js?v=181"></script><script src="libcomlair-selftest-v181.js?v=181"></script><script src="libcomlair-v181-secure.js?v=181"></script><script src="libcomlair-v157-directions.js?v=181"></script></body></html>
