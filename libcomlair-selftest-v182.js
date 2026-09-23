@@ -30,9 +30,9 @@
     const voiceEngine=window.LibcomlairVoice;
     let voiceState=null;
     try{voiceState=voiceEngine&&typeof voiceEngine.status==="function"?voiceEngine.status():null}catch(_){}
-    const voiceHadRealFailure=!!(voiceState&&voiceState.last&&voiceState.last.state==="error");
+    const voiceHadRealFailure=!!(voiceState&&voiceState.last&&voiceState.last.state==="error"); const voiceMode=voiceState&&voiceState.activeEngine==="piper"?"voix de secours active":voiceState&&voiceState.activeEngine==="web"?"voix normale active":"moteur vocal hybride prêt";
     const checks=[
-      check("Voix",!!(voiceEngine&&voiceEngine.version==="v182"&&typeof voiceEngine.speak==="function"&&typeof voiceEngine.testDetailed==="function"&&window.LibcomlairFallbackVoice&&window.LibcomlairFallbackVoice.version==="mespeak-v182"&&!voiceHadRealFailure),voiceHadRealFailure?"dernier test vocal en échec":"voix normale + voix de secours"),
+      check("Voix",!!(voiceEngine&&voiceEngine.version==="v182"&&typeof voiceEngine.speak==="function"&&typeof voiceEngine.testDetailed==="function"&&!voiceHadRealFailure),voiceHadRealFailure?"dernier test vocal en échec":voiceMode),
       check("Catégories",!!(window.LibcomlairCategories&&Array.isArray(window.LibcomlairCategories.categories)&&window.LibcomlairCategories.categories.length>=8),"listes et sous-catégories"),
       check("Accessibilité",!!(window.LibcomlairAccessibility&&typeof window.LibcomlairAccessibility.read==="function"&&typeof window.LibcomlairAccessibility.save==="function"),"profil et critères"),
       check("Données",!!(window.LibcomlairData&&typeof window.LibcomlairData.isFresh==="function"&&typeof window.LibcomlairData.loadState==="function"),"cache et actualisation"),
