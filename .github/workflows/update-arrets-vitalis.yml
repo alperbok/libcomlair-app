@@ -1,9 +1,9 @@
-name: Mettre à jour les arrêts Vitalis
+name: Mettre à jour quotidiennement les arrêts Vitalis
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "50 4 * * 1"
+    - cron: "50 4 * * *"
 
 permissions:
   contents: read
