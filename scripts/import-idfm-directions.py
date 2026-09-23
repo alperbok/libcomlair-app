@@ -216,12 +216,12 @@ def main():
     generated=datetime.now(timezone.utc).isoformat()
     shards=defaultdict(dict)
     for sid, lines in stops.items():
-        prefix=sid[:2] if len(sid)>=2 else sid.zfill(2)
+        prefix=sid[:3] if len(sid)>=3 else sid.zfill(3)
         shards[prefix][sid]=lines
 
     for prefix, shard_stops in shards.items():
         payload={
-            "version":"idfm-directions-static-v156",
+            "version":"idfm-directions-static-v157",
             "generatedAt":generated,
             "stops":shard_stops
         }
@@ -234,7 +234,7 @@ def main():
     grouped_stop_ids=sum(len(members) for members in grouped_members.values() if len(members)>1)
 
     manifest={
-        "version":"idfm-directions-static-v156",
+        "version":"idfm-directions-static-v157",
         "generatedAt":generated,
         "stops":len(stops),
         "shards":sorted(shards),
