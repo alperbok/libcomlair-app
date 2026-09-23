@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Libcomlair V179 — Test voix de secours</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#18202a;background:#f4f6f8}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 20px 48px;background:#f4f6f8}
+main{max-width:760px;margin:0 auto;background:white;border-radius:24px;padding:28px;box-shadow:0 8px 26px rgba(0,0,0,.08)}
+h1{font-size:2rem;margin-top:0}
+p{font-size:1.15rem;line-height:1.5}
+.note{color:#5b6670}
+button{display:block;width:100%;margin:18px 0;padding:20px;border:3px solid #18202a;border-radius:18px;background:white;color:#18202a;font-size:1.25rem;font-weight:700}
+button:disabled{opacity:.55}
+#piperStatus{min-height:70px;padding:16px;border-radius:14px;background:#eef2f5;font-weight:600}
+#piperDetails{font-size:1rem}
+audio{width:100%;margin-top:16px}
+footer{margin-top:28px;color:#66717b;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<h1>🔊 Test de la voix de secours Libcomlair</h1>
+<p>Cette page est volontairement séparée de l’application. Elle teste <strong>Piper</strong>, une synthèse vocale qui génère directement un fichier audio et ne dépend pas de la synthèse vocale Web en panne sur ce téléphone.</p>
+<p class="note"><strong>Premier test :</strong> la voix française légère fait environ 28 Mo. Elle peut donc prendre un moment à se préparer selon la connexion. Les utilisations suivantes peuvent réutiliser le modèle conservé par le navigateur.</p>
+<p id="piperDetails" class="note"></p>
+<button id="preparePiper" type="button">1️⃣ Préparer la voix de secours</button>
+<button id="listenPiper" type="button" hidden>2️⃣ Écouter le test</button>
+<p id="piperStatus" aria-live="polite">Prêt pour le test.</p>
+<audio id="piperAudio" controls hidden></audio>
+<footer>Libcomlair • Version de test V179 • Piper isolé</footer>
+</main>
+<script type="module" src="libcomlair-piper-test-v179.js?v=179"></script>
+</body>
+</html>
