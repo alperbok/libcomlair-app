@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 980" role="img" aria-labelledby="t d">
+<title id="t">Libcomlair, accessibilité pour tous</title>
+<desc id="d">Illustration d'un homme en fauteuil roulant et d'une personne aveugle avec une canne et un chien guide dans une ville accessible.</desc>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dff4f7"/><stop offset="1" stop-color="#f7fbfc"/></linearGradient>
+  <linearGradient id="road" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8eef0"/><stop offset="1" stop-color="#cfdadd"/></linearGradient>
+</defs>
+<rect width="900" height="980" rx="42" fill="url(#sky)"/>
+<g opacity=".9">
+ <rect x="40" y="250" width="150" height="250" rx="10" fill="#b8d7db"/>
+ <rect x="200" y="180" width="135" height="320" rx="10" fill="#c9e0e3"/>
+ <rect x="345" y="220" width="175" height="280" rx="10" fill="#b8d7db"/>
+ <rect x="535" y="145" width="145" height="355" rx="10" fill="#c9e0e3"/>
+ <rect x="695" y="230" width="160" height="270" rx="10" fill="#b8d7db"/>
+</g>
+<g fill="#7eb7a5">
+ <circle cx="110" cy="425" r="75"/><circle cx="765" cy="420" r="78"/>
+ <circle cx="230" cy="450" r="48"/><circle cx="650" cy="455" r="48"/>
+</g>
+<path d="M0 550 Q450 500 900 550 V980 H0Z" fill="url(#road)"/>
+<path d="M400 560 L485 980" stroke="#f9f0c8" stroke-width="18" stroke-dasharray="34 20"/>
+<g transform="translate(145 545)">
+ <circle cx="130" cy="245" r="115" fill="none" stroke="#18383e" stroke-width="24"/>
+ <circle cx="130" cy="245" r="18" fill="#18383e"/>
+ <circle cx="300" cy="300" r="42" fill="none" stroke="#18383e" stroke-width="15"/>
+ <path d="M125 235 L230 235 L275 300 M230 235 L205 125 M205 125 L285 170" fill="none" stroke="#18383e" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+ <circle cx="202" cy="70" r="42" fill="#d79b73"/>
+ <path d="M160 118 Q210 90 250 120 L240 210 H175Z" fill="#2e7b69"/>
+ <path d="M195 210 L150 300" stroke="#2e7b69" stroke-width="30" stroke-linecap="round"/>
+ <path d="M235 210 L295 268" stroke="#2e7b69" stroke-width="30" stroke-linecap="round"/>
+ <rect x="160" y="115" width="80" height="95" rx="22" fill="#2e7b69"/>
+ <path d="M165 135 Q205 95 246 135" fill="#21383d"/>
+ <rect x="145" y="142" width="25" height="100" rx="10" fill="#26393d"/>
+</g>
+<g transform="translate(545 520)">
+ <circle cx="95" cy="90" r="38" fill="#d7a17c"/>
+ <path d="M58 75 Q92 30 132 76 L135 118 Q90 95 54 118Z" fill="#3a2d2b"/>
+ <rect x="50" y="125" width="95" height="190" rx="30" fill="#f4eadc"/>
+ <path d="M70 315 L55 500 M128 315 L150 500" stroke="#3d5960" stroke-width="30" stroke-linecap="round"/>
+ <path d="M70 180 L25 375" stroke="#f7f7f7" stroke-width="9" stroke-linecap="round"/>
+ <path d="M25 375 L15 465" stroke="#d34848" stroke-width="9" stroke-linecap="round"/>
+ <rect x="67" y="78" width="55" height="12" rx="6" fill="#1f3035"/>
+ <ellipse cx="230" cy="375" rx="72" ry="46" fill="#cf9858"/>
+ <circle cx="287" cy="345" r="36" fill="#d6a15d"/>
+ <path d="M205 335 L185 270" stroke="#cf9858" stroke-width="22" stroke-linecap="round"/>
+ <path d="M214 404 L205 465 M250 405 L260 465" stroke="#9b6d3c" stroke-width="15" stroke-linecap="round"/>
+ <path d="M208 350 Q242 315 278 350" fill="none" stroke="#222f33" stroke-width="12"/>
+ <path d="M130 210 Q180 240 215 332" fill="none" stroke="#222f33" stroke-width="8"/>
+</g>
+<g transform="translate(110 95)">
+ <rect width="680" height="120" rx="44" fill="#fff" stroke="#0f6674" stroke-width="6"/>
+ <text x="340" y="78" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="72" fill="#15383e">LIBCOMLAIR</text>
+ <path d="M650 5c0-26 22-47 48-47s48 21 48 47c0 36-48 76-48 76s-48-40-48-76z" fill="#0f6674" transform="scale(.42) translate(900 -35)"/>
+</g>
+<text x="450" y="260" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="30" fill="#214047">Des lieux accessibles, plus faciles à trouver</text>
+<g transform="translate(170 360)" fill="#0f6674">
+ <circle cx="0" cy="0" r="38"/><circle cx="140" cy="0" r="38"/><circle cx="280" cy="0" r="38"/><circle cx="420" cy="0" r="38"/>
+</g>
+<g font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">
+ <text x="170" y="370">♿</text><text x="310" y="370">◉</text><text x="450" y="370">◖</text><text x="590" y="370">🤝</text>
+</g>
+</svg>
