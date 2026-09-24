@@ -1,0 +1,28 @@
+name: Export Libcomlair Backup
+
+on:
+  push:
+    paths:
+      - ".github/workflows/export-libcomlair-backup.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout frozen backup
+        uses: actions/checkout@v4
+        with:
+          ref: af05ccd10bb9850f8c25640378906fe9fa435f41
+          path: libcomlair-backup
+
+      - name: Upload backup archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: Libcomlair-sauvegarde-2026-09-25
+          path: libcomlair-backup/
+          include-hidden-files: true
+          retention-days: 1
