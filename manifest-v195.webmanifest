@@ -1,0 +1,27 @@
+{
+  "name": "Libcomlair",
+  "short_name": "Libcomlair",
+  "id": "./test-v195-vision-app.html",
+  "start_url": "./test-v195-vision-app.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#165f70",
+  "description": "Libcomlair — recherche de lieux accessibles avec assistance vocale.",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./libcomlair-icon-v195.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./libcomlair-icon-v195.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
