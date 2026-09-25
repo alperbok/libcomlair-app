@@ -19,6 +19,9 @@
   const start=document.querySelector("section.hero.v219-main-zone");
   const categories=document.getElementById("v224Page4Categories");
   const searchIntro=document.getElementById("v224Page4SearchIntro");
+  const resultsSection=document.getElementById("places")?.closest("section")||null;
+  const page5Tutorial=document.getElementById("v224Page5Tutorial");
+  let lastPage5Details=null;
 
   const categoryIds=[
     "shopDetails","barDetails","hotelDetails","restaurantDetails",
@@ -62,6 +65,8 @@
   }
 
   function clearPage5State(){
+    body.classList.remove("v224-results-step");
+    lastPage5Details=null;
     categoryPanels.forEach(el=>{
       el.classList.remove("v224-page5-active");
       el.open=false;
@@ -76,7 +81,9 @@
       page5Back.hidden=true;
       page5Back.setAttribute("hidden","");
       page5Back.style.removeProperty("display");
+      page5Back.textContent="← Retour aux catégories";
     }
+    if(page5Tutorial)page5Tutorial.style.removeProperty("display");
   }
 
   function closeCategoryAccordions(){
@@ -181,7 +188,8 @@
 
   function showPage5(details){
     if(!details)return;
-    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step");
+    lastPage5Details=details;
+    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step","v224-results-step");
     body.classList.add("v224-page5-step");
 
     showOnlySections([categories]);
@@ -202,6 +210,8 @@
 
     if(page5Title) page5Title.textContent=categoryName(details);
     if(page5TutorialText) page5TutorialText.textContent=categoryTutorial(details);
+    if(page5Tutorial)page5Tutorial.style.removeProperty("display");
+    if(page5Back)page5Back.textContent="← Retour aux catégories";
     forceShow(page5Header,"block");
     forceShow(page5Back,"block");
 
@@ -209,6 +219,60 @@
       window.scrollTo({top:0,left:0,behavior:"auto"});
       page5Header?.scrollIntoView({block:"start"});
     });
+  }
+
+  function returnLabel(details){
+    const labels={
+      shopDetails:"magasins",
+      barDetails:"débits de boissons",
+      hotelDetails:"hébergements",
+      restaurantDetails:"restaurants",
+      leisureDetails:"activités et sorties",
+      serviceDetails:"services",
+      transportDetails:"transports"
+    };
+    return labels[details?.id]||"sous-catégories";
+  }
+
+  function showResultsPage(details,label){
+    if(!details||!resultsSection)return;
+    lastPage5Details=details;
+    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step");
+    body.classList.add("v224-page5-step","v224-results-step");
+
+    showOnlySections([categories,resultsSection]);
+    forceShow(categories,"block");
+    forceShow(resultsSection,"block");
+
+    categoryPanels.forEach(el=>{
+      el.open=false;
+      el.classList.remove("v224-page5-active");
+      el.style.setProperty("display","none","important");
+    });
+
+    if(page5Title)page5Title.textContent=String(label||categoryName(details)).replace(/^[^A-Za-zÀ-ÿ0-9]+\s*/,"").trim();
+    if(page5Tutorial)page5Tutorial.style.setProperty("display","none","important");
+    if(page5Back)page5Back.textContent="← Retour aux "+returnLabel(details);
+    forceShow(page5Header,"block");
+    forceShow(page5Back,"block");
+
+    requestAnimationFrame(()=>{
+      window.scrollTo({top:0,left:0,behavior:"auto"});
+      page5Header?.scrollIntoView({block:"start"});
+    });
+  }
+
+  function handlePage5Back(event){
+    if(event){
+      event.preventDefault();
+      event.stopPropagation();
+      if(typeof event.stopImmediatePropagation==="function")event.stopImmediatePropagation();
+    }
+    if(body.classList.contains("v224-results-step")&&lastPage5Details){
+      showPage5(lastPage5Details);
+      return;
+    }
+    showPage4("categories");
   }
 
   apply?.addEventListener("click",()=>setTimeout(showPage3,20));
@@ -224,12 +288,12 @@
 
   next?.addEventListener("click",showPage4);
   page4Back?.addEventListener("click",showPage3);
-  page5Back?.addEventListener("click",returnToCategories,true);
+  page5Back?.addEventListener("click",handlePage5Back,true);
 
   document.addEventListener("click",event=>{
     const target=event.target&&event.target.closest?event.target.closest("#v224Page5Back"):null;
     if(!target)return;
-    returnToCategories(event);
+    handlePage5Back(event);
   },true);
 
   categoryPanels.forEach(details=>{
@@ -250,6 +314,18 @@
       if(!body.classList.contains("v224-page4-step"))return;
       if(!details.open)return;
       showPage5(details);
+    });
+
+    // Sous-catégorie : le clic manuel et le clic déclenché par la voix
+    // ouvrent exactement le même écran de résultats.
+    details.addEventListener("click",event=>{
+      if(!body.classList.contains("v224-page5-step")||body.classList.contains("v224-results-step"))return;
+      const button=event.target&&event.target.closest?event.target.closest("button.category"):null;
+      if(!button)return;
+      const grid=button.parentElement;
+      if(!grid||!/Types$/.test(grid.id||""))return;
+      const label=button.textContent.trim();
+      setTimeout(()=>showResultsPage(details,label),0);
     });
   });
 
@@ -275,7 +351,13 @@
     showCategories:()=>showPage4("categories"),
     showSearch:()=>showPage4("search"),
     showCategory:showCategoryById,
-    currentCategory:()=>categoryPanels.find(el=>el.classList.contains("v224-page5-active"))?.id||""
+    showResults:(id,label)=>{
+      const details=document.getElementById(id);
+      if(!details)return false;
+      showResultsPage(details,label);
+      return true;
+    },
+    currentCategory:()=>lastPage5Details?.id||categoryPanels.find(el=>el.classList.contains("v224-page5-active"))?.id||""
   });
 
   page3Mic?.addEventListener("click",activateMic);
