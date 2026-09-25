@@ -66,6 +66,11 @@ Pour chaque panne, enregistrer systématiquement :
 - **Nouvelle panne** : elle doit être ajoutée au registre avant d’être considérée comme définitivement traitée.
 
 Ainsi, plus le projet avance, plus les outils Diagnostic et Réparation deviennent efficaces grâce aux problèmes déjà rencontrés.
+### Cas concret : pages dédiées Carte / Filtres
+
+Le gestionnaire `showResultToolPage()` ne doit jamais imposer `display:block!important` à l’outil actif. Cette surcharge inline empêche les règles finales `display:flex` ou `display:grid` de s’appliquer.
+
+Règle : pour l’outil actif, supprimer la propriété inline `display` ; pour les outils inactifs seulement, utiliser `display:none!important`.
 ## Politique de suppression des règles obsolètes
 
 Les correctifs temporaires ne doivent pas rester indéfiniment dans les feuilles actives.
