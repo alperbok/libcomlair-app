@@ -213,3 +213,145 @@
     display:none!important;
   }
 }
+
+
+/* V224 fiche détaillée compacte */
+@media (max-width:540px){
+  body.v224-page5-step.v224-utility-detail #detail{
+    padding-top:2px!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #detailMeta{
+    margin:4px 0 8px!important;
+    line-height:1.32!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #idfmDirectionDetailsV153{
+    margin:8px 0 10px!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #idfmDirectionDetailsV153 h3{
+    margin:0 0 6px!important;
+    font-size:1.05rem!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #idfmDirectionDetailsV153 .access-list{
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #idfmDirectionDetailsV153 .access-list li{
+    margin:6px 0!important;
+    padding:9px 10px!important;
+    border-radius:12px!important;
+    line-height:1.25!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold{
+    margin:8px 0!important;
+    border:2px solid #7c9095!important;
+    border-radius:14px!important;
+    background:#fff!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold > summary{
+    min-height:50px!important;
+    padding:10px 12px!important;
+    display:flex!important;
+    align-items:center!important;
+    cursor:pointer!important;
+    list-style:none!important;
+    font-size:1rem!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold > summary::-webkit-details-marker{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold > summary::before{
+    content:"▶"!important;
+    margin-right:8px!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold[open] > summary::before{
+    content:"▼"!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold-body{
+    padding:4px 10px 10px!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #accessibilityProfile{
+    display:block!important;
+    margin:8px 0!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #accessibilityProfile > section{
+    margin:7px 0!important;
+    padding:0!important;
+    border:2px solid #c8d0d3!important;
+    border-radius:14px!important;
+    background:#fff!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #accessibilityProfile > section.access-priority{
+    border-color:#86b6bd!important;
+    background:#f7fbfb!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #accessibilityProfile > section > h4{
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-access-toggle{
+    width:100%!important;
+    min-height:52px!important;
+    padding:10px 12px!important;
+    border:0!important;
+    background:transparent!important;
+    color:#17252a!important;
+    font:inherit!important;
+    font-size:1rem!important;
+    font-weight:800!important;
+    text-align:left!important;
+    display:flex!important;
+    gap:8px!important;
+    align-items:center!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-access-toggle[aria-expanded="true"] .v224-access-arrow{
+    transform:rotate(90deg)!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-access-arrow{
+    flex:0 0 auto!important;
+    transition:transform .12s ease!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-access-body{
+    padding:0 10px 10px!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-access-body[hidden]{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-access-body .access-list{
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-access-body .access-list li{
+    margin:6px 0!important;
+    padding:9px 10px!important;
+    border-radius:12px!important;
+    line-height:1.25!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #detail > p.data-note{
+    margin:8px 0!important;
+  }
+}
