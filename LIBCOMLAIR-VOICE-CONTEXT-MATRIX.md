@@ -3,6 +3,80 @@
 > Document de référence pour l’évolution du micro et de l’assistance vocale.
 > Objectif : tout ce qu’un utilisateur peut voir, toucher, choisir, cocher ou saisir doit avoir un équivalent vocal accessible.
 
+## Deux niveaux d’assistance vocale
+
+Libcomlair doit proposer deux modes complémentaires pour le profil Vision.
+
+### 1. Mode découverte guidée
+
+Destiné aux premières utilisations et réactivable à tout moment.
+
+Sur chaque écran, l’assistance doit expliquer :
+- le rôle de la page ;
+- ce que l’utilisateur peut y faire ;
+- toutes les cases cochables visibles ;
+- l’état de chaque case : cochée ou non cochée ;
+- tous les boutons et choix disponibles ;
+- les conséquences principales de chaque action ;
+- les commandes vocales utilisables sur cet écran ;
+- comment revenir en arrière ;
+- comment demander de l’aide ou faire répéter.
+
+Règle fondamentale :
+**tout élément visuel interactif doit avoir un équivalent vocal explicite.**
+
+Pour une case à cocher, l’assistance doit pouvoir :
+1. annoncer son libellé ;
+2. annoncer son état ;
+3. proposer de la cocher ou de la décocher ;
+4. confirmer le changement.
+
+Exemple :
+« Lieux avec téléphone, non coché. Vous pouvez dire : cocher lieux avec téléphone. »
+
+Le mode découverte ne doit pas se limiter à lire l’écran : il doit **enseigner le fonctionnement de Libcomlair page par page**.
+
+### 2. Mode assistance simplifiée
+
+Destiné à l’usage quotidien une fois l’application assimilée.
+
+L’assistance annonce seulement :
+- le nom de l’écran ;
+- les informations nouvelles ou importantes ;
+- les choix principaux disponibles ;
+- la confirmation des actions ;
+- les erreurs ou incompréhensions.
+
+Les explications détaillées restent disponibles par commandes :
+- « Aide »
+- « Quels sont mes choix ? »
+- « Explique cette page »
+- « Lire toutes les options »
+- « Répète »
+
+### Passage d’un mode à l’autre
+
+Le changement doit être possible vocalement et visuellement.
+
+Commandes prévues :
+- « Activer le mode découverte »
+- « Activer le mode simplifié »
+- « Explique cette page »
+
+La préférence doit être conservée localement pour éviter de redemander à chaque ouverture.
+
+### Critère de couverture d’un écran
+
+Une page n’est pas considérée comme complètement accessible au profil Vision tant que :
+- chaque case cochable est annoncée avec son état ;
+- chaque bouton important peut être identifié et déclenché vocalement ;
+- chaque choix de liste ou menu peut être lu et sélectionné vocalement ;
+- chaque champ saisissable peut être rempli ou dicté vocalement lorsque cela est pertinent ;
+- chaque action produit une confirmation vocale ;
+- l’utilisateur peut demander une explication complète de la page.
+
+---
+
 ## Principe général
 
 Chaque écran doit suivre le cycle :
