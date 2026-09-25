@@ -310,7 +310,7 @@
         let title=[...section.children].find(el=>el.tagName==="H4");
         if(!title)return;
         let toggle=title.querySelector(".v224-access-toggle");
-        let bodyBox=section.querySelector(":scope > .v224-access-body");
+        let bodyBox=[...section.children].find(el=>el.classList&&el.classList.contains("v224-access-body"))||null;
         if(!bodyBox){
           bodyBox=document.createElement("div");
           bodyBox.className="v224-access-body";
