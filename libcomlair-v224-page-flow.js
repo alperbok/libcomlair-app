@@ -234,6 +234,8 @@
 
   categoryPanels.forEach(details=>{
     const summary=[...details.children].find(el=>el.tagName==="SUMMARY");
+
+    // Ouverture tactile : prendre la main avant l'ancien accordéon.
     summary?.addEventListener("click",event=>{
       if(!body.classList.contains("v224-page4-step"))return;
       event.preventDefault();
@@ -241,6 +243,14 @@
       event.stopImmediatePropagation();
       showPage5(details);
     },true);
+
+    // Ouverture vocale / ancienne logique : si un moteur ouvre directement
+    // le <details>, convertir immédiatement cet état en véritable écran 5.
+    details.addEventListener("toggle",()=>{
+      if(!body.classList.contains("v224-page4-step"))return;
+      if(!details.open)return;
+      showPage5(details);
+    });
   });
 
   function activateMic(){
