@@ -31,6 +31,8 @@
   const placesFilters=document.getElementById("placesFilters");
   const resultsCount=document.getElementById("resultsCount");
   const activeFiltersText=document.getElementById("activeFilters");
+  const favoritesList=document.getElementById("favoritesList");
+  let favoritesFolderObserver=null;
   let lastPage5Details=null;
   let lastResultsLabel="Résultats";
   let currentResultTool="";
@@ -75,6 +77,74 @@
 
   function clearAllSectionDisplays(){
     directSections().forEach(clearDisplay);
+  }
+
+  function favoriteFolderName(raw){
+    const names={
+      "Magasins":"Magasins",
+      "Bars":"Débits de boissons",
+      "Hôtels":"Hébergements",
+      "Restaurants":"Restaurants",
+      "Loisirs":"Activités et sorties",
+      "Services":"Services",
+      "Transports":"Transports"
+    };
+    return names[raw]||raw||"Autres";
+  }
+
+  function organizeFavoriteFolders(){
+    if(!favoritesList)return;
+    const directCards=[...favoritesList.children].filter(el=>el.matches&&el.matches("article.card"));
+    if(!directCards.length)return;
+
+    if(favoritesFolderObserver)favoritesFolderObserver.disconnect();
+
+    const groups=new Map();
+    directCards.forEach(card=>{
+      const raw=card.dataset.favoriteCategory||"Autres";
+      if(!groups.has(raw))groups.set(raw,[]);
+      groups.get(raw).push(card);
+    });
+
+    const order=["Magasins","Bars","Hôtels","Restaurants","Loisirs","Services","Transports","Autres"];
+    const keys=[...groups.keys()].sort((a,b)=>{
+      const ia=order.indexOf(a),ib=order.indexOf(b);
+      return (ia<0?99:ia)-(ib<0?99:ib)||favoriteFolderName(a).localeCompare(favoriteFolderName(b),"fr");
+    });
+
+    favoritesList.replaceChildren();
+
+    keys.forEach(raw=>{
+      const cards=groups.get(raw)||[];
+      const folder=document.createElement("details");
+      folder.className="v224-favorite-folder";
+      folder.dataset.favoriteFolder=raw;
+
+      const summary=document.createElement("summary");
+      const strong=document.createElement("strong");
+      strong.textContent=favoriteFolderName(raw);
+      const count=document.createElement("span");
+      count.className="v224-favorite-folder-count";
+      count.textContent=cards.length+" "+(cards.length>1?"favoris":"favori");
+      summary.append(strong,count);
+
+      const frame=document.createElement("div");
+      frame.className="v224-favorite-folder-frame";
+      cards.forEach(card=>frame.appendChild(card));
+
+      folder.append(summary,frame);
+      favoritesList.appendChild(folder);
+    });
+
+    if(favoritesFolderObserver){
+      favoritesFolderObserver.observe(favoritesList,{childList:true});
+    }
+  }
+
+  if(favoritesList){
+    favoritesFolderObserver=new MutationObserver(()=>organizeFavoriteFolders());
+    favoritesFolderObserver.observe(favoritesList,{childList:true});
+    setTimeout(organizeFavoriteFolders,0);
   }
 
   function prepareResultAccordions(){
