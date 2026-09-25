@@ -33,6 +33,8 @@
   const activeFiltersText=document.getElementById("activeFilters");
   let lastPage5Details=null;
   let lastResultsLabel="Résultats";
+  let currentResultTool="";
+  let utilityReturnTool="";
 
   const categoryIds=[
     "shopDetails","barDetails","hotelDetails","restaurantDetails",
@@ -167,6 +169,7 @@
       results:"Résultats"
     };
 
+    currentResultTool=kind;
     body.classList.remove("v224-result-tool-map","v224-result-tool-favorites","v224-result-tool-filters","v224-result-tool-contribute","v224-result-tool-results");
     body.classList.add("v224-page5-step","v224-results-step","v224-result-tool-page","v224-result-tool-"+kind);
 
@@ -395,6 +398,7 @@
     if(page5Tutorial)page5Tutorial.style.setProperty("display","none","important");
     prepareResultAccordions();
     if(resultsActions)resultsActions.style.removeProperty("display");
+    currentResultTool="";
     Object.values(resultToolAccordions).forEach(x=>{
       x.open=false;
       x.style.removeProperty("display");
@@ -558,6 +562,7 @@
 
   function showUtilityPage(kind){
     if(!lastPage5Details)return;
+    utilityReturnTool=body.classList.contains("v224-result-tool-page")?currentResultTool:"";
     const screens={
       map:{section:mapSection,title:"Carte",cls:"v224-utility-map"},
       favorites:{section:favoritesSection,title:"Favoris",cls:"v224-utility-favorites"},
@@ -630,7 +635,14 @@
       return;
     }
     if(body.classList.contains("v224-utility-step")){
-      showResultsAgain();
+      const target=utilityReturnTool;
+      utilityReturnTool="";
+      if(target){
+        showResultsAgain();
+        setTimeout(()=>showResultToolPage(target),0);
+      }else{
+        showResultsAgain();
+      }
       return;
     }
     if(body.classList.contains("v224-results-step")&&lastPage5Details){
