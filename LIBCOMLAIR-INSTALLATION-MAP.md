@@ -136,6 +136,17 @@ Rôle :
 - expose `window.LibcomlairVoice` ;
 - gère lecture, annulation, état de reconnaissance, file d’attente et diagnostic vocal.
 
+### Niveaux d’assistance pour le profil Vision
+
+Le système vocal cible deux modes :
+- **Découverte guidée** : explique complètement chaque page, toutes les cases cochables, leur état, les boutons, les choix et les commandes disponibles.
+- **Assistance simplifiée** : fonctionnement quotidien plus court, avec aide détaillée disponible à la demande.
+
+Cette préférence doit rester locale à l’appareil et être réversible à tout moment.
+
+Principe d’accessibilité :
+tout contrôle visuel interactif doit posséder un équivalent vocal utilisable.
+
 ### Reconnaissance vocale actuelle
 Principalement dans `libcomlair-v221-secure.js`.
 
