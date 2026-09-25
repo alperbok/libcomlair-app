@@ -76,13 +76,6 @@
       repair:"Écouter aussi l'événement toggle des grandes catégories et convertir toute ouverture directe en véritable écran 5."
     },
     {
-      id:"samsung-details-layout-distribution",
-      title:"Répartition verticale instable dans un élément details sur Samsung",
-      symptom:"Les règles flex ou grid sont bien chargées mais le contenu reste regroupé en haut et ne remplit pas la hauteur disponible.",
-      cause:"Samsung Browser ne répartit pas toujours le contenu interne d'un élément <details> comme un conteneur flex/grid ordinaire.",
-      repair:"Déplacer le contenu fonctionnel dans un conteneur div normal sur la page dédiée, en conservant les mêmes contrôles et identifiants."
-    },
-    {
       id:"legacy-details-open",
       title:"Ancien accordéon ouvert au lieu d'une nouvelle page",
       symptom:"Une grande catégorie se déplie dans l'écran courant au lieu d'ouvrir l'écran suivant.",
@@ -293,7 +286,7 @@
   }
 
   window.LibcomlairKnownIssues=Object.freeze({
-    version:"v224-6",
+    version:"v224-7",
     definitions,
     correctionProtocol,
     diagnosticRepairPolicy:()=>({...DIAGNOSTIC_REPAIR_POLICY,requiredFields:[...DIAGNOSTIC_REPAIR_POLICY.requiredFields],protection:[...DIAGNOSTIC_REPAIR_POLICY.protection]}),
