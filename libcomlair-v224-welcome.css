@@ -43,3 +43,24 @@ body.v221-onboarding:not(.v221-profile-step) .v224-welcome-image{
 body.v221-onboarding:not(.v221-profile-step){
   overflow-x:hidden!important;
 }
+
+
+/* V224-3 : le bouton HTML invisible suit exactement le bouton dessiné dans l'image */
+body.v221-onboarding:not(.v221-profile-step) #libcomlairSplashNext.v224-next-hotspot{
+  position:absolute!important;
+  left:6%!important;
+  right:6%!important;
+  bottom:4.7%!important;
+  width:auto!important;
+  height:8.5%!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:28px!important;
+  background:transparent!important;
+  color:transparent!important;
+  box-shadow:none!important;
+  font-size:0!important;
+  line-height:0!important;
+}
