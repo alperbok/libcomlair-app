@@ -274,6 +274,98 @@
     });
   }
 
+  function prepareDetailPresentation(){
+    if(!detailSection)return;
+
+    // Informations pratiques : bloc repliable sans toucher aux données.
+    if(!document.getElementById("v224PracticalDetails")){
+      const practicalTitle=[...detailSection.children].find(el=>el.tagName==="H3"&&/informations pratiques/i.test(el.textContent||""));
+      const actions=document.getElementById("detailActions");
+      if(practicalTitle&&actions){
+        const box=document.createElement("details");
+        box.id="v224PracticalDetails";
+        box.className="v224-detail-fold";
+        const summary=document.createElement("summary");
+        summary.innerHTML="<strong>ℹ️ Informations pratiques</strong>";
+        const content=document.createElement("div");
+        content.className="v224-detail-fold-body";
+        practicalTitle.insertAdjacentElement("beforebegin",box);
+        box.append(summary,content);
+        let node=practicalTitle.nextSibling;
+        practicalTitle.remove();
+        while(node&&node!==actions){
+          const nextNode=node.nextSibling;
+          content.appendChild(node);
+          node=nextNode;
+        }
+      }
+    }
+
+    // Accessibilité : le profil prioritaire reste ouvert, les autres sont repliés.
+    const profileBox=document.getElementById("accessibilityProfile");
+    if(profileBox){
+      const sections=[...profileBox.children].filter(el=>el.tagName==="SECTION");
+      const hasPriority=sections.some(section=>section.classList.contains("access-priority"));
+      sections.forEach((section,index)=>{
+        let title=[...section.children].find(el=>el.tagName==="H4");
+        if(!title)return;
+        let toggle=title.querySelector(".v224-access-toggle");
+        let bodyBox=section.querySelector(":scope > .v224-access-body");
+        if(!bodyBox){
+          bodyBox=document.createElement("div");
+          bodyBox.className="v224-access-body";
+          bodyBox.id="v224AccessBody"+index;
+          let node=title.nextSibling;
+          while(node){
+            const nextNode=node.nextSibling;
+            bodyBox.appendChild(node);
+            node=nextNode;
+          }
+          section.appendChild(bodyBox);
+        }
+        if(!toggle){
+          const label=title.textContent.trim();
+          title.textContent="";
+          toggle=document.createElement("button");
+          toggle.type="button";
+          toggle.className="v224-access-toggle";
+          toggle.setAttribute("aria-controls",bodyBox.id);
+          toggle.innerHTML='<span class="v224-access-arrow" aria-hidden="true">▶</span><span>'+label+'</span>';
+          title.appendChild(toggle);
+          toggle.addEventListener("click",()=>{
+            const expanded=toggle.getAttribute("aria-expanded")==="true";
+            toggle.setAttribute("aria-expanded",expanded?"false":"true");
+            bodyBox.hidden=expanded;
+          });
+        }
+        const expanded=section.classList.contains("access-priority")||(!hasPriority&&index===0);
+        toggle.setAttribute("aria-expanded",expanded?"true":"false");
+        bodyBox.hidden=!expanded;
+      });
+    }
+
+    // Informations complémentaires : disponibles sans allonger la fiche en permanence.
+    if(!document.getElementById("v224ComplementaryDetails")){
+      const accessList=document.getElementById("detailAccess");
+      const commentBox=document.getElementById("detailCommentBox");
+      const sourceNote=document.getElementById("detailSourceNote");
+      if(accessList&&sourceNote){
+        const box=document.createElement("details");
+        box.id="v224ComplementaryDetails";
+        box.className="v224-detail-fold";
+        const summary=document.createElement("summary");
+        summary.innerHTML="<strong>＋ Informations complémentaires</strong>";
+        const content=document.createElement("div");
+        content.className="v224-detail-fold-body";
+        accessList.insertAdjacentElement("beforebegin",box);
+        box.append(summary,content);
+        content.appendChild(accessList);
+        if(commentBox)content.appendChild(commentBox);
+        content.appendChild(sourceNote);
+      }
+    }
+  }
+
   function showUtilityPage(kind){
     if(!lastPage5Details)return;
     const screens={
@@ -304,6 +396,10 @@
     if(page5Back)page5Back.textContent="← Retour aux résultats";
     forceShow(page5Header,"block");
     forceShow(page5Back,"block");
+
+    if(kind==="detail"){
+      prepareDetailPresentation();
+    }
 
     if(kind==="favorites"){
       const d=favoritesSection.querySelector("details");
@@ -376,6 +472,7 @@
   openContributeBtn?.addEventListener("click",()=>showUtilityPage("contribute"));
 
   window.addEventListener("libcomlair-detail-opened",()=>{
+    prepareDetailPresentation();
     if(body.classList.contains("v224-results-step"))showUtilityPage("detail");
   });
 
