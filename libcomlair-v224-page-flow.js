@@ -144,58 +144,69 @@
       resultsActions.appendChild(details);
       resultToolAccordions[item.key]=details;
 
-      details.addEventListener("toggle",()=>{
-        if(!details.open)return;
-        Object.entries(resultToolAccordions).forEach(([key,other])=>{
-          if(key!==item.key)other.open=false;
-        });
-
-        if(item.key==="favorites"){
-          const inner=favoritesSection?.querySelector("details");
-          if(inner)inner.open=true;
-        }
-
-        if(item.key==="filters"&&placesFilters){
-          placesFilters.open=true;
-        }
-
-        if(item.key==="map"){
-          setTimeout(()=>{
-            try{window.dispatchEvent(new Event("resize"))}catch(_){}
-          },250);
-          setTimeout(()=>{
-            try{window.dispatchEvent(new Event("resize"))}catch(_){}
-          },700);
-        }
-
-        requestAnimationFrame(()=>details.scrollIntoView({block:"start",behavior:"smooth"}));
+      summary.addEventListener("click",event=>{
+        if(!body.classList.contains("v224-results-step"))return;
+        event.preventDefault();
+        event.stopPropagation();
+        if(typeof event.stopImmediatePropagation==="function")event.stopImmediatePropagation();
+        showResultToolPage(item.key);
       });
     });
   }
 
-  function openResultAccordion(kind){
-    const openIt=()=>{
-      const target=resultToolAccordions[kind];
-      if(!target)return;
-      Object.values(resultToolAccordions).forEach(x=>x.open=false);
-      target.open=true;
+  function showResultToolPage(kind){
+    prepareResultAccordions();
+    const target=resultToolAccordions[kind];
+    if(!target)return false;
+
+    const labels={
+      map:"Carte",
+      favorites:"Favoris",
+      filters:"Filtres et tri",
+      contribute:"Contribuer",
+      results:"Résultats"
     };
 
-    if(body.classList.contains("v224-results-step")){
-      openIt();
-      return;
-    }
+    body.classList.remove("v224-result-tool-map","v224-result-tool-favorites","v224-result-tool-filters","v224-result-tool-contribute","v224-result-tool-results");
+    body.classList.add("v224-page5-step","v224-results-step","v224-result-tool-page","v224-result-tool-"+kind);
 
-    if(lastPage5Details){
-      showResultsPage(lastPage5Details,lastResultsLabel);
-      setTimeout(openIt,0);
+    Object.entries(resultToolAccordions).forEach(([key,el])=>{
+      el.open=key===kind;
+      el.style.setProperty("display",key===kind?"block":"none","important");
+    });
+
+    if(page5Title)page5Title.textContent=labels[kind]||"Rubrique";
+    if(page5Tutorial)page5Tutorial.style.setProperty("display","none","important");
+    if(resultsActions)resultsActions.style.removeProperty("display");
+    if(page5Back)page5Back.textContent="← Retour à "+lastResultsLabel;
+    forceShow(page5Header,"block");
+    forceShow(page5Back,"block");
+
+    if(kind==="favorites"){
+      const inner=favoritesSection?.querySelector("details");
+      if(inner)inner.open=true;
     }
+    if(kind==="filters"&&placesFilters)placesFilters.open=true;
+
+    requestAnimationFrame(()=>{
+      window.scrollTo({top:0,left:0,behavior:"auto"});
+      page5Header?.scrollIntoView({block:"start"});
+      if(kind==="map"){
+        setTimeout(()=>{try{window.dispatchEvent(new Event("resize"))}catch(_){}},250);
+        setTimeout(()=>{try{window.dispatchEvent(new Event("resize"))}catch(_){}},700);
+      }
+    });
+    return true;
+  }
+
+  function openResultAccordion(kind){
+    return showResultToolPage(kind);
   }
 
   prepareResultAccordions();
 
   function clearPage5State(){
-    body.classList.remove("v224-results-step","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
+    body.classList.remove("v224-results-step","v224-result-tool-page","v224-result-tool-map","v224-result-tool-favorites","v224-result-tool-filters","v224-result-tool-contribute","v224-result-tool-results","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
     lastPage5Details=null;
     categoryPanels.forEach(el=>{
       el.classList.remove("v224-page5-active");
@@ -367,7 +378,7 @@
   function showResultsPage(details,label){
     if(!details||!resultsSection)return;
     lastPage5Details=details;
-    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
+    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step","v224-result-tool-page","v224-result-tool-map","v224-result-tool-favorites","v224-result-tool-filters","v224-result-tool-contribute","v224-result-tool-results","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
     body.classList.add("v224-page5-step","v224-results-step");
 
     showOnlySections([categories]);
@@ -384,7 +395,10 @@
     if(page5Tutorial)page5Tutorial.style.setProperty("display","none","important");
     prepareResultAccordions();
     if(resultsActions)resultsActions.style.removeProperty("display");
-    Object.values(resultToolAccordions).forEach(x=>x.open=false);
+    Object.values(resultToolAccordions).forEach(x=>{
+      x.open=false;
+      x.style.removeProperty("display");
+    });
     if(placesFilters)placesFilters.open=true;
     if(page5Back)page5Back.textContent="← Retour aux "+returnLabel(details);
     forceShow(page5Header,"block");
@@ -611,6 +625,10 @@
       event.stopPropagation();
       if(typeof event.stopImmediatePropagation==="function")event.stopImmediatePropagation();
     }
+    if(body.classList.contains("v224-result-tool-page")){
+      showResultsAgain();
+      return;
+    }
     if(body.classList.contains("v224-utility-step")){
       showResultsAgain();
       return;
@@ -725,6 +743,7 @@
     },
     showUtility:showUtilityPage,
     openResultAccordion,
+    showResultToolPage,
     showResultsAgain,
     currentCategory:()=>lastPage5Details?.id||categoryPanels.find(el=>el.classList.contains("v224-page5-active"))?.id||""
   });
