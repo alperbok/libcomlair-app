@@ -6,17 +6,19 @@
     max-width:none!important;
     width:100%!important;
     margin:0!important;
-    padding:8px!important;
+    padding:4px!important;
     box-sizing:border-box!important;
   }
 
   body.v221-profile-step #accessWelcome {
     display:block!important;
-    margin:4px 6px!important;
+    margin:0!important;
     padding:12px 14px 14px!important;
     border-radius:24px!important;
     box-sizing:border-box!important;
-    min-height:calc(100svh - 148px)!important;
+    width:100%!important;
+    max-width:none!important;
+    min-height:0!important;
   }
 
   /* Logo : légèrement réduit, mais plus grand que la version précédente */
@@ -38,19 +40,19 @@
   body.v221-profile-step #accessWelcomeTitle {
     font-size:1.60rem!important;
     line-height:1.10!important;
-    margin:6px 0 8px!important;
+    margin:4px 0 6px!important;
   }
 
   body.v221-profile-step #accessWelcome > p {
     font-size:1.05rem!important;
     line-height:1.20!important;
-    margin:0 0 10px!important;
+    margin:0 0 8px!important;
   }
 
   body.v221-profile-step #accessWelcome fieldset {
     display:grid!important;
-    gap:8px!important;
-    margin:9px 0!important;
+    gap:7px!important;
+    margin:8px 0!important;
     padding:0!important;
   }
 
@@ -62,8 +64,8 @@
   }
 
   body.v221-profile-step #accessWelcome fieldset label {
-    min-height:58px!important;
-    height:58px!important;
+    min-height:56px!important;
+    height:56px!important;
     box-sizing:border-box!important;
     padding:8px 11px!important;
     margin:0!important;
@@ -83,12 +85,12 @@
 
   body.v221-profile-step .welcome-actions {
     display:grid!important;
-    gap:8px!important;
-    margin-top:9px!important;
+    gap:7px!important;
+    margin-top:8px!important;
   }
 
   body.v221-profile-step .welcome-actions .details-btn {
-    min-height:53px!important;
+    min-height:51px!important;
     height:auto!important;
     margin:0!important;
     padding:9px 10px!important;
