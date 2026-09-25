@@ -90,6 +90,13 @@
       repair:"Conserver uniquement l'en-tête correspondant à l'écran actif."
     },
     {
+      id:"filter-frame-forced-minheight-clips-sort",
+      title:"Hauteur forcée du cadre Filtres masque le tri",
+      symptom:"Une grande zone vide apparaît dans Filtres et tri tandis que la zone Trier par disparaît.",
+      cause:"Une ancienne min-height du cadre, combinée à min-height:100% sur son contenu et overflow:hidden, pousse la dernière ligne hors de la zone visible.",
+      repair:"Supprimer les hauteurs minimales obsolètes et laisser les conteneurs flex/grid utiliser uniquement l'espace réellement disponible."
+    },
+    {
       id:"layout-overflow-mobile",
       title:"Contenu plus long que le cadre mobile",
       symptom:"Le cadre est correct mais il faut défiler pour voir la fin d'une page conçue pour tenir à l'écran.",
@@ -279,7 +286,7 @@
   }
 
   window.LibcomlairKnownIssues=Object.freeze({
-    version:"v224-4",
+    version:"v224-5",
     definitions,
     correctionProtocol,
     diagnosticRepairPolicy:()=>({...DIAGNOSTIC_REPAIR_POLICY,requiredFields:[...DIAGNOSTIC_REPAIR_POLICY.requiredFields],protection:[...DIAGNOSTIC_REPAIR_POLICY.protection]}),
