@@ -18,7 +18,7 @@
     box-sizing:border-box!important;
     width:100%!important;
     max-width:none!important;
-    min-height:calc(100svh - 8px)!important;
+    min-height:calc(100dvh - 2px)!important;
   }
 
   /* Logo : légèrement réduit, mais plus grand que la version précédente */
