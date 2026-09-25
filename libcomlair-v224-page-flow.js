@@ -161,9 +161,6 @@
       if(activeFiltersText)filtersContent.appendChild(activeFiltersText);
       if(placesFilters){
         placesFilters.open=true;
-        placesFilters.hidden=false;
-        placesFilters.removeAttribute("hidden");
-        placesFilters.style.removeProperty("display");
         filtersContent.appendChild(placesFilters);
       }
     }
@@ -247,13 +244,8 @@
     body.classList.add("v224-page5-step","v224-results-step","v224-result-tool-page","v224-result-tool-"+kind);
 
     Object.entries(resultToolAccordions).forEach(([key,el])=>{
-      const active=key===kind;
-      el.open=active;
-      if(active){
-        el.style.removeProperty("display");
-      }else{
-        el.style.setProperty("display","none","important");
-      }
+      el.open=key===kind;
+      el.style.setProperty("display",key===kind?"block":"none","important");
     });
 
     if(page5Title)page5Title.textContent=labels[kind]||"Rubrique";
