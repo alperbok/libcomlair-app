@@ -126,7 +126,8 @@
   }
 
   function categoryName(details){
-    const raw=details?.querySelector(":scope > summary")?.textContent || "Catégorie";
+    const summary=[...details.children].find(el=>el.tagName==="SUMMARY");
+    const raw=(summary&&summary.textContent) || "Catégorie";
     return raw.replace(/[▸▶▼]/g,"").trim();
   }
 
@@ -177,7 +178,7 @@
   page5Back?.addEventListener("click",showPage4);
 
   categoryPanels.forEach(details=>{
-    const summary=details.querySelector(":scope > summary");
+    const summary=[...details.children].find(el=>el.tagName==="SUMMARY");
     summary?.addEventListener("click",event=>{
       if(!body.classList.contains("v224-page4-step"))return;
       event.preventDefault();
