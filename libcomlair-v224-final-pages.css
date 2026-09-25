@@ -581,10 +581,6 @@
     display:none!important;
   }
 
-  body.v224-page5-step.v224-results-step #v224FiltersContent #placesFilters[open] > :not(summary){
-    display:block!important;
-  }
-
   body.v224-page5-step.v224-results-step #v224ResultsCountCard{
     display:block!important;
     width:fit-content!important;
@@ -672,12 +668,6 @@
     margin-bottom:10px!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page #v224ResultTool-map #map{
-    height:60dvh!important;
-    min-height:380px!important;
-    max-height:620px!important;
-  }
-
   body.v224-page5-step.v224-result-tool-page #v224ResultTool-filters #activeFilters{
     margin-top:0!important;
   }
@@ -727,9 +717,6 @@
 
   body.v224-page5-step.v224-result-tool-map #map{
     width:100%!important;
-    height:clamp(300px,42dvh,520px)!important;
-    min-height:300px!important;
-    max-height:520px!important;
     margin:2px 0 0!important;
   }
 
@@ -815,22 +802,26 @@
     padding:0!important;
   }
 
-  body.v224-page5-step.v224-result-tool-filters #placesFilters > br{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters #placesFilters > br{
     display:none!important;
+    height:0!important;
+    margin:0!important;
+    padding:0!important;
+    line-height:0!important;
   }
 
-  body.v224-page5-step.v224-result-tool-filters #placesFilters > label{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters #placesFilters > label{
     display:grid!important;
-    grid-template-columns:26px 1fr!important;
+    grid-template-columns:22px 1fr!important;
     align-items:center!important;
-    gap:8px!important;
+    gap:6px!important;
     width:100%!important;
     margin:0!important;
-    padding:7px 2px!important;
+    padding:3px 0!important;
     box-sizing:border-box!important;
-    font-size:.91rem!important;
+    font-size:.84rem!important;
     font-weight:700!important;
-    line-height:1.14!important;
+    line-height:1.05!important;
   }
 
   body.v224-page5-step.v224-result-tool-filters #placesFilters > label input[type="checkbox"]{
@@ -911,7 +902,7 @@
     line-height:1.06!important;
   }
 
-  body.v224-page5-step.v224-result-tool-map #map{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-map #v224ResultTool-map #map{
     height:260px!important;
     min-height:260px!important;
     max-height:260px!important;
@@ -940,14 +931,6 @@
     font-size:.80rem!important;
     line-height:1.05!important;
     border-radius:10px!important;
-  }
-
-  body.v224-page5-step.v224-result-tool-filters #placesFilters > label{
-    grid-template-columns:22px 1fr!important;
-    gap:6px!important;
-    padding:4px 0!important;
-    font-size:.84rem!important;
-    line-height:1.05!important;
   }
 
   body.v224-page5-step.v224-result-tool-filters #placesFilters > label input[type="checkbox"]{
