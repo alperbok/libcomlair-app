@@ -92,11 +92,11 @@
     {
       id:"filters-empty-after-layout-refactor",
       title:"Filtres et tri vide après refonte de structure",
-      status:"repaired-validated",
+      status:"partially-repaired",
       symptom:"La page Filtres et tri s'affiche avec son titre et son cadre mais les cases, le bouton de réinitialisation et le tri disparaissent.",
       cause:"La refonte a déplacé les contrôles hors du conteneur fonctionnel #placesFilters et modifié le flux d'ouverture alors que l'ancienne structure était encore nécessaire au fonctionnement réel.",
       repair:"Restaurer #placesFilters comme conteneur fonctionnel direct dans #v224FiltersContent et restaurer le flux showResultToolPage de la dernière version où les filtres étaient visibles.",
-      validation:"Validé sur Samsung Browser le 26/09/2026 : les cinq cases, Réinitialiser les filtres et Trier par sont de nouveau visibles ; présentation jugée suffisante par l'utilisateur."
+      validation:"Partiellement réparé le 26/09/2026 sur Samsung Browser : les cinq cases, Réinitialiser les filtres et Trier par sont de nouveau visibles. Le remplissage vertical complet de l’écran reste à résoudre lors d’une prochaine itération."
     },
     {
       id:"filter-frame-forced-minheight-clips-sort",
@@ -295,7 +295,7 @@
   }
 
   window.LibcomlairKnownIssues=Object.freeze({
-    version:"v224-8",
+    version:"v224-9",
     definitions,
     correctionProtocol,
     diagnosticRepairPolicy:()=>({...DIAGNOSTIC_REPAIR_POLICY,requiredFields:[...DIAGNOSTIC_REPAIR_POLICY.requiredFields],protection:[...DIAGNOSTIC_REPAIR_POLICY.protection]}),
