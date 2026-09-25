@@ -227,7 +227,7 @@
     margin-bottom:8px!important;
   }
 
-  body.v224-page5-step.v224-results-step #mainContent > section:has(#places){
+  body.v224-page5-step.v224-results-step #v224ResultsSection{
     display:block!important;
     margin:0!important;
     padding:8px 14px 16px!important;
