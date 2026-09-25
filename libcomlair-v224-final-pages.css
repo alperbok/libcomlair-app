@@ -432,3 +432,116 @@
     margin:10px 0 0!important;
   }
 }
+
+
+/* V224 outils Résultats en accordéons : Carte / Favoris / Contribuer */
+@media (max-width:540px){
+  body.v224-page5-step.v224-results-step #v224ResultsActions{
+    display:block!important;
+    margin:7px 0 10px!important;
+  }
+
+  body.v224-page5-step.v224-results-step .v224-result-tool{
+    display:block!important;
+    margin:7px 0!important;
+    border:2px solid #73888d!important;
+    border-radius:15px!important;
+    background:#fff!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-results-step .v224-result-tool > summary{
+    min-height:54px!important;
+    padding:10px 12px!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    align-items:center!important;
+    list-style:none!important;
+    cursor:pointer!important;
+    color:#17252a!important;
+    background:#fff!important;
+    font-size:1rem!important;
+    font-weight:800!important;
+  }
+
+  body.v224-page5-step.v224-results-step .v224-result-tool > summary::-webkit-details-marker{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step .v224-result-tool > summary::before{
+    content:"▶"!important;
+    margin-right:8px!important;
+  }
+
+  body.v224-page5-step.v224-results-step .v224-result-tool[open] > summary{
+    background:#f3fafb!important;
+    border-bottom:2px solid #c4d8dc!important;
+  }
+
+  body.v224-page5-step.v224-results-step .v224-result-tool[open] > summary::before{
+    content:"▼"!important;
+  }
+
+  body.v224-page5-step.v224-results-step .v224-result-tool-frame{
+    margin:8px!important;
+    padding:10px!important;
+    border:2px solid #c8dde0!important;
+    border-radius:13px!important;
+    background:#fbfefe!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-results-step .v224-result-tool-frame > section{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224MapSection > h2,
+  body.v224-page5-step.v224-results-step #v224ContributeSection > h2{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224MapSection #map{
+    display:block!important;
+    width:100%!important;
+    height:52dvh!important;
+    min-height:330px!important;
+    max-height:520px!important;
+    margin:8px 0 0!important;
+    border:2px solid #b7d4d8!important;
+    border-radius:14px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step.v224-results-step #favoritesSection > details{
+    display:block!important;
+  }
+
+  body.v224-page5-step.v224-results-step #favoritesSection > details > summary{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #favoritesList .card{
+    margin:8px 0!important;
+    padding:10px!important;
+    border:2px solid #b7d4d8!important;
+    border-radius:13px!important;
+    background:#fff!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ContributeSection #addPlaceBtn{
+    width:100%!important;
+    min-height:52px!important;
+    margin:0!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ContributeSection #addPlacePanel{
+    margin-top:8px!important;
+  }
+}
