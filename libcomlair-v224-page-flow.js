@@ -13,6 +13,7 @@
   const page5Back=document.getElementById("v224Page5Back");
   const page5Header=document.getElementById("v224Page5Header");
   const page5Title=document.getElementById("v224Page5Title");
+  const page5TutorialText=document.getElementById("v224Page5TutorialText");
 
   const profile=document.getElementById("accessNeedsSection");
   const start=document.querySelector("section.hero.v219-main-zone");
@@ -131,6 +132,20 @@
     return raw.replace(/[▸▶▼]/g,"").trim();
   }
 
+  function categoryTutorial(details){
+    const id=details&&details.id;
+    const texts={
+      shopDetails:"Les magasins sont classés selon leur activité principale. Si vous hésitez, choisissez « Tous les magasins ».",
+      barDetails:"Les établissements sont classés selon leur activité principale. Si vous hésitez, choisissez « Tous les débits de boissons ».",
+      hotelDetails:"Les hébergements sont classés selon leur type principal. Si vous hésitez, choisissez « Tous les hébergements ».",
+      restaurantDetails:"Les restaurants sont classés selon leur type de cuisine ou d’établissement. Si vous hésitez, choisissez « Tous les restaurants ».",
+      leisureDetails:"Les activités sont classées selon leur activité principale. Si vous hésitez, choisissez « Toutes les activités ».",
+      serviceDetails:"Les services sont classés selon leur fonction principale. Si vous hésitez, choisissez « Tous les services ».",
+      transportDetails:"Les transports sont classés selon leur mode principal. Si vous hésitez, choisissez « Tous les transports »."
+    };
+    return texts[id]||"Choisissez la sous-catégorie qui correspond à votre recherche.";
+  }
+
   function showPage5(details){
     if(!details)return;
     body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step");
@@ -153,6 +168,7 @@
     });
 
     if(page5Title) page5Title.textContent=categoryName(details);
+    if(page5TutorialText) page5TutorialText.textContent=categoryTutorial(details);
     forceShow(page5Header,"block");
     forceShow(page5Back,"block");
 
