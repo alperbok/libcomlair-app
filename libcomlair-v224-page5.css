@@ -168,3 +168,36 @@
     display:none!important;
   }
 }
+
+
+/* V224 écran 5 — tutoriel court visible sans modifier les cases */
+@media (max-width:540px){
+  body.v224-page5-step #v224Page5Tutorial{
+    display:block!important;
+    margin:4px 0 8px!important;
+    padding:9px 11px!important;
+    border:2px solid #b8d6db!important;
+    border-radius:14px!important;
+    background:#f1f9fa!important;
+    color:#21383e!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step #v224Page5Tutorial strong{
+    display:block!important;
+    margin:0 0 3px!important;
+    font-size:1rem!important;
+    line-height:1.1!important;
+  }
+
+  body.v224-page5-step #v224Page5Tutorial p{
+    margin:0!important;
+    font-size:.94rem!important;
+    line-height:1.2!important;
+  }
+
+  /* Le tutoriel long reste dans le code mais n'occupe plus de place sur l'écran 5. */
+  body.v224-page5-step #v224Page4Categories > details.v224-page5-active > details{
+    display:none!important;
+  }
+}
