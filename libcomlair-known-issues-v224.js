@@ -27,6 +27,13 @@
       repair:"Supprimer ou normaliser le style inline avant de laisser la feuille CSS courante décider de la mise en page."
     },
     {
+      id:"css-specificity-collision",
+      title:"Ancienne règle CSS plus prioritaire que la correction",
+      symptom:"Une nouvelle hauteur, marge ou disposition est bien publiée mais l'écran garde presque exactement l'ancien rendu.",
+      cause:"Une règle CSS plus ancienne possède une spécificité supérieure et reste prioritaire même si la nouvelle règle est placée plus bas.",
+      repair:"Supprimer la règle conflictuelle à la source puis conserver une seule règle finale suffisamment spécifique pour l'écran concerné."
+    },
+    {
       id:"empty-screen-hidden-sections",
       title:"Cadre visible mais écran vide",
       symptom:"Le cadre de la page apparaît sans son contenu.",
