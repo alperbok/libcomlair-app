@@ -48,6 +48,13 @@
       repair:"Réinitialiser explicitement l'écran 5, réafficher toutes les grandes catégories et revenir directement au titre Catégories."
     },
     {
+      id:"voice-return-command-too-generic",
+      title:"Commandes vocales de retour confondues",
+      symptom:"Retour aux transports et Retour aux catégories mènent au même écran intermédiaire ou à une catégorie sans sous-catégories.",
+      cause:"Le moteur vocal traitait toute phrase contenant retour avec une seule règle générale.",
+      repair:"Distinguer explicitement les destinations de retour et appeler le nouveau gestionnaire de pages pour restaurer soit la catégorie complète, soit les 7 grandes catégories."
+    },
+    {
       id:"voice-category-opens-inline",
       title:"Commande vocale ouvre une catégorie dans la page courante",
       symptom:"Après une demande vocale comme Transports, les sous-catégories s'affichent sous les grandes catégories et l'en-tête dédié n'apparaît pas.",
