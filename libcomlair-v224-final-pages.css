@@ -1193,19 +1193,6 @@
 }
 
 
-/* V224 Filtres : prolonger le cadre jusqu'en bas sans changer le contenu */
-@media (max-width:540px){
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters > .v224-result-tool-frame{
-    min-height:clamp(820px, calc(100dvh - 365px), 980px)!important;
-    height:auto!important;
-  }
-
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersContent{
-    min-height:100%!important;
-  }
-}
-
-
 /* V224 Filtres : équilibrage final vertical */
 @media (max-width:540px){
   body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters #placesFilters{
@@ -1319,5 +1306,29 @@
     padding:7px 9px!important;
     font-size:.94rem!important;
     box-sizing:border-box!important;
+  }
+}
+
+
+/* V224 Filtres : correction overflow final */
+@media (max-width:540px){
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters > .v224-result-tool-frame{
+    flex:1 1 0!important;
+    min-height:0!important;
+    height:auto!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersContent{
+    flex:1 1 0!important;
+    min-height:0!important;
+    height:auto!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody{
+    flex:1 1 0!important;
+    min-height:0!important;
+    height:auto!important;
+    grid-template-rows:repeat(5,minmax(46px,max-content)) auto minmax(16px,1fr) auto!important;
   }
 }
