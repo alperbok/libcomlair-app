@@ -6,9 +6,13 @@ Ce document complète le diagnostic intégré. Chaque nouvelle panne confirmée 
 |---|---|---|---|---|
 | stale-browser-cache | Une modification publiée ne change rien à l'écran | Ancienne ressource CSS/JS conservée par le navigateur, le cache applicatif ou un service worker | Vérifier versions chargées et cache | Vider caches techniques, actualiser service workers, recharger avec une URL versionnée |
 | inline-display-overrides-css | Un nouveau CSS ne produit aucun changement visible | JavaScript pose `display:block!important` ou `display:none!important` directement sur l'élément et écrase le CSS | Inspecter `element.style.display` sur l'écran actif | Supprimer/normaliser le style inline puis laisser le CSS courant contrôler la mise en page |
-| css-specificity-collision | Une correction CSS est publiée mais la hauteur, les marges ou la disposition ne changent presque pas | Une ancienne règle CSS plus spécifique reste prioritaire | Comparer les sélecteurs et repérer les anciennes règles avec `!important` | Supprimer la règle conflictuelle puis garder une seule règle finale spécifique à l’écran |\n| empty-screen-hidden-sections | Le cadre s'affiche mais son contenu est vide | Attribut `hidden`, ancien `display:none` ou état précédent conservé | Vérifier les sections attendues selon la classe de page | Réafficher explicitement les blocs attendus et retirer les états hérités |
+| css-specificity-collision | Une correction CSS est publiée mais la hauteur, les marges ou la disposition ne changent presque pas | Une ancienne règle CSS plus spécifique reste prioritaire | Comparer les sélecteurs et repérer les anciennes règles avec `!important` | Supprimer la règle conflictuelle puis garder une seule règle finale spécifique à l’écran |
+| empty-screen-hidden-sections | Le cadre s'affiche mais son contenu est vide | Attribut `hidden`, ancien `display:none` ou état précédent conservé | Vérifier les sections attendues selon la classe de page | Réafficher explicitement les blocs attendus et retirer les états hérités |
 | page-state-visual-state-desync | La navigation a changé mais l'ancien écran reste visible | Classe de page et visibilité DOM désynchronisées | Comparer classe `body` et sections visibles | Normaliser écran actif + sections autorisées |
-| return-categories-intermediate-screen | Retour aux catégories laisse le titre/tutoriel de la catégorie et un écran intermédiaire vide | Le retour ferme la catégorie sans restaurer complètement l’écran 4 | Vérifier classe de page, en-tête écran 5 et visibilité des 7 catégories | Réinitialiser l’écran 5, réafficher les 7 catégories et défiler directement au titre Catégories |\n| voice-return-command-too-generic | « Retour aux transports » et « Retour aux catégories » produisent le même écran ou un écran de catégorie vide | Une règle vocale générale interceptait toute phrase contenant « retour » | Vérifier la destination demandée dans la transcription vocale | Distinguer chaque destination et appeler explicitement la navigation écran 5 ou écran 4 |\n| voice-category-opens-inline | Une commande vocale ouvre les sous-catégories sous la page Catégories et le logo/micro dédié disparaît | Le moteur vocal ouvre directement le `<details>` et contourne la navigation écran 5 | Surveiller l’ouverture directe des grands `<details>` sur l’écran 4 | Intercepter `toggle` et convertir toute ouverture en véritable écran 5 |\n| legacy-details-open | Une catégorie se déplie dans la page au lieu d'ouvrir l'écran suivant | Ancien comportement `<details>` ou ancien écouteur exécuté avant la nouvelle navigation | Vérifier les `details[open]` sur l'écran catégories | Intercepter le clic en priorité, fermer les anciens accordéons, ouvrir l'écran dédié |
+| return-categories-intermediate-screen | Retour aux catégories laisse le titre/tutoriel de la catégorie et un écran intermédiaire vide | Le retour ferme la catégorie sans restaurer complètement l’écran 4 | Vérifier classe de page, en-tête écran 5 et visibilité des 7 catégories | Réinitialiser l’écran 5, réafficher les 7 catégories et défiler directement au titre Catégories |
+| voice-return-command-too-generic | « Retour aux transports » et « Retour aux catégories » produisent le même écran ou un écran de catégorie vide | Une règle vocale générale interceptait toute phrase contenant « retour » | Vérifier la destination demandée dans la transcription vocale | Distinguer chaque destination et appeler explicitement la navigation écran 5 ou écran 4 |
+| voice-category-opens-inline | Une commande vocale ouvre les sous-catégories sous la page Catégories et le logo/micro dédié disparaît | Le moteur vocal ouvre directement le `<details>` et contourne la navigation écran 5 | Surveiller l’ouverture directe des grands `<details>` sur l’écran 4 | Intercepter `toggle` et convertir toute ouverture en véritable écran 5 |
+| legacy-details-open | Une catégorie se déplie dans la page au lieu d'ouvrir l'écran suivant | Ancien comportement `<details>` ou ancien écouteur exécuté avant la nouvelle navigation | Vérifier les `details[open]` sur l'écran catégories | Intercepter le clic en priorité, fermer les anciens accordéons, ouvrir l'écran dédié |
 | samsung-browser-scope | La nouvelle navigation de catégorie ne s'exécute pas sur Samsung Browser | Utilisation de `:scope` dans un sélecteur JavaScript incompatible avec cette version | Erreur ou arrêt silencieux du script de navigation | Remplacer `:scope` par une recherche directe dans `children` |
 | duplicate-brand | Deux logos Libcomlair apparaissent sur la même page | Ancien en-tête encore visible avec le nouvel en-tête | Compter les logos réellement visibles | Conserver uniquement l'en-tête de l'écran actif |
 | mobile-layout-overflow | Le contenu dépasse le cadre mobile | Répartition interne trop haute ou règles de padding/hauteur héritées | Comparer cadre validé et hauteur du contenu | Ne pas modifier le cadre ; restructurer uniquement le contenu intérieur |
@@ -16,16 +20,28 @@ Ce document complète le diagnostic intégré. Chaque nouvelle panne confirmée 
 | voice-state-stuck | Lecture/commande vocale ne correspond plus à l'écran | État vocal ancien conservé après navigation ou erreur | Vérifier état moteur vocal et écran courant | Annuler l'état vocal en cours puis réinitialiser la navigation |
 | page4-grid-blocked | Les catégories restent sur une colonne malgré le CSS grille | Le script imposait `display:block!important` sur `#v224Page4Categories` | Vérifier le style inline du conteneur | Utiliser `display:grid` ou retirer la surcharge inline |
 
-## Règles de travail obligatoires
+## Protocole obligatoire avant toute correction
 
-1. Avant toute nouvelle correction, vérifier si le symptôme existe déjà dans ce registre.
-2. Si oui, appliquer d'abord la cause et la réparation connues.
-3. Ne pas empiler des corrections CSS si un style inline JavaScript est prioritaire.
-4. Ne jamais changer les dimensions du cadre validé pour résoudre un problème de contenu.
-5. Une panne confirmée doit être ajoutée au registre et, si possible, au diagnostic automatique.
-6. Une réparation sûre doit être ajoutée au moteur de réparation automatique.
-7. Si la réparation exige un changement structurel du code, la réparation automatique doit au minimum nettoyer les états/cache puis recharger la version corrigée.
-8. Toujours conserver les données utilisateur protégées pendant une réparation.
+Ce protocole doit être exécuté **avant de modifier le code**, même si la correction paraît simple. Le but est d'éviter les essais successifs sur une panne déjà connue.
+
+1. **Consulter le registre des pannes connues** et rechercher le symptôme exact ou un symptôme proche.
+2. **Exécuter le diagnostic des pannes connues** sur l'écran concerné quand il est disponible.
+3. **Vérifier les styles inline JavaScript** susceptibles d'écraser le CSS (display, height, visibility, opacity, etc.).
+4. **Rechercher les anciennes règles CSS avec !important** qui ciblent le même élément.
+5. **Comparer la spécificité des sélecteurs** avant d'ajouter une nouvelle règle CSS.
+6. **Vérifier l'état de navigation** : classes du body, attributs hidden, accordéons open, section réellement visible.
+7. **Vérifier le cache/version des ressources** si une modification publiée ne change rien.
+8. **Appliquer d'abord la réparation déjà connue** quand la panne est répertoriée.
+9. **Supprimer la cause conflictuelle à la source** avant d'ajouter un nouveau correctif. Ne pas empiler des surcharges CSS.
+10. **Conserver les cadres et dimensions déjà validés** ; corriger en priorité l'organisation intérieure.
+11. **Tester un seul changement structurel à la fois** et comparer avec la capture précédente.
+12. **Enregistrer toute nouvelle panne confirmée** dans ce registre avant de poursuivre les développements.
+13. Si la réparation est sûre, **l'ajouter au diagnostic/réparation automatique**.
+14. Toujours conserver les données utilisateur protégées pendant une réparation.
+
+### Règle anti-boucle
+
+Si une première correction ne produit **presque aucun changement visuel**, ne pas modifier une deuxième fois les mêmes valeurs. Revenir immédiatement aux étapes 1 à 7 pour rechercher une panne connue, une surcharge inline, un conflit de spécificité ou un cache ancien.
 
 ## État actuel du moteur automatique
 
