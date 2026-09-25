@@ -1,22 +1,26 @@
-/* V224 micro final - réglage fin */
+/* V224 micro final - accessibilité renforcée */
 @media (max-width:540px){
   body.v221-profile-step #v222ProfileMic.v222-corner-mic{
-    width:88px!important;
-    height:88px!important;
-    min-width:88px!important;
-    min-height:88px!important;
-    max-width:88px!important;
-    max-height:88px!important;
-    right:2px!important;
-    top:2px!important;
+    width:100px!important;
+    height:100px!important;
+    min-width:100px!important;
+    min-height:100px!important;
+    max-width:100px!important;
+    max-height:100px!important;
+    right:0!important;
+    top:0!important;
     padding:0!important;
     border-width:4px!important;
-    font-size:2.05rem!important;
+    font-size:2.25rem!important;
+    font-weight:800!important;
     box-sizing:border-box!important;
+    box-shadow:0 5px 16px rgba(0,0,0,.22)!important;
   }
 
   body.v221-profile-step #v222ProfileMic.v222-corner-mic span{
-    font-size:.88rem!important;
+    font-size:1rem!important;
+    font-weight:800!important;
     line-height:1!important;
+    margin-top:1px!important;
   }
 }
