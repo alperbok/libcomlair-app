@@ -27,6 +27,13 @@
       repair:"Supprimer ou normaliser le style inline avant de laisser la feuille CSS courante décider de la mise en page."
     },
     {
+      id:"obsolete-css-rules-stacking",
+      title:"Accumulation de règles CSS obsolètes",
+      symptom:"Un écran accumule plusieurs règles successives pour les mêmes sélecteurs et les corrections deviennent imprévisibles.",
+      cause:"Les anciens correctifs sont conservés dans la feuille active après avoir été remplacés par une nouvelle structure.",
+      repair:"Supprimer les variantes obsolètes et conserver une seule règle canonique par comportement ; l'historique Git conserve les anciennes versions."
+    },
+    {
       id:"css-specificity-collision",
       title:"Ancienne règle CSS plus prioritaire que la correction",
       symptom:"Une nouvelle hauteur, marge ou disposition est bien publiée mais l'écran garde presque exactement l'ancien rendu.",
@@ -286,7 +293,7 @@
   }
 
   window.LibcomlairKnownIssues=Object.freeze({
-    version:"v224-5",
+    version:"v224-6",
     definitions,
     correctionProtocol,
     diagnosticRepairPolicy:()=>({...DIAGNOSTIC_REPAIR_POLICY,requiredFields:[...DIAGNOSTIC_REPAIR_POLICY.requiredFields],protection:[...DIAGNOSTIC_REPAIR_POLICY.protection]}),
