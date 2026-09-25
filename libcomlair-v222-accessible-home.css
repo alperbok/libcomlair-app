@@ -28,3 +28,79 @@ body.v221-profile-step #accessWelcome fieldset label:nth-of-type(5){background:#
  .v222-corner-mic{width:62px;height:62px}
  #visionVoiceCommand.vision-mic-fixed{width:68px!important;height:68px!important;top:10px!important;right:10px!important}
 }
+
+/* V224-2 : page profil plus compacte, micro inchangé */
+@media(max-width:540px){
+  body.v221-profile-step #accessWelcome{
+    margin:6px 8px!important;
+    padding:10px 14px 12px!important;
+    border-radius:24px!important;
+  }
+
+  body.v221-profile-step .v222-profile-brand{
+    min-height:68px!important;
+    margin:-2px 0 2px!important;
+    padding-right:62px!important;
+  }
+
+  body.v221-profile-step .v222-profile-brand .v222-brand-logo{
+    width:min(68vw,300px)!important;
+    max-width:300px!important;
+    height:auto!important;
+  }
+
+  body.v221-profile-step #accessWelcomeTitle{
+    font-size:1.45rem!important;
+    line-height:1.12!important;
+    margin:4px 0 7px!important;
+  }
+
+  body.v221-profile-step #accessWelcome>p{
+    margin:0 0 8px!important;
+    line-height:1.22!important;
+  }
+
+  body.v221-profile-step #accessWelcome fieldset{
+    gap:6px!important;
+    margin:8px 0!important;
+  }
+
+  body.v221-profile-step #accessWelcome fieldset legend{
+    margin:0 0 4px!important;
+  }
+
+  body.v221-profile-step #accessWelcome fieldset label{
+    min-height:44px!important;
+    padding:6px 10px!important;
+    border-radius:14px!important;
+    font-size:.98rem!important;
+    line-height:1.08!important;
+  }
+
+  body.v221-profile-step #accessWelcome input[type=checkbox]{
+    width:24px!important;
+    height:24px!important;
+    flex:0 0 24px!important;
+  }
+
+  body.v221-profile-step .welcome-actions{
+    gap:6px!important;
+    margin-top:8px!important;
+  }
+
+  body.v221-profile-step .welcome-actions .details-btn{
+    min-height:48px!important;
+    padding:8px 10px!important;
+    margin:0!important;
+    font-size:1rem!important;
+    line-height:1.1!important;
+  }
+
+  body.v221-profile-step #accessWelcomeStatus{
+    margin:4px 0 0!important;
+  }
+
+  body.v221-profile-step>footer{
+    display:none!important;
+  }
+}
