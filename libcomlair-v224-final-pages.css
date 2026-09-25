@@ -1204,3 +1204,35 @@
     min-height:100%!important;
   }
 }
+
+
+/* V224 Filtres : équilibrage final vertical */
+@media (max-width:540px){
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters #placesFilters{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:repeat(5, minmax(46px,auto)) auto minmax(36px,1fr) auto!important;
+    row-gap:6px!important;
+    flex:1 1 auto!important;
+    height:100%!important;
+    min-height:0!important;
+    align-content:stretch!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters #placesFilters > label{
+    min-height:46px!important;
+    margin:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #resetSearch{
+    grid-row:6!important;
+    margin:6px 0 0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #placesFilters > p{
+    grid-row:8!important;
+    margin:0!important;
+    padding:0!important;
+    align-self:end!important;
+  }
+}
