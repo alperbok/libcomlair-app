@@ -637,3 +637,56 @@
     display:none!important;
   }
 }
+
+
+/* V224 pages dédiées pour Carte / Favoris / Filtres / Contribuer / Résultats */
+@media (max-width:540px){
+  body.v224-page5-step.v224-result-tool-page #v224ResultsActions{
+    display:block!important;
+    margin:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page #v224ResultsActions > .v224-result-tool{
+    margin:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    overflow:visible!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page #v224ResultsActions > .v224-result-tool > summary{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page #v224ResultsActions > .v224-result-tool > .v224-result-tool-frame{
+    display:block!important;
+    margin:0!important;
+    padding:10px!important;
+    border:2px solid #c8dde0!important;
+    border-radius:15px!important;
+    background:#fbfefe!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page #v224Page5Back{
+    margin-bottom:10px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page #v224ResultTool-map #map{
+    height:60dvh!important;
+    min-height:380px!important;
+    max-height:620px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page #v224ResultTool-filters #activeFilters{
+    margin-top:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page #v224ResultTool-results #v224ResultsCountCard{
+    margin-top:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page #v224ResultTool-contribute #v224ContributeSection{
+    padding-top:0!important;
+  }
+}
