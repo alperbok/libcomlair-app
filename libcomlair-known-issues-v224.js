@@ -120,6 +120,14 @@
     "Ajouter toute nouvelle panne confirmée au registre et au diagnostic quand c’est possible."
   ]);
 
+  const DIAGNOSTIC_REPAIR_POLICY=Object.freeze({
+    requiredFields:["symptom","cause","detection","repairLevel","repair","protectedData","validation"],
+    diagnostic:"Identifier les pannes connues détectables et retourner leur identifiant et leur cause.",
+    repair:"Appliquer uniquement les réparations sûres et connues puis relancer le diagnostic.",
+    structural:"Pour une panne structurelle, identifier clairement la panne et préserver les données utilisateur jusqu’au chargement de la version corrigée.",
+    protection:["profil d’accessibilité","favoris","avis","signalements","propositions"]
+  });
+
   const CATEGORY_IDS=[
     "shopDetails","barDetails","hotelDetails","restaurantDetails",
     "leisureDetails","serviceDetails","transportDetails"
@@ -264,9 +272,10 @@
   }
 
   window.LibcomlairKnownIssues=Object.freeze({
-    version:"v224-2",
+    version:"v224-3",
     definitions,
     correctionProtocol,
+    diagnosticRepairPolicy:()=>({...DIAGNOSTIC_REPAIR_POLICY,requiredFields:[...DIAGNOSTIC_REPAIR_POLICY.requiredFields],protection:[...DIAGNOSTIC_REPAIR_POLICY.protection]}),
     preflight,
     detect,
     repairSafe
