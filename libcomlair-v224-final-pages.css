@@ -204,3 +204,12 @@
     display:none!important;
   }
 }
+
+
+/* Eviter les titres répétés : l'en-tête du cadre porte déjà le nom de l'écran. */
+@media (max-width:540px){
+  body.v224-page5-step.v224-utility-map #v224MapSection > h2,
+  body.v224-page5-step.v224-utility-contribute #v224ContributeSection > h2{
+    display:none!important;
+  }
+}
