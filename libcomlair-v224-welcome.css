@@ -1,0 +1,11 @@
+html,body.v221-onboarding{margin:0!important;padding:0!important;background:#eef7f8!important}
+body.v221-onboarding #libcomlairSplash{max-width:none!important;width:100%!important;margin:0!important;padding:0!important}
+body.v221-onboarding .v224-welcome-screen{position:relative;width:100%;max-width:941px;margin:0 auto;background:#eef7f8;line-height:0}
+body.v221-onboarding .v224-welcome-image{display:block;width:100%;height:auto;max-height:none;border:0!important;border-radius:0!important;margin:0!important;object-fit:contain}
+.v224-next-hotspot{position:absolute;left:6%;right:6%;bottom:4.7%;height:8.5%;margin:0;border:0;border-radius:28px;background:transparent;color:transparent;font-size:0;cursor:pointer;z-index:10}
+.v224-next-hotspot:focus-visible{outline:5px solid #ffca3a;outline-offset:-5px;background:rgba(15,119,132,.12)}
+.v224-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media(max-width:540px){
+ body.v221-onboarding .v224-welcome-screen{width:100vw}
+ .v224-next-hotspot{left:5.5%;right:5.5%;bottom:4.5%;height:8.8%}
+}
