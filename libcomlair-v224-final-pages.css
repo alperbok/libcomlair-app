@@ -868,3 +868,114 @@
     box-sizing:border-box!important;
   }
 }
+
+
+/* V224 recadrage serré Carte + Filtres */
+@media (max-width:540px){
+  /* CARTE : objectif écran unique autant que possible */
+  body.v224-page5-step.v224-result-tool-map #v224Page5Header{
+    margin-bottom:2px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #v224Page5Back{
+    min-height:46px!important;
+    margin:4px 0 6px!important;
+    padding:6px 9px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #v224ResultTool-map > .v224-result-tool-frame{
+    padding:6px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #v224MapSection{
+    gap:4px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #v224MapSection > .data-note{
+    margin:0!important;
+    font-size:.80rem!important;
+    line-height:1.08!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #nearMe{
+    min-height:40px!important;
+    margin:1px 0!important;
+    padding:5px 9px!important;
+    font-size:.88rem!important;
+    border-radius:12px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #locationStatus{
+    margin:0!important;
+    font-size:.76rem!important;
+    line-height:1.06!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #map{
+    height:260px!important;
+    min-height:260px!important;
+    max-height:260px!important;
+    margin:2px 0 0!important;
+    border-radius:12px!important;
+  }
+
+  /* FILTRES : réduire encore tous les espaces verticaux */
+  body.v224-page5-step.v224-result-tool-filters #v224Page5Header{
+    margin-bottom:2px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #v224Page5Back{
+    min-height:44px!important;
+    margin:4px 0 6px!important;
+    padding:5px 8px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #v224ResultTool-filters > .v224-result-tool-frame{
+    padding:6px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #v224FiltersContent #activeFilters{
+    margin:0 0 4px!important;
+    padding:5px 7px!important;
+    font-size:.80rem!important;
+    line-height:1.05!important;
+    border-radius:10px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > label{
+    grid-template-columns:22px 1fr!important;
+    gap:6px!important;
+    padding:4px 0!important;
+    font-size:.84rem!important;
+    line-height:1.05!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > label input[type="checkbox"]{
+    width:20px!important;
+    height:20px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #resetSearch{
+    min-height:38px!important;
+    margin:5px 0 4px!important;
+    padding:5px 8px!important;
+    font-size:.80rem!important;
+    border-radius:11px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > p{
+    margin:3px 0 0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > p label{
+    margin:0 0 2px!important;
+    font-size:.84rem!important;
+    line-height:1.05!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #sortPlaces{
+    min-height:38px!important;
+    padding:4px 6px!important;
+    font-size:.82rem!important;
+  }
+}
