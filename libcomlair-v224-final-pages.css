@@ -814,23 +814,18 @@
   }
 }
 
-/* V224 Filtres et tri — structure finale sans <details> */
+/* V224 Filtres et tri — structure canonique visible */
 @media (max-width:540px){
   body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #mainContent{
-    display:flex!important;
-    flex-direction:column!important;
-    height:calc(100dvh - 2px)!important;
     min-height:calc(100dvh - 2px)!important;
-    overflow:hidden!important;
+    height:auto!important;
+    overflow:visible!important;
   }
 
   body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224Page4Categories,
   body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultsActions,
   body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters{
-    display:flex!important;
-    flex-direction:column!important;
-    flex:1 1 auto!important;
-    min-height:0!important;
+    display:block!important;
   }
 
   body.v224-page5-step.v224-result-tool-filters #v224Page5Header{
@@ -844,25 +839,20 @@
   }
 
   body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters > .v224-result-tool-frame{
-    display:flex!important;
-    flex-direction:column!important;
-    flex:1 1 0!important;
+    display:block!important;
     min-height:0!important;
     height:auto!important;
-    overflow:hidden!important;
+    overflow:visible!important;
     padding:8px!important;
   }
 
   body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersContent{
-    display:flex!important;
-    flex-direction:column!important;
-    flex:1 1 0!important;
+    display:block!important;
     min-height:0!important;
     height:auto!important;
   }
 
   body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersContent #activeFilters{
-    flex:0 0 auto!important;
     margin:0 0 8px!important;
     padding:7px 9px!important;
     font-size:.88rem!important;
@@ -870,22 +860,20 @@
     border-radius:10px!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody{
-    display:flex!important;
-    flex-direction:column!important;
-    flex:1 1 0!important;
-    min-height:0!important;
-    height:auto!important;
-    gap:6px!important;
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #placesFilters{
+    display:block!important;
     margin:0!important;
     padding:0!important;
+    border:0!important;
+    background:transparent!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody > br{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #placesFilters > summary,
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #placesFilters > br{
     display:none!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody > label{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #placesFilters > label{
     display:grid!important;
     grid-template-columns:24px minmax(0,1fr)!important;
     align-items:center!important;
@@ -899,7 +887,7 @@
     line-height:1.1!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody > label input[type="checkbox"]{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #placesFilters > label input[type="checkbox"]{
     width:22px!important;
     height:22px!important;
     min-width:22px!important;
@@ -909,28 +897,27 @@
     justify-self:center!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody #resetSearch{
-    align-self:flex-start!important;
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #resetSearch{
     min-height:46px!important;
-    margin:6px 0 0!important;
+    margin:8px 0 6px!important;
     padding:7px 12px!important;
     font-size:.9rem!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody > p{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #placesFilters > p{
     width:100%!important;
-    margin:auto 0 0!important;
-    padding:8px 0 0!important;
+    margin:8px 0 0!important;
+    padding:0!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody > p > label{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #placesFilters > p > label{
     display:block!important;
     margin:0 0 5px!important;
     font-size:.94rem!important;
     line-height:1.08!important;
   }
 
-  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersBody #sortPlaces{
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #sortPlaces{
     width:100%!important;
     min-height:48px!important;
     margin:0!important;
