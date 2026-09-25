@@ -355,3 +355,80 @@
     margin:8px 0!important;
   }
 }
+
+
+/* V224 accordéons principaux de fiche — contenu visible seulement à la demande */
+@media (max-width:540px){
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold{
+    margin:7px 0!important;
+    border:2px solid #73888d!important;
+    border-radius:15px!important;
+    background:#fff!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold > summary{
+    min-height:54px!important;
+    padding:10px 12px!important;
+    box-sizing:border-box!important;
+    background:#fff!important;
+    color:#17252a!important;
+    display:flex!important;
+    align-items:center!important;
+    font-size:1rem!important;
+    font-weight:800!important;
+    line-height:1.15!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold[open] > summary{
+    border-bottom:2px solid #c4d8dc!important;
+    background:#f3fafb!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail .v224-detail-fold-body{
+    margin:8px!important;
+    padding:10px!important;
+    border:2px solid #c8dde0!important;
+    border-radius:13px!important;
+    background:#fbfefe!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #v224DirectionsDetails > #idfmDirectionDetailsV153{
+    margin:8px!important;
+    padding:10px!important;
+    border:2px solid #c8dde0!important;
+    border-radius:13px!important;
+    background:#fbfefe!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #detailActions[open] > .detail-actions,
+  body.v224-page5-step.v224-utility-detail #placeReportSection[open] > div,
+  body.v224-page5-step.v224-utility-detail #placeFeedback[open] > :not(summary){
+    margin:8px!important;
+    padding:10px!important;
+    border-radius:13px!important;
+    background:#fbfefe!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #v224AccessibilityDetails #accessibilityProfile{
+    margin:0!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #v224AccessibilityDetails .v224-access-body{
+    margin:0 8px 8px!important;
+    padding:8px!important;
+    border-radius:12px!important;
+    background:#eef8f3!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #v224AccessibilityDetails > .v224-detail-fold-body > #detailAccess{
+    margin-top:10px!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #v224AccessibilityDetails > .v224-detail-fold-body > #detailSourceNote{
+    margin:10px 0 0!important;
+  }
+}
