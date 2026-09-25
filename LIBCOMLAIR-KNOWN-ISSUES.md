@@ -43,6 +43,27 @@ Ce protocole doit être exécuté **avant de modifier le code**, même si la cor
 
 Si une première correction ne produit **presque aucun changement visuel**, ne pas modifier une deuxième fois les mêmes valeurs. Revenir immédiatement aux étapes 1 à 7 pour rechercher une panne connue, une surcharge inline, un conflit de spécificité ou un cache ancien.
 
+## Cycle de vie obligatoire d’une panne
+
+Toute panne confirmée doit devenir une connaissance exploitable par l’application, et pas seulement une note de développement.
+
+Pour chaque panne, enregistrer systématiquement :
+1. **Symptôme utilisateur** : ce que l’utilisateur voit ou entend.
+2. **Cause réelle confirmée** : la source technique du problème.
+3. **Méthode de détection** : test DOM, état de page, cache, style inline, erreur vocale, taille Leaflet, etc.
+4. **Niveau de réparation** : automatique sûre, semi-automatique, ou intervention de code requise.
+5. **Réparation connue** : action exacte à appliquer.
+6. **Données à protéger** : profil, favoris, avis, signalements, propositions et autres données utilisateur.
+7. **Test de validation** : condition permettant de confirmer que la panne est réellement résolue.
+
+### Utilisation par les outils intégrés
+
+- **Diagnostic de fonctionnement** : doit rechercher les pannes connues qu’il sait détecter et afficher leur identifiant/cause.
+- **Réparation automatique** : doit appliquer uniquement les réparations sûres et connues, puis relancer le diagnostic.
+- **Panne structurelle non réparable automatiquement** : le diagnostic doit au minimum l’identifier clairement, nettoyer les états transitoires sûrs et charger la version corrigée sans toucher aux données utilisateur.
+- **Nouvelle panne** : elle doit être ajoutée au registre avant d’être considérée comme définitivement traitée.
+
+Ainsi, plus le projet avance, plus les outils Diagnostic et Réparation deviennent efficaces grâce aux problèmes déjà rencontrés.
 ## État actuel du moteur automatique
 
 Le registre JavaScript `libcomlair-known-issues-v224.js` est chargé avant :
