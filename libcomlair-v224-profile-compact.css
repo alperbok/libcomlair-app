@@ -1,5 +1,5 @@
-/* Libcomlair V224 - page 2 compacte équilibrée
-   Le micro reste volontairement inchangé. */
+/* Libcomlair V224 - cadre V9 conservé, contenu réparti à l'intérieur
+   Logo et micro inchangés. */
 
 @media (max-width: 540px) {
   body.v221-profile-step #mainContent {
@@ -10,20 +10,26 @@
     box-sizing:border-box!important;
   }
 
+  /* CADRE DE RÉFÉRENCE V9 : dimensions figées */
   body.v221-profile-step #accessWelcome {
-    display:block!important;
+    display:grid!important;
+    grid-template-rows:auto auto auto minmax(0,1fr) auto!important;
+    row-gap:8px!important;
     margin:0!important;
     padding:10px 12px 11px!important;
     border-radius:24px!important;
     box-sizing:border-box!important;
     width:100%!important;
     max-width:none!important;
+    height:calc(100dvh - 2px)!important;
     min-height:calc(100dvh - 2px)!important;
+    max-height:calc(100dvh - 2px)!important;
+    overflow:hidden!important;
   }
 
-  /* Logo : légèrement réduit, mais plus grand que la version précédente */
+  /* Logo : strictement inchangé */
   body.v221-profile-step .v222-profile-brand {
-    min-height:76px!important;
+    min-height:66px!important;
     margin:-2px 0 0!important;
     padding-right:62px!important;
   }
@@ -35,39 +41,43 @@
     margin:0 auto!important;
   }
 
-  /* Micro : aucune modification de taille, position ou apparence */
+  /* Micro : aucune modification */
 
   body.v221-profile-step #accessWelcomeTitle {
     font-size:1.60rem!important;
     line-height:1.10!important;
-    margin:6px 0 10px!important;
+    margin:2px 0 4px!important;
   }
 
   body.v221-profile-step #accessWelcome > p {
     font-size:1.05rem!important;
     line-height:1.20!important;
-    margin:0 0 12px!important;
+    margin:0 0 6px!important;
   }
 
+  /* Les 5 choix occupent tout l'espace disponible sans agrandir le cadre */
   body.v221-profile-step #accessWelcome fieldset {
-    display:grid!important;
-    gap:10px!important;
-    margin:12px 0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    margin:0!important;
     padding:0!important;
+    min-height:0!important;
   }
 
   body.v221-profile-step #accessWelcome fieldset legend {
-    margin:0 0 6px!important;
+    margin:0 0 2px!important;
     padding:0!important;
     font-size:1.10rem!important;
     line-height:1.08!important;
+    flex:0 0 auto!important;
   }
 
   body.v221-profile-step #accessWelcome fieldset label {
-    min-height:64px!important;
-    height:64px!important;
+    flex:1 1 0!important;
+    min-height:52px!important;
     box-sizing:border-box!important;
-    padding:8px 10px!important;
+    padding:6px 10px!important;
     margin:0!important;
     border-radius:16px!important;
     font-size:1.03rem!important;
@@ -85,15 +95,15 @@
 
   body.v221-profile-step .welcome-actions {
     display:grid!important;
-    gap:10px!important;
-    margin-top:12px!important;
+    gap:6px!important;
+    margin:0!important;
   }
 
   body.v221-profile-step .welcome-actions .details-btn {
-    min-height:58px!important;
+    min-height:50px!important;
     height:auto!important;
     margin:0!important;
-    padding:9px 10px!important;
+    padding:8px 10px!important;
     border-radius:15px!important;
     font-size:1.04rem!important;
     line-height:1.08!important;
@@ -104,7 +114,7 @@
   }
 
   body.v221-profile-step #accessWelcomeStatus {
-    margin:1px 0 0!important;
+    margin:0!important;
     min-height:0!important;
     padding:0!important;
   }
