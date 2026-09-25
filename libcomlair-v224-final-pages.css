@@ -545,3 +545,95 @@
     margin-top:8px!important;
   }
 }
+
+
+/* V224 menu compact Bus / Arrêt — chaque rubrique ouvre son propre cadre */
+@media (max-width:540px){
+  body.v224-page5-step.v224-results-step #v224ResultsActions{
+    display:block!important;
+    margin:7px 0 10px!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224FiltersContent,
+  body.v224-page5-step.v224-results-step #v224ResultsContent{
+    width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224FiltersContent #activeFilters{
+    margin:0 0 8px!important;
+    padding:9px 10px!important;
+    border:2px solid #c8dde0!important;
+    border-radius:12px!important;
+    background:#f6fbfc!important;
+    line-height:1.25!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224FiltersContent #placesFilters{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224FiltersContent #placesFilters > summary{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224FiltersContent #placesFilters[open] > :not(summary){
+    display:block!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsCountCard{
+    display:block!important;
+    width:fit-content!important;
+    max-width:100%!important;
+    margin:0 0 10px!important;
+    padding:9px 12px!important;
+    border:2px solid #86b6bd!important;
+    border-radius:12px!important;
+    background:#eef8f9!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsCountCard #resultsCount{
+    margin:0!important;
+    color:#314b51!important;
+    font-size:1rem!important;
+    font-weight:800!important;
+    line-height:1.2!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsSection{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsSection > h2{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsSection > #activeFilters,
+  body.v224-page5-step.v224-results-step #v224ResultsSection > #placesFilters,
+  body.v224-page5-step.v224-results-step #v224ResultsSection > #resultsCount{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultTool-results .v224-result-tool-frame{
+    padding:10px!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultTool-results #places{
+    margin:0!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultTool-results #places .card:first-child{
+    margin-top:0!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultTool-contribute #addPlacePanel[hidden]{
+    display:none!important;
+  }
+}
