@@ -85,7 +85,7 @@
     try{
       localStorage.setItem(LAST_REPAIR_KEY,JSON.stringify({
         date:new Date().toISOString(),
-        version:"v175",
+        version:"v175-known-issues",
         ...meta
       }));
     }catch(_){}
@@ -112,6 +112,13 @@
       }
     }catch(_){}
 
+    let knownIssueRepair=null;
+    try{
+      if(window.LibcomlairKnownIssues&&typeof window.LibcomlairKnownIssues.repairSafe==="function"){
+        knownIssueRepair=window.LibcomlairKnownIssues.repairSafe();
+      }
+    }catch(_){}
+
     clearTransientLocalData();
     restoreProtected(before);
 
@@ -125,10 +132,11 @@
     }catch(_){}
 
     restoreProtected(before);
-    recordRepair({cacheCount,workerCount});
-    status("✓ Réparation terminée. Libcomlair va se recharger avec des données techniques propres.");
+    recordRepair({cacheCount,workerCount,knownIssueRepair});
+    const repairedCount=knownIssueRepair&&Array.isArray(knownIssueRepair.repaired)?knownIssueRepair.repaired.length:0;
+    status("✓ Réparation terminée"+(repairedCount?" : "+repairedCount+" panne"+(repairedCount>1?"s":"")+" connue"+(repairedCount>1?"s":"")+" corrigée"+(repairedCount>1?"s":""):"")+". Libcomlair va se recharger avec des données techniques propres.");
     setTimeout(reloadClean,700);
-    return {ok:true,cacheCount,workerCount};
+    return {ok:true,cacheCount,workerCount,knownIssueRepair};
   }
 
   function lastRepair(){
