@@ -116,6 +116,20 @@ Risques :
 - délai réseau ;
 - lecture interrompue.
 
+### `libcomlair-v224-voice-context.js`
+Rôle :
+- détecte l’écran réellement actif ;
+- distingue accueil, recherche, catégorie, sous-catégorie, Carte, Favoris, Filtres, Contribuer, Résultats et fiche détaillée ;
+- expose `window.LibcomlairVoiceContext` ;
+- fournit les commandes autorisées pour le contexte courant ;
+- émet `libcomlair-voice-context-change` lorsque l’écran vocal change.
+
+Principe de sécurité :
+ce composant ne déclenche aucune commande utilisateur. Il décrit uniquement le contexte. Le moteur de reconnaissance sera raccordé à cette source après validation.
+
+Diagnostic :
+`libcomlair-selftest-v189.js` vérifie maintenant que ce moteur est chargé et sait identifier un contexte.
+
 ### `libcomlair-voice-engine-v189.js`
 Rôle :
 - couche intermédiaire commune ;
