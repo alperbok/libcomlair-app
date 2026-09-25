@@ -1,0 +1,11 @@
+html,body{margin:0!important;padding:0!important}
+body.v224-fullscreen-home{background:#fff!important;overflow-x:hidden}
+body.v224-fullscreen-home #libcomlairSplash{max-width:none!important;width:100%!important;min-height:100dvh!important;margin:0!important;padding:0!important;background:#fff!important}
+.v224-fullscreen-wrap{position:relative;width:100vw;margin:0;padding:0;line-height:0;background:#fff}
+.v224-fullscreen-image{display:block!important;width:100vw!important;height:auto!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;object-fit:contain!important}
+.v224-next-hotspot{position:absolute;left:6.5%;right:6.5%;bottom:2.7%;height:8.4%;margin:0;padding:0;border:0;border-radius:18px;background:transparent;color:transparent;cursor:pointer;z-index:10}
+.v224-next-hotspot:focus-visible{outline:4px solid #ffca3a!important;outline-offset:3px;background:rgba(255,255,255,.08)}
+.v224-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media(max-width:540px){
+  .v224-next-hotspot{left:6%;right:6%;bottom:2.5%;height:8.8%;border-radius:16px}
+}
