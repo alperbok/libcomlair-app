@@ -1,4 +1,4 @@
-/* Libcomlair V224 - cadre V9 conservé, contenu réparti à l'intérieur
+/* Libcomlair V224 - cadre V9 conservé, contenu réparti dans l'espace intérieur
    Logo et micro inchangés. */
 
 @media (max-width: 540px) {
@@ -10,7 +10,7 @@
     box-sizing:border-box!important;
   }
 
-  /* CADRE DE RÉFÉRENCE V9 : dimensions figées */
+  /* Cadre de référence validé : même dimension que V9 */
   body.v221-profile-step #accessWelcome {
     display:grid!important;
     grid-template-rows:auto auto auto minmax(0,1fr) auto!important;
@@ -21,13 +21,10 @@
     box-sizing:border-box!important;
     width:100%!important;
     max-width:none!important;
-    height:calc(100dvh - 2px)!important;
     min-height:calc(100dvh - 2px)!important;
-    max-height:calc(100dvh - 2px)!important;
-    overflow:hidden!important;
   }
 
-  /* Logo : strictement inchangé */
+  /* Logo strictement inchangé */
   body.v221-profile-step .v222-profile-brand {
     min-height:66px!important;
     margin:-2px 0 0!important;
@@ -41,7 +38,7 @@
     margin:0 auto!important;
   }
 
-  /* Micro : aucune modification */
+  /* Micro strictement inchangé */
 
   body.v221-profile-step #accessWelcomeTitle {
     font-size:1.60rem!important;
@@ -55,28 +52,37 @@
     margin:0 0 6px!important;
   }
 
-  /* Les 5 choix occupent tout l'espace disponible sans agrandir le cadre */
   body.v221-profile-step #accessWelcome fieldset {
     display:flex!important;
     flex-direction:column!important;
-    gap:8px!important;
+    min-height:0!important;
     margin:0!important;
     padding:0!important;
-    min-height:0!important;
+    border:0!important;
   }
 
   body.v221-profile-step #accessWelcome fieldset legend {
-    margin:0 0 2px!important;
+    flex:0 0 auto!important;
+    margin:0 0 6px!important;
     padding:0!important;
     font-size:1.10rem!important;
     line-height:1.08!important;
-    flex:0 0 auto!important;
   }
 
-  body.v221-profile-step #accessWelcome fieldset label {
-    flex:1 1 0!important;
-    min-height:52px!important;
+  body.v221-profile-step .v224-needs-grid {
+    display:grid!important;
+    grid-template-rows:repeat(5,minmax(52px,1fr))!important;
+    gap:8px!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+  }
+
+  body.v221-profile-step .v224-needs-grid label {
+    display:flex!important;
+    align-items:center!important;
     box-sizing:border-box!important;
+    min-height:52px!important;
+    height:auto!important;
     padding:6px 10px!important;
     margin:0!important;
     border-radius:16px!important;
