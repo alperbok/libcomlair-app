@@ -201,3 +201,36 @@
     display:none!important;
   }
 }
+
+
+/* V224 résultats de sous-catégorie — garder l'en-tête et afficher la liste */
+@media (max-width:540px){
+  body.v224-page5-step.v224-results-step #mainContent{
+    height:auto!important;
+    min-height:calc(100dvh - 2px)!important;
+    overflow:visible!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224Page4Categories{
+    flex:0 0 auto!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224Page5Tutorial{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224Page4Categories > details{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224Page5Back{
+    margin-bottom:8px!important;
+  }
+
+  body.v224-page5-step.v224-results-step #mainContent > section:has(#places){
+    display:block!important;
+    margin:0!important;
+    padding:8px 14px 16px!important;
+    box-sizing:border-box!important;
+  }
+}
