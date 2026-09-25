@@ -9,3 +9,37 @@ body.v221-onboarding .v224-welcome-image{display:block;width:100%;height:auto;ma
  body.v221-onboarding .v224-welcome-screen{width:100vw}
  .v224-next-hotspot{left:5.5%;right:5.5%;bottom:4.5%;height:8.8%}
 }
+
+/* Correction cadrage mobile : aucun espace autour de l'écran d'accueil */
+body.v221-onboarding:not(.v221-profile-step) #mainContent{
+  max-width:none!important;
+  width:100vw!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+body.v221-onboarding:not(.v221-profile-step) #libcomlairSplash{
+  width:100vw!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+}
+body.v221-onboarding:not(.v221-profile-step) .v224-welcome-screen{
+  width:100vw!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+}
+body.v221-onboarding:not(.v221-profile-step) .v224-welcome-image{
+  display:block!important;
+  width:100vw!important;
+  max-width:none!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  object-fit:contain!important;
+  object-position:center top!important;
+}
+body.v221-onboarding:not(.v221-profile-step){
+  overflow-x:hidden!important;
+}
