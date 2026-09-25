@@ -1,0 +1,206 @@
+/* Libcomlair V224 — écrans finaux de présentation
+   Résultats / Carte / Favoris / Contribution / Fiche détaillée */
+
+@media (max-width:540px){
+  body.v224-page5-step #v224ResultsActions{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsActions{
+    display:grid!important;
+    grid-template-columns:1fr 1fr 1fr!important;
+    gap:6px!important;
+    margin:6px 0 8px!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsActions button{
+    min-height:48px!important;
+    padding:7px 6px!important;
+    border:2px solid #0f7784!important;
+    border-radius:13px!important;
+    background:#eef8f9!important;
+    color:#17383d!important;
+    font-size:.9rem!important;
+    font-weight:800!important;
+    line-height:1.08!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsSection{
+    display:block!important;
+    margin:0!important;
+    padding:6px 2px 14px!important;
+  }
+
+  body.v224-page5-step.v224-results-step #v224ResultsSection > h2{
+    margin:4px 0 6px!important;
+    font-size:1.28rem!important;
+  }
+
+  body.v224-page5-step.v224-results-step #placesFilters{
+    margin:6px 0 8px!important;
+  }
+
+  body.v224-page5-step.v224-results-step #places .card{
+    margin:8px 0!important;
+    padding:10px!important;
+    border:2px solid #b7d4d8!important;
+    border-radius:15px!important;
+    background:#fff!important;
+    box-shadow:none!important;
+  }
+
+  body.v224-page5-step.v224-results-step #places .card h3{
+    margin:0 0 5px!important;
+    font-size:1.08rem!important;
+    line-height:1.15!important;
+  }
+
+  /* Ecrans utilitaires : un seul contenu dans le cadre. */
+  body.v224-page5-step.v224-utility-step #mainContent{
+    display:block!important;
+    width:100%!important;
+    max-width:none!important;
+    min-height:calc(100dvh - 2px)!important;
+    margin:0!important;
+    padding:10px 12px 12px!important;
+    box-sizing:border-box!important;
+    background:#fff!important;
+    border:2px solid #17252a!important;
+    border-radius:24px!important;
+    overflow-x:hidden!important;
+  }
+
+  body.v224-page5-step.v224-utility-step #mainContent > section{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-utility-step #v224Page4Categories{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.v224-page5-step.v224-utility-step #v224Page4Categories > h2,
+  body.v224-page5-step.v224-utility-step #v224Page4Categories > details,
+  body.v224-page5-step.v224-utility-step #v224Page4Back,
+  body.v224-page5-step.v224-utility-step #v224ResultsActions{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-utility-step #v224Page5Header{
+    display:block!important;
+    margin:0 0 6px!important;
+  }
+
+  body.v224-page5-step.v224-utility-step #v224Page5Tutorial{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-utility-step #v224Page5Back{
+    display:block!important;
+    width:100%!important;
+    min-height:50px!important;
+    margin:6px 0 8px!important;
+    padding:8px 10px!important;
+    border:2px solid #6f858b!important;
+    border-radius:14px!important;
+    background:#fff!important;
+    color:#21383e!important;
+    font-size:1rem!important;
+    font-weight:800!important;
+  }
+
+  body.v224-page5-step.v224-utility-map #v224MapSection,
+  body.v224-page5-step.v224-utility-favorites #favoritesSection,
+  body.v224-page5-step.v224-utility-contribute #v224ContributeSection,
+  body.v224-page5-step.v224-utility-detail #detail{
+    display:block!important;
+    margin:0!important;
+    padding:6px 0 12px!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+
+  body.v224-page5-step.v224-utility-map #v224MapSection > h2,
+  body.v224-page5-step.v224-utility-favorites #favoritesSection > h2,
+  body.v224-page5-step.v224-utility-contribute #v224ContributeSection > h2{
+    margin:4px 0 6px!important;
+    font-size:1.28rem!important;
+  }
+
+  body.v224-page5-step.v224-utility-map #map{
+    display:block!important;
+    width:100%!important;
+    height:56dvh!important;
+    min-height:360px!important;
+    max-height:560px!important;
+    margin:8px 0!important;
+    border:2px solid #b7d4d8!important;
+    border-radius:16px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step.v224-utility-favorites #favoritesSection details{
+    display:block!important;
+  }
+
+  body.v224-page5-step.v224-utility-favorites #favoritesSection details > summary{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-utility-favorites #favoritesList .card{
+    margin:8px 0!important;
+    padding:10px!important;
+    border:2px solid #b7d4d8!important;
+    border-radius:15px!important;
+    background:#fff!important;
+  }
+
+  body.v224-page5-step.v224-utility-contribute #addPlaceBtn{
+    width:100%!important;
+    min-height:52px!important;
+    margin:4px 0 8px!important;
+  }
+
+  body.v224-page5-step.v224-utility-contribute #addPlacePanel{
+    margin:0!important;
+  }
+
+  body.v224-page5-step.v224-utility-contribute #proposalMap{
+    width:100%!important;
+    min-height:300px!important;
+    border-radius:14px!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #detail{
+    padding-bottom:18px!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #detail > #closeDetail{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #detailTitle{
+    margin:5px 0 5px!important;
+    font-size:1.35rem!important;
+    line-height:1.12!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #detail h3{
+    margin:10px 0 5px!important;
+    font-size:1.08rem!important;
+  }
+
+  body.v224-page5-step.v224-utility-detail #detailActions,
+  body.v224-page5-step.v224-utility-detail #placeReportSection,
+  body.v224-page5-step.v224-utility-detail #placeFeedback{
+    margin:7px 0!important;
+  }
+
+  body.v224-page5-step.v224-utility-step footer{
+    display:none!important;
+  }
+}
