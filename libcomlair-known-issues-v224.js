@@ -41,6 +41,13 @@
       repair:"Normaliser la classe d'écran active et masquer/afficher explicitement les sections correspondantes."
     },
     {
+      id:"return-categories-intermediate-screen",
+      title:"Retour aux catégories incomplet",
+      symptom:"Après Retour aux catégories, le titre et le tutoriel de l'ancienne catégorie restent visibles sans les sous-catégories.",
+      cause:"Le retour ferme l'accordéon actif mais ne restaure pas complètement l'état visuel de l'écran 4.",
+      repair:"Réinitialiser explicitement l'écran 5, réafficher toutes les grandes catégories et revenir directement au titre Catégories."
+    },
+    {
       id:"legacy-details-open",
       title:"Ancien accordéon ouvert au lieu d'une nouvelle page",
       symptom:"Une grande catégorie se déplie dans l'écran courant au lieu d'ouvrir l'écran suivant.",
