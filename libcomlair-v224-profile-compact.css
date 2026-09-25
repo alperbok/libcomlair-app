@@ -38,7 +38,18 @@
     margin:0 auto!important;
   }
 
-  /* Micro strictement inchangé */
+  /* Micro agrandi, maintenu entièrement à l'intérieur du cadre */
+  body.v221-profile-step #v222ProfileMic.v222-corner-mic {
+    width:74px!important;
+    height:74px!important;
+    right:0!important;
+    top:0!important;
+    font-size:1.75rem!important;
+  }
+
+  body.v221-profile-step #v222ProfileMic.v222-corner-mic span {
+    font-size:.78rem!important;
+  }
 
   body.v221-profile-step #accessWelcomeTitle {
     font-size:1.60rem!important;
