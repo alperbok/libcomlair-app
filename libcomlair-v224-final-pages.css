@@ -1043,3 +1043,58 @@
     font-size:.9rem!important;
   }
 }
+
+
+/* V224 Carte : remplir automatiquement tout l'espace restant du cadre */
+@media (max-width:540px){
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-map #mainContent{
+    display:flex!important;
+    flex-direction:column!important;
+    height:calc(100dvh - 2px)!important;
+    min-height:calc(100dvh - 2px)!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-map #v224Page4Categories{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-map #v224ResultsActions{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-map #v224ResultTool-map{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-map #v224ResultTool-map > .v224-result-tool-frame{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-map #v224MapSection{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-map #v224ResultTool-map #map{
+    flex:1 1 auto!important;
+    height:auto!important;
+    min-height:360px!important;
+    max-height:none!important;
+    margin-top:4px!important;
+  }
+}
