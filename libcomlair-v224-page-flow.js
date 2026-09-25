@@ -277,7 +277,40 @@
   function prepareDetailPresentation(){
     if(!detailSection)return;
 
-    // Informations pratiques : bloc repliable sans toucher aux données.
+    // 1. Lignes et directions : accordéon principal.
+    const wrapDirections=()=>{
+      const directions=document.getElementById("idfmDirectionDetailsV153");
+      if(!directions)return;
+      let box=document.getElementById("v224DirectionsDetails");
+      if(!box){
+        box=document.createElement("details");
+        box.id="v224DirectionsDetails";
+        box.className="v224-detail-fold";
+        box.dataset.voiceTarget="directions";
+        const summary=document.createElement("summary");
+        summary.innerHTML="<strong>🚌 Lignes et directions</strong>";
+        directions.insertAdjacentElement("beforebegin",box);
+        box.append(summary,directions);
+      }
+      box.open=false;
+      box.hidden=directions.hidden;
+      const title=[...directions.children].find(el=>el.tagName==="H3"&&/lignes et directions/i.test(el.textContent||""));
+      if(title)title.style.display="none";
+      if(!directions.dataset.v224Observer){
+        directions.dataset.v224Observer="1";
+        const observer=new MutationObserver(()=>{
+          box.hidden=directions.hidden;
+          const h=[...directions.children].find(el=>el.tagName==="H3"&&/lignes et directions/i.test(el.textContent||""));
+          if(h)h.style.display="none";
+        });
+        observer.observe(directions,{attributes:true,childList:true,subtree:true});
+      }
+    };
+    wrapDirections();
+    setTimeout(wrapDirections,250);
+    setTimeout(wrapDirections,900);
+
+    // 2. Informations pratiques.
     if(!document.getElementById("v224PracticalDetails")){
       const practicalTitle=[...detailSection.children].find(el=>el.tagName==="H3"&&/informations pratiques/i.test(el.textContent||""));
       const actions=document.getElementById("detailActions");
@@ -285,6 +318,7 @@
         const box=document.createElement("details");
         box.id="v224PracticalDetails";
         box.className="v224-detail-fold";
+        box.dataset.voiceTarget="pratique";
         const summary=document.createElement("summary");
         summary.innerHTML="<strong>ℹ️ Informations pratiques</strong>";
         const content=document.createElement("div");
@@ -300,16 +334,55 @@
         }
       }
     }
+    const practical=document.getElementById("v224PracticalDetails");
+    if(practical)practical.open=false;
 
-    // Accessibilité : le profil prioritaire reste ouvert, les autres sont repliés.
+    // 3. Actions / 4. Signalement / 5. Avis.
+    const actions=document.getElementById("detailActions");
+    const report=document.getElementById("placeReportSection");
+    const feedback=document.getElementById("placeFeedback");
+    if(actions){actions.classList.add("v224-detail-fold");actions.dataset.voiceTarget="actions";actions.open=false;}
+    if(report){report.classList.add("v224-detail-fold");report.dataset.voiceTarget="signalement";report.open=false;}
+    if(feedback){feedback.classList.add("v224-detail-fold");feedback.dataset.voiceTarget="avis";feedback.open=false;}
+
+    // 6. Accessibilité : un accordéon principal contenant les 5 profils.
     const profileBox=document.getElementById("accessibilityProfile");
     if(profileBox){
+      let accessMain=document.getElementById("v224AccessibilityDetails");
+      if(!accessMain){
+        const accessTitle=[...detailSection.children].find(el=>el.tagName==="H3"&&/^accessibilité$/i.test((el.textContent||"").trim()));
+        if(accessTitle){
+          accessMain=document.createElement("details");
+          accessMain.id="v224AccessibilityDetails";
+          accessMain.className="v224-detail-fold";
+          accessMain.dataset.voiceTarget="accessibilite";
+          const summary=document.createElement("summary");
+          summary.innerHTML="<strong>♿ Accessibilité</strong>";
+          const content=document.createElement("div");
+          content.className="v224-detail-fold-body";
+          accessTitle.insertAdjacentElement("beforebegin",accessMain);
+          accessMain.append(summary,content);
+          accessTitle.remove();
+          content.appendChild(profileBox);
+
+          const nonRenseigne=[...detailSection.children].find(el=>el.tagName==="P"&&/Non renseigné.*signifie/i.test(el.textContent||""));
+          if(nonRenseigne)content.appendChild(nonRenseigne);
+
+          const detailAccess=document.getElementById("detailAccess");
+          const commentBox=document.getElementById("detailCommentBox");
+          const sourceNote=document.getElementById("detailSourceNote");
+          if(detailAccess)content.appendChild(detailAccess);
+          if(commentBox)content.appendChild(commentBox);
+          if(sourceNote)content.appendChild(sourceNote);
+        }
+      }
+      if(accessMain)accessMain.open=false;
+
       const sections=[...profileBox.children].filter(el=>el.tagName==="SECTION");
       const hasPriority=sections.some(section=>section.classList.contains("access-priority"));
       sections.forEach((section,index)=>{
-        let title=[...section.children].find(el=>el.tagName==="H4");
+        const title=[...section.children].find(el=>el.tagName==="H4");
         if(!title)return;
-        let toggle=title.querySelector(".v224-access-toggle");
         let bodyBox=[...section.children].find(el=>el.classList&&el.classList.contains("v224-access-body"))||null;
         if(!bodyBox){
           bodyBox=document.createElement("div");
@@ -323,6 +396,7 @@
           }
           section.appendChild(bodyBox);
         }
+        let toggle=title.querySelector(".v224-access-toggle");
         if(!toggle){
           const label=title.textContent.trim();
           title.textContent="";
@@ -330,6 +404,7 @@
           toggle.type="button";
           toggle.className="v224-access-toggle";
           toggle.setAttribute("aria-controls",bodyBox.id);
+          toggle.dataset.voiceTarget=(bodyBox.querySelector("ul")?.id||"").replace(/^access/,"").toLowerCase();
           toggle.innerHTML='<span class="v224-access-arrow" aria-hidden="true">▶</span><span>'+label+'</span>';
           title.appendChild(toggle);
           toggle.addEventListener("click",()=>{
@@ -342,27 +417,6 @@
         toggle.setAttribute("aria-expanded",expanded?"true":"false");
         bodyBox.hidden=!expanded;
       });
-    }
-
-    // Informations complémentaires : disponibles sans allonger la fiche en permanence.
-    if(!document.getElementById("v224ComplementaryDetails")){
-      const accessList=document.getElementById("detailAccess");
-      const commentBox=document.getElementById("detailCommentBox");
-      const sourceNote=document.getElementById("detailSourceNote");
-      if(accessList&&sourceNote){
-        const box=document.createElement("details");
-        box.id="v224ComplementaryDetails";
-        box.className="v224-detail-fold";
-        const summary=document.createElement("summary");
-        summary.innerHTML="<strong>＋ Informations complémentaires</strong>";
-        const content=document.createElement("div");
-        content.className="v224-detail-fold-body";
-        accessList.insertAdjacentElement("beforebegin",box);
-        box.append(summary,content);
-        content.appendChild(accessList);
-        if(commentBox)content.appendChild(commentBox);
-        content.appendChild(sourceNote);
-      }
     }
   }
 
