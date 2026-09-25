@@ -27,9 +27,7 @@
   const contributeSection=document.getElementById("v224ContributeSection");
   const detailSection=document.getElementById("detail");
   const resultsActions=document.getElementById("v224ResultsActions");
-  const openMapBtn=document.getElementById("v224OpenMap");
-  const openFavoritesBtn=document.getElementById("v224OpenFavorites");
-  const openContributeBtn=document.getElementById("v224OpenContribute");
+  const resultToolAccordions={};
   let lastPage5Details=null;
   let lastResultsLabel="Résultats";
 
@@ -73,6 +71,85 @@
   function clearAllSectionDisplays(){
     directSections().forEach(clearDisplay);
   }
+
+  function prepareResultAccordions(){
+    if(!resultsActions||resultsActions.dataset.ready==="1")return;
+    resultsActions.dataset.ready="1";
+    resultsActions.replaceChildren();
+
+    const tools=[
+      {key:"map",label:"🗺 Carte",section:mapSection,voice:"carte"},
+      {key:"favorites",label:"★ Favoris",section:favoritesSection,voice:"favoris"},
+      {key:"contribute",label:"＋ Contribuer",section:contributeSection,voice:"contribuer"}
+    ];
+
+    tools.forEach(item=>{
+      if(!item.section)return;
+      item.section.style.removeProperty("display");
+      item.section.hidden=false;
+      item.section.removeAttribute("hidden");
+
+      const details=document.createElement("details");
+      details.id="v224ResultTool-"+item.key;
+      details.className="v224-result-tool";
+      details.dataset.voiceTarget=item.voice;
+
+      const summary=document.createElement("summary");
+      summary.innerHTML="<strong>"+item.label+"</strong>";
+
+      const frame=document.createElement("div");
+      frame.className="v224-result-tool-frame";
+      frame.appendChild(item.section);
+
+      details.append(summary,frame);
+      resultsActions.appendChild(details);
+      resultToolAccordions[item.key]=details;
+
+      details.addEventListener("toggle",()=>{
+        if(!details.open)return;
+        Object.entries(resultToolAccordions).forEach(([key,other])=>{
+          if(key!==item.key)other.open=false;
+        });
+
+        if(item.key==="favorites"){
+          const inner=item.section.querySelector("details");
+          if(inner)inner.open=true;
+        }
+
+        if(item.key==="map"){
+          setTimeout(()=>{
+            try{window.dispatchEvent(new Event("resize"))}catch(_){}
+          },250);
+          setTimeout(()=>{
+            try{window.dispatchEvent(new Event("resize"))}catch(_){}
+          },700);
+        }
+
+        requestAnimationFrame(()=>details.scrollIntoView({block:"start",behavior:"smooth"}));
+      });
+    });
+  }
+
+  function openResultAccordion(kind){
+    const openIt=()=>{
+      const target=resultToolAccordions[kind];
+      if(!target)return;
+      Object.values(resultToolAccordions).forEach(x=>x.open=false);
+      target.open=true;
+    };
+
+    if(body.classList.contains("v224-results-step")){
+      openIt();
+      return;
+    }
+
+    if(lastPage5Details){
+      showResultsPage(lastPage5Details,lastResultsLabel);
+      setTimeout(openIt,0);
+    }
+  }
+
+  prepareResultAccordions();
 
   function clearPage5State(){
     body.classList.remove("v224-results-step","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
@@ -263,7 +340,9 @@
     lastResultsLabel=String(label||categoryName(details)).replace(/^[^A-Za-zÀ-ÿ0-9]+\s*/,"").trim();
     if(page5Title)page5Title.textContent=lastResultsLabel;
     if(page5Tutorial)page5Tutorial.style.setProperty("display","none","important");
+    prepareResultAccordions();
     if(resultsActions)resultsActions.style.removeProperty("display");
+    Object.values(resultToolAccordions).forEach(x=>x.open=false);
     if(page5Back)page5Back.textContent="← Retour aux "+returnLabel(details);
     forceShow(page5Header,"block");
     forceShow(page5Back,"block");
@@ -521,10 +600,6 @@
     handlePage5Back(event);
   },true);
 
-  openMapBtn?.addEventListener("click",()=>showUtilityPage("map"));
-  openFavoritesBtn?.addEventListener("click",()=>showUtilityPage("favorites"));
-  openContributeBtn?.addEventListener("click",()=>showUtilityPage("contribute"));
-
   window.addEventListener("libcomlair-detail-opened",()=>{
     prepareDetailPresentation();
     if(body.classList.contains("v224-results-step"))showUtilityPage("detail");
@@ -534,7 +609,7 @@
     const target=event.target&&event.target.closest?event.target.closest(".show-on-map,#detailMap"):null;
     if(!target)return;
     if(!body.classList.contains("v224-page5-step"))return;
-    setTimeout(()=>showUtilityPage("map"),0);
+    setTimeout(()=>openResultAccordion("map"),0);
   });
 
   document.addEventListener("click",event=>{
@@ -606,6 +681,7 @@
       return true;
     },
     showUtility:showUtilityPage,
+    openResultAccordion,
     showResultsAgain,
     currentCategory:()=>lastPage5Details?.id||categoryPanels.find(el=>el.classList.contains("v224-page5-active"))?.id||""
   });
