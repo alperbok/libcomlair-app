@@ -161,7 +161,18 @@
       if(activeFiltersText)filtersContent.appendChild(activeFiltersText);
       if(placesFilters){
         placesFilters.open=true;
-        filtersContent.appendChild(placesFilters);
+        let filtersBody=document.getElementById("v224FiltersBody");
+        if(!filtersBody){
+          filtersBody=document.createElement("div");
+          filtersBody.id="v224FiltersBody";
+          [...placesFilters.children]
+            .filter(el=>el.tagName!=="SUMMARY")
+            .forEach(el=>filtersBody.appendChild(el));
+        }
+        filtersContent.appendChild(filtersBody);
+        placesFilters.hidden=true;
+        placesFilters.setAttribute("hidden","");
+        placesFilters.style.setProperty("display","none","important");
       }
     }
 
