@@ -20,6 +20,7 @@
   const categories=document.getElementById("v224Page4Categories");
   const searchIntro=document.getElementById("v224Page4SearchIntro");
   const resultsSection=document.getElementById("places")?.closest("section")||null;
+  if(resultsSection&&!resultsSection.id)resultsSection.id="v224ResultsSection";
   const page5Tutorial=document.getElementById("v224Page5Tutorial");
   let lastPage5Details=null;
 
