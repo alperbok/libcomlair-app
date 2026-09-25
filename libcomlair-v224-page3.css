@@ -26,12 +26,12 @@
     overflow:hidden!important;
   }
 
-  body.v224-page3-step #mainContent > section{
+  body.v224-page3-step #mainContent > section:not(#accessNeedsSection):not(.hero.v219-main-zone){
     display:none!important;
   }
 
-  body.v224-page3-step #accessNeedsSection,
-  body.v224-page3-step .hero.v219-main-zone{
+  body.v224-page3-step #mainContent > #accessNeedsSection,
+  body.v224-page3-step #mainContent > section.hero.v219-main-zone{
     display:block!important;
   }
 
