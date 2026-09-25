@@ -22,7 +22,16 @@
   const resultsSection=document.getElementById("places")?.closest("section")||null;
   if(resultsSection&&!resultsSection.id)resultsSection.id="v224ResultsSection";
   const page5Tutorial=document.getElementById("v224Page5Tutorial");
+  const mapSection=document.getElementById("v224MapSection");
+  const favoritesSection=document.getElementById("favoritesSection");
+  const contributeSection=document.getElementById("v224ContributeSection");
+  const detailSection=document.getElementById("detail");
+  const resultsActions=document.getElementById("v224ResultsActions");
+  const openMapBtn=document.getElementById("v224OpenMap");
+  const openFavoritesBtn=document.getElementById("v224OpenFavorites");
+  const openContributeBtn=document.getElementById("v224OpenContribute");
   let lastPage5Details=null;
+  let lastResultsLabel="Résultats";
 
   const categoryIds=[
     "shopDetails","barDetails","hotelDetails","restaurantDetails",
@@ -66,7 +75,7 @@
   }
 
   function clearPage5State(){
-    body.classList.remove("v224-results-step");
+    body.classList.remove("v224-results-step","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
     lastPage5Details=null;
     categoryPanels.forEach(el=>{
       el.classList.remove("v224-page5-active");
@@ -238,7 +247,7 @@
   function showResultsPage(details,label){
     if(!details||!resultsSection)return;
     lastPage5Details=details;
-    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step");
+    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
     body.classList.add("v224-page5-step","v224-results-step");
 
     showOnlySections([categories,resultsSection]);
@@ -251,8 +260,10 @@
       el.style.setProperty("display","none","important");
     });
 
-    if(page5Title)page5Title.textContent=String(label||categoryName(details)).replace(/^[^A-Za-zÀ-ÿ0-9]+\s*/,"").trim();
+    lastResultsLabel=String(label||categoryName(details)).replace(/^[^A-Za-zÀ-ÿ0-9]+\s*/,"").trim();
+    if(page5Title)page5Title.textContent=lastResultsLabel;
     if(page5Tutorial)page5Tutorial.style.setProperty("display","none","important");
+    if(resultsActions)resultsActions.style.removeProperty("display");
     if(page5Back)page5Back.textContent="← Retour aux "+returnLabel(details);
     forceShow(page5Header,"block");
     forceShow(page5Back,"block");
@@ -263,11 +274,74 @@
     });
   }
 
+  function showUtilityPage(kind){
+    if(!lastPage5Details)return;
+    const screens={
+      map:{section:mapSection,title:"Carte",cls:"v224-utility-map"},
+      favorites:{section:favoritesSection,title:"Favoris",cls:"v224-utility-favorites"},
+      contribute:{section:contributeSection,title:"Contribuer",cls:"v224-utility-contribute"},
+      detail:{section:detailSection,title:"Fiche détaillée",cls:"v224-utility-detail"}
+    };
+    const screen=screens[kind];
+    if(!screen||!screen.section)return;
+
+    body.classList.remove("v224-results-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
+    body.classList.add("v224-page5-step","v224-utility-step",screen.cls);
+
+    showOnlySections([categories,screen.section]);
+    forceShow(categories,"block");
+    forceShow(screen.section,"block");
+
+    categoryPanels.forEach(el=>{
+      el.open=false;
+      el.classList.remove("v224-page5-active");
+      el.style.setProperty("display","none","important");
+    });
+
+    if(page5Title)page5Title.textContent=screen.title;
+    if(page5Tutorial)page5Tutorial.style.setProperty("display","none","important");
+    if(resultsActions)resultsActions.style.setProperty("display","none","important");
+    if(page5Back)page5Back.textContent="← Retour aux résultats";
+    forceShow(page5Header,"block");
+    forceShow(page5Back,"block");
+
+    if(kind==="favorites"){
+      const d=favoritesSection.querySelector("details");
+      if(d)d.open=true;
+    }
+
+    if(kind==="contribute"){
+      const panel=document.getElementById("addPlacePanel");
+      if(panel&&panel.hasAttribute("hidden"))document.getElementById("addPlaceBtn")?.click();
+    }
+
+    requestAnimationFrame(()=>{
+      window.scrollTo({top:0,left:0,behavior:"auto"});
+      page5Header?.scrollIntoView({block:"start"});
+      if(kind==="map"){
+        setTimeout(()=>{
+          try{window.dispatchEvent(new Event("resize"))}catch(_){}
+        },250);
+        setTimeout(()=>{
+          try{window.dispatchEvent(new Event("resize"))}catch(_){}
+        },700);
+      }
+    });
+  }
+
+  function showResultsAgain(){
+    if(lastPage5Details)showResultsPage(lastPage5Details,lastResultsLabel);
+  }
+
   function handlePage5Back(event){
     if(event){
       event.preventDefault();
       event.stopPropagation();
       if(typeof event.stopImmediatePropagation==="function")event.stopImmediatePropagation();
+    }
+    if(body.classList.contains("v224-utility-step")){
+      showResultsAgain();
+      return;
     }
     if(body.classList.contains("v224-results-step")&&lastPage5Details){
       showPage5(lastPage5Details);
@@ -296,6 +370,21 @@
     if(!target)return;
     handlePage5Back(event);
   },true);
+
+  openMapBtn?.addEventListener("click",()=>showUtilityPage("map"));
+  openFavoritesBtn?.addEventListener("click",()=>showUtilityPage("favorites"));
+  openContributeBtn?.addEventListener("click",()=>showUtilityPage("contribute"));
+
+  window.addEventListener("libcomlair-detail-opened",()=>{
+    if(body.classList.contains("v224-results-step"))showUtilityPage("detail");
+  });
+
+  document.addEventListener("click",event=>{
+    const target=event.target&&event.target.closest?event.target.closest(".show-on-map,#detailMap"):null;
+    if(!target)return;
+    if(!body.classList.contains("v224-page5-step"))return;
+    setTimeout(()=>showUtilityPage("map"),0);
+  });
 
   categoryPanels.forEach(details=>{
     const summary=[...details.children].find(el=>el.tagName==="SUMMARY");
@@ -358,6 +447,8 @@
       showResultsPage(details,label);
       return true;
     },
+    showUtility:showUtilityPage,
+    showResultsAgain,
     currentCategory:()=>lastPage5Details?.id||categoryPanels.find(el=>el.classList.contains("v224-page5-active"))?.id||""
   });
 
