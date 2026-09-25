@@ -1,0 +1,100 @@
+/* Libcomlair V224 - page 2 compacte, cache-bust dédié
+   Le micro reste volontairement inchangé. */
+
+@media (max-width: 540px) {
+  body.v221-profile-step #accessWelcome {
+    display:block!important;
+    margin:4px 8px!important;
+    padding:8px 14px 10px!important;
+    border-radius:24px!important;
+  }
+
+  /* Logo uniquement : légèrement réduit pour dégager le cadre */
+  body.v221-profile-step .v222-profile-brand {
+    min-height:62px!important;
+    margin:-2px 0 0!important;
+    padding-right:62px!important;
+  }
+
+  body.v221-profile-step .v222-profile-brand .v222-brand-logo {
+    width:min(64vw,280px)!important;
+    max-width:280px!important;
+    height:auto!important;
+    margin:0 auto!important;
+  }
+
+  /* Micro : aucune modification de taille, position ou apparence */
+
+  body.v221-profile-step #accessWelcomeTitle {
+    font-size:1.32rem!important;
+    line-height:1.08!important;
+    margin:2px 0 5px!important;
+  }
+
+  body.v221-profile-step #accessWelcome > p {
+    font-size:.91rem!important;
+    line-height:1.15!important;
+    margin:0 0 6px!important;
+  }
+
+  body.v221-profile-step #accessWelcome fieldset {
+    display:grid!important;
+    gap:5px!important;
+    margin:6px 0!important;
+    padding:0!important;
+  }
+
+  body.v221-profile-step #accessWelcome fieldset legend {
+    margin:0 0 3px!important;
+    padding:0!important;
+    font-size:1rem!important;
+    line-height:1.05!important;
+  }
+
+  body.v221-profile-step #accessWelcome fieldset label {
+    min-height:46px!important;
+    height:46px!important;
+    box-sizing:border-box!important;
+    padding:5px 10px!important;
+    margin:0!important;
+    border-radius:14px!important;
+    font-size:.94rem!important;
+    line-height:1.05!important;
+    gap:9px!important;
+  }
+
+  body.v221-profile-step #accessWelcome input[type="checkbox"] {
+    width:23px!important;
+    height:23px!important;
+    min-width:23px!important;
+    min-height:23px!important;
+    flex:0 0 23px!important;
+  }
+
+  body.v221-profile-step .welcome-actions {
+    display:grid!important;
+    gap:5px!important;
+    margin-top:6px!important;
+  }
+
+  body.v221-profile-step .welcome-actions .details-btn {
+    min-height:45px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:7px 9px!important;
+    border-radius:14px!important;
+    font-size:.94rem!important;
+    line-height:1.05!important;
+  }
+
+  body.v221-profile-step #accessWelcomeStatus {
+    margin:2px 0 0!important;
+    min-height:0!important;
+    padding:0!important;
+  }
+
+  /* Le pied de page n'apporte rien pendant ce choix et libère de la hauteur. */
+  body.v221-profile-step > footer {
+    display:none!important;
+  }
+}
