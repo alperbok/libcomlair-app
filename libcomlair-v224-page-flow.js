@@ -264,6 +264,20 @@
     announce?.click();
   }
 
+  function showCategoryById(id){
+    const details=document.getElementById(id);
+    if(!details)return false;
+    showPage5(details);
+    return true;
+  }
+
+  window.LibcomlairPageFlow=Object.freeze({
+    showCategories:()=>showPage4("categories"),
+    showSearch:()=>showPage4("search"),
+    showCategory:showCategoryById,
+    currentCategory:()=>categoryPanels.find(el=>el.classList.contains("v224-page5-active"))?.id||""
+  });
+
   page3Mic?.addEventListener("click",activateMic);
   page4Mic?.addEventListener("click",activateMic);
   page5Mic?.addEventListener("click",activateMic);
