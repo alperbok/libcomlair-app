@@ -28,6 +28,9 @@
   const detailSection=document.getElementById("detail");
   const resultsActions=document.getElementById("v224ResultsActions");
   const resultToolAccordions={};
+  const placesFilters=document.getElementById("placesFilters");
+  const resultsCount=document.getElementById("resultsCount");
+  const activeFiltersText=document.getElementById("activeFilters");
   let lastPage5Details=null;
   let lastResultsLabel="Résultats";
 
@@ -73,21 +76,57 @@
   }
 
   function prepareResultAccordions(){
-    if(!resultsActions||resultsActions.dataset.ready==="1")return;
-    resultsActions.dataset.ready="1";
+    if(!resultsActions||resultsActions.dataset.ready==="2")return;
+    resultsActions.dataset.ready="2";
     resultsActions.replaceChildren();
 
+    // Cadre Filtres et tri : on retire le filtre de la liste des résultats
+    // et on l'affiche dans son propre accordéon.
+    let filtersContent=document.getElementById("v224FiltersContent");
+    if(!filtersContent){
+      filtersContent=document.createElement("div");
+      filtersContent.id="v224FiltersContent";
+      if(activeFiltersText)filtersContent.appendChild(activeFiltersText);
+      if(placesFilters){
+        placesFilters.open=true;
+        filtersContent.appendChild(placesFilters);
+      }
+    }
+
+    // Cadre Résultats : compteur court puis liste seulement à l'ouverture.
+    let resultsContent=document.getElementById("v224ResultsContent");
+    if(!resultsContent){
+      resultsContent=document.createElement("div");
+      resultsContent.id="v224ResultsContent";
+
+      const countCard=document.createElement("div");
+      countCard.id="v224ResultsCountCard";
+      countCard.setAttribute("aria-live","polite");
+      if(resultsCount)countCard.appendChild(resultsCount);
+
+      const oldTitle=[...resultsSection.children].find(el=>el.tagName==="H2");
+      if(oldTitle)oldTitle.style.display="none";
+
+      resultsContent.appendChild(countCard);
+      resultsContent.appendChild(resultsSection);
+    }
+
     const tools=[
-      {key:"map",label:"🗺 Carte",section:mapSection,voice:"carte"},
-      {key:"favorites",label:"★ Favoris",section:favoritesSection,voice:"favoris"},
-      {key:"contribute",label:"＋ Contribuer",section:contributeSection,voice:"contribuer"}
+      {key:"map",label:"🗺 Carte",content:mapSection,voice:"carte"},
+      {key:"favorites",label:"★ Favoris",content:favoritesSection,voice:"favoris"},
+      {key:"filters",label:"⚙ Filtres et tri",content:filtersContent,voice:"filtres"},
+      {key:"contribute",label:"＋ Contribuer",content:contributeSection,voice:"contribuer"},
+      {key:"results",label:"📋 Résultats",content:resultsContent,voice:"resultats"}
     ];
 
     tools.forEach(item=>{
-      if(!item.section)return;
-      item.section.style.removeProperty("display");
-      item.section.hidden=false;
-      item.section.removeAttribute("hidden");
+      if(!item.content)return;
+
+      if(item.content.tagName==="SECTION"){
+        item.content.style.removeProperty("display");
+        item.content.hidden=false;
+        item.content.removeAttribute("hidden");
+      }
 
       const details=document.createElement("details");
       details.id="v224ResultTool-"+item.key;
@@ -99,7 +138,7 @@
 
       const frame=document.createElement("div");
       frame.className="v224-result-tool-frame";
-      frame.appendChild(item.section);
+      frame.appendChild(item.content);
 
       details.append(summary,frame);
       resultsActions.appendChild(details);
@@ -112,8 +151,12 @@
         });
 
         if(item.key==="favorites"){
-          const inner=item.section.querySelector("details");
+          const inner=favoritesSection?.querySelector("details");
           if(inner)inner.open=true;
+        }
+
+        if(item.key==="filters"&&placesFilters){
+          placesFilters.open=true;
         }
 
         if(item.key==="map"){
@@ -327,9 +370,8 @@
     body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
     body.classList.add("v224-page5-step","v224-results-step");
 
-    showOnlySections([categories,resultsSection]);
+    showOnlySections([categories]);
     forceShow(categories,"block");
-    forceShow(resultsSection,"block");
 
     categoryPanels.forEach(el=>{
       el.open=false;
@@ -343,6 +385,7 @@
     prepareResultAccordions();
     if(resultsActions)resultsActions.style.removeProperty("display");
     Object.values(resultToolAccordions).forEach(x=>x.open=false);
+    if(placesFilters)placesFilters.open=true;
     if(page5Back)page5Back.textContent="← Retour aux "+returnLabel(details);
     forceShow(page5Header,"block");
     forceShow(page5Back,"block");
@@ -615,7 +658,7 @@
   document.addEventListener("click",event=>{
     const target=event.target&&event.target.closest?event.target.closest(".favorite-details"):null;
     if(!target)return;
-    if(!body.classList.contains("v224-utility-favorites"))return;
+    if(!body.classList.contains("v224-results-step"))return;
     setTimeout(()=>showUtilityPage("detail"),0);
   });
 
