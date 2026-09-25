@@ -1,6 +1,7 @@
 (()=>{
   "use strict";
   const body=document.body;
+  const main=document.getElementById("mainContent");
   const apply=document.getElementById("applyAccessProfile");
   const skip=document.getElementById("skipAccessProfile");
   const change=document.getElementById("changeAccessProfile");
@@ -33,6 +34,22 @@
     el.style.removeProperty("display");
   }
 
+  function directSections(){
+    return main ? [...main.children].filter(el=>el.tagName==="SECTION") : [];
+  }
+
+  function showOnlySections(allowed){
+    const keep=new Set(allowed.filter(Boolean));
+    directSections().forEach(section=>{
+      if(keep.has(section)) forceShow(section);
+      else forceHide(section);
+    });
+  }
+
+  function clearAllSectionDisplays(){
+    directSections().forEach(clearDisplay);
+  }
+
   function closeCategoryAccordions(){
     ["shopDetails","barDetails","hotelDetails","restaurantDetails","leisureDetails","serviceDetails","transportDetails"].forEach(id=>{
       const el=document.getElementById(id);
@@ -48,9 +65,7 @@
     body.classList.remove("v221-profile-step","v221-onboarding","v224-page4-step");
     body.classList.add("v224-page3-step");
 
-    forceShow(profile);
-    forceShow(start);
-    forceHide(categories);
+    showOnlySections([profile,start]);
 
     requestAnimationFrame(()=>{
       window.scrollTo({top:0,left:0,behavior:"auto"});
@@ -62,14 +77,14 @@
     body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step");
     body.classList.add("v224-page4-step");
 
-    forceHide(profile);
-    forceShow(start);
-    forceShow(categories);
+    showOnlySections([start,categories]);
+
     if(searchIntro){
       searchIntro.hidden=false;
       searchIntro.removeAttribute("hidden");
       searchIntro.style.removeProperty("display");
     }
+
     closeCategoryAccordions();
 
     requestAnimationFrame(()=>{
@@ -84,9 +99,7 @@
   change?.addEventListener("click",()=>{
     body.classList.remove("v224-page3-step","v224-page4-step");
     body.classList.add("v221-profile-step");
-    clearDisplay(profile);
-    clearDisplay(start);
-    clearDisplay(categories);
+    clearAllSectionDisplays();
     requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"auto"}));
   });
 
