@@ -102,10 +102,22 @@
     });
   }
 
-  function showPage4(){
+  function showPage4(scrollTarget="search"){
     body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page5-step");
     body.classList.add("v224-page4-step");
+
     clearPage5State();
+
+    if(page5Header){
+      page5Header.hidden=true;
+      page5Header.setAttribute("hidden","");
+      page5Header.style.setProperty("display","none","important");
+    }
+    if(page5Back){
+      page5Back.hidden=true;
+      page5Back.setAttribute("hidden","");
+      page5Back.style.setProperty("display","none","important");
+    }
 
     showOnlySections([start,categories]);
     forceShow(start,"flex");
@@ -119,11 +131,32 @@
     }
 
     closeCategoryAccordions();
+    categoryPanels.forEach(el=>{
+      el.hidden=false;
+      el.removeAttribute("hidden");
+      el.open=false;
+      el.classList.remove("v224-page5-active");
+      el.style.removeProperty("display");
+    });
 
     requestAnimationFrame(()=>{
-      window.scrollTo({top:0,left:0,behavior:"auto"});
-      searchIntro?.scrollIntoView({block:"start"});
+      if(scrollTarget==="categories"){
+        const title=categories ? [...categories.children].find(el=>el.tagName==="H2") : null;
+        (title||categories)?.scrollIntoView({block:"start",behavior:"auto"});
+      }else{
+        window.scrollTo({top:0,left:0,behavior:"auto"});
+        searchIntro?.scrollIntoView({block:"start"});
+      }
     });
+  }
+
+  function returnToCategories(event){
+    if(event){
+      event.preventDefault();
+      event.stopPropagation();
+      if(typeof event.stopImmediatePropagation==="function")event.stopImmediatePropagation();
+    }
+    showPage4("categories");
   }
 
   function categoryName(details){
@@ -191,7 +224,13 @@
 
   next?.addEventListener("click",showPage4);
   page4Back?.addEventListener("click",showPage3);
-  page5Back?.addEventListener("click",showPage4);
+  page5Back?.addEventListener("click",returnToCategories,true);
+
+  document.addEventListener("click",event=>{
+    const target=event.target&&event.target.closest?event.target.closest("#v224Page5Back"):null;
+    if(!target)return;
+    returnToCategories(event);
+  },true);
 
   categoryPanels.forEach(details=>{
     const summary=[...details.children].find(el=>el.tagName==="SUMMARY");
