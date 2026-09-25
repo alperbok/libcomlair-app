@@ -109,7 +109,7 @@
     showOnlySections([start,categories]);
     forceShow(start,"flex");
     start?.style.setProperty("flex-direction","column","important");
-    forceShow(categories,"block");
+    forceShow(categories,"grid");
 
     if(searchIntro){
       searchIntro.hidden=false;
