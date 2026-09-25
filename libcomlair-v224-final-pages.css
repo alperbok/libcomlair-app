@@ -1191,3 +1191,16 @@
     font-size:.94rem!important;
   }
 }
+
+
+/* V224 Filtres : prolonger le cadre jusqu'en bas sans changer le contenu */
+@media (max-width:540px){
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224ResultTool-filters > .v224-result-tool-frame{
+    min-height:clamp(820px, calc(100dvh - 365px), 980px)!important;
+    height:auto!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-page.v224-result-tool-filters #v224FiltersContent{
+    min-height:100%!important;
+  }
+}
