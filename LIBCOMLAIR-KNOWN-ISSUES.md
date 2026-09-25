@@ -17,7 +17,7 @@ Ce document complète le diagnostic intégré. Chaque nouvelle panne confirmée 
 | duplicate-brand | Deux logos Libcomlair apparaissent sur la même page | Ancien en-tête encore visible avec le nouvel en-tête | Compter les logos réellement visibles | Conserver uniquement l'en-tête de l'écran actif |
 | mobile-layout-overflow | Le contenu dépasse le cadre mobile | Répartition interne trop haute ou règles de padding/hauteur héritées | Comparer cadre validé et hauteur du contenu | Ne pas modifier le cadre ; restructurer uniquement le contenu intérieur |
 | filter-frame-forced-minheight-clips-sort | Une grande zone vide apparaît et « Trier par » disparaît | Une ancienne hauteur minimale du cadre combinée à `min-height:100%` et `overflow:hidden` pousse le tri hors écran | Vérifier les hauteurs forcées du cadre et des enfants flex | Supprimer les hauteurs minimales obsolètes et laisser le conteneur flex utiliser uniquement l’espace réellement disponible |
-| filters-empty-after-layout-refactor | La page Filtres et tri affiche le cadre mais plus les contrôles | Refonte ayant déplacé les contrôles hors de `#placesFilters` et modifié le flux d’ouverture | Comparer avec la dernière version où les filtres étaient visibles | Restaurer `#placesFilters` dans `#v224FiltersContent` et le flux `showResultToolPage` connu fonctionnel ; **réparé et validé le 26/09/2026 sur Samsung Browser** |
+| filters-empty-after-layout-refactor | La page Filtres et tri affiche le cadre mais plus les contrôles | Refonte ayant déplacé les contrôles hors de `#placesFilters` et modifié le flux d’ouverture | Comparer avec la dernière version où les filtres étaient visibles | Restaurer `#placesFilters` dans `#v224FiltersContent` et le flux `showResultToolPage` connu fonctionnel ; **partiellement réparé le 26/09/2026** : contenu revenu, mais remplissage vertical complet de l’écran encore à résoudre |
 | leaflet-gray-map | La carte affiche seulement une bande de tuiles et une grande zone grise | Leaflet calcule sa taille alors que son conteneur est masqué ou pas encore dimensionné | Vérifier taille du conteneur au moment de l'affichage | Appeler `invalidateSize()` après affichage réel et conserver une taille explicite |
 | voice-state-stuck | Lecture/commande vocale ne correspond plus à l'écran | État vocal ancien conservé après navigation ou erreur | Vérifier état moteur vocal et écran courant | Annuler l'état vocal en cours puis réinitialiser la navigation |
 | page4-grid-blocked | Les catégories restent sur une colonne malgré le CSS grille | Le script imposait `display:block!important` sur `#v224Page4Categories` | Vérifier le style inline du conteneur | Utiliser `display:grid` ou retirer la surcharge inline |
@@ -26,6 +26,7 @@ Ce document complète le diagnostic intégré. Chaque nouvelle panne confirmée 
 
 - **Suspectée** : symptôme observé, cause non démontrée.
 - **Confirmée** : cause démontrée, réparation pas encore validée.
+- **Partiellement réparée** : une partie du symptôme est corrigée, mais l’objectif complet n’est pas encore atteint.
 - **Réparée et validée** : réparation appliquée puis vérifiée réellement dans l’application.
 
 Seules les pannes **réparées et validées** peuvent servir de référence fiable au moteur de diagnostic/réparation automatique.
