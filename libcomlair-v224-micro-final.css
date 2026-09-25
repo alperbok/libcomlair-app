@@ -1,0 +1,22 @@
+/* V224 micro final - chargé en dernier */
+@media (max-width:540px){
+  body.v221-profile-step #v222ProfileMic.v222-corner-mic{
+    width:84px!important;
+    height:84px!important;
+    min-width:84px!important;
+    min-height:84px!important;
+    max-width:84px!important;
+    max-height:84px!important;
+    right:6px!important;
+    top:4px!important;
+    padding:0!important;
+    border-width:4px!important;
+    font-size:2rem!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v221-profile-step #v222ProfileMic.v222-corner-mic span{
+    font-size:.86rem!important;
+    line-height:1!important;
+  }
+}
