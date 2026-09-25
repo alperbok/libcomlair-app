@@ -66,6 +66,19 @@ Pour chaque panne, enregistrer systématiquement :
 - **Nouvelle panne** : elle doit être ajoutée au registre avant d’être considérée comme définitivement traitée.
 
 Ainsi, plus le projet avance, plus les outils Diagnostic et Réparation deviennent efficaces grâce aux problèmes déjà rencontrés.
+## Politique de suppression des règles obsolètes
+
+Les correctifs temporaires ne doivent pas rester indéfiniment dans les feuilles actives.
+
+Lorsqu’une nouvelle structure remplace une ancienne :
+1. rechercher les sélecteurs dupliqués qui ciblent le même écran ;
+2. identifier la règle finale réellement utilisée ;
+3. supprimer les variantes anciennes devenues sans utilité ;
+4. conserver une seule règle canonique par comportement ;
+5. incrémenter la version de ressource pour éviter le cache ;
+6. vérifier les écrans déjà validés après le nettoyage.
+
+L’historique Git conserve les anciennes versions : elles n’ont donc pas besoin de rester actives dans le CSS de production.
 ## État actuel du moteur automatique
 
 Le registre JavaScript `libcomlair-known-issues-v224.js` est chargé avant :
