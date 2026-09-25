@@ -105,6 +105,21 @@
     }
   ]);
 
+  const CORRECTION_PROTOCOL=Object.freeze([
+    "Consulter le registre des pannes connues avant de modifier le code.",
+    "Exécuter le diagnostic des pannes connues sur l’écran concerné quand il est disponible.",
+    "Vérifier les styles inline JavaScript qui peuvent écraser la présentation.",
+    "Rechercher les anciennes règles CSS !important visant les mêmes éléments.",
+    "Comparer la spécificité des sélecteurs avant d’ajouter une règle CSS.",
+    "Vérifier classes de page, hidden, open et visibilité des sections.",
+    "Vérifier cache et version des ressources si le rendu ne change pas.",
+    "Appliquer d’abord la réparation déjà connue.",
+    "Supprimer la cause conflictuelle avant d’ajouter une nouvelle surcharge.",
+    "Conserver les cadres déjà validés et corriger l’intérieur.",
+    "Si une correction ne change presque rien, arrêter les essais et recommencer le pré-contrôle.",
+    "Ajouter toute nouvelle panne confirmée au registre et au diagnostic quand c’est possible."
+  ]);
+
   const CATEGORY_IDS=[
     "shopDetails","barDetails","hotelDetails","restaurantDetails",
     "leisureDetails","serviceDetails","transportDetails"
@@ -236,9 +251,23 @@
     return ISSUE_DEFINITIONS.map(x=>({...x}));
   }
 
+  function correctionProtocol(){
+    return [...CORRECTION_PROTOCOL];
+  }
+
+  function preflight(){
+    return {
+      detected:detect(),
+      protocol:correctionProtocol(),
+      page:currentPageClass()
+    };
+  }
+
   window.LibcomlairKnownIssues=Object.freeze({
-    version:"v224-1",
+    version:"v224-2",
     definitions,
+    correctionProtocol,
+    preflight,
     detect,
     repairSafe
   });
