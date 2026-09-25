@@ -199,7 +199,7 @@
   function showPage5(details){
     if(!details)return;
     lastPage5Details=details;
-    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step","v224-results-step");
+    body.classList.remove("v221-profile-step","v221-onboarding","v224-page3-step","v224-page4-step","v224-results-step","v224-utility-step","v224-utility-map","v224-utility-favorites","v224-utility-contribute","v224-utility-detail");
     body.classList.add("v224-page5-step");
 
     showOnlySections([categories]);
@@ -384,6 +384,13 @@
     if(!target)return;
     if(!body.classList.contains("v224-page5-step"))return;
     setTimeout(()=>showUtilityPage("map"),0);
+  });
+
+  document.addEventListener("click",event=>{
+    const target=event.target&&event.target.closest?event.target.closest(".favorite-details"):null;
+    if(!target)return;
+    if(!body.classList.contains("v224-utility-favorites"))return;
+    setTimeout(()=>showUtilityPage("detail"),0);
   });
 
   categoryPanels.forEach(details=>{
