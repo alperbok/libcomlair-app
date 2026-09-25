@@ -48,6 +48,13 @@
       repair:"Réinitialiser explicitement l'écran 5, réafficher toutes les grandes catégories et revenir directement au titre Catégories."
     },
     {
+      id:"voice-category-opens-inline",
+      title:"Commande vocale ouvre une catégorie dans la page courante",
+      symptom:"Après une demande vocale comme Transports, les sous-catégories s'affichent sous les grandes catégories et l'en-tête dédié n'apparaît pas.",
+      cause:"L'ancien moteur vocal ouvre directement le <details> de la catégorie et contourne le gestionnaire de clic qui ouvre l'écran 5.",
+      repair:"Écouter aussi l'événement toggle des grandes catégories et convertir toute ouverture directe en véritable écran 5."
+    },
+    {
       id:"legacy-details-open",
       title:"Ancien accordéon ouvert au lieu d'une nouvelle page",
       symptom:"Une grande catégorie se déplie dans l'écran courant au lieu d'ouvrir l'écran suivant.",
