@@ -183,8 +183,9 @@
       if(!body.classList.contains("v224-page4-step"))return;
       event.preventDefault();
       event.stopPropagation();
+      event.stopImmediatePropagation();
       showPage5(details);
-    });
+    },true);
   });
 
   function activateMic(){
