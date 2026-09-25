@@ -690,3 +690,181 @@
     padding-top:0!important;
   }
 }
+
+
+/* V224 recadrage Carte / Favoris / Filtres */
+@media (max-width:540px){
+  /* Carte : garder le contenu essentiel dans un seul écran autant que possible. */
+  body.v224-page5-step.v224-result-tool-map #v224ResultTool-map > .v224-result-tool-frame{
+    padding:8px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #v224MapSection{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:7px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #v224MapSection > .data-note{
+    margin:0!important;
+    font-size:.88rem!important;
+    line-height:1.18!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #nearMe{
+    width:max-content!important;
+    min-height:44px!important;
+    margin:2px 0!important;
+    padding:7px 10px!important;
+    font-size:.94rem!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #locationStatus{
+    margin:0!important;
+    font-size:.84rem!important;
+    line-height:1.15!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-map #map{
+    width:100%!important;
+    height:clamp(300px,42dvh,520px)!important;
+    min-height:300px!important;
+    max-height:520px!important;
+    margin:2px 0 0!important;
+  }
+
+  /* Favoris : dossiers par grande catégorie. */
+  body.v224-page5-step.v224-result-tool-favorites #favoritesCount{
+    margin:0 0 8px!important;
+    font-size:.9rem!important;
+    line-height:1.15!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites #favoritesList{
+    display:block!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites .v224-favorite-folder{
+    margin:7px 0!important;
+    border:2px solid #86a0a5!important;
+    border-radius:14px!important;
+    background:#fff!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites .v224-favorite-folder > summary{
+    min-height:52px!important;
+    padding:9px 11px!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:8px!important;
+    list-style:none!important;
+    cursor:pointer!important;
+    font-size:1rem!important;
+    line-height:1.1!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites .v224-favorite-folder > summary::-webkit-details-marker{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites .v224-favorite-folder > summary::before{
+    content:"▶"!important;
+    margin-right:5px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites .v224-favorite-folder[open] > summary::before{
+    content:"▼"!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites .v224-favorite-folder-count{
+    margin-left:auto!important;
+    font-size:.82rem!important;
+    font-weight:700!important;
+    color:#536b70!important;
+    white-space:nowrap!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites .v224-favorite-folder-frame{
+    padding:8px!important;
+    border-top:2px solid #c8dde0!important;
+    background:#f8fcfc!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-favorites .v224-favorite-folder-frame .card{
+    margin:7px 0!important;
+  }
+
+  /* Filtres : lignes compactes avec case et texte côte à côte. */
+  body.v224-page5-step.v224-result-tool-filters #v224ResultTool-filters > .v224-result-tool-frame{
+    padding:8px!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #v224FiltersContent #activeFilters{
+    margin:0 0 7px!important;
+    padding:7px 9px!important;
+    font-size:.86rem!important;
+    line-height:1.15!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > br{
+    display:none!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > label{
+    display:grid!important;
+    grid-template-columns:26px 1fr!important;
+    align-items:center!important;
+    gap:8px!important;
+    width:100%!important;
+    margin:0!important;
+    padding:7px 2px!important;
+    box-sizing:border-box!important;
+    font-size:.91rem!important;
+    font-weight:700!important;
+    line-height:1.14!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > label input[type="checkbox"]{
+    width:22px!important;
+    height:22px!important;
+    margin:0!important;
+    padding:0!important;
+    justify-self:center!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #resetSearch{
+    min-height:42px!important;
+    margin:8px 0 7px!important;
+    padding:7px 10px!important;
+    font-size:.88rem!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > p{
+    margin:5px 0 0!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #placesFilters > p label{
+    display:block!important;
+    margin:0 0 4px!important;
+    font-size:.92rem!important;
+    line-height:1.1!important;
+  }
+
+  body.v224-page5-step.v224-result-tool-filters #sortPlaces{
+    width:100%!important;
+    min-height:42px!important;
+    margin:0!important;
+    padding:5px 7px!important;
+    font-size:.9rem!important;
+    box-sizing:border-box!important;
+  }
+}
