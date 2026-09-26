@@ -36,6 +36,41 @@ Exemple :
 
 Le mode découverte ne doit pas se limiter à lire l’écran : il doit **enseigner le fonctionnement de Libcomlair page par page**.
 
+### Zones explicatives et informations non interactives
+
+Les éléments qui ne sont pas des choix mais qui apportent une explication doivent eux aussi être accessibles vocalement.
+
+Cela comprend notamment :
+- encadrés explicatifs ;
+- notices ;
+- textes d’aide ;
+- tutoriels ;
+- descriptions de catégories ;
+- explications de critères ;
+- messages d’information ;
+- légendes utiles ;
+- avertissements non critiques ;
+- textes expliquant le fonctionnement d’une page.
+
+Règle :
+**toute information visuelle utile doit pouvoir être proposée à la lecture.**
+
+Comportement attendu :
+1. en mode découverte, l’assistance annonce qu’une explication est disponible ;
+2. elle peut lire automatiquement les explications essentielles à la compréhension de la page ;
+3. pour les explications secondaires, elle propose par exemple : « Une explication est disponible. Dites “lire l’explication” pour l’écouter. » ;
+4. en mode simplifié, elle ne lit pas systématiquement les textes longs, mais doit toujours permettre de les demander.
+
+Commandes prévues :
+- « Lire l’explication »
+- « Lire les informations »
+- « Lire l’aide »
+- « Lire le tutoriel »
+- « Explique cette page »
+- « Lire tout ce qui est affiché »
+
+Si plusieurs zones explicatives sont présentes sur la même page, l’assistance doit les nommer afin que l’utilisateur puisse choisir celle qu’il souhaite écouter.
+
 ### 2. Mode assistance simplifiée
 
 Destiné à l’usage quotidien une fois l’application assimilée.
