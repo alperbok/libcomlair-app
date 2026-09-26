@@ -44,6 +44,7 @@
     const checks=[
       check("Voix",!!(voiceEngine&&voiceEngine.version==="v189"&&typeof voiceEngine.speak==="function"&&typeof voiceEngine.testDetailed==="function"&&!voiceHadFailure),voiceMode),
       check("Contexte vocal",!!(window.LibcomlairVoiceContext&&typeof window.LibcomlairVoiceContext.detect==="function"&&typeof window.LibcomlairVoiceContext.current==="function"&&typeof window.LibcomlairVoiceContext.getMode==="function"&&["discovery","simplified"].includes(window.LibcomlairVoiceContext.getMode())),window.LibcomlairVoiceContext?("écran : "+window.LibcomlairVoiceContext.current().id+" — mode : "+window.LibcomlairVoiceContext.getMode()):"moteur absent"),
+      check("Guide vocal",!!(window.LibcomlairVoiceGuide&&typeof window.LibcomlairVoiceGuide.build==="function"&&typeof window.LibcomlairVoiceGuide.readCurrent==="function"),window.LibcomlairVoiceGuide?("mode : "+window.LibcomlairVoiceContext.getMode()):"guide absent"),
       check("Catégories",!!(window.LibcomlairCategories&&Array.isArray(window.LibcomlairCategories.categories)&&window.LibcomlairCategories.categories.length>=8),"listes et sous-catégories"),
       check("Accessibilité",!!(window.LibcomlairAccessibility&&typeof window.LibcomlairAccessibility.read==="function"&&typeof window.LibcomlairAccessibility.save==="function"),"profil et critères"),
       check("Données",!!(window.LibcomlairData&&typeof window.LibcomlairData.isFresh==="function"&&typeof window.LibcomlairData.loadState==="function"),"cache et actualisation"),
@@ -55,7 +56,7 @@
     ];
 
     const failed=checks.filter(x=>!x.ok);
-    const result={ok:failed.length===0&&runtimeErrors.length===0,checks,failed,knownIssues:[...knownIssues],runtimeErrors:[...runtimeErrors],version:"v189-known-issues-voice-context"};
+    const result={ok:failed.length===0&&runtimeErrors.length===0,checks,failed,knownIssues:[...knownIssues],runtimeErrors:[...runtimeErrors],version:"v189-known-issues-voice-guide"};
     window.__libcomlairLastDiagnostic=result;
 
     const box=document.getElementById("systemDiagnosticResult");
