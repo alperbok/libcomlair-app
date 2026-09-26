@@ -9,20 +9,20 @@
 <p>Chargement de Libcomlair…</p>
 <script>
 (async()=>{
-  const source="test-v224-profile-compact.html?voice-contextual-source=73";
+  const source="test-v224-profile-compact.html?voice-contextual-source=74";
   try{
     let html=await fetch(source,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
     html=html.replace(
       /<script src="libcomlair-v222-accessible-home\.js\?v=[^"]+"><\/script>/,
-      '<script src="libcomlair-v224-voice-router.js?v=11"><\/script><script src="libcomlair-v224-profile-simple-actions.js?v=7"><\/script>'
+      '<script src="libcomlair-v224-voice-router.js?v=12"><\/script><script src="libcomlair-v224-profile-simple-actions.js?v=8"><\/script>'
     );
     html=html.replace(
       /<script src="libcomlair-repair-engine-v175\.js\?v=[^"]+"><\/script>/,
-      '<script src="libcomlair-repair-catalog-v224.js?v=2"><\/script><script src="libcomlair-repair-engine-v175.js?v=voice-visual-1"><\/script>'
+      '<script src="libcomlair-repair-catalog-v224.js?v=3"><\/script><script src="libcomlair-repair-engine-v175.js?v=voice-visual-2"><\/script>'
     );
-    html=html.replace("</head>",'<link rel="stylesheet" href="libcomlair-v224-global-assistance.css?v=11"><link rel="stylesheet" href="libcomlair-v224-mic-visual-state.css?v=1"></head>');
-    const extras='<script src="libcomlair-v224-mic-visual-state.js?v=1"><\/script><script src="libcomlair-v224-global-assistance.js?v=11"><\/script><script src="libcomlair-v224-regression-guard.js?v=11"><\/script>';
+    html=html.replace("</head>",'<link rel="stylesheet" href="libcomlair-v224-global-assistance.css?v=12"><link rel="stylesheet" href="libcomlair-v224-mic-visual-state.css?v=2"></head>');
+    const extras='<script src="libcomlair-v224-mic-visual-state.js?v=2"><\/script><script src="libcomlair-v224-global-assistance.js?v=12"><\/script><script src="libcomlair-v224-regression-guard.js?v=12"><\/script>';
     html=html.replace("</body>",extras+"</body>");
     document.open();
     document.write(html);
