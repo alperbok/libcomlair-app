@@ -92,6 +92,19 @@
       commits:["cc902c57a72f61c80acc6217886e275134e493ea","65813d04f528e5a74647f5ae7613e8117440d64b","a8412455425bfbf15a840409bf878d95cbbbec08","9c2c52bc576f113810739669767b89c9dfbc5fd3"],
       validation:"Validé par l'utilisateur sur Samsung Browser le 26/09/2026 : le cercle Micro s'assombrit pendant l'écoute puis revient à son état normal.",
       safeAutoRepair:true
+    }),
+    Object.freeze({
+      id:"voice-complete-page-coverage",
+      area:"voice",
+      status:"confirmed",
+      symptom:"Le micro et l'assistance vocale ne garantissaient pas encore la connaissance de tous les contrôles et textes explicatifs visibles de chaque page.",
+      cause:"Le routeur ignorait les champs texte et certains contrôles ARIA ; le guide limitait l'inventaire à 18 contrôles et 8 explications ; les nouveaux écrans Navigation vocale et Comment fonctionne étaient encore identifiés comme Accueil.",
+      detection:"Comparer l'écran visible avec LibcomlairVoiceRouter.candidates() et LibcomlairVoiceGuide.auditCurrent(); aucun contrôle interactif ou texte explicatif visible ne doit manquer.",
+      repair:"Étendre le routeur aux champs et contrôles ARIA, ajouter la dictée de champ, créer les contextes dédiés Navigation vocale et Comment fonctionne, inventorier tous les contrôles et paragraphes/notes visibles et lire les longues pages en séquences vocales.",
+      files:["libcomlair-v224-voice-router.js","libcomlair-v224-voice-completeness.js","test-v224-voice-contextual-v7.html"],
+      commits:["e5c9c4f69a4db4592736d5af428122db5f806a21","c962992b4ce4f11dc3eed61d20ee5b1105e15057","732726b83ac6e90d7930da869e398b7820eb2dab"],
+      validation:"Correction installée le 27/09/2026 ; validation utilisateur page par page encore nécessaire.",
+      safeAutoRepair:true
     })
   ]);
 
@@ -129,7 +142,7 @@
   }
 
   window.LibcomlairRepairCatalog=Object.freeze({
-    version:"v224-4",
+    version:"v224-5",
     all,
     byId,
     byStatus,
