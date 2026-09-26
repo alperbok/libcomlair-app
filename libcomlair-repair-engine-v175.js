@@ -15,7 +15,8 @@
     "libcomlair-favorites-v16",
     "libcomlair-reviews-v18",
     "libcomlair-reports-v16",
-    "libcomlair-proposals-v13"
+    "libcomlair-proposals-v13",
+    "libcomlair-voice-assistance-mode-v1"
   ];
 
   const LAST_REPAIR_KEY="libcomlair-last-repair-v1";
@@ -81,11 +82,20 @@
     }catch(_){return 0}
   }
 
+  function repairVoiceCommands(){
+    try{
+      if(window.LibcomlairVoiceRouter&&typeof window.LibcomlairVoiceRouter.repairSimpleCommands==="function"){
+        return window.LibcomlairVoiceRouter.repairSimpleCommands();
+      }
+    }catch(_){}
+    return {ok:false,reason:"voice-router-unavailable"};
+  }
+
   function recordRepair(meta){
     try{
       localStorage.setItem(LAST_REPAIR_KEY,JSON.stringify({
         date:new Date().toISOString(),
-        version:"v175-known-issues",
+        version:"v175-known-issues-voice-simple",
         ...meta
       }));
     }catch(_){}
@@ -119,6 +129,8 @@
       }
     }catch(_){}
 
+    const voiceCommandRepair=repairVoiceCommands();
+
     clearTransientLocalData();
     restoreProtected(before);
 
@@ -132,11 +144,14 @@
     }catch(_){}
 
     restoreProtected(before);
-    recordRepair({cacheCount,workerCount,knownIssueRepair});
+    recordRepair({cacheCount,workerCount,knownIssueRepair,voiceCommandRepair});
     const repairedCount=knownIssueRepair&&Array.isArray(knownIssueRepair.repaired)?knownIssueRepair.repaired.length:0;
-    status("✓ Réparation terminée"+(repairedCount?" : "+repairedCount+" panne"+(repairedCount>1?"s":"")+" connue"+(repairedCount>1?"s":"")+" corrigée"+(repairedCount>1?"s":""):"")+". Libcomlair va se recharger avec des données techniques propres.");
+    const voiceText=voiceCommandRepair&&voiceCommandRepair.ok
+      ?" Commandes vocales simples vérifiées : "+voiceCommandRepair.actionsWithShortCommands+" action"+(voiceCommandRepair.actionsWithShortCommands>1?"s":"")+" couverte"+(voiceCommandRepair.actionsWithShortCommands>1?"s":"")+"."
+      :"";
+    status("✓ Réparation terminée"+(repairedCount?" : "+repairedCount+" panne"+(repairedCount>1?"s":"")+" connue"+(repairedCount>1?"s":"")+" corrigée"+(repairedCount>1?"s":""):"")+"."+voiceText+" Libcomlair va se recharger avec des données techniques propres.");
     setTimeout(reloadClean,700);
-    return {ok:true,cacheCount,workerCount,knownIssueRepair};
+    return {ok:true,cacheCount,workerCount,knownIssueRepair,voiceCommandRepair};
   }
 
   function lastRepair(){
@@ -147,8 +162,9 @@
   }
 
   window.LibcomlairRepair=Object.freeze({
-    version:"v175",
+    version:"v175-voice-simple",
     repair,
+    repairVoiceCommands,
     lastRepair,
     transientKeys:Object.freeze([...TRANSIENT_KEYS]),
     protectedKeys:Object.freeze([...PROTECTED_KEYS])
