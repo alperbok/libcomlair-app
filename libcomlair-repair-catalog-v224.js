@@ -89,13 +89,42 @@
   function autoRepairable(){return all().filter(x=>x.safeAutoRepair);}
   function pendingValidation(){return all().filter(x=>x.status!=="repaired-and-validated");}
 
+  function historical(){
+    try{
+      const defs=window.LibcomlairKnownIssues?.definitions?.();
+      return Array.isArray(defs)?defs.map(x=>({...x,source:"known-issues"})):[];
+    }catch(_){return []}
+  }
+
+  function combined(){
+    const map=new Map();
+    historical().forEach(item=>map.set(item.id,item));
+    all().forEach(item=>map.set(item.id,{...item,source:"repair-catalog"}));
+    return [...map.values()];
+  }
+
+  function summary(){
+    const recent=all();
+    const combinedItems=combined();
+    return {
+      totalKnown:combinedItems.length,
+      recent:recent.length,
+      validated:recent.filter(x=>x.status==="repaired-and-validated").length,
+      pendingValidation:recent.filter(x=>x.status!=="repaired-and-validated").length,
+      safeAutoRepair:recent.filter(x=>x.safeAutoRepair).length
+    };
+  }
+
   window.LibcomlairRepairCatalog=Object.freeze({
-    version:"v224-1",
+    version:"v224-2",
     all,
     byId,
     byStatus,
     validated,
     autoRepairable,
-    pendingValidation
+    pendingValidation,
+    historical,
+    combined,
+    summary
   });
 })();
