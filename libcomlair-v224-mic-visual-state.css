@@ -1,0 +1,18 @@
+/* Libcomlair — état visuel du microphone pendant l'écoute */
+#v222ProfileMic[data-mic-listening="true"],
+#v224Page3Mic[data-mic-listening="true"],
+#v224Page4Mic[data-mic-listening="true"],
+#v224Page5Mic[data-mic-listening="true"],
+#visionVoiceCommand[data-mic-listening="true"]{
+  filter:brightness(.68) contrast(1.08)!important;
+  outline:4px solid rgba(0,0,0,.30)!important;
+  outline-offset:2px!important;
+}
+
+#v222ProfileMic[data-mic-listening="true"] span,
+#v224Page3Mic[data-mic-listening="true"] span,
+#v224Page4Mic[data-mic-listening="true"] span,
+#v224Page5Mic[data-mic-listening="true"] span,
+#visionVoiceCommand[data-mic-listening="true"] span{
+  font-weight:800!important;
+}
