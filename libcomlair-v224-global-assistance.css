@@ -1,0 +1,83 @@
+html body #libcomlairGlobalMenuButton{
+  position:fixed!important;
+  left:max(12px,env(safe-area-inset-left))!important;
+  top:max(12px,env(safe-area-inset-top))!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:52px!important;
+  height:52px!important;
+  min-width:52px!important;
+  min-height:52px!important;
+  max-width:52px!important;
+  max-height:52px!important;
+  margin:0!important;
+  padding:0!important;
+  border:3px solid #fff!important;
+  border-radius:14px!important;
+  background:#0f7784!important;
+  color:#fff!important;
+  font-size:1.8rem!important;
+  font-weight:900!important;
+  line-height:1!important;
+  box-sizing:border-box!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.24)!important;
+  z-index:1200!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+html body #libcomlairGlobalMenuButton[data-visible="true"]{display:flex!important}
+html body #libcomlairGlobalMenuButton[data-visible="false"]{display:none!important}
+
+html body #libcomlairGlobalMenuBackdrop{
+  position:fixed!important;
+  inset:0!important;
+  margin:0!important;
+  padding:0!important;
+  background:rgba(0,0,0,.35)!important;
+  z-index:1250!important;
+  display:flex!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+}
+html body #libcomlairGlobalMenuBackdrop[hidden]{display:none!important}
+
+html body #libcomlairGlobalMenuPanel{
+  position:relative!important;
+  width:min(92vw,430px)!important;
+  height:100%!important;
+  max-height:100dvh!important;
+  overflow:auto!important;
+  box-sizing:border-box!important;
+  background:#fff!important;
+  border:0!important;
+  border-right:3px solid #0f7784!important;
+  border-radius:0!important;
+  padding:18px 16px 24px!important;
+  margin:0!important;
+  box-shadow:8px 0 24px rgba(0,0,0,.22)!important;
+}
+html body #libcomlairGlobalMenuPanel h2{margin:0 52px 8px 0!important;font-size:1.4rem!important;color:#17252a!important}
+html body #libcomlairGlobalMenuPanel .libcomlair-settings-intro{margin:0 0 12px!important;padding:10px 12px!important;border:2px solid #d7e5e8!important;border-radius:14px!important;background:#f7fafb!important;line-height:1.35!important}
+html body #libcomlairGlobalMenuPanel .libcomlair-settings-actions{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;margin:10px 0 14px!important}
+html body #libcomlairGlobalMenuPanel .libcomlair-settings-actions button,
+html body #libcomlairGlobalMenuPanel .technical-menu-panel button{width:100%!important;min-height:48px!important}
+html body #libcomlairGlobalMenuClose{
+  position:absolute!important;
+  right:12px!important;
+  top:10px!important;
+  left:auto!important;
+  bottom:auto!important;
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  min-height:44px!important;
+  margin:0!important;
+  padding:0!important;
+  border:2px solid #65767b!important;
+  border-radius:50%!important;
+  background:#fff!important;
+  font-size:1.35rem!important;
+  font-weight:900!important;
+}
+html body #technicalMenu[data-globalized="true"]{display:none!important}
