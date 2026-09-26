@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — écrans Navigation vocale et Tutoriel v7</title>
+</head>
+<body>
+<p>Chargement de Libcomlair…</p>
+<script>
+(async()=>{
+  const source="test-v224-profile-compact.html?voice-contextual-source=75";
+  try{
+    let html=await fetch(source,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+
+    html=html.replace(
+      /<script src="libcomlair-v222-accessible-home\.js\?v=[^"]+"><\/script>/,
+      '<script src="libcomlair-v224-voice-router.js?v=13"><\/script><script src="libcomlair-v224-profile-simple-actions.js?v=9"><\/script>'
+    );
+    html=html.replace(
+      /<script src="libcomlair-repair-engine-v175\.js\?v=[^"]+"><\/script>/,
+      '<script src="libcomlair-repair-catalog-v224.js?v=4"><\/script><script src="libcomlair-repair-engine-v175.js?v=voice-visual-3"><\/script>'
+    );
+    html=html.replace(
+      "</head>",
+      '<link rel="stylesheet" href="libcomlair-v224-global-assistance.css?v=13"><link rel="stylesheet" href="libcomlair-v224-mic-visual-state.css?v=3"><link rel="stylesheet" href="libcomlair-v224-onboarding-screens.css?v=1"></head>'
+    );
+    const extras='<script src="libcomlair-v224-mic-visual-state.js?v=3"><\/script><script src="libcomlair-v224-global-assistance.js?v=13"><\/script><script src="libcomlair-v224-onboarding-screens.js?v=1"><\/script><script src="libcomlair-v224-regression-guard.js?v=13"><\/script>';
+    html=html.replace("</body>",extras+"</body>");
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    document.body.innerHTML="<h1>Libcomlair</h1><p>Impossible de charger la version de test.</p><pre></pre>";
+    document.querySelector("pre").textContent=String(err&&err.message||err);
+  }
+})();
+</script>
+</body>
+</html>
