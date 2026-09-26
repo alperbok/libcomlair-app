@@ -44,6 +44,22 @@
     return button;
   }
 
+  function normalizeAssistanceOptionLabels(){
+    const fieldset=document.getElementById("visionAssistanceMode");
+    if(!fieldset)return;
+    fieldset.querySelectorAll("label").forEach(label=>{
+      if(label.querySelector(".v224-assistance-option-text"))return;
+      const input=label.querySelector('input[type="radio"]');
+      if(!input)return;
+      const span=document.createElement("span");
+      span.className="v224-assistance-option-text";
+      [...label.childNodes].forEach(node=>{
+        if(node!==input)span.appendChild(node);
+      });
+      label.appendChild(span);
+    });
+  }
+
   function ensureStructure(){
     let voiceTitle=document.getElementById("v224VoiceModeScreenTitle");
     if(!voiceTitle){
@@ -71,6 +87,8 @@
       homeTitle.textContent="Accueil / Recherche";
       start.insertBefore(homeTitle,start.firstChild);
     }
+
+    normalizeAssistanceOptionLabels();
 
     let voiceActions=document.getElementById("v224VoiceModeActions");
     if(!voiceActions){
@@ -151,6 +169,7 @@
 
   function showVoice(){
     ensureStructure();
+    normalizeAssistanceOptionLabels();
     current="voice";
     clearSubstepClasses();
     body.classList.add("v224-onboarding-voice");
@@ -257,7 +276,7 @@
   ensureStructure();
 
   window.LibcomlairOnboardingScreens=Object.freeze({
-    version:"v224-3",
+    version:"v224-4",
     current:()=>current,
     showVoice,
     showTutorial:()=>showTutorial({autoRead:false}),
