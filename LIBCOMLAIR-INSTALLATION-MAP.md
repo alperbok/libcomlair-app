@@ -130,6 +130,23 @@ ce composant ne déclenche aucune commande utilisateur. Il décrit uniquement le
 Diagnostic :
 `libcomlair-selftest-v189.js` vérifie maintenant que ce moteur est chargé et sait identifier un contexte.
 
+### `libcomlair-v224-voice-guide.js`
+Rôle :
+- construit la présentation vocale de l’écran réellement actif ;
+- distingue le mode Découverte et le mode Simplifié ;
+- recense les cases cochables visibles et annonce leur état ;
+- recense les listes, champs, boutons et rubriques visibles ;
+- repère les zones explicatives et les propose à la lecture ;
+- expose `window.LibcomlairVoiceGuide`.
+
+Sécurité :
+- aucune action utilisateur n’est déclenchée par ce composant ;
+- si le guide n’est pas disponible, le bouton de présentation revient à l’ancienne présentation générale.
+
+État :
+la lecture manuelle de page utilise maintenant ce guide. La lecture automatique à chaque changement d’écran n’est pas encore activée.
+
+
 ### `libcomlair-voice-engine-v189.js`
 Rôle :
 - couche intermédiaire commune ;
