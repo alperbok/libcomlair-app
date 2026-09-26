@@ -1,6 +1,8 @@
 (()=>{
   "use strict";
 
+  const VOICE_MODE_KEY="libcomlair-voice-assistance-mode-v1";
+
   const CATEGORY_IDS=[
     "shopDetails","barDetails","hotelDetails","restaurantDetails",
     "leisureDetails","serviceDetails","transportDetails"
@@ -31,6 +33,53 @@
     serviceDetails:"Services",
     transportDetails:"Transports"
   });
+
+  function hasVisionProfile(){
+    try{
+      const profile=JSON.parse(localStorage.getItem("libcomlair-access-profile-v1")||"null");
+      return !!(profile&&Array.isArray(profile.needs)&&profile.needs.includes("vision"));
+    }catch(_){return false}
+  }
+
+  function readVoiceMode(){
+    try{
+      const stored=localStorage.getItem(VOICE_MODE_KEY);
+      if(stored==="discovery"||stored==="simplified")return stored;
+    }catch(_){}
+    return hasVisionProfile()?"discovery":"simplified";
+  }
+
+  function hasExplicitVoiceMode(){
+    try{
+      const stored=localStorage.getItem(VOICE_MODE_KEY);
+      return stored==="discovery"||stored==="simplified";
+    }catch(_){return false}
+  }
+
+  function setVoiceMode(mode){
+    const clean=String(mode||"").toLowerCase();
+    if(clean!=="discovery"&&clean!=="simplified")return false;
+    try{localStorage.setItem(VOICE_MODE_KEY,clean)}catch(_){return false}
+    try{
+      window.dispatchEvent(new CustomEvent("libcomlair-voice-mode-change",{
+        detail:{mode:clean,explicit:true}
+      }));
+    }catch(_){}
+    refresh("voice-mode");
+    return true;
+  }
+
+  function resetVoiceMode(){
+    try{localStorage.removeItem(VOICE_MODE_KEY)}catch(_){}
+    const mode=readVoiceMode();
+    try{
+      window.dispatchEvent(new CustomEvent("libcomlair-voice-mode-change",{
+        detail:{mode,explicit:false}
+      }));
+    }catch(_){}
+    refresh("voice-mode-reset");
+    return mode;
+  }
 
   let lastSignature="";
   let lastContext=null;
@@ -75,6 +124,8 @@
       categoryId,
       categoryLabel,
       commands:Object.freeze(commands),
+      assistanceMode:readVoiceMode(),
+      assistanceModeExplicit:hasExplicitVoiceMode(),
       ...(extra||{})
     });
   }
@@ -181,7 +232,9 @@
       categoryLabel:ctx.categoryLabel||"",
       subcategoryLabel:ctx.subcategoryLabel||"",
       fieldId:ctx.fieldId||"",
-      commands:[...(ctx.commands||[])]
+      commands:[...(ctx.commands||[])],
+      assistanceMode:ctx.assistanceMode,
+      assistanceModeExplicit:ctx.assistanceModeExplicit
     };
   }
 
@@ -225,12 +278,16 @@
   }
 
   window.LibcomlairVoiceContext=Object.freeze({
-    version:"v224-1",
+    version:"v224-2",
     detect,
     refresh,
     current,
     commands,
     describe,
+    getMode:readVoiceMode,
+    setMode:setVoiceMode,
+    resetMode:resetVoiceMode,
+    hasExplicitMode:hasExplicitVoiceMode,
     categoryLabels:CATEGORY_LABELS
   });
 
