@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — test micro contextuel V61</title>
+</head>
+<body>
+<p>Chargement de Libcomlair…</p>
+<script>
+(async()=>{
+  try{
+    const response=await fetch('test-v224-profile-compact.html?v=61-shell',{cache:'no-store'});
+    let html=await response.text();
+    html=html.replace('libcomlair-v222-accessible-home.js?v=224-1','libcomlair-v222-accessible-home.js?v=224-compat-1');
+    html=html.replace('libcomlair-selftest-v189.js?v=225','libcomlair-selftest-v189.js?v=226');
+    html=html.replace('</body>','<script src="libcomlair-v224-global-assistance.js?v=1"><\/script><script src="libcomlair-v224-voice-router.js?v=2"><\/script></body>');
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(error){
+    document.body.innerHTML='<p>Impossible de charger la version de test.</p>';
+    console.error(error);
+  }
+})();
+</script>
+</body>
+</html>
