@@ -68,12 +68,6 @@ body.v224-onboarding-home .hero.v219-main-zone{
   box-sizing:border-box!important;
 }
 
-/* Les deux écrans d'apprentissage utilisent réellement la hauteur de l'écran. */
-body.v224-onboarding-voice .hero.v219-main-zone,
-body.v224-onboarding-tutorial .hero.v219-main-zone{
-  min-height:calc(100dvh - 92px)!important;
-}
-
 .v224-onboarding-screen-title{
   margin:2px 0 6px!important;
   text-align:center!important;
@@ -96,35 +90,36 @@ body.v224-onboarding-voice #visionAssistanceMode{
   display:flex!important;
   flex-direction:column!important;
   flex:1 1 auto!important;
+  gap:8px!important;
   margin:0!important;
-  padding:8px 10px!important;
+  padding:10px 12px!important;
   border-radius:12px!important;
 }
 
 body.v224-onboarding-voice #visionAssistanceMode legend{
   margin:0 0 4px!important;
   padding:0 4px!important;
-  font-size:1rem!important;
+  font-size:1.02rem!important;
 }
 
 body.v224-onboarding-voice #visionAssistanceMode label{
   display:flex!important;
   align-items:center!important;
   margin:4px 0!important;
-  padding:9px 10px!important;
-  min-height:44px!important;
+  padding:12px 12px!important;
+  min-height:62px!important;
   border:1px solid #c7dadd!important;
-  border-radius:10px!important;
-  line-height:1.15!important;
-  font-size:1rem!important;
+  border-radius:12px!important;
+  line-height:1.18!important;
+  font-size:1.04rem!important;
   font-weight:700!important;
 }
 
 body.v224-onboarding-voice #visionAssistanceModeHelp,
 body.v224-onboarding-voice #visionAssistanceModeStatus{
-  margin:6px 0 0!important;
-  font-size:.92rem!important;
-  line-height:1.25!important;
+  margin:8px 0 0!important;
+  font-size:.98rem!important;
+  line-height:1.3!important;
 }
 
 .v224-onboarding-actions{
@@ -134,18 +129,38 @@ body.v224-onboarding-voice #visionAssistanceModeStatus{
   margin-top:8px!important;
 }
 
+body.v224-onboarding-voice #v224VoiceModeActions{
+  margin-top:auto!important;
+  padding-top:10px!important;
+}
+
 .v224-onboarding-actions .details-btn,
 .v224-onboarding-compact .details-btn,
 body.v224-onboarding-home #v224Page3Next{
-  min-height:48px!important;
+  min-height:52px!important;
   margin:0!important;
-  padding:9px 10px!important;
+  padding:10px 12px!important;
   border-radius:12px!important;
-  font-size:1rem!important;
+  font-size:1.02rem!important;
   line-height:1.15!important;
 }
 
 /* Écran 3 — Comment fonctionne Libcomlair : grand écran de lecture. */
+body.v224-onboarding-tutorial .v222-app-brand{
+  min-height:104px!important;
+  align-items:flex-start!important;
+  padding-top:0!important;
+}
+
+body.v224-onboarding-tutorial #v224Page3Mic{
+  top:-2px!important;
+}
+
+body.v224-onboarding-tutorial #v224TutorialScreenTitle{
+  margin-top:2px!important;
+  margin-bottom:10px!important;
+}
+
 body.v224-onboarding-tutorial #libcomlairTutorial{
   display:flex!important;
   flex-direction:column!important;
@@ -168,7 +183,7 @@ body.v224-onboarding-tutorial #libcomlairTutorialText{
   flex:1 1 auto!important;
   min-height:0!important;
   margin:0!important;
-  padding:14px 16px!important;
+  padding:18px 18px!important;
   border:1px solid #cfd8dc!important;
   border-radius:14px!important;
   background:#fff!important;
@@ -176,27 +191,27 @@ body.v224-onboarding-tutorial #libcomlairTutorialText{
 }
 
 body.v224-onboarding-tutorial #libcomlairTutorialText p{
-  margin:0 0 12px!important;
-  font-size:1rem!important;
-  line-height:1.34!important;
+  margin:0 0 16px!important;
+  font-size:1.08rem!important;
+  line-height:1.4!important;
 }
 
 body.v224-onboarding-tutorial #libcomlairTutorialText p:last-of-type{
-  margin-bottom:8px!important;
+  margin-bottom:10px!important;
 }
 
 body.v224-onboarding-tutorial #readLibcomlairTutorial{
-  min-height:48px!important;
+  min-height:54px!important;
   margin:auto 0 0!important;
-  padding:9px 14px!important;
-  font-size:1rem!important;
+  padding:10px 16px!important;
+  font-size:1.05rem!important;
 }
 
 body.v224-onboarding-tutorial #v224TutorialActions{
-  margin-top:8px!important;
+  margin-top:10px!important;
 }
 
-/* Accueil / Recherche : les deux raccourcis restent compacts et dans l'ordre logique. */
+/* Accueil / Recherche : raccourcis disponibles avant l'entrée dans l'écran Recherche. */
 body.v224-onboarding-home #speechChoiceControls{
   margin:0!important;
   padding:8px!important;
@@ -229,10 +244,25 @@ body.v224-onboarding-home #v224Page3Next{
 }
 
 @media (max-width:540px){
+  /* Les deux écrans d'apprentissage remplissent réellement le cadre mobile. */
+  body.v224-onboarding-voice #mainContent,
+  body.v224-onboarding-tutorial #mainContent{
+    display:flex!important;
+    flex-direction:column!important;
+    height:calc(100dvh - 2px)!important;
+    min-height:calc(100dvh - 2px)!important;
+  }
+
+  body.v224-onboarding-voice #accessNeedsSection,
+  body.v224-onboarding-tutorial #accessNeedsSection{
+    flex:0 0 auto!important;
+  }
+
   body.v224-onboarding-voice .hero.v219-main-zone,
   body.v224-onboarding-tutorial .hero.v219-main-zone{
-    min-height:calc(100dvh - 86px)!important;
-    gap:6px!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+    gap:7px!important;
     padding:6px 8px 10px!important;
   }
 
@@ -243,25 +273,32 @@ body.v224-onboarding-home #v224Page3Next{
 
   .v224-onboarding-screen-title{
     font-size:1.18rem!important;
-    margin-bottom:4px!important;
+    margin-bottom:5px!important;
   }
 
   body.v224-onboarding-voice #visionVoiceControls{
-    padding:7px 8px!important;
+    padding:9px 10px!important;
   }
 
   body.v224-onboarding-voice #visionAssistanceMode label{
-    padding:7px 8px!important;
-    margin:3px 0!important;
+    min-height:68px!important;
+    padding:11px 10px!important;
+    margin:4px 0!important;
+  }
+
+  body.v224-onboarding-voice #visionAssistanceModeHelp,
+  body.v224-onboarding-voice #visionAssistanceModeStatus{
+    font-size:1rem!important;
+    line-height:1.3!important;
   }
 
   body.v224-onboarding-tutorial #libcomlairTutorialText{
-    padding:12px 13px!important;
+    padding:18px 16px!important;
   }
 
   body.v224-onboarding-tutorial #libcomlairTutorialText p{
-    margin:0 0 10px!important;
-    font-size:.98rem!important;
-    line-height:1.3!important;
+    margin:0 0 15px!important;
+    font-size:1.08rem!important;
+    line-height:1.4!important;
   }
 }
