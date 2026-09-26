@@ -1,0 +1,171 @@
+/* Libcomlair v224 — écrans dédiés Navigation vocale / Tutoriel / Accueil */
+
+body.v224-onboarding-voice #accessNeedsSection > :not(.v222-app-brand),
+body.v224-onboarding-tutorial #accessNeedsSection > :not(.v222-app-brand),
+body.v224-onboarding-home #accessNeedsSection > :not(.v222-app-brand){
+  display:none!important;
+}
+
+body.v224-onboarding-voice #accessNeedsSection,
+body.v224-onboarding-tutorial #accessNeedsSection,
+body.v224-onboarding-home #accessNeedsSection{
+  min-height:0!important;
+  margin-bottom:4px!important;
+  padding-bottom:0!important;
+}
+
+body.v224-onboarding-voice .hero.v219-main-zone,
+body.v224-onboarding-tutorial .hero.v219-main-zone,
+body.v224-onboarding-home .hero.v219-main-zone{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+  margin:0!important;
+  padding:8px 10px 12px!important;
+  min-height:0!important;
+}
+
+.v224-onboarding-screen-title{
+  margin:2px 0 6px!important;
+  text-align:center!important;
+  font-size:1.18rem!important;
+  line-height:1.15!important;
+}
+
+body.v224-onboarding-voice #visionVoiceControls{
+  display:block!important;
+  margin:0!important;
+  padding:10px!important;
+  border-radius:14px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode{
+  display:block!important;
+  margin:0!important;
+  padding:8px 10px!important;
+  border-radius:12px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode legend{
+  margin:0 0 4px!important;
+  padding:0 4px!important;
+  font-size:.98rem!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label{
+  display:block!important;
+  margin:4px 0!important;
+  padding:8px 10px!important;
+  border:1px solid #c7dadd!important;
+  border-radius:10px!important;
+  line-height:1.15!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceModeHelp,
+body.v224-onboarding-voice #visionAssistanceModeStatus{
+  margin:5px 0 0!important;
+  font-size:.86rem!important;
+  line-height:1.2!important;
+}
+
+.v224-onboarding-actions{
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+
+.v224-onboarding-actions .details-btn,
+.v224-onboarding-compact .details-btn,
+body.v224-onboarding-home #v224Page3Next{
+  min-height:44px!important;
+  margin:0!important;
+  padding:8px 10px!important;
+  border-radius:12px!important;
+  font-size:.95rem!important;
+  line-height:1.15!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorial{
+  display:block!important;
+  margin:0!important;
+  padding:8px 10px!important;
+  border-radius:14px!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText p{
+  margin:4px 0!important;
+  font-size:.88rem!important;
+  line-height:1.22!important;
+}
+
+body.v224-onboarding-tutorial #readLibcomlairTutorial{
+  min-height:42px!important;
+  margin:7px 0 0!important;
+  padding:7px 10px!important;
+}
+
+body.v224-onboarding-home #speechChoiceControls{
+  margin:0!important;
+  padding:8px!important;
+}
+
+body.v224-onboarding-home #speechChoiceControls .details-btn{
+  min-height:42px!important;
+  margin:3px 0!important;
+  padding:7px 10px!important;
+}
+
+.v224-onboarding-compact{
+  grid-template-columns:1fr!important;
+  gap:7px!important;
+  margin:0!important;
+}
+
+body.v224-onboarding-home #v224ReopenVoiceMode,
+body.v224-onboarding-home #v224ReopenTutorial{
+  display:block!important;
+  width:100%!important;
+  text-align:left!important;
+}
+
+body.v224-onboarding-home #v224Page3Next{
+  display:block!important;
+  width:100%!important;
+  margin-top:2px!important;
+}
+
+@media (max-width:540px){
+  body.v224-onboarding-voice .hero.v219-main-zone,
+  body.v224-onboarding-tutorial .hero.v219-main-zone,
+  body.v224-onboarding-home .hero.v219-main-zone{
+    gap:6px!important;
+    padding:6px 8px 10px!important;
+  }
+
+  .v224-onboarding-screen-title{
+    font-size:1.08rem!important;
+    margin-bottom:4px!important;
+  }
+
+  body.v224-onboarding-voice #visionVoiceControls,
+  body.v224-onboarding-tutorial #libcomlairTutorial{
+    padding:7px 8px!important;
+  }
+
+  body.v224-onboarding-voice #visionAssistanceMode label{
+    padding:6px 8px!important;
+    margin:3px 0!important;
+  }
+
+  body.v224-onboarding-tutorial #libcomlairTutorialText p{
+    margin:3px 0!important;
+    font-size:.84rem!important;
+    line-height:1.18!important;
+  }
+}
