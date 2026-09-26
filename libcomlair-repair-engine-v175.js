@@ -91,11 +91,20 @@
     return {ok:false,reason:"voice-router-unavailable"};
   }
 
+  function repairMicVisualState(){
+    try{
+      if(window.LibcomlairMicVisualState&&typeof window.LibcomlairMicVisualState.repair==="function"){
+        return window.LibcomlairMicVisualState.repair();
+      }
+    }catch(_){}
+    return {ok:false,reason:"mic-visual-state-unavailable"};
+  }
+
   function recordRepair(meta){
     try{
       localStorage.setItem(LAST_REPAIR_KEY,JSON.stringify({
         date:new Date().toISOString(),
-        version:"v175-known-issues-voice-simple",
+        version:"v175-known-issues-voice-visual",
         ...meta
       }));
     }catch(_){}
@@ -130,6 +139,7 @@
     }catch(_){}
 
     const voiceCommandRepair=repairVoiceCommands();
+    const micVisualRepair=repairMicVisualState();
 
     clearTransientLocalData();
     restoreProtected(before);
@@ -144,14 +154,17 @@
     }catch(_){}
 
     restoreProtected(before);
-    recordRepair({cacheCount,workerCount,knownIssueRepair,voiceCommandRepair});
+    recordRepair({cacheCount,workerCount,knownIssueRepair,voiceCommandRepair,micVisualRepair});
     const repairedCount=knownIssueRepair&&Array.isArray(knownIssueRepair.repaired)?knownIssueRepair.repaired.length:0;
     const voiceText=voiceCommandRepair&&voiceCommandRepair.ok
       ?" Commandes vocales simples vérifiées : "+voiceCommandRepair.actionsWithShortCommands+" action"+(voiceCommandRepair.actionsWithShortCommands>1?"s":"")+" couverte"+(voiceCommandRepair.actionsWithShortCommands>1?"s":"")+"."
       :"";
-    status("✓ Réparation terminée"+(repairedCount?" : "+repairedCount+" panne"+(repairedCount>1?"s":"")+" connue"+(repairedCount>1?"s":"")+" corrigée"+(repairedCount>1?"s":""):"")+"."+voiceText+" Libcomlair va se recharger avec des données techniques propres.");
+    const micVisualText=micVisualRepair&&micVisualRepair.ok
+      ?" Indicateur visuel du micro resynchronisé."
+      :"";
+    status("✓ Réparation terminée"+(repairedCount?" : "+repairedCount+" panne"+(repairedCount>1?"s":"")+" connue"+(repairedCount>1?"s":"")+" corrigée"+(repairedCount>1?"s":""):"")+"."+voiceText+micVisualText+" Libcomlair va se recharger avec des données techniques propres.");
     setTimeout(reloadClean,700);
-    return {ok:true,cacheCount,workerCount,knownIssueRepair,voiceCommandRepair};
+    return {ok:true,cacheCount,workerCount,knownIssueRepair,voiceCommandRepair,micVisualRepair};
   }
 
   function lastRepair(){
@@ -162,9 +175,10 @@
   }
 
   window.LibcomlairRepair=Object.freeze({
-    version:"v175-voice-simple",
+    version:"v175-voice-visual",
     repair,
     repairVoiceCommands,
+    repairMicVisualState,
     lastRepair,
     transientKeys:Object.freeze([...TRANSIENT_KEYS]),
     protectedKeys:Object.freeze([...PROTECTED_KEYS])
