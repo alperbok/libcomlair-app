@@ -1,22 +1,33 @@
 (()=>{
   "use strict";
 
+  function setVoice(el,primary,aliases){
+    if(!el)return;
+    el.dataset.voicePrimary=primary;
+    el.dataset.voiceAliases=(aliases||[]).join("|");
+  }
+
   function applySimpleLabels(){
     const validate=document.getElementById("applyAccessProfile");
     const noAdapt=document.getElementById("skipAccessProfile");
+    const backProfile=document.getElementById("changeAccessProfile");
 
     if(validate){
       validate.textContent="Valider";
       validate.setAttribute("aria-label","Valider");
-      validate.dataset.voicePrimary="valider";
-      validate.dataset.voiceAliases="confirmer|mes choix|utiliser mes choix";
+      setVoice(validate,"valider",["confirmer","mes choix","utiliser mes choix"]);
     }
 
     if(noAdapt){
       noAdapt.textContent="Sans adaptation";
       noAdapt.setAttribute("aria-label","Sans adaptation");
-      noAdapt.dataset.voicePrimary="sans adaptation";
-      noAdapt.dataset.voiceAliases="aucune adaptation|pas d’adaptation|continuer sans adaptation|continuer";
+      setVoice(noAdapt,"sans adaptation",["aucune adaptation","pas d’adaptation","continuer sans adaptation","continuer"]);
+    }
+
+    if(backProfile){
+      backProfile.textContent="Retour au profil";
+      backProfile.setAttribute("aria-label","Retour au profil");
+      setVoice(backProfile,"retour",["retour profil","profil","modifier mon profil","modifier mon profil d’accessibilité"]);
     }
   }
 
@@ -27,7 +38,7 @@
   }
 
   window.LibcomlairProfileSimpleActions=Object.freeze({
-    version:"v224-1",
+    version:"v224-2",
     apply:applySimpleLabels
   });
 })();
