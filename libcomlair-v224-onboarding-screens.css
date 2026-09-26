@@ -89,7 +89,7 @@ body.v224-onboarding-voice #visionVoiceControls{
 body.v224-onboarding-voice #visionAssistanceMode{
   display:flex!important;
   flex-direction:column!important;
-  flex:1 1 auto!important;
+  flex:0 1 auto!important;
   gap:8px!important;
   margin:0!important;
   padding:10px 12px!important;
@@ -106,7 +106,6 @@ body.v224-onboarding-voice #visionAssistanceMode legend{
 body.v224-onboarding-voice #visionAssistanceMode label{
   display:flex!important;
   align-items:center!important;
-  flex:1 1 0!important;
   margin:4px 0!important;
   padding:12px 12px!important;
   min-height:76px!important;
@@ -132,10 +131,11 @@ body.v224-onboarding-voice #visionAssistanceModeStatus{
   margin-top:8px!important;
 }
 
+/* Le cadre ne change pas : les actions occupent simplement le bas de l'espace disponible. */
 body.v224-onboarding-voice #v224VoiceModeActions{
   flex:0 0 auto!important;
-  margin-top:8px!important;
-  padding-top:0!important;
+  margin-top:auto!important;
+  padding-top:10px!important;
 }
 
 .v224-onboarding-actions .details-btn,
@@ -149,7 +149,7 @@ body.v224-onboarding-home #v224Page3Next{
   line-height:1.15!important;
 }
 
-/* Écran 3 — Comment fonctionne Libcomlair : grand écran de lecture. */
+/* Écran 3 — Comment fonctionne Libcomlair : contenu adapté au cadre fixe. */
 body.v224-onboarding-tutorial .v222-app-brand{
   min-height:104px!important;
   align-items:flex-start!important;
@@ -162,8 +162,8 @@ body.v224-onboarding-tutorial #v224Page3Mic{
 
 body.v224-onboarding-tutorial #v224TutorialScreenTitle{
   margin-top:0!important;
-  margin-bottom:8px!important;
-  font-size:1.16rem!important;
+  margin-bottom:6px!important;
+  font-size:1.14rem!important;
 }
 
 body.v224-onboarding-tutorial #libcomlairTutorial{
@@ -171,6 +171,7 @@ body.v224-onboarding-tutorial #libcomlairTutorial{
   flex-direction:column!important;
   flex:1 1 auto!important;
   min-height:0!important;
+  overflow:hidden!important;
   margin:0!important;
   padding:0!important;
   border:0!important;
@@ -187,8 +188,9 @@ body.v224-onboarding-tutorial #libcomlairTutorialText{
   flex-direction:column!important;
   flex:1 1 auto!important;
   min-height:0!important;
+  overflow:hidden!important;
   margin:0!important;
-  padding:14px 15px!important;
+  padding:11px 13px!important;
   border:1px solid #cfd8dc!important;
   border-radius:14px!important;
   background:#fff!important;
@@ -196,25 +198,25 @@ body.v224-onboarding-tutorial #libcomlairTutorialText{
 }
 
 body.v224-onboarding-tutorial #libcomlairTutorialText p{
-  margin:0 0 10px!important;
-  font-size:1.02rem!important;
-  line-height:1.32!important;
+  margin:0 0 7px!important;
+  font-size:.98rem!important;
+  line-height:1.26!important;
 }
 
 body.v224-onboarding-tutorial #libcomlairTutorialText p:last-of-type{
-  margin-bottom:6px!important;
+  margin-bottom:4px!important;
 }
 
 body.v224-onboarding-tutorial #readLibcomlairTutorial{
-  min-height:50px!important;
+  min-height:48px!important;
   margin:auto 0 0!important;
-  padding:9px 14px!important;
-  font-size:1.02rem!important;
+  padding:8px 13px!important;
+  font-size:1rem!important;
 }
 
 body.v224-onboarding-tutorial #v224TutorialActions{
   flex:0 0 auto!important;
-  margin-top:8px!important;
+  margin-top:6px!important;
 }
 
 /* Accueil / Recherche : raccourcis disponibles avant l'entrée dans l'écran Recherche. */
@@ -250,12 +252,13 @@ body.v224-onboarding-home #v224Page3Next{
 }
 
 @media (max-width:540px){
+  /* Le cadre extérieur conserve ses dimensions validées dans libcomlair-v224-page3.css.
+     Ici on ne redéfinit plus sa hauteur ni sa largeur. */
   body.v224-onboarding-voice #mainContent,
   body.v224-onboarding-tutorial #mainContent{
     display:flex!important;
     flex-direction:column!important;
-    height:calc(100dvh - 2px)!important;
-    min-height:calc(100dvh - 2px)!important;
+    overflow:hidden!important;
   }
 
   body.v224-onboarding-voice #accessNeedsSection,
@@ -267,8 +270,9 @@ body.v224-onboarding-home #v224Page3Next{
   body.v224-onboarding-tutorial .hero.v219-main-zone{
     flex:1 1 auto!important;
     min-height:0!important;
-    gap:6px!important;
-    padding:5px 8px 8px!important;
+    overflow:hidden!important;
+    gap:5px!important;
+    padding:4px 8px 7px!important;
   }
 
   body.v224-onboarding-home .hero.v219-main-zone{
@@ -286,24 +290,24 @@ body.v224-onboarding-home #v224Page3Next{
   }
 
   body.v224-onboarding-voice #visionAssistanceMode label{
-    min-height:82px!important;
-    padding:11px 10px!important;
-    margin:4px 0!important;
+    min-height:76px!important;
+    padding:10px!important;
+    margin:3px 0!important;
   }
 
   body.v224-onboarding-voice #visionAssistanceModeHelp,
   body.v224-onboarding-voice #visionAssistanceModeStatus{
-    font-size:.98rem!important;
-    line-height:1.28!important;
+    font-size:.96rem!important;
+    line-height:1.25!important;
   }
 
   body.v224-onboarding-tutorial #libcomlairTutorialText{
-    padding:13px 14px!important;
+    padding:10px 12px!important;
   }
 
   body.v224-onboarding-tutorial #libcomlairTutorialText p{
-    margin:0 0 9px!important;
-    font-size:1.01rem!important;
-    line-height:1.31!important;
+    margin:0 0 6px!important;
+    font-size:.97rem!important;
+    line-height:1.24!important;
   }
 }
