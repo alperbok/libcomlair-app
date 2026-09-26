@@ -11,7 +11,7 @@
   const CONTEXT_COMMANDS=Object.freeze({
     welcome:["suivant","continuer","aide","répète"],
     profile:["mobilité","vision","audition","compréhension","assistance","utiliser mes choix","continuer sans adaptation","aide","répète"],
-    home:["modifier mon profil","commencer","présentation libcomlair","arrêter la lecture","comment fonctionne libcomlair","assistance et réglages","tester l’assistance vocale","diagnostic","réparation automatique","rechercher un lieu accessible","aide","répète"],
+    home:["modifier mon profil","commencer","présentation libcomlair","arrêter la lecture","mode découverte","mode simplifié","changer le mode vocal","comment fonctionne libcomlair","assistance et réglages","tester l’assistance vocale","diagnostic","réparation automatique","rechercher un lieu accessible","aide","répète"],
     search:["rechercher","ouvrir les critères","magasins","débits de boissons","hébergements","restaurants","activités et sorties","services","transports","retour","aide","répète"],
     category:["tous","lire l’explication","retour aux catégories","quels sont mes choix","aide","répète"],
     subcategory:["carte","favoris","filtres et tri","contribuer","résultats","retour","quels sont mes choix","aide","répète"],
@@ -56,22 +56,42 @@
     }catch(_){return false}
   }
 
-  function setVoiceMode(mode){
+  function modeLabel(mode){
+    return mode==="discovery"?"Découverte guidée":"Simplifié";
+  }
+
+  function announceMode(mode){
+    const status=document.getElementById("visionAssistanceModeStatus");
+    const label=modeLabel(mode);
+    if(status)status.textContent="Mode vocal actif : "+label+".";
+    const engine=window.LibcomlairVoice;
+    if(engine&&engine.available&&typeof engine.speak==="function"){
+      const message=mode==="discovery"
+        ?"Mode découverte guidée activé. Libcomlair expliquera davantage les pages, les choix, les cases et les informations disponibles."
+        :"Mode simplifié activé. Libcomlair annoncera l’essentiel. Vous pourrez toujours demander de l’aide ou une explication complète.";
+      try{engine.speak(message,{rate:0.9})}catch(_){}
+    }
+  }
+
+  function setVoiceMode(mode,options){
     const clean=String(mode||"").toLowerCase();
     if(clean!=="discovery"&&clean!=="simplified")return false;
     try{localStorage.setItem(VOICE_MODE_KEY,clean)}catch(_){return false}
+    syncModeControls();
     try{
       window.dispatchEvent(new CustomEvent("libcomlair-voice-mode-change",{
         detail:{mode:clean,explicit:true}
       }));
     }catch(_){}
     refresh("voice-mode");
+    if(!options||options.announce!==false)announceMode(clean);
     return true;
   }
 
   function resetVoiceMode(){
     try{localStorage.removeItem(VOICE_MODE_KEY)}catch(_){}
     const mode=readVoiceMode();
+    syncModeControls();
     try{
       window.dispatchEvent(new CustomEvent("libcomlair-voice-mode-change",{
         detail:{mode,explicit:false}
@@ -79,6 +99,76 @@
     }catch(_){}
     refresh("voice-mode-reset");
     return mode;
+  }
+
+  function ensureModeControls(){
+    const host=document.getElementById("visionVoiceControls");
+    if(!host)return null;
+    let fieldset=document.getElementById("visionAssistanceMode");
+    if(!fieldset){
+      fieldset=document.createElement("fieldset");
+      fieldset.id="visionAssistanceMode";
+      fieldset.className="v224-voice-mode-choice";
+      fieldset.setAttribute("aria-describedby","visionAssistanceModeHelp visionAssistanceModeStatus");
+
+      const legend=document.createElement("legend");
+      const strong=document.createElement("strong");
+      strong.textContent="Niveau d’assistance vocale";
+      legend.appendChild(strong);
+      fieldset.appendChild(legend);
+
+      const discoveryLabel=document.createElement("label");
+      const discovery=document.createElement("input");
+      discovery.type="radio";
+      discovery.name="visionAssistanceModeChoice";
+      discovery.value="discovery";
+      discovery.id="visionAssistanceDiscovery";
+      discoveryLabel.append(discovery,document.createTextNode(" Découverte guidée"));
+      fieldset.appendChild(discoveryLabel);
+
+      const simplifiedLabel=document.createElement("label");
+      const simplified=document.createElement("input");
+      simplified.type="radio";
+      simplified.name="visionAssistanceModeChoice";
+      simplified.value="simplified";
+      simplified.id="visionAssistanceSimplified";
+      simplifiedLabel.append(simplified,document.createTextNode(" Simplifié"));
+      fieldset.appendChild(simplifiedLabel);
+
+      const help=document.createElement("p");
+      help.id="visionAssistanceModeHelp";
+      help.className="data-note";
+      help.textContent="Découverte explique les pages et les choix en détail. Simplifié annonce l’essentiel. Le mode peut être changé à tout moment.";
+      fieldset.appendChild(help);
+
+      const status=document.createElement("p");
+      status.id="visionAssistanceModeStatus";
+      status.className="data-note";
+      status.setAttribute("aria-live","polite");
+      fieldset.appendChild(status);
+
+      const prompt=document.getElementById("visionGuidePrompt");
+      if(prompt)host.insertBefore(fieldset,prompt);
+      else host.appendChild(fieldset);
+
+      fieldset.addEventListener("change",event=>{
+        const input=event.target;
+        if(!(input instanceof HTMLInputElement)||input.name!=="visionAssistanceModeChoice"||!input.checked)return;
+        setVoiceMode(input.value,{announce:true});
+      });
+    }
+    syncModeControls();
+    return fieldset;
+  }
+
+  function syncModeControls(){
+    const mode=readVoiceMode();
+    const discovery=document.getElementById("visionAssistanceDiscovery");
+    const simplified=document.getElementById("visionAssistanceSimplified");
+    if(discovery)discovery.checked=mode==="discovery";
+    if(simplified)simplified.checked=mode==="simplified";
+    const status=document.getElementById("visionAssistanceModeStatus");
+    if(status)status.textContent="Mode vocal actif : "+modeLabel(mode)+".";
   }
 
   let lastSignature="";
@@ -196,7 +286,8 @@
       ctx.title,
       ctx.categoryId||"",
       ctx.subcategoryLabel||"",
-      ctx.fieldId||""
+      ctx.fieldId||"",
+      ctx.assistanceMode||""
     ].join("|");
   }
 
@@ -278,7 +369,7 @@
   }
 
   window.LibcomlairVoiceContext=Object.freeze({
-    version:"v224-2",
+    version:"v224-3",
     detect,
     refresh,
     current,
@@ -288,9 +379,14 @@
     setMode:setVoiceMode,
     resetMode:resetVoiceMode,
     hasExplicitMode:hasExplicitVoiceMode,
+    modeLabel,
+    ensureModeControls,
+    syncModeControls,
     categoryLabels:CATEGORY_LABELS
   });
 
   observe();
+  ensureModeControls();
+  window.addEventListener("libcomlair-voice-mode-change",syncModeControls);
   refresh("initial");
 })();
