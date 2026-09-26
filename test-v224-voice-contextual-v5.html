@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — test commandes vocales simples v5</title>
+</head>
+<body>
+<p>Chargement de Libcomlair…</p>
+<script>
+(async()=>{
+  const source="test-v224-profile-compact.html?voice-contextual-source=67";
+  try{
+    let html=await fetch(source,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+
+    html=html.replace(
+      '<button id="applyAccessProfile" class="details-btn" type="button">Utiliser mes choix</button>',
+      '<button id="applyAccessProfile" class="details-btn" type="button" aria-label="Valider mes choix">Valider</button>'
+    );
+    html=html.replace(
+      '<button id="skipAccessProfile" class="details-btn" type="button">Continuer sans adaptation particulière</button>',
+      '<button id="skipAccessProfile" class="details-btn" type="button" aria-label="Sans adaptation">Sans adaptation</button>'
+    );
+
+    html=html.replace(
+      /<script src="libcomlair-v222-accessible-home\.js\?v=[^"]+"><\/script>/,
+      '<script src="libcomlair-v224-voice-router.js?v=5"><\/script>'
+    );
+    html=html.replace("</head>",'<link rel="stylesheet" href="libcomlair-v224-global-assistance.css?v=5"></head>');
+    const extras='<script src="libcomlair-v224-global-assistance.js?v=5"><\/script><script src="libcomlair-v224-regression-guard.js?v=5"><\/script>';
+    html=html.replace("</body>",extras+"</body>");
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    document.body.innerHTML="<h1>Libcomlair</h1><p>Impossible de charger la version de test.</p><pre></pre>";
+    document.querySelector("pre").textContent=String(err&&err.message||err);
+  }
+})();
+</script>
+</body>
+</html>
