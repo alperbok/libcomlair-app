@@ -79,6 +79,19 @@
       commits:["918de728faa41d36390981513d2c2476c67f536d","2aaffd1ddfee9147ca0b6973457e37e3e3417b6c","d3cfd41b03b28531addb858c29bbe186558215cc"],
       validation:"Installé ; test Diagnostic/Réparation de bout en bout encore nécessaire.",
       safeAutoRepair:true
+    }),
+    Object.freeze({
+      id:"voice-mic-visual-listening-state",
+      area:"voice",
+      status:"confirmed",
+      symptom:"Quand l'utilisateur appuie sur Micro, aucun changement visuel ne permet de savoir si la reconnaissance vocale écoute réellement.",
+      cause:"Le routeur et le moteur vocal exposaient l'état d'écoute, mais aucun composant visuel ne synchronisait cet état avec les boutons Micro.",
+      detection:"Comparer LibcomlairVoice.isRecognitionActive() avec data-mic-listening sur les boutons Micro visibles.",
+      repair:"Synchroniser automatiquement le cercle Micro avec l'état réel d'écoute ; assombrir le bouton pendant l'écoute et restaurer son état normal à la fin. Réparation automatique resynchronise un état visuel bloqué.",
+      files:["libcomlair-v224-mic-visual-state.js","libcomlair-v224-mic-visual-state.css","libcomlair-v224-regression-guard.js","libcomlair-repair-engine-v175.js"],
+      commits:["cc902c57a72f61c80acc6217886e275134e493ea","65813d04f528e5a74647f5ae7613e8117440d64b","a8412455425bfbf15a840409bf878d95cbbbec08","9c2c52bc576f113810739669767b89c9dfbc5fd3"],
+      validation:"Correction installée ; validation sur Samsung Browser encore nécessaire.",
+      safeAutoRepair:true
     })
   ]);
 
@@ -116,7 +129,7 @@
   }
 
   window.LibcomlairRepairCatalog=Object.freeze({
-    version:"v224-2",
+    version:"v224-3",
     all,
     byId,
     byStatus,
