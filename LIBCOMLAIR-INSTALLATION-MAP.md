@@ -147,6 +147,11 @@ Cette préférence doit rester locale à l’appareil et être réversible à to
 Principe d’accessibilité :
 tout contrôle visuel interactif doit posséder un équivalent vocal utilisable.
 
+Préférence locale : `libcomlair-voice-assistance-mode-v1`.
+- sans préférence explicite + profil Vision : `discovery` ;
+- choix explicite possible : `discovery` ou `simplified` ;
+- le réglage n’altère aucune donnée utilisateur métier.
+
 ### Lecture des zones explicatives
 
 L’accessibilité vocale ne concerne pas seulement les contrôles interactifs.
