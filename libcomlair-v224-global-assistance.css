@@ -1,33 +1,39 @@
 html body #libcomlairGlobalMenuButton{
-  position:fixed!important;
-  left:max(12px,env(safe-area-inset-left))!important;
-  top:max(12px,env(safe-area-inset-top))!important;
+  position:absolute!important;
+  left:-8px!important;
+  top:2px!important;
   right:auto!important;
   bottom:auto!important;
-  width:52px!important;
-  height:52px!important;
-  min-width:52px!important;
-  min-height:52px!important;
-  max-width:52px!important;
-  max-height:52px!important;
+  width:56px!important;
+  height:56px!important;
+  min-width:56px!important;
+  min-height:56px!important;
+  max-width:56px!important;
+  max-height:56px!important;
   margin:0!important;
   padding:0!important;
   border:3px solid #fff!important;
   border-radius:14px!important;
   background:#0f7784!important;
   color:#fff!important;
-  font-size:1.8rem!important;
+  font-size:1.75rem!important;
   font-weight:900!important;
   line-height:1!important;
   box-sizing:border-box!important;
   box-shadow:0 4px 14px rgba(0,0,0,.24)!important;
-  z-index:1200!important;
+  z-index:55!important;
   display:none!important;
   align-items:center!important;
   justify-content:center!important;
 }
 html body #libcomlairGlobalMenuButton[data-visible="true"]{display:flex!important}
 html body #libcomlairGlobalMenuButton[data-visible="false"]{display:none!important}
+
+html body .v222-app-brand,
+html body #v224Page4Brand,
+html body #v224Page5Brand{
+  overflow:visible!important;
+}
 
 html body #libcomlairGlobalMenuBackdrop{
   position:fixed!important;
