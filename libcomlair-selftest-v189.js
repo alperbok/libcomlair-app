@@ -43,7 +43,7 @@
 
     const checks=[
       check("Voix",!!(voiceEngine&&voiceEngine.version==="v189"&&typeof voiceEngine.speak==="function"&&typeof voiceEngine.testDetailed==="function"&&!voiceHadFailure),voiceMode),
-      check("Contexte vocal",!!(window.LibcomlairVoiceContext&&typeof window.LibcomlairVoiceContext.detect==="function"&&typeof window.LibcomlairVoiceContext.current==="function"),window.LibcomlairVoiceContext?("écran : "+window.LibcomlairVoiceContext.current().id):"moteur absent"),
+      check("Contexte vocal",!!(window.LibcomlairVoiceContext&&typeof window.LibcomlairVoiceContext.detect==="function"&&typeof window.LibcomlairVoiceContext.current==="function"&&typeof window.LibcomlairVoiceContext.getMode==="function"&&["discovery","simplified"].includes(window.LibcomlairVoiceContext.getMode())),window.LibcomlairVoiceContext?("écran : "+window.LibcomlairVoiceContext.current().id+" — mode : "+window.LibcomlairVoiceContext.getMode()):"moteur absent"),
       check("Catégories",!!(window.LibcomlairCategories&&Array.isArray(window.LibcomlairCategories.categories)&&window.LibcomlairCategories.categories.length>=8),"listes et sous-catégories"),
       check("Accessibilité",!!(window.LibcomlairAccessibility&&typeof window.LibcomlairAccessibility.read==="function"&&typeof window.LibcomlairAccessibility.save==="function"),"profil et critères"),
       check("Données",!!(window.LibcomlairData&&typeof window.LibcomlairData.isFresh==="function"&&typeof window.LibcomlairData.loadState==="function"),"cache et actualisation"),
