@@ -16,9 +16,19 @@
     }catch(_){return false}
   }
 
+  function simpleVoiceCommandsOk(){
+    try{
+      const router=window.LibcomlairVoiceRouter;
+      if(!router||typeof router.diagnoseSimpleCommands!=="function")return false;
+      const report=router.diagnoseSimpleCommands();
+      return !!(report&&report.ok&&report.visibleActions>0);
+    }catch(_){return false}
+  }
+
   function snapshot(){
     const checks=[
-      {name:"Routeur micro contextuel",ok:!!(window.LibcomlairVoiceRouter&&window.LibcomlairVoiceRouter.version==="v224-5"&&typeof window.LibcomlairVoiceRouter.start==="function")},
+      {name:"Routeur micro contextuel",ok:!!(window.LibcomlairVoiceRouter&&window.LibcomlairVoiceRouter.version==="v224-6"&&typeof window.LibcomlairVoiceRouter.start==="function")},
+      {name:"Commandes vocales simples",ok:simpleVoiceCommandsOk()},
       {name:"Contexte vocal",ok:!!(window.LibcomlairVoiceContext&&typeof window.LibcomlairVoiceContext.current==="function")},
       {name:"Guide vocal",ok:!!(window.LibcomlairVoiceGuide&&typeof window.LibcomlairVoiceGuide.readCurrent==="function")},
       {name:"Menu Assistance et réglages",ok:!!(window.LibcomlairGlobalAssistance&&window.LibcomlairGlobalAssistance.version==="v224-3"&&typeof window.LibcomlairGlobalAssistance.open==="function")},
@@ -26,7 +36,7 @@
       {name:"Menu rattaché à l’en-tête du logo",ok:menuHeaderOk()},
       {name:"Reconnaissance vocale navigateur",ok:!!(window.SpeechRecognition||window.webkitSpeechRecognition)}
     ];
-    return {ok:checks.every(x=>x.ok),checks,version:"v224-6"};
+    return {ok:checks.every(x=>x.ok),checks,version:"v224-7"};
   }
 
   function appendToDiagnostic(){
@@ -36,7 +46,7 @@
     if(box){
       const failed=result.checks.filter(x=>!x.ok);
       const suffix=result.ok
-        ?" Contrôle vocal anti-régression : routeur, contexte, guide et menu réglages sont chargés ; le bouton réglages est rattaché à l’en-tête du logo."
+        ?" Contrôle vocal anti-régression : routeur, commandes simples, contexte, guide et menu réglages sont chargés correctement."
         :" Contrôle vocal anti-régression en échec : "+failed.map(x=>x.name).join(", ")+".";
       box.textContent=box.textContent.replace(/ Contrôle vocal anti-régression[^]*$/m,"");
       box.textContent+=suffix;
@@ -50,5 +60,5 @@
   });
   setTimeout(appendToDiagnostic,1100);
 
-  window.LibcomlairRegressionGuard=Object.freeze({version:"v224-6",run:appendToDiagnostic,snapshot});
+  window.LibcomlairRegressionGuard=Object.freeze({version:"v224-7",run:appendToDiagnostic,snapshot});
 })();
