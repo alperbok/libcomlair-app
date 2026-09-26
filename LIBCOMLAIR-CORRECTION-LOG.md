@@ -176,6 +176,40 @@ Une réparation ne devient une référence automatique que lorsqu’elle est `r�
 
 ---
 
+## 2026-09-26 — indicateur visuel du microphone pendant l’écoute
+
+**ID :** `voice-mic-visual-listening-state`
+
+**Symptôme utilisateur :** lorsque le micro est activé, aucun changement du cercle Micro ne permettait de savoir si l’application écoutait réellement.
+
+**Cause confirmée :** l’état de reconnaissance existait dans le moteur vocal mais n’était pas relié visuellement aux boutons Micro.
+
+**Réparation :**
+- assombrir le cercle Micro pendant toute la durée réelle de reconnaissance ;
+- revenir automatiquement à l’apparence normale à la fin de l’écoute, après une erreur ou une annulation ;
+- comparer l’état `LibcomlairVoice.isRecognitionActive()` avec l’état visuel du bouton ;
+- permettre à Réparation automatique de resynchroniser un état visuel bloqué.
+
+**Fichiers :**
+- `libcomlair-v224-mic-visual-state.js`
+- `libcomlair-v224-mic-visual-state.css`
+- `libcomlair-v224-regression-guard.js`
+- `libcomlair-repair-engine-v175.js`.
+
+**Commits de référence :**
+- `cc902c57a72f61c80acc6217886e275134e493ea`
+- `65813d04f528e5a74647f5ae7613e8117440d64b`
+- `a8412455425bfbf15a840409bf878d95cbbbec08`
+- `9c2c52bc576f113810739669767b89c9dfbc5fd3`.
+
+**Diagnostic :** l’état visuel doit être sombre uniquement lorsque le moteur signale que la reconnaissance est active ; tout écart est une désynchronisation détectable.
+
+**Validation :** utilisateur a confirmé « Ça fonctionne » sur Samsung Browser le 26/09/2026 : le cercle Micro s’assombrit pendant l’écoute puis revient à son état normal.
+
+**État :** `réparée-et-validée`.
+
+---
+
 ## Contrôle obligatoire lors du futur test Diagnostic / Réparation
 
 Le test devra vérifier au minimum :
@@ -186,5 +220,6 @@ Le test devra vérifier au minimum :
 5. que le mode Découverte/Simplifié est conservé ;
 6. que le profil, favoris, avis, signalements et propositions restent intacts ;
 7. que le menu ☰ reste rattaché à l’en-tête ;
-8. qu’un changement de version/cache recharge bien les ressources corrigées ;
-9. que toute réparation seulement « confirmée » reste distinguée d’une réparation « réparée-et-validée ».
+8. que l’indicateur visuel du micro correspond réellement à l’état d’écoute ;
+9. qu’un changement de version/cache recharge bien les ressources corrigées ;
+10. que toute réparation seulement « confirmée » reste distinguée d’une réparation « réparée-et-validée ».
