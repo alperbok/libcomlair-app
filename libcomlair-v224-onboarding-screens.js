@@ -219,6 +219,21 @@
     window.LibcomlairVoiceContext?.refresh?.("onboarding-home-screen");
   }
 
+  function clearOnboardingArtifactsForSearch(){
+    [
+      "v224HomeSearchTitle",
+      "v224VoiceModeScreenTitle",
+      "v224TutorialScreenTitle",
+      "v224OnboardingCompactChoices",
+      "v224VoiceModeActions",
+      "v224TutorialActions",
+      "v224Page3Next"
+    ].forEach(id=>hide(document.getElementById(id)));
+    if(speech)hide(speech);
+    hide(voice);
+    hide(tutorial);
+  }
+
   function beginAfterProfile(){
     setTimeout(()=>{
       if(body.classList.contains("v224-page3-step"))showVoice();
@@ -234,6 +249,7 @@
   next.addEventListener("click",()=>{
     current="";
     clearSubstepClasses();
+    requestAnimationFrame(clearOnboardingArtifactsForSearch);
   });
 
   window.addEventListener("libcomlair-voice-mode-change",()=>updateCompactMode());
@@ -241,7 +257,7 @@
   ensureStructure();
 
   window.LibcomlairOnboardingScreens=Object.freeze({
-    version:"v224-1",
+    version:"v224-2",
     current:()=>current,
     showVoice,
     showTutorial:()=>showTutorial({autoRead:false}),
