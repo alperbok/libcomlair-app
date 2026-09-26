@@ -147,6 +147,18 @@ Cette préférence doit rester locale à l’appareil et être réversible à to
 Principe d’accessibilité :
 tout contrôle visuel interactif doit posséder un équivalent vocal utilisable.
 
+### Lecture des zones explicatives
+
+L’accessibilité vocale ne concerne pas seulement les contrôles interactifs.
+
+Les encadrés d’aide, notices, descriptions, tutoriels et autres textes explicatifs visibles doivent :
+- être détectables par l’assistance vocale ;
+- être proposés à la lecture ;
+- pouvoir être lus sur commande ;
+- être distingués des choix interactifs.
+
+En mode découverte, les explications nécessaires à la compréhension d’une page peuvent être lues automatiquement. En mode simplifié, elles restent disponibles à la demande.
+
 ### Reconnaissance vocale actuelle
 Principalement dans `libcomlair-v221-secure.js`.
 
