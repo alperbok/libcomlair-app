@@ -100,6 +100,9 @@ Commandes prévues :
 
 La préférence doit être conservée localement pour éviter de redemander à chaque ouverture.
 
+Clé locale du mode vocal : `libcomlair-voice-assistance-mode-v1`.
+Pour un profil Vision sans choix antérieur, le mode initial est **Découverte guidée**. Une fois le mode simplifié choisi, cette préférence est conservée sur l’appareil jusqu’à un nouveau changement explicite.
+
 ### Critère de couverture d’un écran
 
 Une page n’est pas considérée comme complètement accessible au profil Vision tant que :
