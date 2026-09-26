@@ -785,6 +785,11 @@ function setupVisionSpeechOutput(){
   read.addEventListener("click",()=>{
     window.__libcomlairVisionIntroPlayed=false;
     removeVisionIntroFallback();
+    const guide=window.LibcomlairVoiceGuide;
+    if(guide&&typeof guide.readCurrent==="function"){
+      const ok=guide.readCurrent();
+      if(ok)return;
+    }
     startVisionIntroSpeech(true);
   });
   if(test)test.addEventListener("click",()=>{
