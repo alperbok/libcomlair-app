@@ -157,7 +157,7 @@
     preparePage3Shell();
     hideStartChildren();
     show(document.getElementById("v224VoiceModeScreenTitle"));
-    show(voice,"block");
+    show(voice,"flex");
     voice.hidden=false;
     const oldStart=document.getElementById("visionGuideStart");
     if(oldStart)hide(oldStart);
@@ -167,7 +167,7 @@
     if(legacy)hide(legacy);
     setTimeout(()=>{
       const fieldset=document.getElementById("visionAssistanceMode");
-      if(fieldset)show(fieldset,"block");
+      if(fieldset)show(fieldset,"flex");
       show(document.getElementById("v224VoiceModeActions"),"grid");
       window.LibcomlairVoiceContext?.refresh?.("onboarding-voice-screen");
     },30);
@@ -190,10 +190,10 @@
     hideStartChildren();
     show(document.getElementById("v224TutorialScreenTitle"));
     tutorial.open=true;
-    show(tutorial,"block");
+    show(tutorial,"flex");
     const summary=tutorial.querySelector(":scope > summary");
     if(summary)hide(summary);
-    show(document.getElementById("libcomlairTutorialText"),"block");
+    show(document.getElementById("libcomlairTutorialText"),"flex");
     show(document.getElementById("v224TutorialActions"),"grid");
     setTimeout(()=>{
       window.LibcomlairVoiceContext?.refresh?.("onboarding-tutorial-screen");
@@ -257,7 +257,7 @@
   ensureStructure();
 
   window.LibcomlairOnboardingScreens=Object.freeze({
-    version:"v224-2",
+    version:"v224-3",
     current:()=>current,
     showVoice,
     showTutorial:()=>showTutorial({autoRead:false}),
