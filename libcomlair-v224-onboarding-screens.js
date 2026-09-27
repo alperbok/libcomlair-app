@@ -4,6 +4,7 @@
   const body=document.body;
   const needsSection=document.getElementById("accessNeedsSection");
   const start=document.querySelector("section.hero.v219-main-zone");
+  const categories=document.getElementById("v224Page4Categories");
   const voice=document.getElementById("visionVoiceControls");
   const tutorial=document.getElementById("libcomlairTutorial");
   const speech=document.getElementById("speechChoiceControls");
@@ -220,7 +221,13 @@
     button.textContent="Navigation vocale — "+mode;button.setAttribute("aria-label","Navigation vocale, mode "+mode);
   }
   function hideStartChildren(){[...start.children].forEach(hide)}
-  function preparePage3Shell(){show(needsSection,"block");show(start,"flex");start.style.setProperty("flex-direction","column","important");window.scrollTo({top:0,left:0,behavior:"auto"})}
+  function preparePage3Shell(){
+    body.classList.remove("v221-profile-step","v221-onboarding","v224-page4-step","v224-page5-step");
+    body.classList.add("v224-page3-step");
+    if(categories)hide(categories);
+    show(needsSection,"block");show(start,"flex");start.style.setProperty("flex-direction","column","important");
+    window.scrollTo({top:0,left:0,behavior:"auto"});
+  }
   function notify(step){
     setTimeout(()=>{
       try{window.LibcomlairVoiceContext?.refresh?.("onboarding-"+step)}catch(_){}
@@ -279,6 +286,6 @@
 
   ensureStructure();
   window.LibcomlairOnboardingScreens=Object.freeze({
-    version:"v224-5",current:()=>current,showNeeds,showVoice,showTutorial,showHome,updateCompactMode
+    version:"v224-6",current:()=>current,showNeeds,showVoice,showTutorial,showHome,updateCompactMode
   });
 })();
