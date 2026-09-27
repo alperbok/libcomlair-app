@@ -1,0 +1,106 @@
+/* Libcomlair V224 — étape Mes besoins d’accessibilité */
+@media (max-width:540px){
+  body.v224-onboarding-needs #mainContent{
+    height:auto!important;
+    min-height:calc(100dvh - 2px)!important;
+    overflow:visible!important;
+  }
+
+  body.v224-onboarding-needs #accessNeedsSection{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.v224-onboarding-needs #accessNeedsSection > h2{
+    margin:8px 0 4px!important;
+    font-size:1.42rem!important;
+    line-height:1.08!important;
+  }
+
+  body.v224-onboarding-needs #activeAccessProfile{
+    margin:0 0 10px!important;
+    font-size:1rem!important;
+    line-height:1.25!important;
+  }
+
+  body.v224-onboarding-needs .v224-needs-folders{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    margin:0!important;
+  }
+
+  body.v224-onboarding-needs .v224-needs-folder{
+    margin:0!important;
+    padding:0!important;
+    border:2px solid #b8d6db!important;
+    border-radius:14px!important;
+    background:#f6fbfc!important;
+    overflow:hidden!important;
+  }
+
+  body.v224-onboarding-needs .v224-needs-folder > summary{
+    min-height:52px!important;
+    margin:0!important;
+    padding:10px 12px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:#e9f6f8!important;
+    color:#17252a!important;
+    font-size:1.02rem!important;
+    display:flex!important;
+    align-items:center!important;
+  }
+
+  body.v224-onboarding-needs .v224-needs-folder[open] > summary{
+    border-bottom:1px solid #c7dadd!important;
+  }
+
+  body.v224-onboarding-needs .v224-needs-folder-body{
+    padding:9px 11px 10px!important;
+  }
+
+  body.v224-onboarding-needs .v224-needs-folder-body .data-note{
+    margin:0 0 7px!important;
+    font-size:.92rem!important;
+    line-height:1.25!important;
+  }
+
+  body.v224-onboarding-needs .v224-needs-criterion{
+    display:flex!important;
+    align-items:center!important;
+    gap:10px!important;
+    min-height:42px!important;
+    margin:0!important;
+    padding:6px 2px!important;
+    font-size:.98rem!important;
+    line-height:1.2!important;
+    font-weight:650!important;
+  }
+
+  body.v224-onboarding-needs .v224-needs-criterion input[type="checkbox"]{
+    width:24px!important;
+    height:24px!important;
+    min-width:24px!important;
+    min-height:24px!important;
+    margin:0!important;
+    flex:0 0 24px!important;
+  }
+
+  body.v224-onboarding-needs #v224NeedsActions{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+    margin:10px 0 0!important;
+  }
+
+  body.v224-onboarding-needs #v224NeedsActions button{
+    min-height:52px!important;
+    margin:0!important;
+    padding:9px 10px!important;
+    border-radius:13px!important;
+    font-size:1.02rem!important;
+    font-weight:800!important;
+  }
+}
