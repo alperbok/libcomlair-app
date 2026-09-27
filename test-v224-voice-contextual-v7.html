@@ -9,7 +9,7 @@
 <p>Chargement de Libcomlair…</p>
 <script>
 (async()=>{
-  const source="test-v224-profile-compact.html?voice-contextual-source=83";
+  const source="test-v224-profile-compact.html?voice-contextual-source=84";
   try{
     let html=await fetch(source,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
@@ -25,7 +25,7 @@
       "</head>",
       '<link rel="stylesheet" href="libcomlair-v224-global-assistance.css?v=13"><link rel="stylesheet" href="libcomlair-v224-mic-visual-state.css?v=3"><link rel="stylesheet" href="libcomlair-v224-onboarding-screens.css?v=6"><link rel="stylesheet" href="libcomlair-v224-needs-step.css?v=1"></head>'
     );
-    const extras='<script src="libcomlair-v224-mic-visual-state.js?v=3"><\/script><script src="libcomlair-v224-global-assistance.js?v=13"><\/script><script src="libcomlair-v224-voice-completeness.js?v=2"><\/script><script src="libcomlair-v224-onboarding-screens.js?v=5"><\/script><script src="libcomlair-v224-guided-presenter.js?v=1"><\/script><script src="libcomlair-v224-regression-guard.js?v=13"><\/script>';
+    const extras='<script src="libcomlair-v224-mic-visual-state.js?v=3"><\/script><script src="libcomlair-v224-global-assistance.js?v=13"><\/script><script src="libcomlair-v224-voice-completeness.js?v=2"><\/script><script src="libcomlair-v224-onboarding-screens.js?v=5"><\/script><script src="libcomlair-v224-guided-presenter.js?v=2"><\/script><script src="libcomlair-v224-regression-guard.js?v=13"><\/script>';
     html=html.replace("</body>",extras+"</body>");
     document.open();
     document.write(html);
