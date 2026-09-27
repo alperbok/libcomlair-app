@@ -54,15 +54,16 @@
     return !!ok;
   }
 
-  function schedule(ctx,force=false){
+  function schedule(force=false){
     if(timer)clearTimeout(timer);
     timer=setTimeout(()=>{
-      const current=ctx||window.LibcomlairVoiceContext?.current?.();
+      const current=window.LibcomlairVoiceContext?.current?.();
       present(current,force);
     },260);
   }
 
-  window.addEventListener("libcomlair-voice-context-change",event=>schedule(event.detail?.context));
+  window.addEventListener("libcomlair-voice-context-change",()=>schedule());
+  window.addEventListener("libcomlair-voice-mode-change",()=>schedule());
   window.addEventListener("libcomlair-onboarding-step",()=>schedule());
   window.addEventListener("pageshow",()=>schedule());
 
@@ -77,7 +78,7 @@
   setTimeout(()=>schedule(),450);
 
   window.LibcomlairGuidedPresenter=Object.freeze({
-    version:"v224-1",
+    version:"v224-2",
     presentCurrent:(force=false)=>present(window.LibcomlairVoiceContext?.current?.(),force),
     resetVisited:()=>visited.clear(),
     visited:()=>[...visited],
