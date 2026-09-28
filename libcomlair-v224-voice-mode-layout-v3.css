@@ -1,0 +1,85 @@
+/* Libcomlair v224 — présentation finale des choix de navigation vocale */
+body.v224-onboarding-voice #visionAssistanceMode{
+  gap:14px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label{
+  grid-template-columns:32% 68%!important;
+  min-height:132px!important;
+  padding:15px 16px!important;
+  margin:0!important;
+  border-radius:16px!important;
+  align-items:center!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label input[type="radio"]{
+  width:32px!important;
+  height:32px!important;
+  min-width:32px!important;
+  min-height:32px!important;
+  justify-self:center!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label .v224-assistance-option-text{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:center!important;
+  gap:8px!important;
+  width:100%!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-title-box{
+  display:block!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:9px 12px!important;
+  border:2px solid #17252a!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#17252a!important;
+  font-size:1.2rem!important;
+  line-height:1.12!important;
+  font-weight:800!important;
+  text-align:center!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-description-final{
+  display:block!important;
+  margin:0!important;
+  padding:0 2px!important;
+  color:#52606d!important;
+  font-size:.96rem!important;
+  line-height:1.28!important;
+  font-weight:600!important;
+  text-align:left!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-eyebrow{
+  display:none!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-definition{
+  display:none!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceModeHelp{
+  margin:4px 0 0!important;
+  font-size:.96rem!important;
+  line-height:1.25!important;
+}
+
+@media(max-width:540px){
+  body.v224-onboarding-voice #visionAssistanceMode label{
+    min-height:136px!important;
+    padding:14px 13px!important;
+    grid-template-columns:31% 69%!important;
+  }
+  body.v224-onboarding-voice .v224-voice-option-title-box{
+    font-size:1.16rem!important;
+    padding:8px 10px!important;
+  }
+  body.v224-onboarding-voice .v224-voice-option-description-final{
+    font-size:.94rem!important;
+  }
+}
