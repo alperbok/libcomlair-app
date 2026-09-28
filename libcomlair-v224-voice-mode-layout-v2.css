@@ -1,0 +1,68 @@
+/* Libcomlair v224 — choix vocaux dans des cases, définitions dessous */
+body.v224-onboarding-voice #visionAssistanceMode{
+  gap:10px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label{
+  grid-template-columns:34% 66%!important;
+  min-height:104px!important;
+  padding:16px 18px!important;
+  margin:0!important;
+  border-radius:16px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label input[type="radio"]{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  min-height:30px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label .v224-assistance-option-text{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  min-height:48px!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-title{
+  font-size:1.24rem!important;
+  line-height:1.15!important;
+  font-weight:800!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-eyebrow,
+body.v224-onboarding-voice .v224-voice-option-description{
+  display:none!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-definition{
+  margin:2px 8px 10px!important;
+  padding:0 4px!important;
+  font-size:.98rem!important;
+  line-height:1.28!important;
+  color:#52606d!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-definition strong{
+  color:#17252a!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceModeHelp{
+  margin-top:4px!important;
+}
+
+@media(max-width:540px){
+  body.v224-onboarding-voice #visionAssistanceMode label{
+    min-height:108px!important;
+    padding:15px 14px!important;
+    grid-template-columns:35% 65%!important;
+  }
+  body.v224-onboarding-voice .v224-voice-option-title{
+    font-size:1.22rem!important;
+  }
+  body.v224-onboarding-voice .v224-voice-option-definition{
+    font-size:.96rem!important;
+    margin:2px 6px 9px!important;
+  }
+}
