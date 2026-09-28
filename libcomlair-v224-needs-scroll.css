@@ -1,0 +1,14 @@
+/* Libcomlair v224 — page des critères : défilement autorisé pour profils multiples. */
+body.v224-onboarding-needs{
+  overflow-y:auto!important;
+  overscroll-behavior-y:auto!important;
+}
+body.v224-onboarding-needs #mainContent,
+body.v224-onboarding-needs #accessNeedsSection{
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+body.v224-onboarding-needs.v224-needs-multiple #v224NeedsFolders{
+  padding-bottom:4px!important;
+}
