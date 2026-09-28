@@ -128,14 +128,14 @@
       actions=document.createElement("div");
       actions.id="v224NeedsActions";
       actions.className="v224-onboarding-actions";
-      const back=change||makeButton("v224NeedsBack","Retour");
-      back.textContent="Retour";
-      back.setAttribute("aria-label","Retour");
+      const back=makeButton("v224NeedsBack","Retour");
       const validate=makeButton("v224NeedsValidate","Valider");
       actions.append(back,validate);
       needsSection.appendChild(actions);
-      validate.addEventListener("click",()=>showVoice());
+      back.addEventListener("click",()=>showTutorial());
+      validate.addEventListener("click",()=>showHome());
     }
+    if(change)hide(change);
 
     if(accessFilters&&!criteriaObserver){
       criteriaObserver=new MutationObserver(()=>syncAllProxies());
@@ -180,7 +180,7 @@
       voiceActions=document.createElement("div");voiceActions.id="v224VoiceModeActions";voiceActions.className="v224-onboarding-actions";
       const back=makeButton("v224VoiceModeBack","Retour"),validate=makeButton("v224VoiceModeValidate","Valider");
       voiceActions.append(back,validate);voice.appendChild(voiceActions);
-      back.addEventListener("click",()=>showNeeds());
+      back.addEventListener("click",()=>{if(change)change.click()});
       validate.addEventListener("click",()=>showTutorial());
     }
 
@@ -189,7 +189,7 @@
       tutorialActions=document.createElement("div");tutorialActions.id="v224TutorialActions";tutorialActions.className="v224-onboarding-actions";
       const back=makeButton("v224TutorialBack","Retour"),onward=makeButton("v224TutorialNext","Suivant");
       tutorialActions.append(back,onward);tutorial.appendChild(tutorialActions);
-      back.addEventListener("click",()=>showVoice());onward.addEventListener("click",()=>showHome());
+      back.addEventListener("click",()=>showVoice());onward.addEventListener("click",()=>showNeeds());
     }
 
     const read=document.getElementById("readLibcomlairTutorial");
@@ -209,7 +209,7 @@
       const back=makeButton("v224HomeBack","Retour");
       next.textContent="Rechercher";next.setAttribute("aria-label","Rechercher");
       homeActions.append(back,next);start.appendChild(homeActions);
-      back.addEventListener("click",()=>showTutorial());
+      back.addEventListener("click",()=>showNeeds());
     }
     updateCompactMode();
   }
@@ -225,7 +225,7 @@
     body.classList.remove("v221-profile-step","v221-onboarding","v224-page4-step","v224-page5-step");
     body.classList.add("v224-page3-step");
     if(categories)hide(categories);
-    show(needsSection,"block");show(start,"flex");start.style.setProperty("flex-direction","column","important");
+    hide(needsSection);show(start,"flex");start.style.setProperty("flex-direction","column","important");
     window.scrollTo({top:0,left:0,behavior:"auto"});
   }
   function notify(step){
@@ -237,8 +237,9 @@
 
   function showNeeds(){
     ensureStructure();current="needs";clearSubstepClasses();body.classList.add("v224-onboarding-needs");
-    preparePage3Shell();hide(start);updateNeedsFolders();
+    preparePage3Shell();hide(start);show(needsSection,"block");needsSection.removeAttribute("aria-hidden");updateNeedsFolders();
     [...needsSection.children].forEach(el=>show(el,el.id==="v224NeedsActions"?"grid":"block"));
+    if(change)hide(change);
     const brand=needsSection.querySelector(".v222-app-brand");if(brand)show(brand,"flex");
     notify("needs");
   }
@@ -272,7 +273,7 @@
     if(speech)hide(speech);hide(voice);hide(tutorial);hide(needsSection);
   }
 
-  apply?.addEventListener("click",()=>setTimeout(()=>{if(body.classList.contains("v224-page3-step"))showNeeds()},35));
+  apply?.addEventListener("click",()=>setTimeout(()=>{if(body.classList.contains("v224-page3-step"))showVoice()},35));
   skip?.addEventListener("click",()=>setTimeout(()=>{if(body.classList.contains("v224-page3-step"))showVoice()},35));
   change?.addEventListener("click",()=>{current="";clearSubstepClasses()});
   next.addEventListener("click",()=>{current="";clearSubstepClasses();requestAnimationFrame(clearOnboardingArtifactsForSearch)});
@@ -286,6 +287,6 @@
 
   ensureStructure();
   window.LibcomlairOnboardingScreens=Object.freeze({
-    version:"v224-6",current:()=>current,showNeeds,showVoice,showTutorial,showHome,updateCompactMode
+    version:"v224-7",current:()=>current,showNeeds,showVoice,showTutorial,showHome,updateCompactMode
   });
 })();
