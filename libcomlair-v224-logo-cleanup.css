@@ -1,10 +1,10 @@
 /* Libcomlair v224 — nettoyage visuel du logo d'en-tête
-   Le fichier assets/libcomlair-logo-v222.jpg contient une petite zone parasite
-   à son extrême gauche. On la masque sur tous les logos d'en-tête sans toucher
-   à l'image plein écran de bienvenue. */
+   Le fichier assets/libcomlair-logo-v222.jpg contient une zone parasite
+   sur son bord gauche. On la recadre uniquement sur les logos d'en-tête,
+   sans toucher à l'image plein écran de bienvenue. */
 
 .v222-brand-logo{
-  clip-path: inset(0 0 0 6.5%)!important;
-  transform: translateX(-3.25%)!important;
+  clip-path: inset(0 0 0 11%)!important;
+  transform: translateX(-5.5%)!important;
   transform-origin:center center!important;
 }
