@@ -12256,8 +12256,8 @@
       "name": "Pré Oté",
       "category": "Transports",
       "transportType": "Bus / Arrêt",
-      "lat": 46.558638,
-      "lon": 0.28883,
+      "lat": 46.558759,
+      "lon": 0.288724,
       "wheelchair": "inconnue",
       "officialSource": "Point d’Accès National transport.data.gouv.fr"
     },
@@ -12265,8 +12265,8 @@
       "name": "Pré Oté",
       "category": "Transports",
       "transportType": "Bus / Arrêt",
-      "lat": 46.558569,
-      "lon": 0.288746,
+      "lat": 46.558493,
+      "lon": 0.288614,
       "wheelchair": "inconnue",
       "officialSource": "Point d’Accès National transport.data.gouv.fr"
     },
