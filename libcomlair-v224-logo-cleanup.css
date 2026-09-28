@@ -1,6 +1,4 @@
-/* Libcomlair v224 — logo propre dans les en-têtes.
-   On conserve le logo blanc d'origine des pages, sans reprendre le ciel bleu
-   de l'image d'accueil. Seule la très petite zone parasite à gauche est masquée. */
+/* Libcomlair v224 — en-têtes avec logo propre généré par JS. */
 
 .v222-app-brand,
 .v222-profile-brand,
@@ -10,7 +8,6 @@
   background:#fff!important;
 }
 
-/* Désactive complètement l'ancien remplacement par un extrait de l'image d'accueil. */
 .v222-app-brand::before,
 .v222-profile-brand::before,
 #v224Page4Brand::before,
@@ -20,21 +17,19 @@
   background-image:none!important;
 }
 
-/* Réaffiche le vrai logo à fond blanc et masque seulement son bord parasite. */
 .v222-app-brand > .v222-brand-logo,
 .v222-profile-brand > .v222-brand-logo,
 #v224Page4Brand > .v222-brand-logo,
 #v224Page5Brand > .v222-brand-logo{
   visibility:visible!important;
   opacity:1!important;
-  clip-path:inset(0 0 0 4.2%)!important;
-  transform:translateX(-1.4%) scaleX(1.02)!important;
+  clip-path:none!important;
+  transform:none!important;
   transform-origin:center center!important;
   background:#fff!important;
   object-fit:contain!important;
 }
 
-/* Le menu et le micro restent au-dessus du logo. */
 #libcomlairGlobalMenuButton,
 #v224Page3Mic,
 #v224Page4Mic,
