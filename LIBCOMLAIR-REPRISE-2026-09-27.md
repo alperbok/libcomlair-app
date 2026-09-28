@@ -15,10 +15,12 @@ Ce fichier sert de point de reprise avant redémarrage du téléphone. Il compl�
 
 ## Parcours logique retenu
 
+Ordre corrigé après vérification visuelle du 28 septembre 2026 :
+
 1. Choix du profil / handicap
-2. Mes besoins d'accessibilité
-3. Navigation vocale
-4. Comment fonctionne Libcomlair ?
+2. Navigation vocale
+3. Comment fonctionne Libcomlair ?
+4. Mes besoins d'accessibilité
 5. Accueil / Recherche
 6. Recherche / Catégories
 7. Sous-catégories
@@ -60,21 +62,9 @@ Mobilité, Audition, Compréhension/cognition et Assistance/accompagnement peuve
 
 Le mode Simplifié annonce seulement l'essentiel nécessaire pour utiliser la page.
 
-## Page Mes besoins d'accessibilité
-
-Cette étape doit être une vraie page et ne plus être sautée.
-
-Organisation retenue : sous-dossiers par handicap :
-
-- Mobilité
-- Vision
-- Audition
-- Compréhension / cognition
-- Assistance / accompagnement
-
-Les dossiers correspondant aux handicaps choisis au départ doivent s'ouvrir automatiquement. Les autres restent disponibles sur demande. Chaque critère doit être utilisable au toucher et à la voix. La page se termine par Valider ou Retour.
-
 ## Navigation vocale
+
+Cette étape vient maintenant immédiatement après le choix du profil.
 
 La voix doit expliquer qu'il existe deux choix :
 
@@ -85,7 +75,23 @@ Elle doit annoncer le choix actuel, demander lequel choisir, puis proposer Valid
 
 ## Comment fonctionne Libcomlair ?
 
+Cette étape vient après Navigation vocale et avant Mes besoins d'accessibilité.
+
 En mode Vision + Découverte, la lecture doit démarrer automatiquement à la première visite. Le bouton Lire n'est pas nécessaire comme action principale pendant cette première lecture. À la fin, la voix doit proposer clairement : Suivant ou Retour.
+
+## Page Mes besoins d'accessibilité
+
+Cette étape doit être une vraie page et ne plus être sautée. Elle vient désormais après « Comment fonctionne Libcomlair ? » et avant « Accueil / Recherche ».
+
+Organisation retenue : sous-dossiers par handicap :
+
+- Mobilité
+- Vision
+- Audition
+- Compréhension / cognition
+- Assistance / accompagnement
+
+Les dossiers correspondant aux handicaps choisis au départ doivent s'ouvrir automatiquement. Les autres restent disponibles sur demande. Chaque critère doit être utilisable au toucher et à la voix. La page se termine par Valider ou Retour.
 
 ## Accueil / Recherche
 
@@ -119,12 +125,13 @@ Le routeur doit couvrir notamment :
 
 Le menu ☰ reste attaché à l'en-tête et défile avec le logo ; il ne doit pas être fixé au viewport.
 
-## État actuel avant redémarrage
+## État actuel
 
 - La v7 est la page de test active : `test-v224-voice-contextual-v7.html`.
-- Le parcours a été réordonné pour inclure Mes besoins d'accessibilité avant Navigation vocale.
-- Une feuille dédiée aux sous-dossiers de besoins a été créée : `libcomlair-v224-needs-step.css`.
-- La présentation automatique des premières visites en mode Vision a été ajoutée dans `libcomlair-v224-guided-presenter.js`.
+- Le défaut où « Mes besoins d'accessibilité » restait visible au-dessus des écrans suivants a été corrigé par une règle de visibilité dédiée.
+- L'ordre visuel a été corrigé le 28 septembre 2026 : Profil → Navigation vocale → Comment fonctionne Libcomlair ? → Mes besoins d'accessibilité → Accueil / Recherche.
+- Une feuille dédiée aux sous-dossiers de besoins existe : `libcomlair-v224-needs-step.css`.
+- La présentation automatique des premières visites en mode Vision est portée par `libcomlair-v224-guided-presenter.js`.
 - La couverture vocale complète est portée par `libcomlair-v224-voice-completeness.js` et le routeur `libcomlair-v224-voice-router.js`.
 - La sélection vocale d'une catégorie doit demander ensuite Valider ou Retour.
 - Les améliorations récentes sont installées mais doivent encore être testées page par page avant d'être classées réparées et validées.
@@ -134,9 +141,9 @@ Le menu ☰ reste attaché à l'en-tête et défile avec le logo ; il ne doit pa
 Reprendre les tests dans cet ordre, sans sauter d'étape :
 
 1. Choix du handicap Vision
-2. Mes besoins d'accessibilité
-3. Navigation vocale
-4. Comment fonctionne Libcomlair ?
+2. Navigation vocale
+3. Comment fonctionne Libcomlair ?
+4. Mes besoins d'accessibilité
 5. Accueil / Recherche
 6. Recherche / Catégories
 7. Sous-catégorie
