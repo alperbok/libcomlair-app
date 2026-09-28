@@ -1,71 +1,44 @@
-/* Libcomlair v224 — logo d’en-tête repris depuis l’image d’accueil validée.
-   On conserve l’ancien <img> uniquement pour sa place dans la mise en page,
-   mais on affiche par-dessus la zone propre du logo provenant de
-   assets/libcomlair-welcome-v224.jpg. L’image plein écran d’accueil n’est pas modifiée. */
+/* Libcomlair v224 — logo propre dans les en-têtes.
+   On conserve le logo blanc d'origine des pages, sans reprendre le ciel bleu
+   de l'image d'accueil. Seule la très petite zone parasite à gauche est masquée. */
 
 .v222-app-brand,
 .v222-profile-brand,
 #v224Page4Brand,
 #v224Page5Brand{
   position:relative!important;
+  background:#fff!important;
 }
 
-.v222-app-brand > .v222-brand-logo,
-.v222-profile-brand > .v222-brand-logo,
-#v224Page4Brand > .v222-brand-logo,
-#v224Page5Brand > .v222-brand-logo{
-  visibility:hidden!important;
-  clip-path:none!important;
-  transform:none!important;
-}
-
+/* Désactive complètement l'ancien remplacement par un extrait de l'image d'accueil. */
 .v222-app-brand::before,
 .v222-profile-brand::before,
 #v224Page4Brand::before,
 #v224Page5Brand::before{
-  content:"";
-  position:absolute!important;
-  left:50%!important;
-  top:50%!important;
-  width:215px!important;
-  height:58px!important;
-  transform:translate(-50%,-50%)!important;
-  background-image:url("assets/libcomlair-welcome-v224.jpg?v=224-clean-logo")!important;
-  background-repeat:no-repeat!important;
-  background-size:320px auto!important;
-  background-position:center -7px!important;
-  pointer-events:none!important;
-  z-index:1!important;
+  content:none!important;
+  display:none!important;
+  background-image:none!important;
 }
 
-/* La page de choix du profil dispose de plus de largeur : on ouvre légèrement
-   la fenêtre de cadrage afin que le L de LIBCOMLAIR ne soit jamais coupé. */
-.v222-profile-brand::before{
-  width:238px!important;
+/* Réaffiche le vrai logo à fond blanc et masque seulement son bord parasite. */
+.v222-app-brand > .v222-brand-logo,
+.v222-profile-brand > .v222-brand-logo,
+#v224Page4Brand > .v222-brand-logo,
+#v224Page5Brand > .v222-brand-logo{
+  visibility:visible!important;
+  opacity:1!important;
+  clip-path:inset(0 0 0 4.2%)!important;
+  transform:translateX(-1.4%) scaleX(1.02)!important;
+  transform-origin:center center!important;
+  background:#fff!important;
+  object-fit:contain!important;
 }
 
-/* Le menu et le micro restent au-dessus du logo recadré. */
+/* Le menu et le micro restent au-dessus du logo. */
 #libcomlairGlobalMenuButton,
 #v224Page3Mic,
 #v224Page4Mic,
-#v224Page5Mic{
+#v224Page5Mic,
+#v222ProfileMic{
   z-index:50!important;
-}
-
-@media (max-width:370px){
-  .v222-app-brand::before,
-  #v224Page4Brand::before,
-  #v224Page5Brand::before{
-    width:205px!important;
-    background-size:305px auto!important;
-    background-position:center -7px!important;
-  }
-
-  /* Sur le petit écran du téléphone, la page Profil conserve une fenêtre
-     plus large que les autres en-têtes pour afficher le logo complet. */
-  .v222-profile-brand::before{
-    width:238px!important;
-    background-size:305px auto!important;
-    background-position:center -7px!important;
-  }
 }
