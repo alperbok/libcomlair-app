@@ -14,7 +14,10 @@
   ];
 
   function syncNeedsVisibility(){
-    if(body.classList.contains("v224-onboarding-needs"))return;
+    if(body.classList.contains("v224-onboarding-needs")){
+      needsSection.removeAttribute("aria-hidden");
+      return;
+    }
     if(hiddenWhenActive.some(className=>body.classList.contains(className))){
       needsSection.style.setProperty("display","none","important");
       needsSection.setAttribute("aria-hidden","true");
@@ -28,7 +31,7 @@
   syncNeedsVisibility();
 
   window.LibcomlairOnboardingVisibilityGuard=Object.freeze({
-    version:"v224-1",
+    version:"v224-2",
     sync:syncNeedsVisibility
   });
 })();
