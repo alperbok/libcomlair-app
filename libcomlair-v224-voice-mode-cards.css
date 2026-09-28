@@ -1,0 +1,79 @@
+/* Libcomlair v224 — cartes de choix du niveau d'assistance vocale */
+body.v224-onboarding-voice #visionAssistanceMode{
+  gap:14px!important;
+  padding:14px 14px 16px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label{
+  grid-template-columns:34% 66%!important;
+  min-height:122px!important;
+  margin:0!important;
+  padding:16px 18px!important;
+  border-radius:16px!important;
+  column-gap:8px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label input[type="radio"]{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  min-height:30px!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceMode label .v224-assistance-option-text{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  gap:4px!important;
+  line-height:1.15!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-eyebrow{
+  display:block!important;
+  font-size:.95rem!important;
+  font-weight:800!important;
+  color:#52606d!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-title{
+  display:block!important;
+  font-size:1.18rem!important;
+  line-height:1.12!important;
+  color:#17252a!important;
+}
+
+body.v224-onboarding-voice .v224-voice-option-description{
+  display:block!important;
+  margin-top:2px!important;
+  font-size:.92rem!important;
+  line-height:1.22!important;
+  font-weight:600!important;
+  color:#52606d!important;
+}
+
+body.v224-onboarding-voice #visionAssistanceModeHelp{
+  margin-top:12px!important;
+  font-size:1rem!important;
+  line-height:1.3!important;
+}
+
+@media(max-width:540px){
+  body.v224-onboarding-voice #visionAssistanceMode{
+    gap:14px!important;
+    padding:13px!important;
+  }
+  body.v224-onboarding-voice #visionAssistanceMode label{
+    min-height:124px!important;
+    padding:15px 14px!important;
+    grid-template-columns:35% 65%!important;
+  }
+  body.v224-onboarding-voice .v224-voice-option-title{
+    font-size:1.2rem!important;
+  }
+  body.v224-onboarding-voice .v224-voice-option-eyebrow{
+    font-size:.98rem!important;
+  }
+  body.v224-onboarding-voice .v224-voice-option-description{
+    font-size:.94rem!important;
+  }
+}
