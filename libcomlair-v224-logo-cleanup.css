@@ -38,6 +38,12 @@
   z-index:1!important;
 }
 
+/* La page de choix du profil dispose de plus de largeur : on ouvre légèrement
+   la fenêtre de cadrage afin que le L de LIBCOMLAIR ne soit jamais coupé. */
+.v222-profile-brand::before{
+  width:238px!important;
+}
+
 /* Le menu et le micro restent au-dessus du logo recadré. */
 #libcomlairGlobalMenuButton,
 #v224Page3Mic,
@@ -48,10 +54,17 @@
 
 @media (max-width:370px){
   .v222-app-brand::before,
-  .v222-profile-brand::before,
   #v224Page4Brand::before,
   #v224Page5Brand::before{
     width:205px!important;
+    background-size:305px auto!important;
+    background-position:center -7px!important;
+  }
+
+  /* Sur le petit écran du téléphone, la page Profil conserve une fenêtre
+     plus large que les autres en-têtes pour afficher le logo complet. */
+  .v222-profile-brand::before{
+    width:238px!important;
     background-size:305px auto!important;
     background-position:center -7px!important;
   }
