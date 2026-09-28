@@ -1,10 +1,58 @@
-/* Libcomlair v224 — nettoyage visuel du logo d'en-tête
-   Le fichier assets/libcomlair-logo-v222.jpg contient une zone parasite
-   sur son bord gauche. On la recadre uniquement sur les logos d'en-tête,
-   sans toucher à l'image plein écran de bienvenue. */
+/* Libcomlair v224 — logo d’en-tête repris depuis l’image d’accueil validée.
+   On conserve l’ancien <img> uniquement pour sa place dans la mise en page,
+   mais on affiche par-dessus la zone propre du logo provenant de
+   assets/libcomlair-welcome-v224.jpg. L’image plein écran d’accueil n’est pas modifiée. */
 
-.v222-brand-logo{
-  clip-path: inset(0 0 0 11%)!important;
-  transform: translateX(-5.5%)!important;
-  transform-origin:center center!important;
+.v222-app-brand,
+.v222-profile-brand,
+#v224Page4Brand,
+#v224Page5Brand{
+  position:relative!important;
+}
+
+.v222-app-brand > .v222-brand-logo,
+.v222-profile-brand > .v222-brand-logo,
+#v224Page4Brand > .v222-brand-logo,
+#v224Page5Brand > .v222-brand-logo{
+  visibility:hidden!important;
+  clip-path:none!important;
+  transform:none!important;
+}
+
+.v222-app-brand::before,
+.v222-profile-brand::before,
+#v224Page4Brand::before,
+#v224Page5Brand::before{
+  content:"";
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:215px!important;
+  height:58px!important;
+  transform:translate(-50%,-50%)!important;
+  background-image:url("assets/libcomlair-welcome-v224.jpg?v=224-clean-logo")!important;
+  background-repeat:no-repeat!important;
+  background-size:320px auto!important;
+  background-position:center -7px!important;
+  pointer-events:none!important;
+  z-index:1!important;
+}
+
+/* Le menu et le micro restent au-dessus du logo recadré. */
+#libcomlairGlobalMenuButton,
+#v224Page3Mic,
+#v224Page4Mic,
+#v224Page5Mic{
+  z-index:50!important;
+}
+
+@media (max-width:370px){
+  .v222-app-brand::before,
+  .v222-profile-brand::before,
+  #v224Page4Brand::before,
+  #v224Page5Brand::before{
+    width:205px!important;
+    background-size:305px auto!important;
+    background-position:center -7px!important;
+  }
 }
