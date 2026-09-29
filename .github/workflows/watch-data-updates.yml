@@ -41,12 +41,12 @@ jobs:
             local max_age_hours="$3"
 
             local json count conclusion updated_at updated_epoch age_hours run_url
-            json=$(gh api "/repos/${REPO}/actions/workflows/${file}/runs?event=schedule&status=completed&per_page=1")
+            json=$(gh api "/repos/${REPO}/actions/workflows/${file}/runs?status=completed&per_page=1")
             count=$(jq '.workflow_runs | length' <<<"$json")
 
             if [[ "$count" -eq 0 ]]; then
-              statuses+=("❌ ${label} — aucune exécution planifiée terminée trouvée")
-              problems+=("${label}: aucune exécution planifiée terminée trouvée")
+              statuses+=("❌ ${label} — aucune exécution terminée trouvée")
+              problems+=("${label}: aucune exécution terminée trouvée")
               return
             fi
 
@@ -83,7 +83,7 @@ jobs:
               echo "- ${line}"
             done
             echo
-            echo "Ce contrôle vérifie à la fois les **échecs** et les mises à jour qui ne se sont **pas exécutées depuis trop longtemps**."
+            echo "Ce contrôle vérifie à la fois les **échecs** et les mises à jour qui ne se sont **pas exécutées depuis trop longtemps**. Une exécution manuelle ou déclenchée par une correction est également prise en compte afin de confirmer immédiatement un retour à la normale."
           } > /tmp/update-watchdog-body.md
 
           issue_number=$(gh api "/repos/${REPO}/issues?state=all&per_page=100" --paginate --jq ".[] | select(.pull_request | not) | select(.title == \"${TITLE}\") | .number" | head -n 1 || true)
