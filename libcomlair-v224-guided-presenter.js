@@ -6,6 +6,7 @@
   let presenting=false;
   let lastPresentedKey="";
   let lastPresentedAt=0;
+  let lastAttempt={time:0,contextId:"",result:"idle",reason:""};
 
   function profileNeeds(){
     try{
@@ -18,6 +19,7 @@
     try{return window.LibcomlairVoiceContext?.getMode?.()||"simplified"}catch(_){return "simplified"}
   }
   function key(ctx){return [hasVision()?"vision":"standard",mode(),ctx?.id||"",ctx?.title||"",ctx?.categoryId||"",ctx?.subcategoryLabel||""].join("|")}
+  function mark(ctx,result,reason){lastAttempt={time:Date.now(),contextId:ctx?.id||"",result:String(result||""),reason:String(reason||"")}}
 
   const PURPOSE=Object.freeze({
     welcome:"Cette page vous souhaite la bienvenue dans Libcomlair et permet de poursuivre vers le choix de vos besoins d’accessibilité.",
@@ -86,6 +88,17 @@
     return parts.filter(Boolean).join(" ");
   }
 
+  function discoveryText(ctx){
+    try{
+      const described=window.LibcomlairVoiceGuide?.describe?.();
+      const text=String(described?.text||"").replace(/\s+/g," ").trim();
+      if(text)return text;
+    }catch(error){
+      mark(ctx,"guide-describe-error",error?.message||error);
+    }
+    return standardPresentation(ctx);
+  }
+
   function finish(){presenting=false}
 
   function cancelCurrent(){
@@ -96,10 +109,18 @@
     try{window.LibcomlairVoiceGuide?.stop?.()}catch(_){}
   }
 
+  function directOnboarding(ctx){
+    const text=discoveryText(ctx);
+    const ok=speak(text,{onstart:()=>mark(ctx,"speaking","direct-onboarding"),onend:finish,onerror:error=>{mark(ctx,"error",error?.error||error?.message||error);finish()}});
+    if(!ok){mark(ctx,"failed","engine-speak-false");finish()}
+    else mark(ctx,"accepted","direct-onboarding");
+    return ok;
+  }
+
   function present(ctx,force=false){
-    if(!ctx)return false;
+    if(!ctx){mark(null,"failed","no-context");return false}
     const k=key(ctx),now=Date.now();
-    if(!force&&k===lastPresentedKey&&now-lastPresentedAt<900)return false;
+    if(!force&&k===lastPresentedKey&&now-lastPresentedAt<900){mark(ctx,"skipped","duplicate-under-900ms");return false}
     lastPresentedKey=k;
     lastPresentedAt=now;
     history.push(k);
@@ -109,22 +130,61 @@
     const currentMode=mode();
     const guide=window.LibcomlairVoiceGuide;
 
-    /* Simplifié signifie annonce courte, jamais silence. */
     if(currentMode==="simplified"){
-      const ok=speak(standardPresentation(ctx),{onend:finish,onerror:finish});
-      if(!ok)finish();
+      const ok=speak(standardPresentation(ctx),{onstart:()=>mark(ctx,"speaking","simplified"),onend:finish,onerror:error=>{mark(ctx,"error",error?.error||error?.message||error);finish()}});
+      if(!ok){mark(ctx,"failed","engine-speak-false");finish()}
       return ok;
     }
 
-    /* Sans profil Vision, conserver une annonce courte et utilisable. */
     if(!hasVision()){
-      const ok=speak(standardPresentation(ctx),{onend:finish,onerror:finish});
-      if(!ok)finish();
+      const ok=speak(standardPresentation(ctx),{onstart:()=>mark(ctx,"speaking","standard"),onend:finish,onerror:error=>{mark(ctx,"error",error?.error||error?.message||error);finish()}});
+      if(!ok){mark(ctx,"failed","engine-speak-false");finish()}
       return ok;
     }
 
-    /* Présentation Libcomlair : le proxy du guide utilise la carte centrale. */
+    /*
+      Les écrans d'onboarding utilisent désormais un chemin direct :
+      le guide prépare le texte, mais Render le lit directement. Cela évite
+      qu'un proxy readCurrent() ou une séquence secondaire renvoie false et
+      bloque toute la lecture automatique après le profil.
+    */
+    if(ctx.id==="onboarding-voice"||ctx.id==="onboarding-needs"||ctx.id==="onboarding-home"){
+      return directOnboarding(ctx);
+    }
+
     if(ctx.id==="onboarding-tutorial"&&guide?.readCurrent){
+      try{
+        const ok=guide.readCurrent({
+          oncomplete:()=>setTimeout(()=>{
+            const spoken=speak(ending(ctx,true),{onend:finish,onerror:finish});
+            if(!spoken)finish();
+          },100),
+          onerror:finish
+        });
+        if(!ok){
+          const spoken=speak((PURPOSE[ctx.id]||"")+" "+ending(ctx,true),{onend:finish,onerror:finish});
+          if(!spoken)finish();
+          mark(ctx,spoken?"accepted":"failed","tutorial-fallback");
+          return spoken;
+        }
+        mark(ctx,"accepted","tutorial-guide");
+        return true;
+      }catch(error){
+        const spoken=speak((PURPOSE[ctx.id]||"")+" "+ending(ctx,true),{onend:finish,onerror:finish});
+        if(!spoken)finish();
+        mark(ctx,spoken?"accepted":"failed","tutorial-exception-fallback");
+        return spoken;
+      }
+    }
+
+    if(!guide?.readCurrent){
+      const ok=speak((PURPOSE[ctx.id]||"")+" "+ending(ctx,true),{onend:finish,onerror:finish});
+      if(!ok)finish();
+      mark(ctx,ok?"accepted":"failed","no-guide");
+      return ok;
+    }
+
+    try{
       const ok=guide.readCurrent({
         oncomplete:()=>setTimeout(()=>{
           const spoken=speak(ending(ctx,true),{onend:finish,onerror:finish});
@@ -133,30 +193,19 @@
         onerror:finish
       });
       if(!ok){
-        const spoken=speak((PURPOSE[ctx.id]||"")+" "+ending(ctx,true),{onend:finish,onerror:finish});
-        if(!spoken)finish();
-      }
-      return !!ok;
-    }
-
-    if(!guide?.readCurrent){
-      const ok=speak((PURPOSE[ctx.id]||"")+" "+ending(ctx,true),{onend:finish,onerror:finish});
-      if(!ok)finish();
-      return ok;
-    }
-
-    const ok=guide.readCurrent({
-      oncomplete:()=>setTimeout(()=>{
         const spoken=speak(ending(ctx,true),{onend:finish,onerror:finish});
         if(!spoken)finish();
-      },100),
-      onerror:finish
-    });
-    if(!ok){
-      const spoken=speak(ending(ctx,true),{onend:finish,onerror:finish});
+        mark(ctx,spoken?"accepted":"failed","guide-false-fallback");
+        return spoken;
+      }
+      mark(ctx,"accepted","guide");
+      return true;
+    }catch(error){
+      const spoken=speak(standardPresentation(ctx),{onend:finish,onerror:finish});
       if(!spoken)finish();
+      mark(ctx,spoken?"accepted":"failed","guide-exception-fallback:"+(error?.message||error));
+      return spoken;
     }
-    return !!ok;
   }
 
   function schedule(reason,force=false,delay=320){
@@ -164,7 +213,7 @@
     timer=setTimeout(()=>{
       timer=null;
       let ctx=null;
-      try{ctx=window.LibcomlairVoiceContext?.current?.()}catch(_){}
+      try{ctx=window.LibcomlairVoiceContext?.current?.()}catch(error){mark(null,"failed","context-error:"+(error?.message||error))}
       present(ctx,force);
     },delay);
   }
@@ -193,7 +242,7 @@
   else schedule("initial",true,550);
 
   window.LibcomlairGuidedPresenter=Object.freeze({
-    version:"v224-6",
+    version:"v224-7",
     presentCurrent:(force=false)=>present(window.LibcomlairVoiceContext?.current?.(),force),
     cancelCurrent,
     restartCurrent:()=>transition("manual-restart",true),
@@ -201,6 +250,7 @@
     visited:()=>[...new Set(history)],
     profileMode:()=>hasVision()?"vision-complete":"standard-guided",
     isPresenting:()=>presenting,
-    currentMode:mode
+    currentMode:mode,
+    lastAttempt:()=>({...lastAttempt})
   });
 })();
