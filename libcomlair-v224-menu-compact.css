@@ -1,0 +1,106 @@
+/* Libcomlair v224 — menu Assistance et réglages plus compact */
+html body #libcomlairGlobalMenuPanel{
+  padding:10px 12px 12px!important;
+  overflow:auto!important;
+}
+
+html body #libcomlairGlobalMenuPanel h2{
+  margin:0 48px 6px 0!important;
+  font-size:1.25rem!important;
+  line-height:1.15!important;
+}
+
+html body #libcomlairGlobalMenuPanel .libcomlair-settings-intro{
+  margin:0 0 7px!important;
+  padding:7px 9px!important;
+  font-size:.92rem!important;
+  line-height:1.22!important;
+  border-radius:12px!important;
+}
+
+html body #libcomlairHelpActionsFrame{
+  margin:0 0 8px!important;
+  padding:8px!important;
+  border:2px solid #c7dadd!important;
+  border-radius:14px!important;
+  background:#f7fbfc!important;
+  box-sizing:border-box!important;
+}
+
+html body #libcomlairHelpActionsFrame h3{
+  margin:0 0 6px!important;
+  padding:0 2px!important;
+  font-size:1.02rem!important;
+  line-height:1.15!important;
+  color:#17252a!important;
+}
+
+html body #libcomlairGlobalMenuPanel .libcomlair-settings-actions{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:5px!important;
+  margin:0!important;
+}
+
+html body #libcomlairGlobalMenuPanel .libcomlair-settings-actions button,
+html body #libcomlairGlobalMenuPanel .technical-menu-panel button{
+  width:100%!important;
+  min-height:44px!important;
+  height:auto!important;
+  margin:0!important;
+  padding:8px 10px!important;
+  border-radius:12px!important;
+  font-size:1rem!important;
+  line-height:1.15!important;
+}
+
+html body #libcomlairGlobalMenuPanel .technical-menu-panel{
+  margin:6px 0 0!important;
+  padding:8px!important;
+  border-radius:14px!important;
+}
+
+html body #libcomlairGlobalMenuPanel .technical-menu-panel>*{
+  margin-top:5px!important;
+  margin-bottom:5px!important;
+}
+
+html body #libcomlairGlobalMenuPanel .technical-menu-panel p,
+html body #libcomlairGlobalMenuPanel .technical-menu-panel .data-note{
+  font-size:.9rem!important;
+  line-height:1.2!important;
+}
+
+html body #libcomlairGlobalMenuClose{
+  top:7px!important;
+  right:9px!important;
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  min-height:38px!important;
+}
+
+@media(max-width:540px){
+  html body #libcomlairGlobalMenuPanel{
+    width:min(92vw,430px)!important;
+    padding:8px 10px 10px!important;
+  }
+  html body #libcomlairGlobalMenuPanel .libcomlair-settings-intro{
+    font-size:.88rem!important;
+    line-height:1.18!important;
+    padding:6px 8px!important;
+  }
+  html body #libcomlairHelpActionsFrame{
+    padding:7px!important;
+    margin-bottom:7px!important;
+  }
+  html body #libcomlairGlobalMenuPanel .libcomlair-settings-actions{
+    gap:4px!important;
+  }
+  html body #libcomlairGlobalMenuPanel .libcomlair-settings-actions button,
+  html body #libcomlairGlobalMenuPanel .technical-menu-panel button{
+    min-height:42px!important;
+    padding:7px 9px!important;
+    font-size:.96rem!important;
+  }
+}
