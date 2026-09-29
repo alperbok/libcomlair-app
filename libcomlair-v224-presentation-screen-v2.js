@@ -2,7 +2,7 @@
   "use strict";
 
   const TITLE_ID="v224PresentationTitleV2";
-  const ITEM_HEIGHT="38px";
+  const ITEM_HEIGHT="42px";
 
   function important(el,name,value){
     if(el)el.style.setProperty(name,value,"important");
@@ -26,8 +26,8 @@
   function compactItems(){
     const text=document.getElementById("libcomlairTutorialText");
     if(!text)return;
-    important(text,"gap","2px");
-    important(text,"padding","5px 8px");
+    important(text,"gap","3px");
+    important(text,"padding","6px 8px");
     important(text,"box-sizing","border-box");
 
     text.querySelectorAll("details.v224-presentation-item").forEach(details=>{
@@ -49,7 +49,7 @@
         important(summary,"min-height",ITEM_HEIGHT);
         important(summary,"max-height",ITEM_HEIGHT);
       }
-      important(summary,"padding","3px 8px");
+      important(summary,"padding","4px 8px");
       important(summary,"margin","0");
       const strong=summary?.querySelector("strong");
       if(strong){
@@ -69,11 +69,11 @@
 
     const actions=document.getElementById("v224TutorialActions");
     if(actions){
-      important(actions,"margin-top","3px");
+      important(actions,"margin-top","4px");
       actions.querySelectorAll(".details-btn").forEach(btn=>{
-        important(btn,"height","46px");
-        important(btn,"min-height","46px");
-        important(btn,"padding","6px 9px");
+        important(btn,"height","50px");
+        important(btn,"min-height","50px");
+        important(btn,"padding","7px 10px");
       });
     }
   }
@@ -104,5 +104,5 @@
   window.addEventListener("pageshow",()=>{render();setTimeout(render,100)});
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",render,{once:true});else render();
 
-  window.LibcomlairPresentationScreenV2=Object.freeze({version:"v224-2",render,compactItems});
+  window.LibcomlairPresentationScreenV2=Object.freeze({version:"v224-3",render,compactItems});
 })();
