@@ -18,6 +18,19 @@
       safeAutoRepair:true
     }),
     Object.freeze({
+      id:"clean-rebuild-preferred-after-layered-regressions",
+      area:"repair-strategy",
+      status:"confirmed",
+      symptom:"Une fonction ou une page recommence à présenter des régressions après plusieurs correctifs successifs appliqués sur les mêmes anciens fichiers ou conteneurs.",
+      cause:"L’empilement de correctifs, observateurs, styles et gestionnaires hérités peut créer des conflits difficiles à isoler et réintroduire d’anciens comportements.",
+      detection:"Si un même défaut réapparaît après plusieurs corrections, vérifier combien de couches CSS/JS modifient encore le même composant et si d’anciens fichiers restent chargés.",
+      repair:"Privilégier une reconstruction propre : créer un nouveau module indépendant avec son propre DOM, son propre style et ses propres événements ; conserver seulement les dépendances nécessaires ; cesser de charger les anciennes couches responsables ; valider le nouveau module avant de supprimer définitivement l’ancien.",
+      files:["test-v224-voice-contextual-v7.html","libcomlair-v224-voice-screen-fresh.js","libcomlair-v224-voice-screen-fresh.css"],
+      commits:["e5d05248f91e73ee853203c5f7b085d922d5187a","43b1546e0adf1c5b699b9464ec67df1ef3775e0c","0bf6eed42919d2997ad5210df7a470e6edee719d"],
+      validation:"Méthode de référence enregistrée le 29/09/2026. À privilégier pour les futures régressions structurelles si la reconstruction de Navigation vocale est validée par l’utilisateur.",
+      safeAutoRepair:false
+    }),
+    Object.freeze({
       id:"guided-assistance-not-starting-on-onboarding",
       area:"voice",
       status:"confirmed",
@@ -69,5 +82,5 @@
     return {totalKnown:items.length,recent:recent.length,validated:recent.filter(x=>x.status==="repaired-and-validated").length,pendingValidation:recent.filter(x=>x.status!=="repaired-and-validated").length,safeAutoRepair:recent.filter(x=>x.safeAutoRepair).length};
   }
 
-  window.LibcomlairRepairCatalog=Object.freeze({version:"v224-9",all,byId,byStatus,validated,autoRepairable,pendingValidation,historical,combined,summary});
+  window.LibcomlairRepairCatalog=Object.freeze({version:"v224-10",all,byId,byStatus,validated,autoRepairable,pendingValidation,historical,combined,summary});
 })();
