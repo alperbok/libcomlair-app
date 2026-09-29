@@ -10,19 +10,20 @@
   ];
 
   const PRESENTATION_BLOCKS=[
-    ["Le but de Libcomlair","Libcomlair aide à trouver des lieux et services avec des informations d’accessibilité plus faciles à comprendre."],
-    ["Votre profil","Au début, vous pouvez indiquer un ou plusieurs besoins d’accessibilité afin d’adapter l’affichage, la lecture et les propositions de l’application."],
-    ["Vos critères","Les critères utiles sont choisis sur la page dédiée Mes besoins d’accessibilité. Cette présentation n’entre pas dans leur détail."],
-    ["La recherche","Vous pouvez ensuite rechercher par catégorie, sous-catégorie, lieu ou ville selon les fonctions disponibles."],
-    ["Les informations affichées","Libcomlair distingue les informations connues, vérifiées ou encore à vérifier. L’application n’invente pas une information d’accessibilité manquante."],
-    ["L’assistance vocale","Le mode Découverte guidée explique les pages et les choix. Le mode Simplifié annonce seulement l’essentiel. Le micro reste disponible pour les commandes vocales."],
-    ["Les mises à jour","Le nombre de lieux, leur classement et certaines informations peuvent évoluer lorsque les sources sont mises à jour."]
+    {heading:"Le but de Libcomlair",body:"Libcomlair aide à trouver des lieux et services avec des informations d’accessibilité plus faciles à comprendre."},
+    {heading:"Votre profil",body:"Au début, vous pouvez indiquer un ou plusieurs besoins d’accessibilité afin d’adapter l’affichage, la lecture et les propositions de l’application."},
+    {heading:"Vos critères",body:"Les critères utiles sont choisis sur la page dédiée Mes besoins d’accessibilité. Cette présentation n’entre pas dans leur détail."},
+    {heading:"La recherche",body:"Vous pouvez ensuite rechercher par catégorie, sous-catégorie, lieu ou ville selon les fonctions disponibles."},
+    {heading:"Les informations affichées",body:"Libcomlair distingue les informations connues, vérifiées ou encore à vérifier. L’application n’invente pas une information d’accessibilité manquante."},
+    {heading:"L’assistance vocale",body:"Le mode Découverte guidée explique les pages et les choix. Le mode Simplifié annonce seulement l’essentiel. Le micro reste disponible pour les commandes vocales."},
+    {heading:"Le menu",body:"Le menu permet d’accéder aux fonctions d’aide et d’utilisation ainsi qu’aux outils techniques de diagnostic et de réparation. Ces deux groupes sont séparés pour rester faciles à comprendre."},
+    {heading:"Les mises à jour",body:"Le nombre de lieux, leur classement et certaines informations peuvent évoluer lorsque les sources sont mises à jour."},
+    {heading:"Fonctions en préparation",body:"Projet : un profil enregistré pourra mémoriser les besoins et critères d’accessibilité. Un projet de carte et GPS accessible est également prévu afin de proposer des itinéraires adaptés, notamment à pied, en fauteuil, en voiture et, lorsque les données le permettent, en transports en commun accessibles.",future:true}
   ];
 
   const PAGE_VOICE={
     "onboarding-home":"Vous êtes sur Accueil et Recherche. Cette page sert uniquement à commencer une recherche. Choisissez Rechercher pour accéder aux catégories de lieux. Vous pouvez aussi utiliser Retour. Le micro reste disponible pour les commandes vocales. Aucun critère d’accessibilité n’est expliqué sur cette page.",
-    "onboarding-voice":"Vous êtes sur Navigation vocale. Cette page permet de choisir le niveau d’assistance. Découverte guidée est conseillé pour une première utilisation et explique les pages et les choix. Simplifié est prévu pour une utilisation courante et annonce seulement l’essentiel. Choisissez un mode puis Valider, ou utilisez Retour.",
-    "onboarding-tutorial":"Vous êtes sur Présentation Libcomlair. Cette page présente le but général de l’application, le rôle du profil, la recherche, les informations affichées et l’assistance vocale. Les critères d’accessibilité ne sont pas détaillés ici : ils sont expliqués uniquement sur la page Mes besoins d’accessibilité. Choisissez Suivant pour continuer ou Retour pour revenir à Navigation vocale."
+    "onboarding-voice":"Vous êtes sur Navigation vocale. Cette page permet de choisir le niveau d’assistance. Découverte guidée est conseillé pour une première utilisation et explique les pages et les choix. Simplifié est prévu pour une utilisation courante et annonce seulement l’essentiel. Choisissez un mode puis Valider, ou utilisez Retour."
   };
 
   function hide(el){if(el)el.style.setProperty("display","none","important")}
@@ -50,8 +51,11 @@
       notice.setAttribute("role","note");
       notice.setAttribute("data-voice-explain","true");
     }
-    notice.replaceChildren();
-    HOME_TEXT.forEach(text=>{const p=document.createElement("p");p.textContent=text;notice.appendChild(p)});
+    if(notice.dataset.v224HomeBuilt!=="1"){
+      notice.dataset.v224HomeBuilt="1";
+      notice.replaceChildren();
+      HOME_TEXT.forEach(text=>{const p=document.createElement("p");p.textContent=text;notice.appendChild(p)});
+    }
 
     const actions=document.getElementById("v224HomeActions");
     if(actions&&actions.parentElement===start){
@@ -59,6 +63,12 @@
       if(notice.parentElement!==start)start.insertBefore(notice,actions);
       else if(notice.previousElementSibling!==label)start.insertBefore(label,notice);
     }
+  }
+
+  function closeOtherPresentationItems(current){
+    document.querySelectorAll("#libcomlairTutorialText details.v224-presentation-item[open]").forEach(item=>{
+      if(item!==current)item.open=false;
+    });
   }
 
   function buildPresentation(){
@@ -69,17 +79,39 @@
     if(!tutorial||!text)return;
     tutorial.setAttribute("aria-label","Présentation Libcomlair");
 
-    if(text.dataset.v224CoherenceBuilt==="1")return;
-    text.dataset.v224CoherenceBuilt="1";
+    if(text.dataset.v224AccordionBuilt==="1")return;
+    text.dataset.v224AccordionBuilt="1";
     text.replaceChildren();
-    PRESENTATION_BLOCKS.forEach(([heading,body])=>{
-      const block=document.createElement("div");
-      block.className="v224-presentation-block";
-      block.setAttribute("data-voice-explain","true");
-      const strong=document.createElement("strong");strong.textContent=heading;
-      block.append(strong,document.createTextNode(body));
-      text.appendChild(block);
+
+    PRESENTATION_BLOCKS.forEach((item,index)=>{
+      const details=document.createElement("details");
+      details.className="v224-presentation-item";
+      details.dataset.presentationIndex=String(index);
+      details.setAttribute("data-voice-explain","true");
+
+      const summary=document.createElement("summary");
+      summary.className="v224-presentation-summary";
+      const heading=document.createElement("strong");
+      heading.textContent=item.heading;
+      summary.appendChild(heading);
+      if(item.future){
+        const badge=document.createElement("span");
+        badge.className="v224-presentation-status";
+        badge.textContent="Projet";
+        summary.appendChild(badge);
+      }
+
+      const body=document.createElement("div");
+      body.className="v224-presentation-body";
+      body.textContent=item.body;
+      details.append(summary,body);
+      details.addEventListener("toggle",()=>{if(details.open)closeOtherPresentationItems(details)});
+      text.appendChild(details);
     });
+  }
+
+  function presentationItems(){
+    return [...document.querySelectorAll("#libcomlairTutorialText details.v224-presentation-item")];
   }
 
   function stabilizeVoice(){
@@ -91,14 +123,13 @@
       return;
     }
 
+    if(body.classList.contains("v224-voice-layout-ready"))return;
     try{window.LibcomlairVoiceModeLayoutFinal?.apply?.()}catch(_){}
-    if(!body.classList.contains("v224-voice-layout-ready")){
-      requestAnimationFrame(()=>{
-        if(document.body?.classList.contains("v224-onboarding-voice")){
-          document.body.classList.add("v224-voice-layout-ready");
-        }
-      });
-    }
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      if(document.body?.classList.contains("v224-onboarding-voice")){
+        document.body.classList.add("v224-voice-layout-ready");
+      }
+    }));
   }
 
   function speakSequence(text,options){
@@ -116,6 +147,47 @@
     next();return true;
   }
 
+  function speakPresentation(options){
+    buildPresentation();
+    const engine=window.LibcomlairVoice;
+    const items=presentationItems();
+    if(!engine?.speak||!items.length)return false;
+    const opts=options||{};
+    items.forEach(item=>item.open=false);
+    let index=0;
+
+    const readNext=()=>{
+      if(index>=items.length){
+        try{opts.oncomplete?.()}catch(_){}
+        return;
+      }
+      const details=items[index];
+      const data=PRESENTATION_BLOCKS[index];
+      closeOtherPresentationItems(details);
+      details.open=true;
+      requestAnimationFrame(()=>{
+        try{details.querySelector("summary")?.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(_){}
+      });
+      const prefix=data.future?"Projet en préparation. ":"";
+      engine.speak(data.heading+". "+prefix+data.body,{
+        rate:.9,
+        onerror:opts.onerror,
+        onend:()=>{
+          details.open=false;
+          index+=1;
+          setTimeout(readNext,120);
+        }
+      });
+    };
+
+    engine.speak("Présentation Libcomlair. Les rubriques vont s’ouvrir une à une pendant la lecture.",{
+      rate:.9,
+      onerror:opts.onerror,
+      onend:readNext
+    });
+    return true;
+  }
+
   function patchGuide(){
     const base=window.LibcomlairVoiceGuide;
     if(!base||base.__v224PageCoherenceProxy)return;
@@ -125,12 +197,17 @@
           if(prop==="__v224PageCoherenceProxy")return true;
           if(prop==="readCurrent")return options=>{
             const id=window.LibcomlairVoiceContext?.current?.().id;
+            if(id==="onboarding-tutorial")return speakPresentation(options);
             const text=PAGE_VOICE[id];
             if(text)return speakSequence(text,options);
             return target.readCurrent(options);
           };
           if(prop==="describe")return ()=>{
             const id=window.LibcomlairVoiceContext?.current?.().id;
+            if(id==="onboarding-tutorial"){
+              const text=PRESENTATION_BLOCKS.map(x=>x.heading+". "+x.body).join(" ");
+              return {contextId:id,title:"Présentation Libcomlair",mode:window.LibcomlairVoiceContext?.getMode?.()||"simplified",controls:[],explanations:PRESENTATION_BLOCKS.map(x=>x.heading+". "+x.body),text};
+            }
             if(PAGE_VOICE[id])return {contextId:id,title:window.LibcomlairVoiceContext?.current?.().title||"",mode:window.LibcomlairVoiceContext?.getMode?.()||"simplified",controls:[],explanations:[PAGE_VOICE[id]],text:PAGE_VOICE[id]};
             return target.describe();
           };
@@ -169,5 +246,5 @@
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",sync,{once:true});else sync();
 
-  window.LibcomlairPageCoherence=Object.freeze({version:"v224-2",sync,buildHome,buildPresentation,stabilizeVoice});
+  window.LibcomlairPageCoherence=Object.freeze({version:"v224-3",sync,buildHome,buildPresentation,stabilizeVoice,speakPresentation});
 })();
