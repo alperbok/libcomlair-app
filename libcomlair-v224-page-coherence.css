@@ -1,6 +1,6 @@
 /* Libcomlair v224 — cohérence finale des écrans d'onboarding */
 
-/* Accueil / Recherche : page compacte */
+/* Accueil / Recherche : page compacte mais suffisamment haute pour occuper l'écran */
 body.v224-onboarding-home #speechChoiceControls,
 body.v224-onboarding-home #v224OnboardingCompactChoices{
   display:none!important;
@@ -21,8 +21,9 @@ body.v224-onboarding-home #v224HomeHowToLabel{
 }
 body.v224-onboarding-home #v224HomeNotice{
   display:block!important;
+  min-height:46vh!important;
   margin:0 14px 10px!important;
-  padding:14px 16px!important;
+  padding:18px 18px!important;
   border:2px solid #c9dadd!important;
   border-radius:16px!important;
   background:#f5fafb!important;
@@ -31,15 +32,15 @@ body.v224-onboarding-home #v224HomeNotice{
 body.v224-onboarding-home #v224HomeNotice h3{display:none!important}
 body.v224-onboarding-home #v224HomeNotice p,
 body.v224-onboarding-home #v224HomeNotice div{
-  margin:0 0 9px!important;
+  margin:0 0 13px!important;
   font-size:1rem!important;
-  line-height:1.3!important;
+  line-height:1.36!important;
 }
 body.v224-onboarding-home #v224HomeNotice p:last-child,
 body.v224-onboarding-home #v224HomeNotice div:last-child{margin-bottom:0!important}
-body.v224-onboarding-home #v224HomeActions{margin-top:8px!important}
+body.v224-onboarding-home #v224HomeActions{margin-top:10px!important}
 
-/* Présentation Libcomlair : une vraie page dédiée */
+/* Présentation Libcomlair : titres compacts qui s'ouvrent à la demande */
 body.v224-onboarding-tutorial #v224TutorialScreenTitle{
   margin-bottom:10px!important;
 }
@@ -51,27 +52,74 @@ body.v224-onboarding-tutorial #libcomlairTutorial{
 body.v224-onboarding-tutorial #libcomlairTutorialText{
   display:flex!important;
   flex-direction:column!important;
-  gap:10px!important;
+  gap:8px!important;
   width:100%!important;
   box-sizing:border-box!important;
 }
-body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-block{
+body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item{
   margin:0!important;
-  padding:10px 12px!important;
-  border:1.5px solid #d2dee1!important;
-  border-radius:12px!important;
+  padding:0!important;
+  border:1.5px solid #cfdadd!important;
+  border-radius:13px!important;
   background:#fff!important;
-  font-size:.98rem!important;
-  line-height:1.3!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
 }
-body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-block strong{
-  display:block!important;
-  margin-bottom:3px!important;
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-summary{
+  min-height:58px!important;
+  padding:13px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  cursor:pointer!important;
+  list-style:none!important;
   color:#17252a!important;
-  font-size:1.02rem!important;
+  font-size:1rem!important;
+  line-height:1.2!important;
+  box-sizing:border-box!important;
 }
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-summary::-webkit-details-marker{display:none!important}
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-summary::after{
+  content:"▶";
+  flex:0 0 auto!important;
+  font-size:.88rem!important;
+}
+body.v224-onboarding-tutorial #libcomlairTutorialText details[open]>.v224-presentation-summary::after{content:"▼"}
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-summary strong{
+  font-size:1.02rem!important;
+  line-height:1.2!important;
+}
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-status{
+  margin-left:auto!important;
+  padding:3px 8px!important;
+  border:1px solid #7daeb5!important;
+  border-radius:999px!important;
+  font-size:.76rem!important;
+  font-weight:700!important;
+  color:#315e66!important;
+  background:#edf7f8!important;
+}
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-body{
+  padding:0 16px 14px!important;
+  font-size:.96rem!important;
+  line-height:1.34!important;
+  color:#26363b!important;
+}
+body.v224-onboarding-tutorial #libcomlairTutorialText details:not([open])>.v224-presentation-body{display:none!important}
 
-/* Empêche l'ancien rendu de Navigation vocale de clignoter avant le nouveau. */
+/* Navigation vocale : rien de l'ancien rendu ne doit apparaître avant la mise en page finale. */
+body.v224-page3-step:not(.v224-onboarding-voice) #visionVoiceControls{
+  display:none!important;
+}
+body.v224-onboarding-voice:not(.v224-voice-layout-ready) #visionVoiceControls{
+  visibility:hidden!important;
+  opacity:0!important;
+}
+body.v224-onboarding-voice.v224-voice-layout-ready #visionVoiceControls{
+  visibility:visible!important;
+  opacity:1!important;
+}
 body.v224-onboarding-voice:not(.v224-voice-layout-ready) #visionAssistanceMode{
   visibility:hidden!important;
 }
@@ -81,9 +129,11 @@ body.v224-onboarding-voice.v224-voice-layout-ready #visionAssistanceMode{
 
 @media(max-width:540px){
   body.v224-onboarding-home #v224HomeHowToLabel{margin:6px 12px 7px!important;padding:10px 13px!important;font-size:1.08rem!important}
-  body.v224-onboarding-home #v224HomeNotice{margin:0 12px 8px!important;padding:12px 14px!important}
+  body.v224-onboarding-home #v224HomeNotice{min-height:44vh!important;margin:0 12px 8px!important;padding:16px 15px!important}
   body.v224-onboarding-home #v224HomeNotice p,
-  body.v224-onboarding-home #v224HomeNotice div{font-size:.96rem!important;line-height:1.27!important;margin-bottom:7px!important}
-  body.v224-onboarding-tutorial #libcomlairTutorialText{gap:7px!important}
-  body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-block{padding:8px 10px!important;font-size:.94rem!important;line-height:1.25!important}
+  body.v224-onboarding-home #v224HomeNotice div{font-size:.96rem!important;line-height:1.32!important;margin-bottom:11px!important}
+  body.v224-onboarding-tutorial #libcomlairTutorialText{gap:6px!important}
+  body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-summary{min-height:54px!important;padding:11px 13px!important}
+  body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-summary strong{font-size:.98rem!important}
+  body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-body{padding:0 13px 12px!important;font-size:.93rem!important;line-height:1.3!important}
 }
