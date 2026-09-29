@@ -40,6 +40,8 @@
     return text(el)||String(el?.value||el?.name||el?.id||"");
   }
 
+  const previousContext=window.LibcomlairVoiceContext;
+
   function currentPage(){
     const b=document.body;
     if(!b)return {id:"page-00-inconnue",contextId:"home",title:"Libcomlair"};
@@ -63,7 +65,8 @@
     if(b.classList.contains("v224-page4-step"))
       return {id:"page-07-categories",contextId:"search",title:"Recherche et catégories"};
 
-    const base=window.LibcomlairVoiceContext?.detect?.();
+    let base=null;
+    try{base=previousContext?.detect?.()||previousContext?.current?.()||null}catch(_){}
     if(base?.id==="category"){
       const cat=norm(base.categoryId||base.categoryLabel||base.title);
       return {id:"page-08-categorie-"+cat,contextId:"category",title:base.title||"Catégorie"};
@@ -126,7 +129,6 @@
     return p;
   }
 
-  const previousContext=window.LibcomlairVoiceContext;
   let lastSignature="";
 
   function contextForPage(){
@@ -148,7 +150,7 @@
 
   if(previousContext){
     window.LibcomlairVoiceContext=Object.freeze({
-      version:"v224-identity-1",
+      version:"v224-identity-2",
       detect:contextForPage,
       current:contextForPage,
       refresh:(reason)=>{annotateAll();return dispatchContext(reason||"identity-refresh")},
@@ -181,6 +183,6 @@
   ["libcomlair-onboarding-step","libcomlair-detail-opened","libcomlair-nearme-result","pageshow","popstate"].forEach(name=>window.addEventListener(name,()=>schedule(name)));
   document.addEventListener("change",()=>schedule("choice-change"),true);
 
-  window.LibcomlairIdentity=Object.freeze({version:"v224-1",currentPage,refresh,annotateAll});
+  window.LibcomlairIdentity=Object.freeze({version:"v224-2",currentPage,refresh,annotateAll});
   refresh("initial");
 })();
