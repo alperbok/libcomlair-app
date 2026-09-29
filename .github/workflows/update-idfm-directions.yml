@@ -7,7 +7,7 @@ on:
       - ".github/workflows/update-idfm-directions.yml"
       - "scripts/import-idfm-directions.py"
   schedule:
-    - cron: "17 6,12,16 * * *"
+    - cron: "17 */3 * * *"
 
 permissions:
   contents: read
