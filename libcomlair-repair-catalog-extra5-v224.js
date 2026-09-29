@@ -42,6 +42,19 @@
       commits:["a654c261d7c99f2e9e2b5eecba9be54b86df4b86"],
       validation:"Règle de présentation commune enregistrée le 29/09/2026. À réutiliser sur tous les nouveaux écrans et lors des prochaines harmonisations.",
       safeAutoRepair:false
+    }),
+    Object.freeze({
+      id:"idfm-refresh-cadence-too-slow",
+      area:"data-updates",
+      status:"repaired-and-validated",
+      symptom:"La mise à jour des directions IDFM était annoncée comme devant être faite toutes les 3 heures mais n’était programmée que trois fois par jour, avec de longues périodes sans actualisation.",
+      cause:"Le cron historique était limité à 06:17, 12:17 et 16:17 UTC au lieu d’utiliser un intervalle régulier de trois heures.",
+      detection:"Contrôler le cron de update-idfm-directions.yml et l’historique GitHub Actions. Une exécution IDFM doit être prévue toutes les trois heures et une alerte doit apparaître si aucune réussite récente n’est disponible.",
+      repair:"Programmer IDFM avec le cron 17 */3 * * *, soit huit exécutions par jour. Régler le watchdog sur une ancienneté maximale de 5 heures afin de tolérer un petit retard GitHub tout en détectant rapidement une exécution manquée ou en échec.",
+      files:[".github/workflows/update-idfm-directions.yml",".github/workflows/watch-data-updates.yml"],
+      commits:["e02c5c652c4c4481b146c73224a619e012feae4b","ed6a8995b81d1b77a41880567bbf1283a09d5844"],
+      validation:"Le changement de cadence a déclenché une mise à jour IDFM réelle qui a produit et enregistré de nouvelles données le 29/09/2026. Le watchdog ajusté a terminé son contrôle avec succès.",
+      safeAutoRepair:true
     })
   ]);
 
@@ -69,5 +82,5 @@
     return {totalKnown:items.length,recent:recent.length,validated:recent.filter(x=>x.status==="repaired-and-validated").length,pendingValidation:recent.filter(x=>x.status!=="repaired-and-validated").length,safeAutoRepair:recent.filter(x=>x.safeAutoRepair).length};
   }
 
-  window.LibcomlairRepairCatalog=Object.freeze({version:"v224-13",all,byId,byStatus,validated,autoRepairable,pendingValidation,historical,combined,summary});
+  window.LibcomlairRepairCatalog=Object.freeze({version:"v224-14",all,byId,byStatus,validated,autoRepairable,pendingValidation,historical,combined,summary});
 })();
