@@ -10,7 +10,8 @@ import json, sys
 from pathlib import Path
 from urllib.request import Request, urlopen
 
-SNCF_API = "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/gares-de-voyageurs/records"\nPAGE_SIZE = 100
+SNCF_API = "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/gares-de-voyageurs/records"
+PAGE_SIZE = 100
 
 OUT = Path("data/gares-officielles.json")
 
