@@ -1,6 +1,8 @@
 (()=>{
   "use strict";
 
+  const WELCOME_MESSAGE="Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver, pour tous. Appuyez sur Suivant pour commencer.";
+
   let stage="listen";
   let boundButton=null;
   let last={time:0,stage:"listen",result:"idle",audioState:""};
@@ -66,9 +68,14 @@
       const unlocked=await render.unlockAudio();
       if(!unlocked)throw new Error("audio-still-locked");
 
-      const presenter=window.LibcomlairGuidedPresenter;
-      if(!presenter?.restartCurrent)throw new Error("presenter-unavailable");
-      const accepted=!!presenter.restartCurrent();
+      const engine=window.LibcomlairVoice;
+      if(!engine?.speak)throw new Error("voice-engine-unavailable");
+      const accepted=!!engine.speak(WELCOME_MESSAGE,{
+        rate:.9,
+        onstart:()=>{remember("welcome-speaking");setNext()},
+        onend:()=>remember("welcome-ended"),
+        onerror:error=>{remember(error?.error||error?.message||error||"welcome-voice-error");setListen()}
+      });
       if(!accepted)throw new Error("welcome-not-accepted");
       remember("welcome-accepted");
     }catch(error){
@@ -99,7 +106,8 @@
   window.addEventListener("libcomlair-voice-status",onVoiceStatus);
 
   window.LibcomlairWelcomeListenFirst=Object.freeze({
-    version:"v224-16",
+    version:"v224-16.1",
+    message:WELCOME_MESSAGE,
     bind,
     stage:()=>stage,
     status:()=>({...last}),
