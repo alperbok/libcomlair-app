@@ -1,0 +1,86 @@
+name: Surveiller les sauvegardes Libcomlair
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/watch-backups.yml"
+  schedule:
+    - cron: "11 */6 * * *"
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+concurrency:
+  group: libcomlair-backup-watchdog
+  cancel-in-progress: true
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier la dernière sauvegarde
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TITLE="[ALERTE] Sauvegarde Libcomlair en problème"
+          NOW=$(date -u +%s)
+          CHECKED_AT=$(date -u +"%Y-%m-%d %H:%M UTC")
+
+          json=$(gh api "/repos/${REPO}/actions/workflows/backup-repository.yml/runs?status=completed&per_page=1")
+          count=$(jq '.workflow_runs | length' <<<"$json")
+          problem=""
+          status=""
+
+          if [[ "$count" -eq 0 ]]; then
+            problem="Aucune sauvegarde terminée trouvée"
+            status="❌ Aucune sauvegarde terminée trouvée"
+          else
+            conclusion=$(jq -r '.workflow_runs[0].conclusion // "inconnue"' <<<"$json")
+            updated_at=$(jq -r '.workflow_runs[0].updated_at' <<<"$json")
+            run_url=$(jq -r '.workflow_runs[0].html_url' <<<"$json")
+            updated_epoch=$(date -u -d "$updated_at" +%s)
+            age_hours=$(( (NOW - updated_epoch) / 3600 ))
+            if [[ "$conclusion" != "success" ]]; then
+              problem="Dernière sauvegarde en échec (${conclusion})"
+              status="❌ Dernière sauvegarde: ${conclusion} — ${run_url}"
+            elif (( age_hours > 30 )); then
+              problem="Dernière sauvegarde trop ancienne (${age_hours} h)"
+              status="⚠️ Dernière sauvegarde réussie il y a ${age_hours} h — ${run_url}"
+            else
+              status="✅ Dernière sauvegarde réussie il y a ${age_hours} h — ${run_url}"
+            fi
+          fi
+
+          issue_number=$(gh api "/repos/${REPO}/issues?state=all&per_page=100" --paginate --jq ".[] | select(.pull_request | not) | select(.title == \"${TITLE}\") | .number" | head -n 1 || true)
+
+          body="## Surveillance des sauvegardes Libcomlair
+
+Dernière vérification : **${CHECKED_AT}**
+
+- ${status}
+
+Le contrôle considère la sauvegarde en retard si aucune réussite n'est détectée depuis plus de 30 heures."
+
+          if [[ -n "$problem" ]]; then
+            if [[ -n "$issue_number" ]]; then
+              gh api --method PATCH "/repos/${REPO}/issues/${issue_number}" -f state="open" -f body="$body" >/dev/null
+            else
+              gh api --method POST "/repos/${REPO}/issues" -f title="$TITLE" -f body="$body" >/dev/null
+            fi
+            echo "$problem"
+          else
+            echo "Sauvegarde normale."
+            if [[ -n "$issue_number" ]]; then
+              state=$(gh api "/repos/${REPO}/issues/${issue_number}" --jq '.state')
+              if [[ "$state" == "open" ]]; then
+                gh api --method POST "/repos/${REPO}/issues/${issue_number}/comments" -f body="✅ La sauvegarde est de nouveau normale au ${CHECKED_AT}." >/dev/null
+                gh api --method PATCH "/repos/${REPO}/issues/${issue_number}" -f state="closed" >/dev/null
+              fi
+            fi
+          fi
