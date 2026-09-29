@@ -42,6 +42,19 @@
       commits:["3b52ab9e77793d053648f1d5a46f1cd28a9c4e47","96dd35cae24f412287da586edecf84571402ab97"],
       validation:"Correctif v2 installé le 29/09/2026 après constat utilisateur du silence total. Nouvelle validation utilisateur attendue.",
       safeAutoRepair:true
+    }),
+    Object.freeze({
+      id:"voice-first-screen-silent-android-audio-locked",
+      area:"voice-audio",
+      status:"confirmed",
+      symptom:"La première page Bienvenue peut rester silencieuse alors que l’assistance vocale fonctionne dès la page suivante.",
+      cause:"Sur certains appareils Android, le contexte Web Audio utilisé par la voix naturelle reste suspendu avant le premier geste de l’utilisateur. Ce problème avait déjà été rencontré dans les versions v187/v188 et était connu dans la carte d’installation, mais n’était pas enregistré comme panne autonome dans le catalogue de réparation.",
+      detection:"À l’ouverture de Libcomlair, vérifier l’état audio du moteur naturel. Si la première page est silencieuse et que l’état Web Audio est suspended ou audio-locked, puis que la voix fonctionne après un premier toucher ou sur la page suivante, cette panne est reconnue.",
+      repair:"Déverrouiller le contexte audio naturel au premier geste utilisateur puis relancer l’annonce de la page Bienvenue si elle n’a pas commencé. Ne jamais basculer vers une synthèse vocale locale ou robotique pour contourner ce verrouillage. Conserver uniquement une voix naturelle et prévoir plusieurs fournisseurs naturels de secours.",
+      files:["libcomlair-render-voice-v195.js","libcomlair-voice-engine-v189.js","libcomlair-v224-guided-presenter.js","libcomlair-ui-v187.js","LIBCOMLAIR-INSTALLATION-MAP.md"],
+      commits:["ef0114d3bed81e2040c3a451275b2326b70d25b2"],
+      validation:"Panne historique confirmée le 29/09/2026 après nouvelle observation utilisateur. Correction de démarrage naturel encore à valider sur la page Bienvenue.",
+      safeAutoRepair:true
     })
   ]);
 
@@ -68,5 +81,5 @@
     return {totalKnown:items.length,recent:recent.length,validated:recent.filter(x=>x.status==="repaired-and-validated").length,pendingValidation:recent.filter(x=>x.status!=="repaired-and-validated").length,safeAutoRepair:recent.filter(x=>x.safeAutoRepair).length};
   }
 
-  window.LibcomlairRepairCatalog=Object.freeze({version:"v224-15",all,byId,byStatus,validated,autoRepairable,pendingValidation,historical,combined,summary});
+  window.LibcomlairRepairCatalog=Object.freeze({version:"v224-16",all,byId,byStatus,validated,autoRepairable,pendingValidation,historical,combined,summary});
 })();
