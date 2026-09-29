@@ -100,7 +100,7 @@
     if(autoTimer){clearTimeout(autoTimer);autoTimer=0}
   }
 
-  function autoRead(step){
+  function ensureGuidedReading(step){
     stopAuto();
     if(mode()!=="discovery"||lastAutoStep===step)return;
     lastAutoStep=step;
@@ -108,8 +108,12 @@
       autoTimer=0;
       const still=step==="voice"?document.body.classList.contains("v224-onboarding-voice"):document.body.classList.contains("v224-onboarding-tutorial");
       if(!still||mode()!=="discovery")return;
-      try{window.LibcomlairVoiceGuide?.readCurrent?.({})}catch(_){}
-    },420);
+      try{
+        const presenter=window.LibcomlairGuidedPresenter;
+        if(presenter?.isPresenting?.())return;
+        presenter?.presentCurrent?.(true);
+      }catch(_){}
+    },700);
   }
 
   function render(){
@@ -121,9 +125,9 @@
     if(inVoice){
       sync();
       requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"auto"}));
-      autoRead("voice");
+      ensureGuidedReading("voice");
     }else if(document.body.classList.contains("v224-onboarding-tutorial")){
-      autoRead("tutorial");
+      ensureGuidedReading("tutorial");
     }else{
       stopAuto();
       lastAutoStep="";
@@ -137,5 +141,5 @@
   window.addEventListener("pageshow",render);
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",render,{once:true});else render();
 
-  window.LibcomlairVoiceScreenFresh=Object.freeze({version:"v224-1",build,render,sync});
+  window.LibcomlairVoiceScreenFresh=Object.freeze({version:"v224-2",build,render,sync});
 })();
