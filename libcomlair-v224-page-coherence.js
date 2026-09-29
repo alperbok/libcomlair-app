@@ -68,6 +68,9 @@
     const text=document.getElementById("libcomlairTutorialText");
     if(!tutorial||!text)return;
     tutorial.setAttribute("aria-label","Présentation Libcomlair");
+
+    if(text.dataset.v224CoherenceBuilt==="1")return;
+    text.dataset.v224CoherenceBuilt="1";
     text.replaceChildren();
     PRESENTATION_BLOCKS.forEach(([heading,body])=>{
       const block=document.createElement("div");
@@ -80,11 +83,22 @@
   }
 
   function stabilizeVoice(){
-    const inVoice=document.body?.classList.contains("v224-onboarding-voice");
-    if(!inVoice){document.body?.classList.remove("v224-voice-layout-ready");return}
-    document.body?.classList.remove("v224-voice-layout-ready");
+    const body=document.body;
+    if(!body)return;
+    const inVoice=body.classList.contains("v224-onboarding-voice");
+    if(!inVoice){
+      if(body.classList.contains("v224-voice-layout-ready"))body.classList.remove("v224-voice-layout-ready");
+      return;
+    }
+
     try{window.LibcomlairVoiceModeLayoutFinal?.apply?.()}catch(_){}
-    requestAnimationFrame(()=>document.body?.classList.add("v224-voice-layout-ready"));
+    if(!body.classList.contains("v224-voice-layout-ready")){
+      requestAnimationFrame(()=>{
+        if(document.body?.classList.contains("v224-onboarding-voice")){
+          document.body.classList.add("v224-voice-layout-ready");
+        }
+      });
+    }
   }
 
   function speakSequence(text,options){
@@ -128,29 +142,32 @@
     }catch(_){}
   }
 
+  let syncQueued=false;
   function sync(){
-    const b=document.body;if(!b)return;
-    if(b.classList.contains("v224-onboarding-home")){
-      buildHome();
-      show(document.getElementById("v224HomeHowToLabel"));
-      show(document.getElementById("v224HomeNotice"));
-    }else{
-      hide(document.getElementById("v224HomeHowToLabel"));
-      hide(document.getElementById("v224HomeNotice"));
-    }
-    buildPresentation();
-    stabilizeVoice();
-    patchGuide();
+    if(syncQueued)return;
+    syncQueued=true;
+    requestAnimationFrame(()=>{
+      syncQueued=false;
+      const b=document.body;if(!b)return;
+      if(b.classList.contains("v224-onboarding-home")){
+        buildHome();
+        show(document.getElementById("v224HomeHowToLabel"));
+        show(document.getElementById("v224HomeNotice"));
+      }else{
+        hide(document.getElementById("v224HomeHowToLabel"));
+        hide(document.getElementById("v224HomeNotice"));
+      }
+      buildPresentation();
+      stabilizeVoice();
+      patchGuide();
+    });
   }
 
-  window.addEventListener("libcomlair-onboarding-step",()=>{sync();setTimeout(sync,40);setTimeout(sync,140)});
-  window.addEventListener("pageshow",()=>{sync();setTimeout(sync,80)});
+  window.addEventListener("libcomlair-onboarding-step",()=>{sync();setTimeout(sync,80)});
+  window.addEventListener("pageshow",()=>{sync();setTimeout(sync,100)});
   window.addEventListener("libcomlair-voice-mode-change",()=>{stabilizeVoice();patchGuide()});
 
-  if(document.body){
-    try{new MutationObserver(()=>sync()).observe(document.body,{attributes:true,attributeFilter:["class"]})}catch(_){}
-  }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",sync,{once:true});else sync();
 
-  window.LibcomlairPageCoherence=Object.freeze({version:"v224-1",sync,buildHome,buildPresentation,stabilizeVoice});
+  window.LibcomlairPageCoherence=Object.freeze({version:"v224-2",sync,buildHome,buildPresentation,stabilizeVoice});
 })();
