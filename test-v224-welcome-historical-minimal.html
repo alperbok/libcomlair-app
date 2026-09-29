@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — diagnostic voix Bienvenue historique</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;padding:24px;line-height:1.5}
+.status{border:1px solid #999;border-radius:12px;padding:16px;margin-top:18px;white-space:pre-wrap;word-break:break-word}
+h1{font-size:1.5rem}
+</style>
+</head>
+<body>
+<h1>Diagnostic minimal — voix de Bienvenue</h1>
+<p>Ne touchez à rien après l’ouverture. Cette page utilise uniquement l’ancien couple validé : Render v195 + moteur vocal v189.</p>
+<div id="status" class="status" aria-live="polite">Chargement des moteurs historiques…</div>
+<script src="libcomlair-render-voice-v195.js?v=historical-minimal-1"></script>
+<script src="libcomlair-voice-engine-v189.js?v=historical-minimal-1"></script>
+<script>
+(()=>{
+  'use strict';
+  const box=document.getElementById('status');
+  let started=false;
+  let ended=false;
+  let attempted=false;
+  let lastEvent='';
+
+  function snapshot(note){
+    let voice=null,render=null;
+    try{voice=window.LibcomlairVoice?.status?.()||null}catch(_){}
+    try{render=window.LibcomlairRenderVoice?.status?.()||null}catch(_){}
+    const lines=[
+      'Test : ancien moteur v195 + v189',
+      'Tentative lancée : '+(attempted?'oui':'non'),
+      'Voix démarrée : '+(started?'oui':'non'),
+      'Lecture terminée : '+(ended?'oui':'non'),
+      'Événement : '+(lastEvent||'aucun'),
+      'Moteur : '+(voice?.version||'indisponible'),
+      'Render : '+(render?.version||'indisponible'),
+      'Audio : '+(render?.audioState||'inconnu'),
+      'Render prêt : '+(render?.ready?'oui':'non'),
+      'État voix : '+(voice?.last?.state||'inconnu'),
+      'Résultat : '+(voice?.lastOutcome?.reason||render?.last?.error||'en attente')
+    ];
+    if(note)lines.push('Note : '+note);
+    box.textContent=lines.join('\n');
+  }
+
+  window.addEventListener('libcomlair-voice-status',e=>{
+    lastEvent='voice:'+String(e?.detail?.state||'');
+    snapshot();
+  });
+  window.addEventListener('libcomlair-render-voice-status',e=>{
+    lastEvent='render:'+String(e?.detail?.state||'');
+    snapshot();
+  });
+
+  snapshot('La tentative automatique part environ 800 ms après le chargement.');
+
+  setTimeout(()=>{
+    attempted=true;
+    snapshot('Tentative automatique en cours.');
+    const ok=window.LibcomlairVoice?.speak?.(
+      'Bienvenue dans Libcomlair. Pour continuer, choisissez Suivant.',
+      {
+        onstart:()=>{started=true;snapshot('La voix historique a démarré automatiquement.');},
+        onend:()=>{ended=true;snapshot('La lecture automatique est terminée.');},
+        onerror:e=>snapshot('Erreur : '+String(e?.error||e?.message||e||'inconnue'))
+      }
+    );
+    if(ok===false)snapshot('Le moteur a refusé la tentative automatique.');
+  },800);
+
+  setTimeout(()=>snapshot('État après 10 secondes.'),10000);
+})();
+</script>
+</body>
+</html>
