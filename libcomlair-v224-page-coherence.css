@@ -1,0 +1,89 @@
+/* Libcomlair v224 — cohérence finale des écrans d'onboarding */
+
+/* Accueil / Recherche : page compacte */
+body.v224-onboarding-home #speechChoiceControls,
+body.v224-onboarding-home #v224OnboardingCompactChoices{
+  display:none!important;
+}
+body.v224-onboarding-home #v224HomeHowToLabel{
+  display:block!important;
+  margin:8px 14px 8px!important;
+  padding:12px 16px!important;
+  border:2px solid #17252a!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  color:#17252a!important;
+  font-size:1.12rem!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+  text-align:left!important;
+  box-sizing:border-box!important;
+}
+body.v224-onboarding-home #v224HomeNotice{
+  display:block!important;
+  margin:0 14px 10px!important;
+  padding:14px 16px!important;
+  border:2px solid #c9dadd!important;
+  border-radius:16px!important;
+  background:#f5fafb!important;
+  box-sizing:border-box!important;
+}
+body.v224-onboarding-home #v224HomeNotice h3{display:none!important}
+body.v224-onboarding-home #v224HomeNotice p,
+body.v224-onboarding-home #v224HomeNotice div{
+  margin:0 0 9px!important;
+  font-size:1rem!important;
+  line-height:1.3!important;
+}
+body.v224-onboarding-home #v224HomeNotice p:last-child,
+body.v224-onboarding-home #v224HomeNotice div:last-child{margin-bottom:0!important}
+body.v224-onboarding-home #v224HomeActions{margin-top:8px!important}
+
+/* Présentation Libcomlair : une vraie page dédiée */
+body.v224-onboarding-tutorial #v224TutorialScreenTitle{
+  margin-bottom:10px!important;
+}
+body.v224-onboarding-tutorial #libcomlairTutorial{
+  width:100%!important;
+  flex:1 1 auto!important;
+  box-sizing:border-box!important;
+}
+body.v224-onboarding-tutorial #libcomlairTutorialText{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-block{
+  margin:0!important;
+  padding:10px 12px!important;
+  border:1.5px solid #d2dee1!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  font-size:.98rem!important;
+  line-height:1.3!important;
+}
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-block strong{
+  display:block!important;
+  margin-bottom:3px!important;
+  color:#17252a!important;
+  font-size:1.02rem!important;
+}
+
+/* Empêche l'ancien rendu de Navigation vocale de clignoter avant le nouveau. */
+body.v224-onboarding-voice:not(.v224-voice-layout-ready) #visionAssistanceMode{
+  visibility:hidden!important;
+}
+body.v224-onboarding-voice.v224-voice-layout-ready #visionAssistanceMode{
+  visibility:visible!important;
+}
+
+@media(max-width:540px){
+  body.v224-onboarding-home #v224HomeHowToLabel{margin:6px 12px 7px!important;padding:10px 13px!important;font-size:1.08rem!important}
+  body.v224-onboarding-home #v224HomeNotice{margin:0 12px 8px!important;padding:12px 14px!important}
+  body.v224-onboarding-home #v224HomeNotice p,
+  body.v224-onboarding-home #v224HomeNotice div{font-size:.96rem!important;line-height:1.27!important;margin-bottom:7px!important}
+  body.v224-onboarding-tutorial #libcomlairTutorialText{gap:7px!important}
+  body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-block{padding:8px 10px!important;font-size:.94rem!important;line-height:1.25!important}
+}
