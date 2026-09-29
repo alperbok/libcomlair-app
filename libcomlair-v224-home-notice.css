@@ -1,0 +1,52 @@
+/* Libcomlair v224 — notice Accueil / Recherche */
+body.v224-onboarding-home #v224OnboardingCompactChoices{
+  display:none!important;
+}
+
+#v224HomeNotice{
+  display:none!important;
+}
+
+body.v224-onboarding-home #v224HomeNotice{
+  display:block!important;
+  margin:2px 0 6px!important;
+  padding:14px 16px!important;
+  border:2px solid #c7dadd!important;
+  border-radius:16px!important;
+  background:#f7fbfc!important;
+  color:#17252a!important;
+  box-sizing:border-box!important;
+}
+
+body.v224-onboarding-home #v224HomeNotice h3{
+  margin:0 0 10px!important;
+  font-size:1.18rem!important;
+  line-height:1.18!important;
+  text-align:left!important;
+}
+
+body.v224-onboarding-home #v224HomeNotice>div{
+  margin:0 0 8px!important;
+  font-size:1rem!important;
+  line-height:1.32!important;
+}
+
+body.v224-onboarding-home #v224HomeNotice>div:last-child{
+  margin-bottom:0!important;
+}
+
+@media(max-width:540px){
+  body.v224-onboarding-home #v224HomeNotice{
+    padding:12px 14px!important;
+    margin:2px 0 5px!important;
+  }
+  body.v224-onboarding-home #v224HomeNotice h3{
+    font-size:1.12rem!important;
+    margin-bottom:8px!important;
+  }
+  body.v224-onboarding-home #v224HomeNotice>div{
+    font-size:.96rem!important;
+    line-height:1.26!important;
+    margin-bottom:6px!important;
+  }
+}
