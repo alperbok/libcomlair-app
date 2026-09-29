@@ -1,0 +1,32 @@
+/* Libcomlair v224 — lecture Présentation centrée avec navigation toujours visible */
+body.v224-onboarding-tutorial.v224-presentation-reading #v224PresentationVoiceOverlay{
+  padding-bottom:110px!important;
+}
+body.v224-onboarding-tutorial.v224-presentation-reading #v224TutorialActions{
+  position:fixed!important;
+  left:14px!important;
+  right:14px!important;
+  bottom:12px!important;
+  z-index:560!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:12px!important;
+  padding:8px!important;
+  background:rgba(255,255,255,.96)!important;
+  border-radius:18px!important;
+  box-shadow:0 4px 18px rgba(0,0,0,.2)!important;
+}
+body.v224-onboarding-tutorial.v224-presentation-reading #libcomlairTutorialText details.v224-presentation-item{
+  pointer-events:none!important;
+}
+@media(max-width:540px){
+  body.v224-onboarding-tutorial.v224-presentation-reading #v224PresentationVoiceOverlay{
+    padding:14px 14px 120px!important;
+  }
+  body.v224-onboarding-tutorial.v224-presentation-reading #v224TutorialActions{
+    left:10px!important;
+    right:10px!important;
+    bottom:8px!important;
+    gap:8px!important;
+  }
+}
