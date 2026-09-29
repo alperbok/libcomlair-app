@@ -9,7 +9,7 @@
 <p>Chargement de Libcomlair…</p>
 <script>
 (async()=>{
-  const source="test-v224-profile-compact.html?voice-contextual-source=95";
+  const source="test-v224-profile-compact.html?voice-contextual-source=96";
   try{
     let html=await fetch(source,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
@@ -19,7 +19,7 @@
     );
     html=html.replace(
       /<script src="libcomlair-repair-engine-v175\.js\?v=[^"]+"><\/script>/,
-      '<script src="libcomlair-repair-catalog-v224.js?v=6"><\/script><script src="libcomlair-repair-catalog-extra-v224.js?v=1"><\/script><script src="libcomlair-repair-catalog-extra2-v224.js?v=1"><\/script><script src="libcomlair-repair-catalog-extra3-v224.js?v=1"><\/script><script src="libcomlair-repair-catalog-extra4-v224.js?v=2"><\/script><script src="libcomlair-repair-catalog-extra5-v224.js?v=1"><\/script><script src="libcomlair-repair-engine-v175.js?v=voice-visual-3"><\/script>'
+      '<script src="libcomlair-repair-catalog-v224.js?v=6"><\/script><script src="libcomlair-repair-catalog-extra-v224.js?v=1"><\/script><script src="libcomlair-repair-catalog-extra2-v224.js?v=1"><\/script><script src="libcomlair-repair-catalog-extra3-v224.js?v=1"><\/script><script src="libcomlair-repair-catalog-extra4-v224.js?v=2"><\/script><script src="libcomlair-repair-catalog-extra5-v224.js?v=2"><\/script><script src="libcomlair-repair-engine-v175.js?v=voice-visual-3"><\/script>'
     );
     html=html.replace(
       "</head>",
