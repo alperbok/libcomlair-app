@@ -1,0 +1,60 @@
+/* Libcomlair v224 — cadre central de lecture pour Présentation Libcomlair */
+#v224PresentationVoiceOverlay{
+  position:fixed!important;
+  inset:0!important;
+  z-index:500!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:18px!important;
+  pointer-events:none!important;
+  box-sizing:border-box!important;
+}
+#v224PresentationVoiceOverlay[hidden]{display:none!important}
+#v224PresentationVoiceCard{
+  width:min(86vw,560px)!important;
+  min-height:220px!important;
+  padding:22px 24px!important;
+  border:3px solid #17252a!important;
+  border-radius:22px!important;
+  background:#f7fbfc!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.28)!important;
+  color:#17252a!important;
+  text-align:left!important;
+  box-sizing:border-box!important;
+}
+#v224PresentationVoiceProgress{
+  margin:0 0 14px!important;
+  color:#507079!important;
+  font-size:.92rem!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+  text-align:center!important;
+}
+#v224PresentationVoiceHeading{
+  margin:0 0 14px!important;
+  color:#17252a!important;
+  font-size:1.34rem!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+  text-align:center!important;
+}
+#v224PresentationVoiceBody{
+  margin:0!important;
+  color:#263438!important;
+  font-size:1.08rem!important;
+  line-height:1.42!important;
+  font-weight:500!important;
+}
+@media(max-width:540px){
+  #v224PresentationVoiceOverlay{padding:14px!important}
+  #v224PresentationVoiceCard{
+    width:90vw!important;
+    min-height:210px!important;
+    padding:20px 18px!important;
+    border-radius:18px!important;
+  }
+  #v224PresentationVoiceProgress{font-size:.9rem!important;margin-bottom:12px!important}
+  #v224PresentationVoiceHeading{font-size:1.24rem!important;margin-bottom:12px!important}
+  #v224PresentationVoiceBody{font-size:1.02rem!important;line-height:1.38!important}
+}
