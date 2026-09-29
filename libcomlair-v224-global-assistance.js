@@ -53,6 +53,27 @@ function visible(el){
   if(!el||el.hidden||el.hasAttribute("hidden"))return false;
   try{const s=getComputedStyle(el),r=el.getBoundingClientRect();return s.display!=="none"&&s.visibility!=="hidden"&&r.width>0&&r.height>0}catch(_){return false}
 }
+function cleanLabel(value){return String(value||"").replace(/[🔊📋🧭⚡🧪🔧]/g," ").replace(/\s+/g," ").trim()}
+function hasVision(){try{const p=JSON.parse(localStorage.getItem("libcomlair-access-profile-v1")||"null");return !!(p&&Array.isArray(p.needs)&&p.needs.includes("vision"))}catch(_){return false}}
+function voiceMode(){try{return window.LibcomlairVoiceContext?.getMode?.()||"simplified"}catch(_){return "simplified"}}
+function menuLabels(){
+  return [...panel.querySelectorAll("button")]
+    .filter(el=>el!==closeButton&&visible(el))
+    .map(el=>cleanLabel(el.getAttribute("aria-label")||el.textContent))
+    .filter(Boolean)
+    .slice(0,12);
+}
+function speakMenu(force=false){
+  const engine=window.LibcomlairVoice;
+  if(!engine?.speak)return false;
+  if(!force&&!hasVision())return false;
+  const labels=menuLabels();
+  const full=voiceMode()==="discovery";
+  const text=full
+    ?"Assistance et réglages. Choix disponibles : "+labels.join(", ")+". Vous pouvez dire le nom d’un choix. Pour quitter, dites Fermer réglages."
+    :"Assistance et réglages. Dites le nom du choix souhaité, ou Fermer réglages.";
+  return !!engine.speak(text,{rate:.9});
+}
 function stillChoosingProfile(){return visible(document.getElementById("libcomlairSplash"))||visible(document.getElementById("accessWelcome"))}
 function shouldShow(){
   if(stillChoosingProfile())return false;
@@ -62,42 +83,21 @@ function shouldShow(){
 function activeBrand(){
   const b=document.body;
   if(b.classList.contains("v224-page5-step")||b.classList.contains("v224-result-tool-page")||b.classList.contains("v224-utility-step")||b.classList.contains("v224-utility-detail")){
-    const el=document.getElementById("v224Page5Brand");
-    if(el)return el;
+    const el=document.getElementById("v224Page5Brand");if(el)return el;
   }
-  if(b.classList.contains("v224-page4-step")){
-    const el=document.getElementById("v224Page4Brand");
-    if(el)return el;
-  }
-  if(b.classList.contains("v224-page3-step")){
-    const el=document.querySelector("#accessNeedsSection .v222-app-brand");
-    if(el)return el;
-  }
-  return [
-    document.querySelector("#accessNeedsSection .v222-app-brand"),
-    document.getElementById("v224Page4Brand"),
-    document.getElementById("v224Page5Brand")
-  ].find(visible)||null;
+  if(b.classList.contains("v224-page4-step")){const el=document.getElementById("v224Page4Brand");if(el)return el}
+  if(b.classList.contains("v224-page3-step")){const el=document.querySelector("#accessNeedsSection .v222-app-brand");if(el)return el}
+  return [document.querySelector("#accessNeedsSection .v222-app-brand"),document.getElementById("v224Page4Brand"),document.getElementById("v224Page5Brand")].find(visible)||null;
 }
-function attachToHeader(){
-  const host=activeBrand();
-  if(!host)return false;
-  if(button.parentElement!==host)host.prepend(button);
-  return true;
-}
-function refresh(){
-  const show=shouldShow();
-  if(show)attachToHeader();
-  button.dataset.visible=show?"true":"false";
-}
-function isVisionDiscovery(){try{const p=JSON.parse(localStorage.getItem("libcomlair-access-profile-v1")||"null");return !!(p&&Array.isArray(p.needs)&&p.needs.includes("vision")&&window.LibcomlairVoiceContext?.getMode?.()==="discovery")}catch(_){return false}}
+function attachToHeader(){const host=activeBrand();if(!host)return false;if(button.parentElement!==host)host.prepend(button);return true}
+function refresh(){const show=shouldShow();if(show)attachToHeader();button.dataset.visible=show?"true":"false"}
 function open(fromVoice=false){
   if(stillChoosingProfile())return false;
   refresh();
   backdrop.hidden=false;
   button.setAttribute("aria-expanded","true");
   requestAnimationFrame(()=>closeButton.focus());
-  if(fromVoice)window.LibcomlairVoice?.speak?.("Assistance et réglages ouvert. Vous pouvez demander une explication de la page, lire les choix, changer le mode vocal, tester l’assistance, lancer le diagnostic ou la réparation automatique.",{rate:.9});
+  setTimeout(()=>speakMenu(!!fromVoice),80);
   return true;
 }
 function close(fromVoice=false){
@@ -120,16 +120,12 @@ function maybePresent(){
   let done=false;try{done=localStorage.getItem(INTRO_KEY)==="1"}catch(_){}
   if(done)return;
   presented=true;
-  setTimeout(()=>{
-    if(!shouldShow())return;
-    open(false);
-    if(isVisionDiscovery())window.LibcomlairVoice?.speak?.("Voici Assistance et réglages. Le bouton trois tirets est placé dans l’en-tête, à gauche du logo. Il défile avec la page. Vous pouvez aussi dire simplement Réglages. Je ne vous le rappellerai pas systématiquement ensuite.",{rate:.9});
-  },300);
+  setTimeout(()=>{if(shouldShow())open(false)},300);
 }
 try{new MutationObserver(maybePresent).observe(document.body,{attributes:true,attributeFilter:["class"]})}catch(_){}
 window.addEventListener("pageshow",maybePresent);
 setInterval(refresh,700);
 maybePresent();
 
-window.LibcomlairGlobalAssistance=Object.freeze({version:"v224-3",open,close,isOpen:()=>!backdrop.hidden,refresh,activeBrand});
+window.LibcomlairGlobalAssistance=Object.freeze({version:"v224-4",open,close,isOpen:()=>!backdrop.hidden,refresh,activeBrand,speakMenu});
 })();
