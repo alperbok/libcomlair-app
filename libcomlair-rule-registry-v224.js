@@ -26,8 +26,17 @@
       domain:"qualite",
       title:"Préserver les fonctions déjà validées",
       rule:"Une correction ciblée ne doit pas casser une fonction déjà validée. Toute modification structurelle doit vérifier les comportements précédemment approuvés.",
-      triggers:["modification","refonte","correctif","nouvelle version","déploiement"],
-      links:["P1-diagnose-before-fix","P1-validate-after-fix","P1-backup-before-risk"]
+      triggers:["modification","refonte","correctif","nouvelle version","déploiement","régression"],
+      links:["P0-logical-regression-path","P1-diagnose-before-fix","P1-validate-after-fix","P1-backup-before-risk"]
+    }),
+    Object.freeze({
+      id:"P0-logical-regression-path",
+      priority:"P0",
+      domain:"qualite",
+      title:"Tester Libcomlair dans l'ordre logique réel après une modification importante",
+      rule:"Après une correction importante, une modification structurelle ou le retour d'une panne connue, refaire un parcours de non-régression dans l'ordre réel d'utilisation de Libcomlair. Ne pas se limiter au seul écran corrigé : vérifier successivement les étapes déjà validées jusqu'aux fonctions potentiellement affectées.",
+      triggers:["test complet","parcours","ordre logique","régression","modification importante","panne réapparue","après correction"],
+      links:["P0-known-issues-first","P0-accessibility-continuity","P0-no-regression","P1-validate-after-fix","P1-voice-context-every-page"]
     }),
     Object.freeze({
       id:"P0-accessibility-continuity",
@@ -36,7 +45,7 @@
       title:"L'accessibilité reste prioritaire sur chaque page",
       rule:"Tout élément visible, sélectionnable ou explicatif important doit rester utilisable ou lisible par l'assistance adaptée, notamment pour le profil Vision.",
       triggers:["page","case","bouton","explication","navigation","vision","accessibilité"],
-      links:["P0-natural-voice-only","P1-voice-context-every-page","P0-no-regression"]
+      links:["P0-natural-voice-only","P1-voice-context-every-page","P0-no-regression","P0-logical-regression-path"]
     }),
     Object.freeze({
       id:"P0-natural-voice-only",
@@ -79,9 +88,9 @@
       priority:"P1",
       domain:"qualite",
       title:"Valider après correction",
-      rule:"Une panne n'est considérée comme réparée et validée qu'après un test ciblé concluant, puis un contrôle des fonctions voisines susceptibles d'avoir été affectées.",
+      rule:"Une panne n'est considérée comme réparée et validée qu'après un test ciblé concluant, puis un contrôle des fonctions voisines et un parcours logique de non-régression lorsque la modification peut toucher plusieurs écrans.",
       triggers:["correctif","réparé","test","validation"],
-      links:["P0-no-regression","P1-record-new-issue"]
+      links:["P0-no-regression","P0-logical-regression-path","P1-record-new-issue"]
     }),
     Object.freeze({
       id:"P1-record-new-issue",
@@ -108,7 +117,7 @@
       title:"Le micro et l'assistance vocale doivent suivre le contexte de chaque page",
       rule:"Chaque page doit annoncer ses éléments utiles et proposer uniquement les commandes correspondant au contexte visible, avec synchronisation entre voix et interface.",
       triggers:["voix","micro","page","navigation","commande"],
-      links:["P0-accessibility-continuity","P0-natural-voice-only","P1-validate-after-fix"]
+      links:["P0-accessibility-continuity","P0-natural-voice-only","P0-logical-regression-path","P1-validate-after-fix"]
     }),
     Object.freeze({
       id:"P1-android-audio-unlock",
@@ -174,5 +183,5 @@
     };
   }
 
-  window.LibcomlairRuleRegistry=Object.freeze({version:"v224-1",all,byId,byPriority,linked,forText,resolve,preflight});
+  window.LibcomlairRuleRegistry=Object.freeze({version:"v224-2",all,byId,byPriority,linked,forText,resolve,preflight});
 })();
