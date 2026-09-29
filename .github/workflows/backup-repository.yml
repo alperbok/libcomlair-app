@@ -1,0 +1,50 @@
+name: Sauvegarder Libcomlair
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/backup-repository.yml"
+  schedule:
+    - cron: "23 2 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: libcomlair-full-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer tout l'historique Git
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Vérifier l'intégrité du dépôt
+        run: git fsck --full
+
+      - name: Construire l'archive complète
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/libcomlair-backup
+          git bundle create /tmp/libcomlair-backup/libcomlair-history.bundle --all
+          git archive --format=tar.gz --output=/tmp/libcomlair-backup/libcomlair-current.tar.gz HEAD
+          git rev-parse HEAD > /tmp/libcomlair-backup/COMMIT.txt
+          git ls-files -z | sort -z | xargs -0 sha256sum > /tmp/libcomlair-backup/SHA256-FILES.txt
+          (cd /tmp/libcomlair-backup && sha256sum libcomlair-history.bundle libcomlair-current.tar.gz > SHA256-ARCHIVES.txt)
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > /tmp/libcomlair-backup/CREATED-UTC.txt
+
+      - name: Publier la sauvegarde vérifiable
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: libcomlair-backup-${{ github.run_id }}
+          path: /tmp/libcomlair-backup/
+          retention-days: 30
+          if-no-files-found: error
+          compression-level: 6
