@@ -1,0 +1,111 @@
+/* Libcomlair v224 — nouvelle coque autonome de Présentation Libcomlair */
+
+body.v224-onboarding-tutorial .v222-app-brand{
+  min-height:96px!important;
+  align-items:flex-start!important;
+  padding-top:0!important;
+}
+
+body.v224-onboarding-tutorial #v224PresentationFreshTitle{
+  position:absolute!important;
+  left:58px!important;
+  right:112px!important;
+  bottom:3px!important;
+  z-index:8!important;
+  margin:0!important;
+  padding:0!important;
+  color:#17252a!important;
+  font-size:1.08rem!important;
+  line-height:1.1!important;
+  font-weight:800!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  pointer-events:none!important;
+}
+
+body.v224-onboarding-tutorial #v224TutorialScreenTitle{
+  display:none!important;
+}
+
+body.v224-onboarding-tutorial .hero.v219-main-zone{
+  gap:3px!important;
+  padding-top:2px!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText{
+  gap:3px!important;
+  padding:8px 10px!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item:not([open]){
+  height:43px!important;
+  min-height:43px!important;
+  max-height:43px!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item:not([open]) > summary.v224-presentation-summary{
+  height:43px!important;
+  min-height:43px!important;
+  max-height:43px!important;
+  padding:5px 9px!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item[open]{
+  height:auto!important;
+  min-height:43px!important;
+  max-height:none!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item[open] > summary.v224-presentation-summary{
+  min-height:43px!important;
+  padding:5px 9px!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-summary strong{
+  font-size:.98rem!important;
+  line-height:1.12!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-status{
+  padding:2px 7px!important;
+  font-size:.78rem!important;
+}
+
+body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-body{
+  padding:2px 10px 9px!important;
+  font-size:.93rem!important;
+  line-height:1.27!important;
+}
+
+body.v224-onboarding-tutorial #v224TutorialActions{
+  margin-top:4px!important;
+}
+
+body.v224-onboarding-tutorial #v224TutorialActions .details-btn{
+  min-height:50px!important;
+  height:50px!important;
+  padding:7px 10px!important;
+}
+
+@media(max-width:540px){
+  body.v224-onboarding-tutorial .v222-app-brand{min-height:92px!important}
+  body.v224-onboarding-tutorial #v224PresentationFreshTitle{
+    left:54px!important;
+    right:108px!important;
+    bottom:2px!important;
+    font-size:1.02rem!important;
+  }
+  body.v224-onboarding-tutorial #libcomlairTutorialText{gap:2px!important;padding:7px 9px!important}
+  body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item:not([open]),
+  body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item:not([open]) > summary.v224-presentation-summary{
+    height:41px!important;
+    min-height:41px!important;
+    max-height:41px!important;
+  }
+  body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item:not([open]) > summary.v224-presentation-summary,
+  body.v224-onboarding-tutorial #libcomlairTutorialText details.v224-presentation-item[open] > summary.v224-presentation-summary{
+    padding:4px 8px!important;
+  }
+  body.v224-onboarding-tutorial #libcomlairTutorialText .v224-presentation-summary strong{font-size:.96rem!important}
+  body.v224-onboarding-tutorial #v224TutorialActions .details-btn{min-height:48px!important;height:48px!important}
+}
