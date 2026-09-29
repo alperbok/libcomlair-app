@@ -6,9 +6,10 @@
   function context(){try{return window.LibcomlairVoiceContext?.current?.()||null}catch(_){return null}}
   function voice(){try{return window.LibcomlairVoice?.status?.()||null}catch(_){return null}}
   function render(){try{return window.LibcomlairRenderVoice?.status?.()||null}catch(_){return null}}
+  function presenterAttempt(){try{return window.LibcomlairGuidedPresenter?.lastAttempt?.()||null}catch(_){return null}}
 
   function snapshot(){
-    const lc=lifecycle(),ctx=context(),v=voice(),r=render();
+    const lc=lifecycle(),ctx=context(),v=voice(),r=render(),attempt=presenterAttempt();
     const history=(lc?.history||[]).slice(-10);
     return {
       pageId:document.body?.dataset?.libcomlairPageId||"non défini",
@@ -17,6 +18,7 @@
       mode:(()=>{try{return window.LibcomlairVoiceContext?.getMode?.()||""}catch(_){return ""}})(),
       presenter:window.LibcomlairGuidedPresenter?.version||"absent",
       presenterActive:!!window.LibcomlairGuidedPresenter?.isPresenting?.(),
+      presenterAttempt:attempt,
       lifecycle:window.LibcomlairVoicePageLifecycle?.version||"absent",
       voiceEngine:window.LibcomlairVoice?.version||"absent",
       voiceState:v?.last?.state||"inconnu",
@@ -41,6 +43,7 @@
       "Moteur vocal : "+s.voiceEngine+" — état : "+s.voiceState,
       "Render : "+s.renderEngine+" — état : "+s.renderState+" — audio : "+s.audioState
     ];
+    if(s.presenterAttempt)lines.push("Dernier essai présentateur : "+norm(s.presenterAttempt.result)+" — "+norm(s.presenterAttempt.reason||"")+" — contexte="+norm(s.presenterAttempt.contextId||""));
     if(s.voiceError)lines.push("Erreur voix : "+s.voiceError);
     if(s.renderError)lines.push("Erreur Render : "+s.renderError);
     if(s.recognitionActive)lines.push("Micro : écoute active");
@@ -71,5 +74,5 @@
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",ensurePanel,{once:true});else ensurePanel();
   window.addEventListener("pageshow",ensurePanel);
-  window.LibcomlairVoicePathDiagnostic=Object.freeze({version:"v224-1",snapshot,format,ensurePanel});
+  window.LibcomlairVoicePathDiagnostic=Object.freeze({version:"v224-2",snapshot,format,ensurePanel});
 })();
