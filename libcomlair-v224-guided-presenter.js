@@ -19,8 +19,8 @@
     profile:"Cette page permet de choisir un ou plusieurs besoins d’accessibilité.",
     "onboarding-needs":"Cette page permet de choisir les critères d’accessibilité qui comptent pour vous.",
     "onboarding-voice":"Cette page permet de choisir le niveau d’assistance vocale.",
-    "onboarding-tutorial":"Cette page explique comment Libcomlair trouve, classe et présente les lieux et leurs informations d’accessibilité.",
-    "onboarding-home":"Cette page est l’accueil avant la recherche de lieux accessibles.",
+    "onboarding-tutorial":"Cette page présente le fonctionnement général de Libcomlair, ses aides et les fonctions prévues pour la suite.",
+    "onboarding-home":"Cette page permet de commencer une recherche de lieu accessible.",
     search:"Cette page permet de choisir une catégorie de lieux. La recherche par lieu ou par ville est facultative pour le moment.",
     category:"Cette page présente les sous-catégories de la catégorie choisie.",
     subcategory:"Cette page présente les outils disponibles pour la recherche en cours.",
@@ -42,13 +42,13 @@
       :"Les dossiers choisis sont ouverts automatiquement. Vous pouvez modifier les critères, puis choisir Valider ou Retour.";
     if(id==="onboarding-voice")return vision
       ?"Il y a deux choix. Découverte guidée est le mode d’apprentissage complet : Libcomlair décrit chaque page, explique les choix et vous indique quoi dire au micro. Simplifié annonce seulement l’essentiel lorsque vous connaissez déjà l’application. Dites Découverte guidée ou Simplifié, puis dites Valider. Vous pouvez aussi dire Retour."
-      :"Choisissez Découverte guidée pour une présentation de l’application, ou Simplifié pour des annonces plus courtes. Puis choisissez Valider ou Retour.";
+      :"Choisissez Découverte guidée pour une présentation détaillée, ou Simplifié pour des annonces plus courtes. Puis choisissez Valider ou Retour.";
     if(id==="onboarding-tutorial")return vision
-      ?"Cette présentation vous apprend le fonctionnement général de Libcomlair. Elle est lue automatiquement en mode Découverte, le bouton Lire n’est donc pas nécessaire pendant cette première visite. La présentation est terminée. Dites Suivant pour continuer, ou Retour pour revenir à Navigation vocale."
+      ?"La présentation est terminée. Dites Suivant pour continuer, ou Retour pour revenir à Navigation vocale."
       :"La présentation est terminée. Choisissez Suivant pour continuer, ou Retour.";
     if(id==="onboarding-home")return vision
-      ?"Sur cet écran, Présentation Libcomlair permet de réécouter la présentation générale. Les deux aides permettent de rouvrir Navigation vocale ou Comment fonctionne Libcomlair. Pour continuer, dites Rechercher. Pour revenir à la page précédente, dites Retour."
-      :"Pour continuer vers la recherche, choisissez Rechercher. Vous pouvez aussi rouvrir les aides ou choisir Retour.";
+      ?"Pour commencer la recherche, dites Rechercher. Pour revenir à la page précédente, dites Retour."
+      :"Pour commencer la recherche, choisissez Rechercher. Vous pouvez aussi utiliser Retour.";
     if(id==="search")return vision
       ?"Le champ Rechercher un lieu ou une ville est facultatif pour le moment. Les catégories disponibles sont annoncées sur cette page. Dites le nom d’une catégorie, par exemple Restaurants ou Transports. Libcomlair vous confirmera la catégorie sélectionnée. Dites ensuite Valider pour l’ouvrir, ou Retour pour revenir à l’accueil."
       :"La recherche par lieu ou ville est facultative pour le moment. Choisissez une catégorie, puis Valider, ou utilisez Retour.";
@@ -90,13 +90,33 @@
     visited.add(k);presenting=true;
     try{window.LibcomlairVoiceGuide?.stop?.()}catch(_){}
 
+    const guide=window.LibcomlairVoiceGuide;
+
+    /* Présentation Libcomlair : toujours lire les accordéons l’un après l’autre,
+       quel que soit le profil sélectionné. */
+    if(ctx.id==="onboarding-tutorial"&&guide?.readCurrent){
+      const ok=guide.readCurrent({
+        oncomplete:()=>{
+          setTimeout(()=>{
+            const spoken=speak(ending(ctx,hasVision()),{onend:()=>{presenting=false},onerror:()=>{presenting=false}});
+            if(!spoken)presenting=false;
+          },100);
+        },
+        onerror:()=>{presenting=false}
+      });
+      if(!ok){
+        const spoken=speak((PURPOSE[ctx.id]||"")+" "+ending(ctx,hasVision()),{onend:()=>{presenting=false},onerror:()=>{presenting=false}});
+        if(!spoken)presenting=false;
+      }
+      return !!ok;
+    }
+
     if(!hasVision()){
       const ok=speak(standardPresentation(ctx),{onend:()=>{presenting=false},onerror:()=>{presenting=false}});
       if(!ok)presenting=false;
       return ok;
     }
 
-    const guide=window.LibcomlairVoiceGuide;
     if(!guide?.readCurrent){
       const ok=speak((PURPOSE[ctx.id]||"")+" "+ending(ctx,true),{onend:()=>{presenting=false},onerror:()=>{presenting=false}});
       if(!ok)presenting=false;
@@ -135,7 +155,7 @@
   setTimeout(()=>schedule(),500);
 
   window.LibcomlairGuidedPresenter=Object.freeze({
-    version:"v224-3",
+    version:"v224-4",
     presentCurrent:(force=false)=>present(window.LibcomlairVoiceContext?.current?.(),force),
     resetVisited:()=>visited.clear(),
     visited:()=>[...visited],
