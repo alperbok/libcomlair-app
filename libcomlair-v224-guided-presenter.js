@@ -16,6 +16,7 @@
   function key(ctx){return [hasVision()?"vision":"standard",ctx?.id||"",ctx?.title||"",ctx?.categoryId||"",ctx?.subcategoryLabel||""].join("|")}
 
   const PURPOSE=Object.freeze({
+    welcome:"Cette page vous souhaite la bienvenue dans Libcomlair et permet de poursuivre vers le choix de vos besoins d’accessibilité.",
     profile:"Cette page permet de choisir un ou plusieurs besoins d’accessibilité.",
     "onboarding-needs":"Cette page permet de choisir les critères d’accessibilité qui comptent pour vous.",
     "onboarding-voice":"Cette page permet de choisir le niveau d’assistance vocale.",
@@ -34,6 +35,7 @@
 
   function ending(ctx,vision){
     const id=ctx?.id||"";
+    if(id==="welcome")return "Pour continuer, choisissez Suivant.";
     if(id==="profile")return vision
       ?"Pour choisir, attendez la fin de l’annonce, appuyez sur le bouton Micro en haut à droite et dites le nom du besoin. Vous pouvez en choisir plusieurs. Quand vos choix sont terminés, dites Valider. Vous pouvez aussi dire Sans adaptation."
       :"Choisissez un ou plusieurs besoins, puis utilisez Valider. Vous pouvez aussi choisir Sans adaptation.";
@@ -85,7 +87,9 @@
   }
 
   function present(ctx,force=false){
-    if(!ctx||!discovery())return false;
+    if(!ctx)return false;
+    const welcome=ctx.id==="welcome";
+    if(!welcome&&!discovery())return false;
     const k=key(ctx);if(!force&&visited.has(k))return false;
     visited.add(k);presenting=true;
     try{window.LibcomlairVoiceGuide?.stop?.()}catch(_){}
@@ -155,7 +159,7 @@
   setTimeout(()=>schedule(),500);
 
   window.LibcomlairGuidedPresenter=Object.freeze({
-    version:"v224-4",
+    version:"v224-5",
     presentCurrent:(force=false)=>present(window.LibcomlairVoiceContext?.current?.(),force),
     resetVisited:()=>visited.clear(),
     visited:()=>[...visited],
