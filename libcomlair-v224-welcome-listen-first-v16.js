@@ -1,7 +1,7 @@
 (()=>{
   "use strict";
 
-  const WELCOME_MESSAGE="Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver, pour tous. Appuyez sur Suivant pour commencer.";
+  const WELCOME_MESSAGE="Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver pour tous. Appuyez sur Suivant pour commencer.";
 
   let stage="listen";
   let boundButton=null;
@@ -46,11 +46,11 @@
     const b=button();if(!b)return;
     stage="next";
     b.dataset.v224WelcomeStage="next";
-    b.classList.add("v224-welcome-listen-first");
+    b.classList.remove("v224-welcome-listen-first");
     b.removeAttribute("aria-busy");
     b.textContent="Suivant";
     b.setAttribute("aria-label","Suivant vers le choix de vos besoins d’accessibilité");
-    remember("welcome-speaking-next-ready");
+    remember("welcome-speaking-original-green-next-restored");
   }
 
   async function activate(event){
@@ -64,17 +64,17 @@
     setLoading();
     try{
       const render=window.LibcomlairRenderVoice;
+      const engine=window.LibcomlairVoice;
       if(!render?.unlockAudio)throw new Error("render-unavailable");
       const unlocked=await render.unlockAudio();
       if(!unlocked)throw new Error("audio-still-locked");
-
-      const engine=window.LibcomlairVoice;
       if(!engine?.speak)throw new Error("voice-engine-unavailable");
-      const accepted=!!engine.speak(WELCOME_MESSAGE,{
+
+      try{window.LibcomlairGuidedPresenter?.cancelCurrent?.()}catch(_){}
+      const accepted=engine.speak(WELCOME_MESSAGE,{
         rate:.9,
-        onstart:()=>{remember("welcome-speaking");setNext()},
-        onend:()=>remember("welcome-ended"),
-        onerror:error=>{remember(error?.error||error?.message||error||"welcome-voice-error");setListen()}
+        onstart:()=>setNext(),
+        onerror:()=>setListen()
       });
       if(!accepted)throw new Error("welcome-not-accepted");
       remember("welcome-accepted");
@@ -106,7 +106,7 @@
   window.addEventListener("libcomlair-voice-status",onVoiceStatus);
 
   window.LibcomlairWelcomeListenFirst=Object.freeze({
-    version:"v224-16.1",
+    version:"v224-16-2",
     message:WELCOME_MESSAGE,
     bind,
     stage:()=>stage,
