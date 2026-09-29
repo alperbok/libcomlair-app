@@ -102,7 +102,8 @@
 
   function stop(){
     generation+=1;
-    try{window.LibcomlairVoice?.stop?.()}catch(_){}
+    clearTimeout(retryTimer);
+    try{window.LibcomlairVoice?.cancel?.()}catch(_){}
     if(running)settle(false);else hideCard();
   }
 
@@ -153,8 +154,7 @@
     }else if(!active&&entryActive){
       entryActive=false;
       autoStarted=false;
-      clearTimeout(retryTimer);
-      if(running)stop();else hideCard();
+      stop();
     }
   }
 
@@ -164,5 +164,5 @@
   if(document.body){try{new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:["class"]})}catch(_){}}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",sync,{once:true});else sync();
 
-  window.LibcomlairPresentationVoiceCard=Object.freeze({version:"v224-1",start,stop,sync,isRunning:()=>running,blocks:()=>BLOCKS.map(x=>({...x}))});
+  window.LibcomlairPresentationVoiceCard=Object.freeze({version:"v224-2",start,stop,sync,isRunning:()=>running,blocks:()=>BLOCKS.map(x=>({...x}))});
 })();
