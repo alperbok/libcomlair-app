@@ -1,0 +1,114 @@
+name: Surveiller les mises à jour automatiques
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/watch-data-updates.yml"
+  schedule:
+    - cron: "41 * * * *"
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+concurrency:
+  group: automatic-updates-watchdog
+  cancel-in-progress: true
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier les mises à jour et gérer l'alerte
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TITLE="[ALERTE] Mise à jour automatique en problème"
+          NOW_EPOCH=$(date -u +%s)
+          CHECKED_AT=$(date -u +"%Y-%m-%d %H:%M UTC")
+          problems=()
+          statuses=()
+
+          check_workflow() {
+            local label="$1"
+            local file="$2"
+            local max_age_hours="$3"
+
+            local json count conclusion updated_at updated_epoch age_hours run_url
+            json=$(gh api "/repos/${REPO}/actions/workflows/${file}/runs?event=schedule&status=completed&per_page=1")
+            count=$(jq '.workflow_runs | length' <<<"$json")
+
+            if [[ "$count" -eq 0 ]]; then
+              statuses+=("❌ ${label} — aucune exécution planifiée terminée trouvée")
+              problems+=("${label}: aucune exécution planifiée terminée trouvée")
+              return
+            fi
+
+            conclusion=$(jq -r '.workflow_runs[0].conclusion // "inconnue"' <<<"$json")
+            updated_at=$(jq -r '.workflow_runs[0].updated_at' <<<"$json")
+            run_url=$(jq -r '.workflow_runs[0].html_url' <<<"$json")
+            updated_epoch=$(date -u -d "$updated_at" +%s)
+            age_hours=$(( (NOW_EPOCH - updated_epoch) / 3600 ))
+
+            if [[ "$conclusion" != "success" ]]; then
+              statuses+=("❌ ${label} — dernière exécution: ${conclusion}, il y a ${age_hours} h — ${run_url}")
+              problems+=("${label}: dernière exécution en échec (${conclusion})")
+            elif (( age_hours > max_age_hours )); then
+              statuses+=("⚠️ ${label} — dernière réussite trop ancienne: ${age_hours} h (limite ${max_age_hours} h) — ${run_url}")
+              problems+=("${label}: aucune réussite récente (${age_hours} h)")
+            else
+              statuses+=("✅ ${label} — dernière réussite il y a ${age_hours} h")
+            fi
+          }
+
+          # Limites adaptées aux programmations actuellement présentes dans le dépôt.
+          # IDFM n'est actuellement lancé que 3 fois/jour, avec une longue coupure nocturne.
+          check_workflow "Directions IDFM" "update-idfm-directions.yml" 18
+          check_workflow "Arrêts Vitalis" "update-arrets-vitalis.yml" 30
+          check_workflow "Acceslibre" "update-acceslibre.yml" 192
+          check_workflow "Gares SNCF" "update-gares.yml" 192
+
+          {
+            echo "## Surveillance des mises à jour Libcomlair"
+            echo
+            echo "Dernière vérification : **${CHECKED_AT}**"
+            echo
+            for line in "${statuses[@]}"; do
+              echo "- ${line}"
+            done
+            echo
+            echo "Ce contrôle vérifie à la fois les **échecs** et les mises à jour qui ne se sont **pas exécutées depuis trop longtemps**."
+          } > /tmp/update-watchdog-body.md
+
+          issue_number=$(gh api "/repos/${REPO}/issues?state=all&per_page=100" --paginate --jq ".[] | select(.pull_request | not) | select(.title == \"${TITLE}\") | .number" | head -n 1 || true)
+
+          if (( ${#problems[@]} > 0 )); then
+            if [[ -n "$issue_number" ]]; then
+              gh api --method PATCH "/repos/${REPO}/issues/${issue_number}" \
+                -f state="open" \
+                -f body="$(cat /tmp/update-watchdog-body.md)" >/dev/null
+            else
+              gh api --method POST "/repos/${REPO}/issues" \
+                -f title="$TITLE" \
+                -f body="$(cat /tmp/update-watchdog-body.md)" >/dev/null
+            fi
+
+            printf 'Problèmes détectés:\n'
+            printf ' - %s\n' "${problems[@]}"
+          else
+            echo "Toutes les mises à jour surveillées sont dans les délais."
+            if [[ -n "$issue_number" ]]; then
+              state=$(gh api "/repos/${REPO}/issues/${issue_number}" --jq '.state')
+              if [[ "$state" == "open" ]]; then
+                gh api --method POST "/repos/${REPO}/issues/${issue_number}/comments" \
+                  -f body="✅ Les mises à jour surveillées sont de nouveau normales au ${CHECKED_AT}. L'alerte est refermée automatiquement." >/dev/null
+                gh api --method PATCH "/repos/${REPO}/issues/${issue_number}" -f state="closed" >/dev/null
+              fi
+            fi
+          fi
