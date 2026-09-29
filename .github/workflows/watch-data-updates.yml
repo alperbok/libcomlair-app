@@ -67,9 +67,10 @@ jobs:
             fi
           }
 
-          # Limites adaptées aux programmations actuellement présentes dans le dépôt.
-          # IDFM n'est actuellement lancé que 3 fois/jour, avec une longue coupure nocturne.
-          check_workflow "Directions IDFM" "update-idfm-directions.yml" 18
+          # Limites adaptées aux cadences de chaque source.
+          # IDFM tourne toutes les 3 heures ; une marge de 5 heures évite les fausses alertes
+          # tout en détectant rapidement une exécution manquée ou en échec.
+          check_workflow "Directions IDFM" "update-idfm-directions.yml" 5
           check_workflow "Arrêts Vitalis" "update-arrets-vitalis.yml" 30
           check_workflow "Acceslibre" "update-acceslibre.yml" 192
           check_workflow "Gares SNCF" "update-gares.yml" 192
