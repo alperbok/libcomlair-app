@@ -2,6 +2,10 @@ name: Mettre à jour les gares officielles
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/update-gares.yml"
+      - "scripts/import-gares.py"
   schedule:
     - cron: "35 4 * * 1"
 
