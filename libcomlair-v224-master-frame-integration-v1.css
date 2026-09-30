@@ -1,4 +1,4 @@
-/* Libcomlair V224 — intégration du cadre maître validé, version de test v1.
+/* Libcomlair V224 — intégration du cadre maître validé, version de test v2.
    Ne s'active qu'à partir de la recherche/catégories et ne modifie pas
    l'accueil, la deuxième page ni le choix des besoins d'accessibilité. */
 
@@ -14,9 +14,7 @@
     box-sizing:border-box!important;
   }
 
-  body.v224-master-frame-active > header{
-    display:none!important;
-  }
+  body.v224-master-frame-active > header{display:none!important}
 
   #v224MasterShell{
     width:100%!important;
@@ -62,7 +60,7 @@
     background:#fff!important;
   }
 
-  #v224MasterHeader #libcomlairGlobalMenuButton{
+  #v224MasterMenu{
     position:absolute!important;
     left:0!important;
     top:4px!important;
@@ -131,7 +129,6 @@
     line-height:1!important;
   }
 
-  /* Le vrai contenu de chaque écran remplit uniquement la zone centrale. */
   body.v224-master-frame-active #v224MasterShell > #mainContent{
     position:relative!important;
     width:100%!important;
@@ -152,21 +149,13 @@
     -webkit-overflow-scrolling:touch!important;
   }
 
-  /* Les logos/micros internes sont remplacés visuellement par l'en-tête du cadre,
-     mais leurs vrais boutons micro sont déplacés et restent fonctionnels. */
   body.v224-master-frame-active #v224Page4Brand,
   body.v224-master-frame-active #v224Page5Brand,
-  body.v224-master-frame-active #v224MapGpsStandaloneHeader{
-    display:none!important;
-  }
+  body.v224-master-frame-active #v224MapGpsStandaloneHeader{display:none!important}
 
-  /* Les anciens boutons de retour restent dans le DOM pour leur logique JS,
-     mais le pied du cadre devient l'interface visible. */
   body.v224-master-frame-active #v224Page4Back,
   body.v224-master-frame-active #v224Page5Back,
-  body.v224-master-frame-active #v224MapGpsNavV33{
-    display:none!important;
-  }
+  body.v224-master-frame-active #v224MapGpsNavV33{display:none!important}
 
   #v224MasterFooter{
     width:100%!important;
@@ -215,7 +204,6 @@
     border:0!important;
   }
 
-  /* Ecran recherche / catégories : supprimer les contraintes de hauteur de l'ancien cadre. */
   body.v224-page4-step.v224-master-frame-active #mainContent > #v224Page4Categories{
     height:auto!important;
     min-height:0!important;
@@ -224,11 +212,8 @@
     grid-template-rows:auto!important;
   }
 
-  body.v224-page4-step.v224-master-frame-active #mainContent > section.hero.v219-main-zone{
-    flex:none!important;
-  }
+  body.v224-page4-step.v224-master-frame-active #mainContent > section.hero.v219-main-zone{flex:none!important}
 
-  /* Sous-catégories, résultats et écrans utilitaires : le défilement se fait uniquement au centre. */
   body.v224-page5-step.v224-master-frame-active #mainContent,
   body.v224-page5-step.v224-results-step.v224-master-frame-active #mainContent,
   body.v224-page5-step.v224-utility-step.v224-master-frame-active #mainContent{
@@ -248,7 +233,6 @@
     box-sizing:border-box!important;
   }
 
-  /* Carte GPS autonome v33-v35 : elle utilise le même centre et le même pied de cadre. */
   body.v224-map-gps-standalone.v224-master-frame-active #v224MapGpsStandalone{
     width:100%!important;
     min-height:0!important;
@@ -282,7 +266,5 @@
     box-sizing:border-box!important;
   }
 
-  body.v224-master-frame-active footer:not(#v224MasterFooter){
-    display:none!important;
-  }
+  body.v224-master-frame-active footer:not(#v224MasterFooter){display:none!important}
 }
