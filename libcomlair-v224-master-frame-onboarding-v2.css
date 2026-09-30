@@ -1,6 +1,5 @@
-/* Cadre maître : adaptation des écrans Navigation vocale, Tutoriel et Accueil / Recherche.
-   Ces écrans restent fixes tant que leur contenu tient dans le cadre.
-   La page Mes besoins garde son contenu inchangé ; seul son micro est harmonisé. */
+/* Cadre maître : adaptation Navigation vocale, Présentation et Accueil / Recherche.
+   Mes besoins garde son contenu : seuls micro et couleurs des actions sont harmonisés. */
 @media (max-width:540px){
   body.v224-master-frame-active.v224-onboarding-voice #v224VoiceModeActions,
   body.v224-master-frame-active.v224-onboarding-tutorial #v224TutorialActions,
@@ -39,16 +38,16 @@
 
   #v224MasterHeader #v224Page3Mic{
     position:absolute!important;
-    right:-4px!important;
-    top:0!important;
+    right:0!important;
+    top:1px!important;
     left:auto!important;
     bottom:auto!important;
-    width:80px!important;
-    height:80px!important;
-    min-width:80px!important;
-    min-height:80px!important;
-    max-width:80px!important;
-    max-height:80px!important;
+    width:74px!important;
+    height:74px!important;
+    min-width:74px!important;
+    min-height:74px!important;
+    max-width:74px!important;
+    max-height:74px!important;
     margin:0!important;
     padding:0!important;
     border:4px solid #fff!important;
@@ -62,7 +61,7 @@
     justify-content:center!important;
     gap:0!important;
     transform:none!important;
-    font-size:1.75rem!important;
+    font-size:1.62rem!important;
     font-weight:800!important;
     line-height:1!important;
     z-index:61!important;
@@ -71,7 +70,7 @@
   #v224MasterHeader #v224Page3Mic span{
     display:block!important;
     margin-top:1px!important;
-    font-size:.86rem!important;
+    font-size:.82rem!important;
     font-weight:800!important;
     line-height:1!important;
   }
@@ -83,20 +82,26 @@
     box-sizing:border-box!important;
   }
 
-  /* Mes besoins d'accessibilité : contenu intact, micro aligné sur les autres pages. */
+  /* Mes besoins : aucune modification du contenu ou de l'ordre. */
   body.v224-onboarding-needs #v222ProfileMic.v222-corner-mic{
-    width:80px!important;
-    height:80px!important;
-    min-width:80px!important;
-    min-height:80px!important;
-    max-width:80px!important;
-    max-height:80px!important;
-    right:-4px!important;
-    top:0!important;
-    font-size:1.75rem!important;
+    width:74px!important;
+    height:74px!important;
+    min-width:74px!important;
+    min-height:74px!important;
+    max-width:74px!important;
+    max-height:74px!important;
+    right:0!important;
+    top:1px!important;
+    font-size:1.62rem!important;
   }
 
   body.v224-onboarding-needs #v222ProfileMic.v222-corner-mic span{
-    font-size:.86rem!important;
+    font-size:.82rem!important;
+  }
+
+  body.v224-onboarding-needs #v224NeedsActions button{
+    background:#0f7784!important;
+    color:#fff!important;
+    border-color:#0f7784!important;
   }
 }
