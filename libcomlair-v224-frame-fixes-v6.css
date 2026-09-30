@@ -1,6 +1,5 @@
-/* Libcomlair V224 — protections communes du cadre maître v6.5.
-   Cette feuille reste la couche finale de compatibilité du cadre : elle ne redéfinit
-   que les comportements qui doivent gagner sur les anciennes règles encore chargées. */
+/* Libcomlair V224 — protections communes du cadre maître v6.6.
+   Cette feuille ne garde que les protections communes encore nécessaires. */
 
 @media (max-width:540px){
   /* Mes besoins utilise le même micro que le reste du cadre. */
@@ -41,14 +40,6 @@
     font-size:.82rem!important;
     font-weight:800!important;
     line-height:1!important;
-  }
-
-  /* Mes besoins : le centre reste prêt à défiler selon la hauteur réelle du contenu. */
-  body.v224-onboarding-needs.v224-master-frame-active #v224MasterShell > #mainContent{
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
-    -webkit-overflow-scrolling:touch!important;
-    touch-action:pan-y!important;
   }
 
   /* Sécurité anti-doublon : tous les anciens blocs de navigation restent invisibles sous le cadre maître. */
