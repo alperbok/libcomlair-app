@@ -4,42 +4,48 @@
   const body=document.body;
   if(!body)return;
 
-  function applyNeedsMic(){
-    if(!body.classList.contains("v224-onboarding-needs"))return;
-    const mic=document.getElementById("v222ProfileMic");
-    if(!mic)return;
+  const nativeIds=[
+    "v224NeedsActions",
+    "v224VoiceModeActions",
+    "v224TutorialActions",
+    "v224HomeActions",
+    "v224Page4Back",
+    "v224Page5Back",
+    "v224MapGpsNavV33"
+  ];
 
-    const size="62px";
-    ["width","height","min-width","min-height","max-width","max-height"].forEach(prop=>{
-      if(mic.style.getPropertyValue(prop)!==size)mic.style.setProperty(prop,size,"important");
+  function hideNativeActions(){
+    if(!body.classList.contains("v224-master-frame-active"))return;
+    nativeIds.forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      el.style.setProperty("display","none","important");
+      el.style.setProperty("visibility","hidden","important");
+      el.style.setProperty("height","0","important");
+      el.style.setProperty("min-height","0","important");
+      el.style.setProperty("max-height","0","important");
+      el.style.setProperty("margin","0","important");
+      el.style.setProperty("padding","0","important");
+      el.style.setProperty("overflow","hidden","important");
     });
-    mic.style.setProperty("right","4px","important");
-    mic.style.setProperty("top","4px","important");
-    mic.style.setProperty("border-width","3px","important");
-    mic.style.setProperty("font-size","1.35rem","important");
-
-    const label=mic.querySelector("span");
-    if(label){
-      label.style.setProperty("margin-top","0","important");
-      label.style.setProperty("font-size",".72rem","important");
-      label.style.setProperty("line-height","1","important");
-    }
   }
 
-  function schedule(){
-    applyNeedsMic();
-    setTimeout(applyNeedsMic,0);
-    setTimeout(applyNeedsMic,100);
-    setTimeout(applyNeedsMic,240);
+  function refresh(){
+    try{window.LibcomlairMasterFrameIntegration?.refresh?.()}catch(_){}
+    hideNativeActions();
+    setTimeout(hideNativeActions,0);
+    setTimeout(hideNativeActions,120);
+    setTimeout(hideNativeActions,300);
   }
 
-  new MutationObserver(schedule).observe(body,{attributes:true,attributeFilter:["class"]});
-  window.addEventListener("libcomlair-onboarding-step",schedule);
-  window.addEventListener("pageshow",schedule);
-  document.addEventListener("click",()=>setTimeout(applyNeedsMic,0),true);
+  new MutationObserver(refresh).observe(body,{attributes:true,attributeFilter:["class"]});
+  window.addEventListener("libcomlair-onboarding-step",refresh);
+  window.addEventListener("libcomlair-map-gps-page",refresh);
+  window.addEventListener("pageshow",refresh);
+  document.addEventListener("click",()=>setTimeout(hideNativeActions,0),true);
 
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule,{once:true});
-  else schedule();
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",refresh,{once:true});
+  else refresh();
 
-  window.LibcomlairFrameFixesV6=Object.freeze({version:"v6.1",refresh:schedule});
+  window.LibcomlairFrameFixesV6=Object.freeze({version:"v6.2-master-frame-consistency",refresh});
 })();
