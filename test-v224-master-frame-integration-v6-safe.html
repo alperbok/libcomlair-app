@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — cadre maître v6 sécurisé</title>
+</head>
+<body>
+<p>Chargement de Libcomlair…</p>
+<script>
+(async()=>{
+  try{
+    let html=await fetch("test-v224-master-frame-integration-v1.html?safe-v6=1",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+
+    html=html.replace("master-frame-source=2","master-frame-source=12");
+    html=html.replace("libcomlair-v224-master-frame-integration-v1.css?v=2","libcomlair-v224-master-frame-integration-v1.css?v=12");
+    html=html.replace("libcomlair-v224-page3-header-guard.js?v=5","libcomlair-v224-page3-header-guard.js?v=6");
+    html=html.replace("libcomlair-v224-master-frame-integration-v1.js?v=2","libcomlair-v224-master-frame-integration-v1.js?v=12");
+    html=html.replace("v16-mapgps-35.3-master-frame-v1","v16-master-frame-v6-safe");
+
+    html=html.replace("</head>",'<link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=12"><link rel="stylesheet" href="libcomlair-v224-frame-fixes-v6.css?v=2"></head>');
+    html=html.replace("</body>",'<script src="libcomlair-v224-frame-fixes-v6.js?v=2"><\/script></body>');
+
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    document.body.innerHTML="<h1>Libcomlair</h1><p>Impossible de charger la version sécurisée.</p><pre></pre>";
+    document.querySelector("pre").textContent=String(err&&err.message||err);
+  }
+})();
+</script>
+</body>
+</html>
