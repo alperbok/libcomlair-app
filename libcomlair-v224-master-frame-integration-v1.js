@@ -11,10 +11,10 @@
   let shell=null,header=null,footer=null,backButton=null,nextButton=null,status=null,menuProxy=null;
   let currentMic=null;
 
-  const isOnboardingFramed=()=>body.classList.contains("v224-onboarding-voice")||body.classList.contains("v224-onboarding-tutorial")||body.classList.contains("v224-onboarding-home");
-  const isFramedScreen=()=>isOnboardingFramed()||body.classList.contains("v224-page4-step")||body.classList.contains("v224-page5-step")||body.classList.contains("v224-map-gps-standalone");
   const isNeeds=()=>body.classList.contains("v224-onboarding-needs");
-  const nativeActionIds=["v224VoiceModeActions","v224TutorialActions","v224HomeActions","v224Page4Back","v224Page5Back","v224MapGpsNavV33"];
+  const isOnboardingFramed=()=>isNeeds()||body.classList.contains("v224-onboarding-voice")||body.classList.contains("v224-onboarding-tutorial")||body.classList.contains("v224-onboarding-home");
+  const isFramedScreen=()=>isOnboardingFramed()||body.classList.contains("v224-page4-step")||body.classList.contains("v224-page5-step")||body.classList.contains("v224-map-gps-standalone");
+  const nativeActionIds=["v224NeedsActions","v224VoiceModeActions","v224TutorialActions","v224HomeActions","v224Page4Back","v224Page5Back","v224MapGpsNavV33"];
 
   function rememberAndMove(el,target){
     if(!el||!target)return;
@@ -45,7 +45,6 @@
 
   function makeShell(){
     if(shell)return;
-
     shell=document.createElement("div");
     shell.id="v224MasterShell";
     shell.setAttribute("aria-label","Cadre Libcomlair");
@@ -99,6 +98,7 @@
   }
 
   function nativeBack(){
+    if(isNeeds())return document.getElementById("v224NeedsBack");
     if(body.classList.contains("v224-onboarding-voice"))return document.getElementById("v224VoiceModeBack");
     if(body.classList.contains("v224-onboarding-tutorial"))return document.getElementById("v224TutorialBack");
     if(body.classList.contains("v224-onboarding-home"))return document.getElementById("v224HomeBack");
@@ -108,6 +108,7 @@
   }
 
   function nativeNext(){
+    if(isNeeds())return document.getElementById("v224NeedsValidate");
     if(body.classList.contains("v224-onboarding-voice"))return document.getElementById("v224VoiceModeValidate");
     if(body.classList.contains("v224-onboarding-tutorial"))return document.getElementById("v224TutorialNext");
     if(body.classList.contains("v224-onboarding-home"))return document.getElementById("v224Page3Next");
@@ -160,17 +161,25 @@
   }
 
   function desiredMic(){
-    if(isOnboardingFramed())return document.getElementById("v224Page3Mic");
+    if(isNeeds())return document.getElementById("v222ProfileMic");
+    if(body.classList.contains("v224-onboarding-voice")||body.classList.contains("v224-onboarding-tutorial")||body.classList.contains("v224-onboarding-home"))return document.getElementById("v224Page3Mic");
     if(body.classList.contains("v224-page5-step"))return document.getElementById("v224Page5Mic");
     return document.getElementById("v224Page4Mic");
   }
 
   function suppressLegacyHeader(){
-    if(!isOnboardingFramed())return;
     const needs=document.getElementById("accessNeedsSection");
-    if(needs){
-      needs.style.setProperty("display","none","important");
-      needs.setAttribute("aria-hidden","true");
+    if(isNeeds()){
+      const brand=needs?.querySelector(".v222-app-brand");
+      if(brand)brand.style.setProperty("display","none","important");
+      needs?.removeAttribute("aria-hidden");
+      return;
+    }
+    if(body.classList.contains("v224-onboarding-voice")||body.classList.contains("v224-onboarding-tutorial")||body.classList.contains("v224-onboarding-home")){
+      if(needs){
+        needs.style.setProperty("display","none","important");
+        needs.setAttribute("aria-hidden","true");
+      }
     }
   }
 
@@ -196,24 +205,6 @@
     });
   }
 
-  function syncNeedsCosmetics(){
-    if(!isNeeds())return;
-    const mic=document.getElementById("v222ProfileMic");
-    if(mic){
-      ["width","height","min-width","min-height","max-width","max-height"].forEach(prop=>mic.style.setProperty(prop,"74px","important"));
-      mic.style.setProperty("right","0","important");
-      mic.style.setProperty("top","1px","important");
-      mic.style.setProperty("font-size","1.62rem","important");
-      const label=mic.querySelector("span");
-      if(label)label.style.setProperty("font-size",".82rem","important");
-    }
-    document.querySelectorAll("#v224NeedsActions button").forEach(btn=>{
-      btn.style.setProperty("background","#0f7784","important");
-      btn.style.setProperty("color","#fff","important");
-      btn.style.setProperty("border-color","#0f7784","important");
-    });
-  }
-
   function syncScrollMode(){
     if(!body.classList.contains("v224-master-frame-active")){
       body.classList.remove("v224-master-scroll-needed");
@@ -224,9 +215,7 @@
       const forced=body.classList.contains("v224-results-step")||body.classList.contains("v224-utility-step");
       const overflow=main.scrollHeight>main.clientHeight+3;
       const needed=forced||overflow;
-      if(body.classList.contains("v224-master-scroll-needed")!==needed){
-        body.classList.toggle("v224-master-scroll-needed",needed);
-      }
+      body.classList.toggle("v224-master-scroll-needed",needed);
     });
   }
 
@@ -242,12 +231,25 @@
     syncScrollMode();
 
     if(nextButton){
-      if(body.classList.contains("v224-map-gps-standalone"))nextButton.setAttribute("aria-label","Suivant, revenir à la recherche");
-      else if(body.classList.contains("v224-onboarding-home"))nextButton.setAttribute("aria-label","Suivant, ouvrir Carte et GPS");
-      else if(body.classList.contains("v224-onboarding-voice"))nextButton.setAttribute("aria-label","Suivant, valider le niveau d’assistance vocale");
-      else if(body.classList.contains("v224-onboarding-tutorial"))nextButton.setAttribute("aria-label","Suivant");
-      else if(body.classList.contains("v224-page5-step"))nextButton.setAttribute("aria-label","Suivant après avoir choisi une sous-catégorie ou une action");
-      else nextButton.setAttribute("aria-label","Suivant après avoir choisi une catégorie");
+      nextButton.textContent="Suivant";
+      if(isNeeds()){
+        nextButton.textContent="Valider";
+        nextButton.setAttribute("aria-label","Valider mes besoins d’accessibilité");
+      }else if(body.classList.contains("v224-onboarding-voice")){
+        nextButton.textContent="Valider";
+        nextButton.setAttribute("aria-label","Valider le niveau d’assistance vocale");
+      }else if(body.classList.contains("v224-onboarding-home")){
+        nextButton.textContent="Rechercher";
+        nextButton.setAttribute("aria-label","Rechercher");
+      }else if(body.classList.contains("v224-map-gps-standalone")){
+        nextButton.setAttribute("aria-label","Suivant, revenir à la recherche");
+      }else if(body.classList.contains("v224-onboarding-tutorial")){
+        nextButton.setAttribute("aria-label","Suivant");
+      }else if(body.classList.contains("v224-page5-step")){
+        nextButton.setAttribute("aria-label","Suivant après avoir choisi une sous-catégorie ou une action");
+      }else{
+        nextButton.setAttribute("aria-label","Suivant après avoir choisi une catégorie");
+      }
     }
   }
 
@@ -277,7 +279,6 @@
   }
 
   function sync(){
-    syncNeedsCosmetics();
     if(isFramedScreen())activate();else deactivate();
   }
 
@@ -330,11 +331,9 @@
   window.addEventListener("libcomlair-onboarding-step",()=>{
     setTimeout(sync,0);
     setTimeout(syncControls,120);
-    setTimeout(syncNeedsCosmetics,160);
   });
   window.addEventListener("resize",()=>setTimeout(syncScrollMode,50));
   document.addEventListener("click",()=>{
-    syncNeedsCosmetics();
     if(body.classList.contains("v224-master-frame-active")){
       setTimeout(syncControls,0);
       setTimeout(syncControls,120);
@@ -345,7 +344,7 @@
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(sync,0),{once:true});else setTimeout(sync,0);
 
   window.LibcomlairMasterFrameIntegration=Object.freeze({
-    version:"v5.1-systematic-audit-stable",
+    version:"v6.2-needs-in-master-frame",
     refresh:sync,
     inspect,
     isActive:()=>body.classList.contains("v224-master-frame-active")
