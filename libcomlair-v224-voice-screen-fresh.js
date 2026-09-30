@@ -72,6 +72,7 @@
     fieldset.append(note,status);
 
     const actions=document.createElement("div");
+    actions.id="v224VoiceFreshActions";
     actions.className="v224-voice-fresh-actions";
     const back=document.createElement("button");
     back.type="button";back.className="details-btn";back.textContent="Retour";
@@ -120,8 +121,18 @@
     const screen=build();
     if(!screen)return;
     const inVoice=document.body.classList.contains("v224-onboarding-voice");
+    const masterActive=document.body.classList.contains("v224-master-frame-active");
     screen.hidden=!inVoice;
     screen.style.setProperty("display",inVoice?"flex":"none","important");
+
+    const actions=screen.querySelector("#v224VoiceFreshActions");
+    if(actions){
+      const hideActions=inVoice&&masterActive;
+      actions.hidden=hideActions;
+      actions.style.setProperty("display",hideActions?"none":"grid","important");
+      actions.style.setProperty("visibility",hideActions?"hidden":"visible","important");
+    }
+
     if(inVoice){
       sync();
       requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"auto"}));
@@ -141,5 +152,5 @@
   window.addEventListener("pageshow",render);
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",render,{once:true});else render();
 
-  window.LibcomlairVoiceScreenFresh=Object.freeze({version:"v224-2",build,render,sync});
+  window.LibcomlairVoiceScreenFresh=Object.freeze({version:"v224-3-master-frame-actions",build,render,sync});
 })();
