@@ -3,24 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v2 stable Samsung</title>
+<title>Libcomlair — cadre maître audit complet</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
 <script>
 (async()=>{
   try{
-    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=7",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
-    html=html.replace("master-frame-source=2","master-frame-source=8");
+    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=8",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+    html=html.replace("master-frame-source=2","master-frame-source=9");
     html=html.replace(
       "libcomlair-v224-master-frame-integration-v1.css?v=2",
-      'libcomlair-v224-master-frame-integration-v1.css?v=8\"><link rel=\"stylesheet\" href=\"libcomlair-v224-master-frame-onboarding-v2.css?v=6'
+      'libcomlair-v224-master-frame-integration-v1.css?v=9\"><link rel=\"stylesheet\" href=\"libcomlair-v224-master-frame-onboarding-v2.css?v=9'
     );
-    html=html.replace("libcomlair-v224-master-frame-integration-v1.js?v=2","libcomlair-v224-master-frame-integration-v1.js?v=8");
-    html=html.replace("v16-mapgps-35.3-master-frame-v1","v16-mapgps-35.3-master-frame-v2-layout-polish-2");
+    html=html.replace("libcomlair-v224-page3-header-guard.js?v=5","libcomlair-v224-page3-header-guard.js?v=6");
+    html=html.replace("libcomlair-v224-master-frame-integration-v1.js?v=2","libcomlair-v224-master-frame-integration-v1.js?v=9");
+    html=html.replace("v16-mapgps-35.3-master-frame-v1","v16-master-frame-systematic-audit-v5");
     document.open();document.write(html);document.close();
   }catch(err){
-    document.body.innerHTML="<h1>Libcomlair</h1><p>Impossible de charger la version de test stable.</p><pre></pre>";
+    document.body.innerHTML="<h1>Libcomlair</h1><p>Impossible de charger la version d’audit du cadre.</p><pre></pre>";
     document.querySelector("pre").textContent=String(err&&err.message||err);
   }
 })();
