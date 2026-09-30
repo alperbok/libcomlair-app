@@ -10,7 +10,8 @@
   let shell=null,header=null,footer=null,backButton=null,nextButton=null,status=null,menuProxy=null;
   let currentMic=null;
 
-  const isLaterScreen=()=>body.classList.contains("v224-page4-step")||body.classList.contains("v224-page5-step")||body.classList.contains("v224-map-gps-standalone");
+  const isOnboardingFramed=()=>body.classList.contains("v224-onboarding-voice")||body.classList.contains("v224-onboarding-tutorial")||body.classList.contains("v224-onboarding-home");
+  const isFramedScreen=()=>isOnboardingFramed()||body.classList.contains("v224-page4-step")||body.classList.contains("v224-page5-step")||body.classList.contains("v224-map-gps-standalone");
 
   function rememberAndMove(el,target){
     if(!el||!target)return;
@@ -95,12 +96,18 @@
   }
 
   function nativeBack(){
+    if(body.classList.contains("v224-onboarding-voice"))return document.getElementById("v224VoiceModeBack");
+    if(body.classList.contains("v224-onboarding-tutorial"))return document.getElementById("v224TutorialBack");
+    if(body.classList.contains("v224-onboarding-home"))return document.getElementById("v224HomeBack");
     if(body.classList.contains("v224-map-gps-standalone"))return document.getElementById("v224MapGpsBackV33");
     if(body.classList.contains("v224-page5-step"))return document.getElementById("v224Page5Back");
     return document.getElementById("v224Page4Back");
   }
 
   function nativeNext(){
+    if(body.classList.contains("v224-onboarding-voice"))return document.getElementById("v224VoiceModeValidate");
+    if(body.classList.contains("v224-onboarding-tutorial"))return document.getElementById("v224TutorialNext");
+    if(body.classList.contains("v224-onboarding-home"))return document.getElementById("v224Page3Next");
     if(body.classList.contains("v224-map-gps-standalone"))return document.getElementById("v224MapGpsNextV33");
     return null;
   }
@@ -151,8 +158,15 @@
   }
 
   function desiredMic(){
+    if(isOnboardingFramed())return document.getElementById("v224Page3Mic");
     if(body.classList.contains("v224-page5-step"))return document.getElementById("v224Page5Mic");
     return document.getElementById("v224Page4Mic");
+  }
+
+  function suppressLegacyHeader(){
+    if(!isOnboardingFramed())return;
+    const needs=document.getElementById("accessNeedsSection");
+    if(needs)needs.style.setProperty("display","none","important");
   }
 
   function syncControls(){
@@ -161,10 +175,17 @@
     const mic=desiredMic();
     if(currentMic&&currentMic!==mic)restore(currentMic);
     if(mic){rememberAndMove(mic,header);currentMic=mic}
+    suppressLegacyHeader();
 
     if(nextButton){
       if(body.classList.contains("v224-map-gps-standalone")){
         nextButton.setAttribute("aria-label","Suivant, revenir à la recherche");
+      }else if(body.classList.contains("v224-onboarding-home")){
+        nextButton.setAttribute("aria-label","Suivant, ouvrir Carte et GPS");
+      }else if(body.classList.contains("v224-onboarding-voice")){
+        nextButton.setAttribute("aria-label","Suivant, valider le niveau d’assistance vocale");
+      }else if(body.classList.contains("v224-onboarding-tutorial")){
+        nextButton.setAttribute("aria-label","Suivant");
       }else if(body.classList.contains("v224-page5-step")){
         nextButton.setAttribute("aria-label","Suivant après avoir choisi une sous-catégorie ou une action");
       }else{
@@ -182,6 +203,7 @@
     }
     if(!body.classList.contains("v224-master-frame-active"))body.classList.add("v224-master-frame-active");
     syncControls();
+    setTimeout(syncControls,0);
   }
 
   function deactivate(){
@@ -196,7 +218,7 @@
   }
 
   function sync(){
-    if(isLaterScreen())activate();else deactivate();
+    if(isFramedScreen())activate();else deactivate();
   }
 
   const observer=new MutationObserver(()=>{
@@ -206,6 +228,7 @@
   observer.observe(body,{attributes:true,attributeFilter:["class"]});
 
   window.addEventListener("libcomlair-map-gps-page",()=>setTimeout(sync,0));
+  window.addEventListener("libcomlair-onboarding-step",()=>setTimeout(sync,0));
   document.addEventListener("click",()=>{
     if(body.classList.contains("v224-master-frame-active"))setTimeout(syncControls,0);
   },true);
@@ -213,7 +236,7 @@
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(sync,0),{once:true});else setTimeout(sync,0);
 
   window.LibcomlairMasterFrameIntegration=Object.freeze({
-    version:"v2-samsung-stable",
+    version:"v3-onboarding-samsung-stable",
     refresh:sync,
     isActive:()=>body.classList.contains("v224-master-frame-active")
   });
