@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.3</title>
+<title>Libcomlair — cadre maître v6.4</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
@@ -12,11 +12,12 @@
   try{
     let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=14",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
-    html=html.replace("master-frame-source=3","master-frame-source=16");
+    html=html.replace("master-frame-source=3","master-frame-source=17");
+    html=html.replace("libcomlair-v224-map-gps-page-v33.css?v=3","libcomlair-v224-map-gps-page-v33.css?v=4");
 
     html=html.replace(
       'libcomlair-v224-master-frame-integration-v1.css?v=2\"></head>',
-      'libcomlair-v224-master-frame-integration-v1.css?v=16\"><link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=16"><link rel="stylesheet" href="libcomlair-v224-frame-fixes-v6.css?v=6\"></head>'
+      'libcomlair-v224-master-frame-integration-v1.css?v=16\"><link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=16"><link rel="stylesheet" href="libcomlair-v224-frame-fixes-v6.css?v=7\"></head>'
     );
 
     html=html.replace(
@@ -31,7 +32,7 @@
 
     html=html.replace(
       "v17-master-source-cleanup",
-      "v17-master-source-cleanup-6.3-final"
+      "v17-master-source-cleanup-6.4-verified-tuning"
     );
 
     document.open();
