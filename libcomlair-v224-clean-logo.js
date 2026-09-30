@@ -2,23 +2,30 @@
   "use strict";
 
   const TARGETS=".v222-profile-brand > .v222-brand-logo, .v222-app-brand > .v222-brand-logo, #v224Page4Brand > .v222-brand-logo, #v224Page5Brand > .v222-brand-logo";
-  const SOURCE="assets/libcomlair-logo-v222.jpg?v=224-clean-source-3";
+  const SOURCE="assets/libcomlair-logo-v222.jpg?v=224-clean-source-4";
 
   function buildCleanLogo(){
     return new Promise((resolve,reject)=>{
       const source=new Image();
       source.onload=()=>{
         try{
-          const sx=Math.round(source.naturalWidth*0.065);
-          const sw=source.naturalWidth-sx;
           const canvas=document.createElement("canvas");
-          canvas.width=sw;
+          canvas.width=source.naturalWidth;
           canvas.height=source.naturalHeight;
           const ctx=canvas.getContext("2d");
           if(!ctx)throw new Error("Canvas indisponible");
+
+          // Conserver le logo complet à sa taille d'origine.
           ctx.fillStyle="#fff";
           ctx.fillRect(0,0,canvas.width,canvas.height);
-          ctx.drawImage(source,sx,0,sw,source.naturalHeight,0,0,sw,source.naturalHeight);
+          ctx.drawImage(source,0,0,source.naturalWidth,source.naturalHeight);
+
+          // Masquer uniquement la petite tache bleue située dans la marge gauche,
+          // sans rogner ni déplacer le contour du logo.
+          const maskWidth=Math.round(source.naturalWidth*0.06);
+          ctx.fillStyle="#fff";
+          ctx.fillRect(0,0,maskWidth,source.naturalHeight);
+
           resolve(canvas.toDataURL("image/jpeg",0.96));
         }catch(err){reject(err)}
       };
@@ -43,6 +50,6 @@
     apply(dataUrl);
     const observer=new MutationObserver(()=>apply(dataUrl));
     observer.observe(document.body,{childList:true,subtree:true});
-    window.LibcomlairCleanLogo=Object.freeze({version:"v224-3",refresh:()=>apply(dataUrl)});
+    window.LibcomlairCleanLogo=Object.freeze({version:"v224-4",refresh:()=>apply(dataUrl)});
   }).catch(()=>{});
 })();
