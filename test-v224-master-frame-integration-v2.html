@@ -10,11 +10,13 @@
 <script>
 (async()=>{
   try{
-    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=3",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
-    html=html.replace("master-frame-source=2","master-frame-source=4");
-    html=html.replace("libcomlair-v224-master-frame-integration-v1.css?v=2","libcomlair-v224-master-frame-integration-v1.css?v=4");
-    html=html.replace("</head>",'<link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=2"></head>');
-    html=html.replace("libcomlair-v224-master-frame-integration-v1.js?v=2","libcomlair-v224-master-frame-integration-v1.js?v=4");
+    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=4",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+    html=html.replace("master-frame-source=2","master-frame-source=5");
+    html=html.replace(
+      'libcomlair-v224-master-frame-integration-v1.css?v=2\"></head>',
+      'libcomlair-v224-master-frame-integration-v1.css?v=5\"><link rel=\"stylesheet\" href=\"libcomlair-v224-master-frame-onboarding-v2.css?v=3\"></head>'
+    );
+    html=html.replace("libcomlair-v224-master-frame-integration-v1.js?v=2","libcomlair-v224-master-frame-integration-v1.js?v=5");
     html=html.replace("v16-mapgps-35.3-master-frame-v1","v16-mapgps-35.3-master-frame-v2-onboarding-samsung-stable");
     document.open();document.write(html);document.close();
   }catch(err){
