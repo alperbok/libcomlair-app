@@ -19,7 +19,7 @@
       button.insertAdjacentElement("afterend",box);
       button.setAttribute("aria-describedby",box.id);
     }
-    box.textContent=text;
+    if(box.textContent!==text)box.textContent=text;
     return box;
   }
 
@@ -27,16 +27,17 @@
     const guided=mode()==="discovery";
     Object.entries(TUTORIALS).forEach(([id,text])=>{
       const box=ensureTutorial(id,text);if(!box)return;
-      box.hidden=!guided;
-      box.setAttribute("aria-hidden",guided?"false":"true");
+      if(box.hidden===guided)box.hidden=!guided;
+      const aria=guided?"false":"true";
+      if(box.getAttribute("aria-hidden")!==aria)box.setAttribute("aria-hidden",aria);
     });
   }
 
   function hideDuplicateBacks(){
     ["v224CloseGlobalMap","v224GpsBack"].forEach(id=>{
       const btn=by(id);if(!btn)return;
-      btn.setAttribute("aria-hidden","true");
-      btn.tabIndex=-1;
+      if(btn.getAttribute("aria-hidden")!=="true")btn.setAttribute("aria-hidden","true");
+      if(btn.tabIndex!==-1)btn.tabIndex=-1;
     });
   }
 
@@ -54,6 +55,7 @@
   }
 
   function sync(){syncTutorials();hideDuplicateBacks()}
+  function boundedStartupSync(){[0,60,180,420,900].forEach(ms=>setTimeout(sync,ms))}
 
   document.addEventListener("click",event=>{
     if(event.target?.closest?.("#v224NearbyMode"))resetViewport("v224GlobalNearbyPanel");
@@ -62,8 +64,7 @@
 
   window.addEventListener("libcomlair-voice-mode-change",()=>setTimeout(syncTutorials,20));
   window.addEventListener("libcomlair-map-gps-page",()=>setTimeout(sync,20));
-  try{new MutationObserver(sync).observe(document.body,{subtree:true,childList:true})}catch(_){}
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(sync,0),{once:true});else setTimeout(sync,0);
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boundedStartupSync,{once:true});else boundedStartupSync();
 
-  window.LibcomlairMapGpsPolishV35=Object.freeze({version:"v224-35",sync,resetViewport});
+  window.LibcomlairMapGpsPolishV35=Object.freeze({version:"v224-35.1",sync,resetViewport});
 })();
