@@ -37,13 +37,13 @@
       id:"welcome-first-natural-voice-startup-delay",
       area:"voice-performance",
       status:"observed-performance",
-      symptom:"Lors de la toute première utilisation, après appui sur Écouter, le message naturel de Bienvenue peut demander environ 2 à 5 secondes avant de commencer. Une réouverture suivante du lien démarre nettement plus vite.",
+      symptom:"Lors de la toute première utilisation, après appui sur Écouter, le message naturel de Bienvenue peut demander environ 2 à 5 secondes avant de commencer. Pendant ce délai, la case de lecture affiche explicitement que le message vocal est en cours de chargement. Dès que la voix démarre, le message est lu automatiquement et la case repasse au bouton vert Suivant. Une réouverture suivante du lien démarre nettement plus vite.",
       cause:"Cause non confirmée. Le comportement est compatible avec un premier chargement à froid : initialisation du chemin Render, première requête réseau et mise en mémoire locale ou distante. Ne pas assimiler ce délai à la panne AudioContext suspended tant que la voix démarre bien après quelques secondes.",
-      detection:"Tester après une ouverture réellement à froid puis réouvrir le même lien. Relever le temps entre l’appui sur Écouter et le début réel de la voix. Si le premier démarrage reste autour de 2 à 5 secondes et les suivants sont plus rapides, classer comme performance à surveiller. Si la voix ne démarre pas du tout, utiliser le diagnostic AudioContext/Render existant.",
-      repair:"Aucune modification de la voix validée pour l’instant. Conserver la voix naturelle et le flux Écouter → Suivant. Toute optimisation future doit préserver la fiabilité, l’absence de voix robotique et les fonctions déjà validées.",
+      detection:"Tester après une ouverture réellement à froid puis réouvrir le même lien. Vérifier trois éléments : l’état de chargement est visible pendant l’attente, la voix démarre ensuite automatiquement, puis la case devient le Suivant vert. Si le premier démarrage reste autour de 2 à 5 secondes et les suivants sont plus rapides, classer comme performance à surveiller. Si la voix ne démarre pas du tout, utiliser le diagnostic AudioContext/Render existant.",
+      repair:"Aucune modification de la voix validée pour l’instant. Conserver la voix naturelle, l’indicateur visuel de chargement et le flux Écouter → chargement → lecture → Suivant vert. Toute optimisation future doit préserver la fiabilité, l’absence de voix robotique et les fonctions déjà validées.",
       files:["libcomlair-render-voice-v196.js","libcomlair-voice-engine-v191.js","libcomlair-v224-welcome-listen-first-v16.js","test-v224-voice-contextual-v16.html"],
       commits:[],
-      validation:"Observation utilisateur le 30/09/2026 : première utilisation environ 2 à 5 secondes avant lecture ; seconde réouverture du lien lue assez rapidement. Fonctionnement jugé correct.",
+      validation:"Validation utilisateur le 30/09/2026 : pendant le chargement initial, un message visible annonce le chargement sur la case de lecture ; une fois la voix prête, elle est lue directement et la case passe au vert en affichant Suivant. Première utilisation environ 2 à 5 secondes ; réouvertures suivantes nettement plus rapides. Fonctionnement jugé correct.",
       safeAutoRepair:false
     })
   ]);
@@ -59,5 +59,5 @@
   function combined(){const map=new Map();historical().forEach(x=>map.set(x.id,x));all().forEach(x=>map.set(x.id,{...x,source:"repair-catalog"}));return [...map.values()]}
   function summary(){const recent=all(),items=combined();return {totalKnown:items.length,recent:recent.length,validated:validated().length,pendingValidation:pendingValidation().length,safeAutoRepair:autoRepairable().length,observedPerformance:recent.filter(x=>x.status==="observed-performance").length,investigatedNotRootCause:recent.filter(x=>x.status==="investigated-not-root-cause").length}}
 
-  window.LibcomlairRepairCatalog=Object.freeze({version:"v224-29",all,byId,byStatus,validated,autoRepairable,pendingValidation,historical,combined,summary});
+  window.LibcomlairRepairCatalog=Object.freeze({version:"v224-30",all,byId,byStatus,validated,autoRepairable,pendingValidation,historical,combined,summary});
 })();
