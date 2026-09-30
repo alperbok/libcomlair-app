@@ -18,6 +18,17 @@
     return nav;
   }
 
+  function closeModes(){
+    try{
+      const globalPanel=by("v224GlobalNearbyPanel");
+      if(globalPanel&&!globalPanel.hidden){by("v224CloseGlobalMap")?.click()}
+    }catch(_){}
+    try{
+      const gpsPanel=by("v224GpsPanel");
+      if(gpsPanel&&!gpsPanel.hidden){by("v224GpsBack")?.click()}
+    }catch(_){}
+  }
+
   function activate(reason="page4"){
     if(!body?.classList.contains("v224-page4-step"))return false;
     const hub=by("v224MapGpsHub");if(!hub)return false;
@@ -33,14 +44,14 @@
   }
 
   function leaveToSearch(){
+    closeModes();
     deactivate("next");
-    try{by("v224GlobalNearbyPanel").hidden=true}catch(_){}
-    try{by("v224GpsPanel").hidden=true}catch(_){}
     requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"auto"}));
     try{window.dispatchEvent(new Event("libcomlair-voice-context-change"))}catch(_){}
   }
 
   function leaveToHome(){
+    closeModes();
     deactivate("back");
     try{window.LibcomlairOnboardingScreens?.showHome?.()}catch(_){}
   }
@@ -78,5 +89,5 @@
   window.addEventListener("pageshow",()=>setTimeout(sync,120));
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(sync,0),{once:true});else setTimeout(sync,0);
 
-  window.LibcomlairMapGpsPage=Object.freeze({version:"v224-32",activate:()=>activate("manual"),leaveToSearch,leaveToHome,isActive:()=>active});
+  window.LibcomlairMapGpsPage=Object.freeze({version:"v224-32.1",activate:()=>activate("manual"),leaveToSearch,leaveToHome,isActive:()=>active});
 })();
