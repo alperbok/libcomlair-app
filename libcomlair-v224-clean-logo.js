@@ -2,14 +2,14 @@
   "use strict";
 
   const TARGETS=".v222-profile-brand > .v222-brand-logo, .v222-app-brand > .v222-brand-logo, #v224Page4Brand > .v222-brand-logo, #v224Page5Brand > .v222-brand-logo";
-  const SOURCE="assets/libcomlair-logo-v222.jpg?v=224-clean-source";
+  const SOURCE="assets/libcomlair-logo-v222.jpg?v=224-clean-source-2";
 
   function buildCleanLogo(){
     return new Promise((resolve,reject)=>{
       const source=new Image();
       source.onload=()=>{
         try{
-          const sx=Math.round(source.naturalWidth*0.055);
+          const sx=Math.round(source.naturalWidth*0.08);
           const sw=source.naturalWidth-sx;
           const canvas=document.createElement("canvas");
           canvas.width=sw;
@@ -43,6 +43,6 @@
     apply(dataUrl);
     const observer=new MutationObserver(()=>apply(dataUrl));
     observer.observe(document.body,{childList:true,subtree:true});
-    window.LibcomlairCleanLogo=Object.freeze({version:"v224-1",refresh:()=>apply(dataUrl)});
+    window.LibcomlairCleanLogo=Object.freeze({version:"v224-2",refresh:()=>apply(dataUrl)});
   }).catch(()=>{});
 })();
