@@ -1,5 +1,6 @@
-/* Libcomlair V224 — protections communes du cadre maître v6.3.
-   Les mises en page de chaque écran restent désormais dans leur fichier canonique. */
+/* Libcomlair V224 — protections communes du cadre maître v6.4.
+   Cette feuille reste la couche finale de compatibilité du cadre : elle ne redéfinit
+   que les comportements qui doivent gagner sur les anciennes règles encore chargées. */
 
 @media (max-width:540px){
   /* Mes besoins utilise le même micro que le reste du cadre. */
@@ -42,6 +43,16 @@
     line-height:1!important;
   }
 
+  /* Mes besoins : le centre est toujours prêt à défiler. Tant que le contenu tient,
+     aucun défilement n'est nécessaire ; dès qu'un deuxième dossier augmente la hauteur,
+     le geste vertical fonctionne sans dépendre d'une classe calculée après coup. */
+  body.v224-onboarding-needs.v224-master-frame-active #v224MasterShell > #mainContent{
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-y!important;
+  }
+
   /* Sécurité anti-doublon : tous les anciens blocs de navigation restent invisibles sous le cadre maître. */
   body.v224-master-frame-active #v224NeedsActions,
   body.v224-master-frame-active #v224VoiceModeActions,
@@ -59,5 +70,34 @@
     margin:0!important;
     padding:0!important;
     overflow:hidden!important;
+  }
+
+  /* Catégories : tailles conservées, petits intervalles constants. On neutralise
+     la précédente répartition space-around qui créait de très grands trous. */
+  body.v224-page4-step.v224-master-frame-active #v224MasterShell > #mainContent > #v224Page4Categories{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    grid-template-rows:auto repeat(4,64px)!important;
+    column-gap:8px!important;
+    row-gap:10px!important;
+    align-content:start!important;
+    padding-bottom:6px!important;
+  }
+
+  body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details{
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
+    margin:0!important;
+  }
+
+  body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details > summary.category{
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
+  }
+
+  body.v224-page4-step.v224-master-frame-active #transportDetails{
+    grid-column:1 / -1!important;
   }
 }
