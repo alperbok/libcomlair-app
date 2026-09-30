@@ -1,5 +1,6 @@
 /* Cadre maître : adaptation des écrans Navigation vocale, Tutoriel et Accueil / Recherche.
-   Ces écrans restent fixes tant que leur contenu tient dans le cadre. */
+   Ces écrans restent fixes tant que leur contenu tient dans le cadre.
+   La page Mes besoins garde son contenu inchangé ; seul son micro est harmonisé. */
 @media (max-width:540px){
   body.v224-master-frame-active.v224-onboarding-voice #v224VoiceModeActions,
   body.v224-master-frame-active.v224-onboarding-tutorial #v224TutorialActions,
@@ -80,5 +81,22 @@
   body.v224-master-frame-active.v224-onboarding-home #speechChoiceControls{
     max-width:100%!important;
     box-sizing:border-box!important;
+  }
+
+  /* Mes besoins d'accessibilité : contenu intact, micro aligné sur les autres pages. */
+  body.v224-onboarding-needs #v222ProfileMic.v222-corner-mic{
+    width:80px!important;
+    height:80px!important;
+    min-width:80px!important;
+    min-height:80px!important;
+    max-width:80px!important;
+    max-height:80px!important;
+    right:-4px!important;
+    top:0!important;
+    font-size:1.75rem!important;
+  }
+
+  body.v224-onboarding-needs #v222ProfileMic.v222-corner-mic span{
+    font-size:.86rem!important;
   }
 }
