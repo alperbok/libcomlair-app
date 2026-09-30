@@ -4,8 +4,8 @@
   const mode=()=>{try{return window.LibcomlairVoiceContext?.getMode?.()||"simplified"}catch(_){return "simplified"}};
 
   const TUTORIALS={
-    v224NearbyMode:"Ce mode affiche les lieux et transports proches grâce à votre position. Depuis une catégorie, Autour de moi restera limité à cette catégorie.",
-    v224GpsMode:"Choisissez un lieu puis « Y aller avec le GPS » pour l’envoyer ici comme destination. Le guidage accessible complet est encore en projet."
+    v224NearbyMode:"Rôle : afficher les lieux et transports proches de votre position.",
+    v224GpsMode:"Rôle : préparer un trajet vers le lieu que vous avez choisi."
   };
 
   function ensureTutorial(id,text){
@@ -66,5 +66,5 @@
   window.addEventListener("libcomlair-map-gps-page",()=>setTimeout(sync,20));
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boundedStartupSync,{once:true});else boundedStartupSync();
 
-  window.LibcomlairMapGpsPolishV35=Object.freeze({version:"v224-35.2",sync,resetViewport});
+  window.LibcomlairMapGpsPolishV35=Object.freeze({version:"v224-35.3",sync,resetViewport});
 })();
