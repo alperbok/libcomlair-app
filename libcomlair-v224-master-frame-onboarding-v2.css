@@ -1,5 +1,5 @@
 /* Cadre maître : adaptation des écrans Navigation vocale, Tutoriel et Accueil / Recherche.
-   Les écrans Bienvenue, choix du profil et Mes besoins d'accessibilité restent inchangés. */
+   Ces écrans restent fixes tant que leur contenu tient dans le cadre. */
 @media (max-width:540px){
   body.v224-master-frame-active.v224-onboarding-voice #v224VoiceModeActions,
   body.v224-master-frame-active.v224-onboarding-tutorial #v224TutorialActions,
@@ -13,7 +13,7 @@
     display:block!important;
     height:100%!important;
     min-height:0!important;
-    overflow-y:auto!important;
+    overflow-y:hidden!important;
     overflow-x:hidden!important;
   }
 
