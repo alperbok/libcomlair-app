@@ -1,5 +1,5 @@
-/* Libcomlair V224 — intégration du cadre maître validé, finition v4.
-   Le cadre central reste fixe par défaut. Le défilement est réservé aux pages longues. */
+/* Libcomlair V224 — cadre maître, finition systématique v5.
+   Pages courtes fixes. Défilement activé seulement lorsqu'un débordement réel est détecté. */
 
 @media (max-width:540px){
   body.v224-master-frame-active{
@@ -26,7 +26,7 @@
     border-radius:22px!important;
     background:#fff!important;
     display:grid!important;
-    grid-template-rows:88px minmax(0,1fr) 60px!important;
+    grid-template-rows:82px minmax(0,1fr) 60px!important;
     overflow:hidden!important;
     box-sizing:border-box!important;
   }
@@ -35,9 +35,9 @@
     position:relative!important;
     width:100%!important;
     min-width:0!important;
-    min-height:88px!important;
+    min-height:82px!important;
     margin:0!important;
-    padding:0 78px 3px 38px!important;
+    padding:0 76px 3px 38px!important;
     border:0!important;
     border-bottom:1px solid #eef4f5!important;
     background:#fff!important;
@@ -90,16 +90,16 @@
   #v224MasterHeader #v224Page4Mic,
   #v224MasterHeader #v224Page5Mic{
     position:absolute!important;
-    right:-4px!important;
-    top:0!important;
+    right:0!important;
+    top:1px!important;
     left:auto!important;
     bottom:auto!important;
-    width:80px!important;
-    height:80px!important;
-    min-width:80px!important;
-    min-height:80px!important;
-    max-width:80px!important;
-    max-height:80px!important;
+    width:74px!important;
+    height:74px!important;
+    min-width:74px!important;
+    min-height:74px!important;
+    max-width:74px!important;
+    max-height:74px!important;
     margin:0!important;
     padding:0!important;
     border:4px solid #fff!important;
@@ -113,7 +113,7 @@
     justify-content:center!important;
     gap:0!important;
     transform:none!important;
-    font-size:1.75rem!important;
+    font-size:1.62rem!important;
     font-weight:800!important;
     line-height:1!important;
     z-index:61!important;
@@ -123,7 +123,7 @@
   #v224MasterHeader #v224Page5Mic span{
     display:block!important;
     margin-top:1px!important;
-    font-size:.86rem!important;
+    font-size:.82rem!important;
     font-weight:800!important;
     line-height:1!important;
   }
@@ -148,13 +148,21 @@
     -webkit-overflow-scrolling:touch!important;
   }
 
+  body.v224-master-frame-active.v224-master-scroll-needed #v224MasterShell > #mainContent{
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+  }
+
   body.v224-master-frame-active #v224Page4Brand,
   body.v224-master-frame-active #v224Page5Brand,
   body.v224-master-frame-active #v224MapGpsStandaloneHeader{display:none!important}
 
   body.v224-master-frame-active #v224Page4Back,
   body.v224-master-frame-active #v224Page5Back,
-  body.v224-master-frame-active #v224MapGpsNavV33{display:none!important}
+  body.v224-master-frame-active #v224MapGpsNavV33,
+  body.v224-master-frame-active #v224VoiceModeActions,
+  body.v224-master-frame-active #v224TutorialActions,
+  body.v224-master-frame-active #v224HomeActions{display:none!important}
 
   #v224MasterFooter{
     width:100%!important;
@@ -203,7 +211,7 @@
     border:0!important;
   }
 
-  /* Page Recherche / Catégories : le contenu utilise toute la hauteur disponible. */
+  /* Recherche / Catégories : tout l'espace central est utilisé. */
   body.v224-page4-step.v224-master-frame-active #mainContent{
     display:flex!important;
     flex-direction:column!important;
@@ -214,12 +222,12 @@
   }
 
   body.v224-page4-step.v224-master-frame-active #mainContent > #v224Page4Categories{
-    flex:1 1 auto!important;
-    height:auto!important;
+    flex:1 1 0!important;
+    height:100%!important;
     min-height:0!important;
     display:grid!important;
     grid-template-columns:1fr 1fr!important;
-    grid-template-rows:auto repeat(4,minmax(54px,1fr))!important;
+    grid-template-rows:auto repeat(4,minmax(0,1fr))!important;
     gap:7px 8px!important;
     align-content:stretch!important;
   }
@@ -227,6 +235,7 @@
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > h2{
     grid-column:1 / -1!important;
     align-self:end!important;
+    margin:2px 0 4px!important;
   }
 
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details{
@@ -246,16 +255,56 @@
     grid-column:1 / -1!important;
   }
 
-  /* Pages longues : défilement autorisé uniquement ici pour le moment. */
-  body.v224-page5-step.v224-master-frame-active #mainContent,
-  body.v224-page5-step.v224-results-step.v224-master-frame-active #mainContent,
-  body.v224-page5-step.v224-utility-step.v224-master-frame-active #mainContent{
-    height:100%!important;
-    min-height:0!important;
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
+  /* Sous-catégories : remplir le centre avant d'autoriser un défilement. */
+  body.v224-page5-step:not(.v224-results-step):not(.v224-utility-step).v224-master-frame-active #mainContent{
+    display:flex!important;
+    flex-direction:column!important;
+    overflow-y:hidden!important;
   }
 
+  body.v224-page5-step:not(.v224-results-step):not(.v224-utility-step).v224-master-frame-active #v224Page4Categories{
+    flex:1 1 0!important;
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:7px!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-page5-step:not(.v224-results-step):not(.v224-utility-step).v224-master-frame-active #v224Page5Header{
+    flex:0 0 auto!important;
+  }
+
+  body.v224-page5-step:not(.v224-results-step):not(.v224-utility-step).v224-master-frame-active #v224Page4Categories > details.v224-page5-active{
+    flex:1 1 0!important;
+    min-height:0!important;
+    height:100%!important;
+    display:flex!important;
+    flex-direction:column!important;
+    margin:0!important;
+  }
+
+  body.v224-page5-step:not(.v224-results-step):not(.v224-utility-step).v224-master-frame-active #v224Page4Categories > details.v224-page5-active > .grid{
+    flex:1 1 0!important;
+    min-height:0!important;
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    grid-auto-rows:minmax(56px,1fr)!important;
+    gap:8px!important;
+    align-content:stretch!important;
+  }
+
+  body.v224-page5-step:not(.v224-results-step):not(.v224-utility-step).v224-master-frame-active .subcategory-button{
+    width:100%!important;
+    height:100%!important;
+    min-height:56px!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Résultats et outils peuvent être longs : la classe runtime décide du scroll. */
   body.v224-page5-step.v224-master-frame-active #v224Page4Categories,
   body.v224-page5-step.v224-results-step.v224-master-frame-active #v224ResultsSection,
   body.v224-page5-step.v224-utility-step.v224-master-frame-active #v224MapSection,
