@@ -139,8 +139,9 @@
 
   function updateNearMeLabel(){
     const btn=by("nearMe");if(!btn)return;
-    if(globalMode){btn.textContent="⌖ Tout autour de moi";return}
-    const ctx=currentContext();btn.textContent=ctx?"⌖ "+ctx.label+" autour de moi":"⌖ Autour de moi";
+    const ctx=globalMode?null:currentContext();
+    const next=globalMode?"⌖ Tout autour de moi":(ctx?"⌖ "+ctx.label+" autour de moi":"⌖ Autour de moi");
+    if(norm(btn.textContent)!==norm(next))btn.textContent=next;
   }
   function captureContext(){
     if(globalMode){pendingContext=null;return}
@@ -172,7 +173,7 @@
     by("nearMe")?.addEventListener("click",captureContext,true);
     window.addEventListener("libcomlair-nearme-result",()=>setTimeout(restoreContext,20));
     try{new MutationObserver(()=>{buildHub();addGoButtons();updateNearMeLabel();if(!document.body.classList.contains("v224-page4-step")&&globalMode){globalMode=false;restoreMapHome();const p=by("v224GlobalNearbyPanel");if(p)p.hidden=true}}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:["class","aria-pressed"]})}catch(_){}
-    window.LibcomlairMapGpsHub=Object.freeze({version:"v224-31",openNearby:openGlobalNearby,openGps:()=>openGpsPanel(loadDestination(),true),destination:loadDestination,currentContext});
+    window.LibcomlairMapGpsHub=Object.freeze({version:"v224-31.1",openNearby:openGlobalNearby,openGps:()=>openGpsPanel(loadDestination(),true),destination:loadDestination,currentContext});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(init,0),{once:true});else setTimeout(init,0);
 })();
