@@ -13,7 +13,7 @@
       detection:"Sur Présentation Libcomlair, laisser la lecture aller jusqu’à 10 sur 10. Après la dernière rubrique, vérifier qu’une annonce finale propose Suivant pour continuer et Précédent ou Retour pour revenir.",
       repair:"Charger la carte vocale v4 dans la version de test active. Ne modifier ni le présentateur v9 ni le parcours déjà validé. La carte v4 effectue l’annonce de navigation avant de signaler la fin de la présentation.",
       files:["libcomlair-v224-presentation-voice-card-v4.js","test-v224-voice-contextual-v16.html"],
-      commits:[],
+      commits:["d1ce3054fb501579a9ba90cc3e638665c20d303f"],
       validation:"Cause confirmée par test utilisateur le 30/09/2026 : Suivant et Retour ne sont toujours pas proposés avec la v16 qui charge v3. Correctif de chargement v4 installé ; validation utilisateur en attente.",
       safeAutoRepair:true
     }),
@@ -26,7 +26,7 @@
       detection:"Écouter toute phrase contenant Libcomlair, notamment le message d’accueil ou l’introduction de Présentation Libcomlair. Vérifier que la voix dit clairement « Lib comme l’air ».",
       repair:"Conserver l’écriture visuelle Libcomlair partout. Dans le moteur vocal v191, normaliser uniquement le texte envoyé à Render en remplaçant le mot Libcomlair par « Lib comme l’air ». Cette règle s’applique globalement à toutes les annonces naturelles sans modifier les textes affichés ni les données.",
       files:["libcomlair-voice-engine-v191.js","test-v224-voice-contextual-v16.html"],
-      commits:["0e36fc2f3cc8eeed29e3a08fcf45dfa98741697c"],
+      commits:["0e36fc2f3cc8eeed29e3a08fcf45dfa98741697c","d1ce3054fb501579a9ba90cc3e638665c20d303f"],
       validation:"Prononciation souhaitée définie par l’utilisateur le 30/09/2026. Correctif v191 installé ; validation auditive utilisateur en attente.",
       safeAutoRepair:true
     })
