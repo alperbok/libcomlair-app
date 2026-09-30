@@ -1,4 +1,4 @@
-/* Libcomlair V224 — cadre maître, finition systématique v5.
+/* Libcomlair V224 — cadre maître, finition systématique v6.3.
    Pages courtes fixes. Défilement activé seulement lorsqu'un débordement réel est détecté. */
 
 @media (max-width:540px){
@@ -211,7 +211,7 @@
     border:0!important;
   }
 
-  /* Recherche / Catégories : tout l'espace central est utilisé. */
+  /* Recherche / Catégories : cases fixes, intervalles réguliers. */
   body.v224-page4-step.v224-master-frame-active #mainContent{
     display:flex!important;
     flex-direction:column!important;
@@ -227,9 +227,11 @@
     min-height:0!important;
     display:grid!important;
     grid-template-columns:1fr 1fr!important;
-    grid-template-rows:auto repeat(4,minmax(0,1fr))!important;
-    gap:7px 8px!important;
-    align-content:stretch!important;
+    grid-template-rows:auto repeat(4,64px)!important;
+    column-gap:8px!important;
+    row-gap:10px!important;
+    align-content:space-around!important;
+    padding-bottom:6px!important;
   }
 
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > h2{
@@ -239,14 +241,16 @@
   }
 
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details{
-    height:100%!important;
-    min-height:0!important;
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
     margin:0!important;
   }
 
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details > summary.category{
-    height:100%!important;
-    min-height:54px!important;
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
     display:flex!important;
     align-items:center!important;
   }
@@ -304,7 +308,6 @@
     box-sizing:border-box!important;
   }
 
-  /* Résultats et outils peuvent être longs : la classe runtime décide du scroll. */
   body.v224-page5-step.v224-master-frame-active #v224Page4Categories,
   body.v224-page5-step.v224-results-step.v224-master-frame-active #v224ResultsSection,
   body.v224-page5-step.v224-utility-step.v224-master-frame-active #v224MapSection,
