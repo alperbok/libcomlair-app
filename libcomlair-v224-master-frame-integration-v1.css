@@ -1,6 +1,5 @@
-/* Libcomlair V224 — intégration du cadre maître validé, version de test v2.
-   Ne s'active qu'à partir de la recherche/catégories et ne modifie pas
-   l'accueil, la deuxième page ni le choix des besoins d'accessibilité. */
+/* Libcomlair V224 — intégration du cadre maître validé, finition v3.
+   Le cadre central reste fixe par défaut. Le défilement est réservé aux pages longues. */
 
 @media (max-width:540px){
   body.v224-master-frame-active{
@@ -27,7 +26,7 @@
     border-radius:22px!important;
     background:#fff!important;
     display:grid!important;
-    grid-template-rows:78px minmax(0,1fr) 60px!important;
+    grid-template-rows:82px minmax(0,1fr) 60px!important;
     overflow:hidden!important;
     box-sizing:border-box!important;
   }
@@ -36,7 +35,7 @@
     position:relative!important;
     width:100%!important;
     min-width:0!important;
-    min-height:78px!important;
+    min-height:82px!important;
     margin:0!important;
     padding:0 78px 3px 38px!important;
     border:0!important;
@@ -142,7 +141,7 @@
     background:#f7fbfb!important;
     box-shadow:none!important;
     display:block!important;
-    overflow-y:auto!important;
+    overflow-y:hidden!important;
     overflow-x:hidden!important;
     overscroll-behavior:contain!important;
     box-sizing:border-box!important;
@@ -214,6 +213,7 @@
 
   body.v224-page4-step.v224-master-frame-active #mainContent > section.hero.v219-main-zone{flex:none!important}
 
+  /* Pages longues : défilement autorisé uniquement ici pour le moment. */
   body.v224-page5-step.v224-master-frame-active #mainContent,
   body.v224-page5-step.v224-results-step.v224-master-frame-active #mainContent,
   body.v224-page5-step.v224-utility-step.v224-master-frame-active #mainContent{
