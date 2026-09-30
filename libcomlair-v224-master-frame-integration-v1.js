@@ -215,13 +215,18 @@
   }
 
   function syncScrollMode(){
-    body.classList.remove("v224-master-scroll-needed");
-    if(!body.classList.contains("v224-master-frame-active"))return;
+    if(!body.classList.contains("v224-master-frame-active")){
+      body.classList.remove("v224-master-scroll-needed");
+      return;
+    }
     requestAnimationFrame(()=>{
       if(!body.classList.contains("v224-master-frame-active"))return;
       const forced=body.classList.contains("v224-results-step")||body.classList.contains("v224-utility-step");
       const overflow=main.scrollHeight>main.clientHeight+3;
-      body.classList.toggle("v224-master-scroll-needed",forced||overflow);
+      const needed=forced||overflow;
+      if(body.classList.contains("v224-master-scroll-needed")!==needed){
+        body.classList.toggle("v224-master-scroll-needed",needed);
+      }
     });
   }
 
@@ -340,7 +345,7 @@
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(sync,0),{once:true});else setTimeout(sync,0);
 
   window.LibcomlairMasterFrameIntegration=Object.freeze({
-    version:"v5-systematic-audit",
+    version:"v5.1-systematic-audit-stable",
     refresh:sync,
     inspect,
     isActive:()=>body.classList.contains("v224-master-frame-active")
