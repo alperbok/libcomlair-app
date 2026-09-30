@@ -7,7 +7,7 @@
 
   const origin={parent:main.parentNode,next:main.nextSibling};
   const moved=new Map();
-  let shell=null,header=null,footer=null,backButton=null,nextButton=null,status=null;
+  let shell=null,header=null,footer=null,backButton=null,nextButton=null,status=null,menuProxy=null;
   let currentMic=null;
 
   const isLaterScreen=()=>body.classList.contains("v224-page4-step")||body.classList.contains("v224-page5-step")||body.classList.contains("v224-map-gps-standalone");
@@ -32,6 +32,13 @@
     currentMic=null;
   }
 
+  function openGlobalMenu(){
+    try{
+      if(window.LibcomlairGlobalAssistance?.open){window.LibcomlairGlobalAssistance.open(false);return}
+    }catch(_){}
+    document.getElementById("libcomlairGlobalMenuButton")?.click?.();
+  }
+
   function makeShell(){
     if(shell)return;
 
@@ -43,11 +50,19 @@
     header.id="v224MasterHeader";
     header.className="v222-app-brand";
 
+    menuProxy=document.createElement("button");
+    menuProxy.id="v224MasterMenu";
+    menuProxy.type="button";
+    menuProxy.setAttribute("aria-label","Assistance et réglages");
+    menuProxy.setAttribute("aria-haspopup","dialog");
+    menuProxy.textContent="☰";
+    menuProxy.addEventListener("click",openGlobalMenu);
+
     const logo=document.createElement("img");
     logo.className="v222-brand-logo";
     logo.src="assets/libcomlair-logo-v222.jpg?v=224-clean-source-4";
     logo.alt="Libcomlair — Sortir en toute liberté";
-    header.appendChild(logo);
+    header.append(menuProxy,logo);
 
     footer=document.createElement("footer");
     footer.id="v224MasterFooter";
@@ -69,7 +84,6 @@
     status.setAttribute("aria-live","polite");
 
     footer.append(backButton,nextButton,status);
-
     backButton.addEventListener("click",handleBack);
     nextButton.addEventListener("click",handleNext);
   }
@@ -77,7 +91,7 @@
   function announce(message){
     if(!status)return;
     status.textContent="";
-    requestAnimationFrame(()=>{status.textContent=message});
+    requestAnimationFrame(()=>{if(status)status.textContent=message});
   }
 
   function nativeBack(){
@@ -142,14 +156,11 @@
   }
 
   function syncControls(){
-    if(!header)return;
+    if(!header||!body.classList.contains("v224-master-frame-active"))return;
 
     const mic=desiredMic();
     if(currentMic&&currentMic!==mic)restore(currentMic);
     if(mic){rememberAndMove(mic,header);currentMic=mic}
-
-    const menu=document.getElementById("libcomlairGlobalMenuButton");
-    if(menu)rememberAndMove(menu,header);
 
     if(nextButton){
       if(body.classList.contains("v224-map-gps-standalone")){
@@ -169,21 +180,19 @@
       parent.insertBefore(shell,main);
       shell.append(header,main,footer);
     }
-    body.classList.add("v224-master-frame-active");
+    if(!body.classList.contains("v224-master-frame-active"))body.classList.add("v224-master-frame-active");
     syncControls();
   }
 
   function deactivate(){
     if(!shell)return;
-    body.classList.remove("v224-master-frame-active");
+    if(body.classList.contains("v224-master-frame-active"))body.classList.remove("v224-master-frame-active");
     restoreAll();
-    if(main.parentNode===shell){
-      if(origin.parent&&origin.parent.isConnected){
-        if(origin.next&&origin.next.parentNode===origin.parent)origin.parent.insertBefore(main,origin.next);else origin.parent.appendChild(main);
-      }
+    if(main.parentNode===shell&&origin.parent&&origin.parent.isConnected){
+      if(origin.next&&origin.next.parentNode===origin.parent)origin.parent.insertBefore(main,origin.next);else origin.parent.appendChild(main);
     }
     shell.remove();
-    shell=header=footer=backButton=nextButton=status=null;
+    shell=header=footer=backButton=nextButton=status=menuProxy=null;
   }
 
   function sync(){
@@ -192,17 +201,19 @@
 
   const observer=new MutationObserver(()=>{
     sync();
-    if(body.classList.contains("v224-master-frame-active"))syncControls();
+    if(body.classList.contains("v224-master-frame-active"))setTimeout(syncControls,0);
   });
-  observer.observe(body,{attributes:true,attributeFilter:["class"],childList:true,subtree:true});
+  observer.observe(body,{attributes:true,attributeFilter:["class"]});
 
   window.addEventListener("libcomlair-map-gps-page",()=>setTimeout(sync,0));
-  document.addEventListener("click",()=>setTimeout(syncControls,0),true);
+  document.addEventListener("click",()=>{
+    if(body.classList.contains("v224-master-frame-active"))setTimeout(syncControls,0);
+  },true);
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(sync,0),{once:true});else setTimeout(sync,0);
 
   window.LibcomlairMasterFrameIntegration=Object.freeze({
-    version:"v1",
+    version:"v2-samsung-stable",
     refresh:sync,
     isActive:()=>body.classList.contains("v224-master-frame-active")
   });
