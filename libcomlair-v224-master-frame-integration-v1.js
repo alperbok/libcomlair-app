@@ -169,6 +169,20 @@
     if(needs)needs.style.setProperty("display","none","important");
   }
 
+  function suppressNativeNavigation(){
+    [
+      "v224VoiceModeActions",
+      "v224TutorialActions",
+      "v224HomeActions",
+      "v224Page4Back",
+      "v224Page5Back",
+      "v224MapGpsNavV33"
+    ].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.style.setProperty("display","none","important");
+    });
+  }
+
   function syncControls(){
     if(!header||!body.classList.contains("v224-master-frame-active"))return;
 
@@ -176,6 +190,7 @@
     if(currentMic&&currentMic!==mic)restore(currentMic);
     if(mic){rememberAndMove(mic,header);currentMic=mic}
     suppressLegacyHeader();
+    suppressNativeNavigation();
 
     if(nextButton){
       if(body.classList.contains("v224-map-gps-standalone")){
@@ -204,6 +219,7 @@
     if(!body.classList.contains("v224-master-frame-active"))body.classList.add("v224-master-frame-active");
     syncControls();
     setTimeout(syncControls,0);
+    setTimeout(syncControls,120);
   }
 
   function deactivate(){
@@ -223,20 +239,29 @@
 
   const observer=new MutationObserver(()=>{
     sync();
-    if(body.classList.contains("v224-master-frame-active"))setTimeout(syncControls,0);
+    if(body.classList.contains("v224-master-frame-active")){
+      setTimeout(syncControls,0);
+      setTimeout(syncControls,120);
+    }
   });
   observer.observe(body,{attributes:true,attributeFilter:["class"]});
 
   window.addEventListener("libcomlair-map-gps-page",()=>setTimeout(sync,0));
-  window.addEventListener("libcomlair-onboarding-step",()=>setTimeout(sync,0));
+  window.addEventListener("libcomlair-onboarding-step",()=>{
+    setTimeout(sync,0);
+    setTimeout(syncControls,120);
+  });
   document.addEventListener("click",()=>{
-    if(body.classList.contains("v224-master-frame-active"))setTimeout(syncControls,0);
+    if(body.classList.contains("v224-master-frame-active")){
+      setTimeout(syncControls,0);
+      setTimeout(syncControls,120);
+    }
   },true);
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(sync,0),{once:true});else setTimeout(sync,0);
 
   window.LibcomlairMasterFrameIntegration=Object.freeze({
-    version:"v3-onboarding-samsung-stable",
+    version:"v4-layout-stable",
     refresh:sync,
     isActive:()=>body.classList.contains("v224-master-frame-active")
   });
