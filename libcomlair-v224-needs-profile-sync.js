@@ -67,10 +67,15 @@
     }
     const summary=details.querySelector(":scope > summary");
     if(summary){
-      summary.setAttribute("aria-label","Critères pour le handicap "+label+(selected?", ouverts":", fermés"));
+      summary.setAttribute("aria-label","Critères pour le handicap "+label+(details.open?", ouverts":", fermés"));
     }
   }
 
+  /*
+    Le profil enregistré décide uniquement quels dossiers sont ouverts à l'entrée.
+    Ensuite l'utilisateur peut ouvrir/fermer autant de dossiers qu'il veut.
+    Aucun changement de classe du cadre ne doit resynchroniser `open`.
+  */
   function syncNeedsPage(){
     const needs=storedNeeds();
     const selected=new Set(needs);
@@ -79,6 +84,13 @@
       const active=selected.has(key);
       details.open=active;
       updateFolderText(details,key,active);
+      if(!details.dataset.v224IndependentToggle){
+        details.dataset.v224IndependentToggle="true";
+        details.addEventListener("toggle",()=>{
+          updateFolderText(details,key,active);
+          try{window.LibcomlairMasterFrameIntegration?.refresh?.()}catch(_){}
+        });
+      }
     });
     updateStatus(needs);
     body?.classList.toggle("v224-needs-multiple",needs.length>1);
@@ -113,16 +125,8 @@
     if(body?.classList.contains("v224-onboarding-needs"))setTimeout(syncNeedsPage,50);
   });
 
-  if(body){
-    try{
-      new MutationObserver(()=>{
-        if(body.classList.contains("v224-onboarding-needs"))setTimeout(syncNeedsPage,0);
-      }).observe(body,{attributes:true,attributeFilter:["class"]});
-    }catch(_){}
-  }
-
   window.LibcomlairNeedsProfileSync=Object.freeze({
-    version:"v224-1",
+    version:"v224-2-independent-accordions",
     sync:syncNeedsPage,
     saveFromProfile:()=>saveNeeds(checkedNeeds()),
     read:storedNeeds
