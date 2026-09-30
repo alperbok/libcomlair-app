@@ -26,8 +26,17 @@
     const isLater=
       body.classList.contains("v224-page4-step")||
       body.classList.contains("v224-page5-step");
+    const masterActive=body.classList.contains("v224-master-frame-active");
 
     if(isLater){
+      hide(needsSection);
+      needsSection.setAttribute("aria-hidden","true");
+      return;
+    }
+
+    /* Quand le cadre maître est actif, son propre en-tête fait foi.
+       Ne jamais réinjecter l'ancien menu/logo dans la zone centrale. */
+    if(isPage3Other&&masterActive){
       hide(needsSection);
       needsSection.setAttribute("aria-hidden","true");
       return;
@@ -60,7 +69,7 @@
   setTimeout(syncHeader,0);
 
   window.LibcomlairPage3HeaderGuard=Object.freeze({
-    version:"v224-1",
+    version:"v224-2-master-aware",
     sync:syncHeader
   });
 })();
