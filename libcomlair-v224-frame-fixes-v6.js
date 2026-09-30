@@ -7,6 +7,7 @@
   const nativeIds=[
     "v224NeedsActions",
     "v224VoiceModeActions",
+    "v224VoiceFreshActions",
     "v224TutorialActions",
     "v224HomeActions",
     "v224Page4Back",
@@ -47,5 +48,5 @@
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",refresh,{once:true});
   else refresh();
 
-  window.LibcomlairFrameFixesV6=Object.freeze({version:"v6.2-master-frame-consistency",refresh});
+  window.LibcomlairFrameFixesV6=Object.freeze({version:"v6.3-source-cleanup",refresh});
 })();
