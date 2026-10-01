@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "jurisdiction": {
+    "jurisdictionId": "",
+    "label": "",
+    "scopeType": "global|region|country|state|province|other",
+    "countryCodes": [],
+    "parentJurisdictionIds": [],
+    "releaseState": "prepared|audit-in-progress|test|official|revalidation-required|blocked",
+    "lastReviewedAt": null,
+    "nextReviewAt": null,
+    "reviewedBy": null,
+    "areas": {
+      "dataProtection": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "locationPrivacy": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "digitalAccessibility": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "consumerInformation": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "photosAndImageRights": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "userContributions": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "openDataAndDatabaseRights": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "mappingAndGeocodingRights": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "transportDataRights": "not-reviewed|not-applicable|reviewed|action-required|blocked",
+      "ageAndConsent": "not-reviewed|not-applicable|reviewed|action-required|blocked"
+    },
+    "officialSources": [
+      {
+        "sourceId": "",
+        "authority": "",
+        "title": "",
+        "url": "",
+        "effectiveFrom": null,
+        "checkedAt": null,
+        "notes": null
+      }
+    ],
+    "obligations": [
+      {
+        "obligationId": "",
+        "area": "",
+        "summary": "",
+        "appliesToLibcomlair": "unknown|yes|no|conditional",
+        "requiredAction": null,
+        "ownerModule": null,
+        "releaseBlocker": false,
+        "sourceIds": []
+      }
+    ],
+    "notes": []
+  },
+  "rules": {
+    "gpsCountryNeverDefinesLegalJurisdictionAlone": true,
+    "noLegalConclusionWithoutSource": true,
+    "officialSourcesPreferred": true,
+    "countryOfficialReleaseRequiresReviewedRegistry": true,
+    "highImpactUncertaintyRequiresQualifiedReview": true,
+    "lawsAndTermsMustHaveReviewDates": true,
+    "legalStatusMustNotBeInferredFromAnotherCountry": true,
+    "regionalAndNationalRulesCanStack": true,
+    "schemaMigrationRequiredForBreakingChange": true
+  }
+}
