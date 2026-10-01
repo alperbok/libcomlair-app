@@ -1,4 +1,4 @@
-/* Libcomlair V224 — cadre maître, finition systématique v6.7.
+/* Libcomlair V224 — cadre maître, finition systématique v6.8.
    Pages courtes fixes. Les pages accordéon peuvent faire défiler leur contenu réel. */
 
 @media (max-width:540px){
@@ -239,8 +239,7 @@
     margin-top:6px!important;
   }
 
-  /* Recherche / Catégories : cases plus compactes, espaces plus visibles,
-     en conservant quasiment la même occupation verticale totale. */
+  /* Recherche / Catégories : cases plus compactes, espace transféré dans les intervalles. */
   body.v224-page4-step.v224-master-frame-active #mainContent{
     display:flex!important;
     flex-direction:column!important;
@@ -256,9 +255,9 @@
     min-height:0!important;
     display:grid!important;
     grid-template-columns:1fr 1fr!important;
-    grid-template-rows:auto repeat(4,66px)!important;
+    grid-template-rows:auto repeat(4,62px)!important;
     column-gap:8px!important;
-    row-gap:18px!important;
+    row-gap:22px!important;
     align-content:start!important;
     padding-bottom:6px!important;
   }
@@ -270,16 +269,16 @@
   }
 
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details{
-    height:66px!important;
-    min-height:66px!important;
-    max-height:66px!important;
+    height:62px!important;
+    min-height:62px!important;
+    max-height:62px!important;
     margin:0!important;
   }
 
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details > summary.category{
-    height:66px!important;
-    min-height:66px!important;
-    max-height:66px!important;
+    height:62px!important;
+    min-height:62px!important;
+    max-height:62px!important;
     display:flex!important;
     align-items:center!important;
   }
