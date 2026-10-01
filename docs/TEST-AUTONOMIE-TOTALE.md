@@ -8,7 +8,7 @@ Vérifier objectivement que les fonctions essentielles de Libcomlair restent uti
 
 ## Préparation
 
-Le test final doit être réalisé sur un téléphone réel, notamment le Samsung utilisé pour les validations Libcomlair.
+Le test final doit être réalisé sur un smartphone Android réel. Le Samsung actuellement utilisé reste l’appareil de référence de développement, mais l’autonomie Libcomlair ne doit pas dépendre d’une marque particulière.
 
 Conditions :
 
@@ -143,6 +143,6 @@ Réussite si :
 
 ## Résultat final
 
-L’indépendance complète est validée uniquement si les tests essentiels ci-dessus réussissent sur téléphone réel.
+L’indépendance complète est validée uniquement si les tests essentiels ci-dessus réussissent sur smartphone Android réel.
 
-Un test réussi dans le code ou sur ordinateur ne remplace pas la validation physique sur Samsung.
+Un test réussi dans le code, sur ordinateur ou dans un émulateur ne remplace pas la validation physique sur Android. Avant diffusion large, l’autonomie doit aussi être vérifiée sur un appareil Android d’un autre constructeur lorsque possible.
