@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "datasets": [
+    {
+      "datasetId": "accessibility-passport",
+      "currentSchemaVersion": 1,
+      "storage": "local-first",
+      "migrations": []
+    },
+    {
+      "datasetId": "places",
+      "currentSchemaVersion": 1,
+      "storage": "local-and-imported",
+      "migrations": []
+    },
+    {
+      "datasetId": "photos",
+      "currentSchemaVersion": 1,
+      "storage": "local-and-optional-sync",
+      "migrations": []
+    },
+    {
+      "datasetId": "voice-dictionaries",
+      "currentSchemaVersion": 2,
+      "storage": "packaged-and-downloadable",
+      "migrations": []
+    }
+  ],
+  "migrationContract": {
+    "requiredFields": ["migrationId", "fromVersion", "toVersion", "ownerModule", "backupRequired", "rollbackStrategy", "dataLossAllowed", "tests"],
+    "dataLossAllowedDefault": false,
+    "backupBeforeDestructiveMigration": true,
+    "oldFormatMustRemainReadableUntilValidation": true,
+    "phoneValidationRequiredWhenUserDataAffected": true
+  }
+}
