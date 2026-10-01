@@ -1,7 +1,7 @@
 (()=>{
 "use strict";
 
-const VERSION="v224-1";
+const VERSION="v224-2-autonomy-tools";
 const SESSION_KEY="libcomlair-developer-mode-v1";
 const QUERY_KEY="libcomlair-dev";
 const STRUCTURED_ATTR="v224MaintenanceStructured";
@@ -27,6 +27,7 @@ function setDeveloperMode(enabled){
     if(enabled)sessionStorage.setItem(SESSION_KEY,"1");
     else sessionStorage.removeItem(SESSION_KEY);
   }catch(_){}
+  if(!enabled){try{window.LibcomlairExternalServiceTestMode?.disable?.()}catch(_){}}
   refreshDeveloperVisibility();
   return isDeveloperMode();
 }
@@ -64,6 +65,10 @@ function moduleSnapshot(){
     "global-assistance":"LibcomlairGlobalAssistance",
     "voice":"LibcomlairVoice",
     "render-voice":"LibcomlairRenderVoice",
+    "welcome-local-first":"LibcomlairWelcomeLocalFirst",
+    "voice-local-coverage":"LibcomlairVoiceLocalCoverage",
+    "autonomy-dashboard":"LibcomlairAutonomyDashboard",
+    "external-service-test":"LibcomlairExternalServiceTestMode",
     "voice-independence":"LibcomlairVoiceIndependence",
     "voice-context":"LibcomlairVoiceContext",
     "voice-guide":"LibcomlairVoiceGuide",
@@ -96,20 +101,60 @@ async function readFeatureFlags(){
   }catch(err){return {error:String(err&&err.message||err)}}
 }
 
-function renderFlags(target,data){
+function renderPre(target,text){
   target.textContent="";
   const pre=document.createElement("pre");
   pre.className="v224-tech-readout";
+  pre.textContent=String(text||"");
+  target.appendChild(pre);
+}
+
+function renderFlags(target,data){
   if(data&&data.flags){
     const lines=["Configuration runtime active : "+String(!!data.runtimeActive)];
     for(const [name,state] of Object.entries(data.flags))lines.push(name+" : "+state);
-    pre.textContent=lines.join("\n");
-  }else pre.textContent="Impossible de lire la configuration : "+String(data?.error||"erreur inconnue");
-  target.appendChild(pre);
+    renderPre(target,lines.join("\n"));
+  }else renderPre(target,"Impossible de lire la configuration : "+String(data?.error||"erreur inconnue"));
+}
+
+async function showAutonomy(target){
+  const engine=window.LibcomlairAutonomyDashboard;
+  if(!engine?.inspect){renderPre(target,"Jauge d’autonomie non chargée.");return}
+  try{
+    const snapshot=await engine.inspect();
+    renderPre(target,engine.text?.(snapshot)||JSON.stringify(snapshot,null,2));
+  }catch(error){renderPre(target,"Impossible de mesurer l’autonomie : "+String(error?.message||error||"erreur"))}
+}
+
+function updateExternalTestButton(button,status){
+  const engine=window.LibcomlairExternalServiceTestMode;
+  const state=engine?.status?.()||{active:false};
+  button.textContent=state.active?"🌐 Désactiver le test sans services externes":"🧪 Activer le test sans services externes";
+  if(status){
+    status.textContent=state.active
+      ?"TEST ACTIF : les requêtes réseau vers des origines externes sont bloquées dans cet onglet. Les fichiers locaux de Libcomlair restent autorisés."
+      :"Test inactif. L’application utilise son fonctionnement réseau normal.";
+  }
+}
+
+function toggleExternalTest(button,status){
+  const engine=window.LibcomlairExternalServiceTestMode;
+  if(!engine){status.textContent="Le moteur de test des services externes n’est pas chargé.";return}
+  const current=engine.status?.();
+  const result=current?.active?engine.disable():engine.enable();
+  if(result?.ok===false&&result?.reason==="developer-mode-required")status.textContent="Ce test est réservé à la maintenance avancée.";
+  updateExternalTestButton(button,status);
+  setTimeout(()=>{try{window.LibcomlairDiagnostics?.run?.()}catch(_){}},80);
 }
 
 async function buildTechnicalReport(){
   const flags=await readFeatureFlags();
+  let autonomy=null;
+  try{autonomy=await window.LibcomlairAutonomyDashboard?.inspect?.()}catch(_){}
+  let localDiagnostic=null;
+  try{localDiagnostic=window.LibcomlairDiagnostics?.status?.()||null}catch(_){}
+  let externalTest=null;
+  try{externalTest=window.LibcomlairExternalServiceTestMode?.status?.()||null}catch(_){}
   const report={
     schemaVersion:1,
     appVersion:document.documentElement.dataset.libcomlairTestBuild||null,
@@ -123,6 +168,9 @@ async function buildTechnicalReport(){
     microphone:{permissionState:null,captureAvailable:null,recognitionProvider:null,lastErrorCode:null},
     gps:{permissionState:null,available:null,lastErrorCode:null},
     data:{catalogueVersion:null,transportVersion:null,voiceDictionaryVersion:null,counts:{}},
+    autonomy,
+    localDiagnostic,
+    externalTest,
     lastRepair:null,
     lastReferenceJourney:null,
     featureFlags:flags&&flags.flags?flags.flags:null,
@@ -165,11 +213,28 @@ function buildAdvancedContent(content){
   note.className="data-note";
   note.textContent="Mode développeur actif pour cet onglet. Les outils ci-dessous sont séparés du menu utilisateur. Les fonctions dangereuses restent désactivées tant qu’elles ne sont pas validées.";
 
+  const autonomyButton=document.createElement("button");
+  autonomyButton.type="button";
+  autonomyButton.className="details-btn";
+  autonomyButton.textContent="📊 Mesurer l’autonomie Libcomlair";
+  const autonomyResult=document.createElement("div");
+  autonomyResult.className="data-note";
+  autonomyResult.setAttribute("aria-live","polite");
+  autonomyButton.addEventListener("click",()=>showAutonomy(autonomyResult));
+
+  const externalButton=document.createElement("button");
+  externalButton.type="button";
+  externalButton.className="details-btn";
+  const externalStatus=document.createElement("p");
+  externalStatus.className="data-note";
+  externalStatus.setAttribute("aria-live","polite");
+  externalButton.addEventListener("click",()=>toggleExternalTest(externalButton,externalStatus));
+  setTimeout(()=>updateExternalTestButton(externalButton,externalStatus),0);
+
   const flagButton=document.createElement("button");
   flagButton.type="button";
   flagButton.className="details-btn";
   flagButton.textContent="🧩 Voir les fonctions expérimentales";
-
   const flagResult=document.createElement("div");
   flagResult.className="data-note";
   flagResult.setAttribute("aria-live","polite");
@@ -179,7 +244,6 @@ function buildAdvancedContent(content){
   reportButton.type="button";
   reportButton.className="details-btn";
   reportButton.textContent="📄 Exporter un rapport technique";
-
   const reportStatus=document.createElement("p");
   reportStatus.className="data-note";
   reportStatus.setAttribute("aria-live","polite");
@@ -187,18 +251,15 @@ function buildAdvancedContent(content){
 
   const future=document.createElement("p");
   future.className="data-note v224-tech-future";
-  future.textContent="Prévus ici après validation : tests de panne volontaire, matrice de dépendances, migrations, stockage, licences et retour arrière.";
+  future.textContent="Prochaines extensions prévues : matrice automatique des dépendances, migrations de données, contrôle des licences, performance et retour arrière.";
 
   const exitButton=document.createElement("button");
   exitButton.type="button";
   exitButton.className="details-btn";
   exitButton.textContent="🔒 Quitter la maintenance avancée";
-  exitButton.addEventListener("click",()=>{
-    setDeveloperMode(false);
-    window.LibcomlairVoice?.speak?.("Maintenance avancée fermée.",{rate:.9});
-  });
+  exitButton.addEventListener("click",()=>setDeveloperMode(false));
 
-  content.append(note,flagButton,flagResult,reportButton,reportStatus,future,exitButton);
+  content.append(note,autonomyButton,autonomyResult,externalButton,externalStatus,flagButton,flagResult,reportButton,reportStatus,future,exitButton);
 }
 
 function refreshDeveloperVisibility(){
