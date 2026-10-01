@@ -25,45 +25,36 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data/voice/libcomlair-fixed-audio.json"
 OUTPUT_DIR = ROOT / "voice-candidates-output"
 
-# Candidate A remains the current Pocket TTS French default for comparison.
-# B and C use Kyutai-provided precomputed voice-state safetensors. This matters
-# in GitHub Actions because public CI runs can use exported voice states even
-# when raw-audio voice cloning is unavailable.
-# The URLs are pinned to the Kyutai tts-voices revision used during review.
-VOICE_REVISION = "1fc7395b7e012e2bbebfca14b942a4ef62ccc899"
+# Listening-only candidates. We deliberately use source audio prompts instead of
+# precomputed .safetensors voice states because the latter may not match the state
+# serialization format expected by the installed Pocket TTS release.
+#
+# All three files come from Kyutai's unmute-prod-website collection. Kyutai's
+# repository states that, apart from explicitly listed exceptions, these are their
+# own recordings and may be used as CC0. None of these three is one of the listed
+# exceptions.
+VOICE_BASE = "hf://kyutai/tts-voices/unmute-prod-website"
 CANDIDATES = [
     {
         "id": "A",
         "label": "candidate-a",
-        "voiceSource": "estelle",
-        "provenance": "Pocket TTS built-in French voice (Estelle / developpeuse-3)",
+        "voiceSource": VOICE_BASE + "/default_voice.wav",
+        "provenance": "Kyutai tts-voices / unmute-prod-website / default_voice.wav",
         "rightsNote": "Kyutai tts-voices documentation: own recording / CC0",
     },
     {
         "id": "B",
         "label": "candidate-b",
-        "voiceSource": (
-            "https://huggingface.co/kyutai/tts-voices/resolve/"
-            + VOICE_REVISION
-            + "/unmute-prod-website/developer-1.mp3.1e68beda%40240.safetensors"
-        ),
-        "provenance": (
-            "Kyutai tts-voices / unmute-prod-website / developer-1.mp3 / "
-            "precomputed voice state"
-        ),
+        "voiceSource": VOICE_BASE + "/developer-1.mp3",
+        "provenance": "Kyutai tts-voices / unmute-prod-website / developer-1.mp3",
         "rightsNote": "Kyutai tts-voices documentation: own recording / CC0",
     },
     {
         "id": "C",
         "label": "candidate-c",
-        "voiceSource": (
-            "https://huggingface.co/kyutai/tts-voices/resolve/"
-            + VOICE_REVISION
-            + "/unmute-prod-website/fabieng-enhanced-v2.wav.1e68beda%40240.safetensors"
-        ),
+        "voiceSource": VOICE_BASE + "/fabieng-enhanced-v2.wav",
         "provenance": (
-            "Kyutai tts-voices / unmute-prod-website / fabieng-enhanced-v2.wav / "
-            "precomputed voice state"
+            "Kyutai tts-voices / unmute-prod-website / fabieng-enhanced-v2.wav"
         ),
         "rightsNote": "Kyutai tts-voices documentation: own recording / CC0",
     },
@@ -176,7 +167,8 @@ def main() -> int:
             "doesNotModifyRuntime": True,
             "androidListeningRequired": True,
             "candidateNameMustNotImplyApproval": True,
-            "ciUsesPrecomputedVoiceStatesInsteadOfRawAudioCloning": True,
+            "usesSourceAudioPrompts": True,
+            "finalSelectedVoiceMustBePinnedBeforePromotion": True,
         },
         "entries": report_entries,
     }
