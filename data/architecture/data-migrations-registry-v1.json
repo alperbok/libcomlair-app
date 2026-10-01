@@ -26,6 +26,24 @@
       "currentSchemaVersion": 2,
       "storage": "packaged-and-downloadable",
       "migrations": []
+    },
+    {
+      "datasetId": "geography-location-fix",
+      "currentSchemaVersion": 1,
+      "storage": "ephemeral-by-default",
+      "migrations": []
+    },
+    {
+      "datasetId": "legal-jurisdiction-registry",
+      "currentSchemaVersion": 1,
+      "storage": "packaged-reference",
+      "migrations": []
+    },
+    {
+      "datasetId": "resource-rights-registry",
+      "currentSchemaVersion": 1,
+      "storage": "packaged-reference",
+      "migrations": []
     }
   ],
   "migrationContract": {
@@ -33,6 +51,8 @@
     "dataLossAllowedDefault": false,
     "backupBeforeDestructiveMigration": true,
     "oldFormatMustRemainReadableUntilValidation": true,
-    "phoneValidationRequiredWhenUserDataAffected": true
+    "phoneValidationRequiredWhenUserDataAffected": true,
+    "ephemeralLocationMustNotBecomePersistentByMigration": true,
+    "legalAndRightsHistoryMustRemainTraceable": true
   }
 }
