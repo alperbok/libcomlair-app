@@ -2,6 +2,14 @@ name: Generate welcome voice test
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/generate-welcome-voice.yml"
+      - "scripts/generate-fixed-voice-pack-pocket-tts.py"
+      - "data/voice/libcomlair-fixed-audio.json"
+      - "data/voice/pocket-tts-estelle-provenance-v1.json"
 
 permissions:
   contents: read
