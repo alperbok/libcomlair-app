@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.13</title>
+<title>Libcomlair — cadre maître v6.8.14</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
 <script>
 (async()=>{
   try{
-    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=25",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=26",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
-    html=html.replace("master-frame-source=3","master-frame-source=35");
+    html=html.replace("master-frame-source=3","master-frame-source=36");
     html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v196.js?v=196-10");
     html=html.replace("libcomlair-voice-engine-v191.js?v=191-1","libcomlair-voice-engine-v191.js?v=191-3");
     html=html.replace("libcomlair-v224-page4.css?v=master-7","libcomlair-v224-page4.css?v=master-9");
@@ -23,11 +23,9 @@
     html=html.replace("libcomlair-v224-welcome-listen-first-v16.js?v=3","libcomlair-v224-welcome-local-first-v17.js?v=2");
     html=html.replace(
       '<script src="libcomlair-repair-catalog-extra21-v224.js?v=1"><\\/script>',
-      '<script src="libcomlair-repair-catalog-extra21-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra22-v224.js?v=2"><\\/script><script src="libcomlair-repair-catalog-extra23-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra24-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra25-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra26-v224.js?v=2"><\\/script><script src="libcomlair-repair-catalog-extra27-v224.js?v=1"><\\/script>'
+      '<script src="libcomlair-repair-catalog-extra21-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra22-v224.js?v=2"><\\/script><script src="libcomlair-repair-catalog-extra23-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra24-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra25-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra26-v224.js?v=2"><\\/script><script src="libcomlair-repair-catalog-extra27-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra28-v224.js?v=1"><\\/script>'
     );
 
-    // Ces deux remplacements travaillent sur le texte source du wrapper v1.
-    // Il ne faut PAS ajouter d'antislash avant le guillemet fermant de l'attribut.
     html=html.replace(
       'libcomlair-v224-master-frame-integration-v1.css?v=2"></head>',
       'libcomlair-v224-master-frame-integration-v1.css?v=21"><link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=16"><link rel="stylesheet" href="libcomlair-v224-frame-fixes-v6.css?v=10"><link rel="stylesheet" href="libcomlair-v224-technical-menu-access-v1.css?v=2"></head>'
@@ -45,7 +43,7 @@
 
     html=html.replace(
       "v17-master-source-cleanup",
-      "v17-master-source-cleanup-6.8.13-wrapper-injection-fixed"
+      "v17-master-source-cleanup-6.8.14-wrapper-injection-repair-catalogued"
     );
 
     document.open();
