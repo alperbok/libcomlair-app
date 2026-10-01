@@ -3,6 +3,8 @@
 
   const by=id=>document.getElementById(id);
   const text=el=>String(el?.textContent||"").replace(/\s+/g," ").trim();
+  const GEO_KEY="libcomlair-geoapify-nearby-v3";
+  const IDFM_KEY="libcomlair-idfm-nearby-v138";
   let lastPlaceCount="";
 
   function globalNearbyOpen(){
@@ -10,8 +12,16 @@
     return !!(panel&&!panel.hidden&&document.body?.classList.contains("v224-map-gps-standalone"));
   }
 
+  function arrayLength(key){
+    try{
+      const value=JSON.parse(localStorage.getItem(key)||"[]");
+      return Array.isArray(value)?value.length:0;
+    }catch(_){return 0}
+  }
+
   function totalCount(){
-    return text(by("resultsCount"))||"";
+    const total=arrayLength(GEO_KEY)+arrayLength(IDFM_KEY);
+    return total?String(total):"";
   }
 
   function extractPlaceCount(value){
@@ -30,20 +40,15 @@
 
   function writtenMessage(){
     const total=totalCount();
-    if(total)return total+" résultats au total autour de vous, lieux et transports compris.";
-    if(lastPlaceCount)return lastPlaceCount+" lieux trouvés autour de vous.";
+    const places=lastPlaceCount;
+    if(places&&total&&places!==total)return places+" lieux trouvés autour de vous. "+total+" résultats de proximité au total, transports compris.";
+    if(total)return total+" résultats de proximité trouvés autour de vous, lieux et transports compris.";
+    if(places)return places+" lieux trouvés autour de vous.";
     return "Recherche autour de vous terminée.";
   }
 
   function voiceMessage(){
-    const total=totalCount();
-    const places=lastPlaceCount;
-    if(places&&total&&places!==total){
-      return places+" lieux trouvés autour de vous. "+total+" résultats au total, transports compris.";
-    }
-    if(total)return total+" résultats au total autour de vous, lieux et transports compris.";
-    if(places)return places+" lieux trouvés autour de vous.";
-    return "Recherche autour de vous terminée.";
+    return writtenMessage();
   }
 
   function synchronize(event){
@@ -54,15 +59,15 @@
     if(!lastPlaceCount)rememberPlaceCount(text(locationStatus));
     if(!lastPlaceCount)rememberPlaceCount(text(globalStatus));
     const written=writtenMessage();
-    const spoken=voiceMessage();
     if(globalStatus)globalStatus.textContent=written;
     if(locationStatus)locationStatus.textContent=written;
     if(event.detail&&typeof event.detail==="object"){
       try{
-        event.detail.message=spoken;
+        event.detail.message=written;
         event.detail.canonicalNearbyCount=true;
         event.detail.placeCount=lastPlaceCount||null;
         event.detail.totalCount=totalCount()||null;
+        event.detail.countScope="current-nearby-cache";
       }catch(_){}
     }
   }
@@ -112,7 +117,7 @@
   setTimeout(patchVoice,900);
 
   window.LibcomlairNearbyCountSync=Object.freeze({
-    version:"v224-37.3-written-total-spoken-detail",
+    version:"v224-37.4-nearby-only",
     sync:()=>synchronize({detail:{ok:true}}),
     writtenMessage,
     voiceMessage,
