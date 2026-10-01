@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "releaseGateActive": false,
+  "status": "architecture-seed-not-legal-approval",
+  "allowedReleaseStates": [
+    "prepared",
+    "audit-in-progress",
+    "test",
+    "official",
+    "revalidation-required",
+    "blocked"
+  ],
+  "principles": {
+    "legalJurisdictionIndependentFromInterfaceLanguage": true,
+    "legalJurisdictionNotDerivedSolelyFromGps": true,
+    "regionalAndCountryRulesCanStack": true,
+    "officialReleaseRequiresTerritoryReview": true,
+    "officialSourcesPreferred": true,
+    "noComplianceClaimFromSeedRegistry": true,
+    "qualifiedReviewRequiredWhenRiskOrUncertaintyIsMaterial": true
+  },
+  "jurisdictions": [
+    {
+      "jurisdictionId": "EU",
+      "label": "Union européenne",
+      "scopeType": "region",
+      "countryCodes": ["FR", "BE", "DE", "ES", "IT", "PT"],
+      "parentJurisdictionIds": [],
+      "releaseState": "audit-in-progress",
+      "lastReviewedAt": "2026-10-01",
+      "nextReviewAt": null,
+      "areas": {
+        "dataProtection": "not-reviewed",
+        "locationPrivacy": "not-reviewed",
+        "digitalAccessibility": "not-reviewed",
+        "consumerInformation": "not-reviewed",
+        "photosAndImageRights": "not-reviewed",
+        "userContributions": "not-reviewed",
+        "openDataAndDatabaseRights": "not-reviewed",
+        "mappingAndGeocodingRights": "not-reviewed",
+        "transportDataRights": "not-reviewed",
+        "ageAndConsent": "not-reviewed"
+      },
+      "officialSources": [
+        {
+          "sourceId": "eu-gdpr",
+          "authority": "Union européenne",
+          "title": "Règlement (UE) 2016/679 — RGPD",
+          "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj",
+          "checkedAt": "2026-10-01",
+          "purpose": "seed-source-only"
+        },
+        {
+          "sourceId": "eu-eaa",
+          "authority": "Union européenne",
+          "title": "Directive (UE) 2019/882 — Acte législatif européen sur l’accessibilité",
+          "url": "https://eur-lex.europa.eu/eli/dir/2019/882/oj",
+          "checkedAt": "2026-10-01",
+          "purpose": "seed-source-only"
+        }
+      ],
+      "notes": [
+        "Ces sources servent de point de départ de recherche et ne constituent pas une validation juridique de Libcomlair.",
+        "Les transpositions, règles nationales et règles sectorielles doivent être examinées séparément."
+      ]
+    },
+    {
+      "jurisdictionId": "FR",
+      "label": "France",
+      "scopeType": "country",
+      "countryCodes": ["FR"],
+      "parentJurisdictionIds": ["EU"],
+      "releaseState": "prepared",
+      "nationalAuditRequired": true
+    },
+    {
+      "jurisdictionId": "BE",
+      "label": "Belgique",
+      "scopeType": "country",
+      "countryCodes": ["BE"],
+      "parentJurisdictionIds": ["EU"],
+      "releaseState": "prepared",
+      "nationalAuditRequired": true
+    },
+    {
+      "jurisdictionId": "DE",
+      "label": "Allemagne",
+      "scopeType": "country",
+      "countryCodes": ["DE"],
+      "parentJurisdictionIds": ["EU"],
+      "releaseState": "prepared",
+      "nationalAuditRequired": true
+    },
+    {
+      "jurisdictionId": "ES",
+      "label": "Espagne",
+      "scopeType": "country",
+      "countryCodes": ["ES"],
+      "parentJurisdictionIds": ["EU"],
+      "releaseState": "prepared",
+      "nationalAuditRequired": true
+    },
+    {
+      "jurisdictionId": "IT",
+      "label": "Italie",
+      "scopeType": "country",
+      "countryCodes": ["IT"],
+      "parentJurisdictionIds": ["EU"],
+      "releaseState": "prepared",
+      "nationalAuditRequired": true
+    },
+    {
+      "jurisdictionId": "PT",
+      "label": "Portugal",
+      "scopeType": "country",
+      "countryCodes": ["PT"],
+      "parentJurisdictionIds": ["EU"],
+      "releaseState": "prepared",
+      "nationalAuditRequired": true
+    },
+    {
+      "jurisdictionId": "CH",
+      "label": "Suisse",
+      "scopeType": "country",
+      "countryCodes": ["CH"],
+      "parentJurisdictionIds": [],
+      "releaseState": "prepared",
+      "nationalAuditRequired": true,
+      "notes": ["Juridiction non-UE : audit propre obligatoire avant disponibilité officielle."]
+    }
+  ]
+}
