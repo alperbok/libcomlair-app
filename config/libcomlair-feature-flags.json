@@ -39,6 +39,11 @@
     "i18n.transliteration": "test",
     "i18n.rtlSupport": "off",
     "geography.countryAdapters": "test",
+    "geography.deviceLocationSchema": "test",
+    "geography.globalGpsRuntime": "off",
+    "geography.manualLocation": "test",
+    "geography.reverseGeocoding": "off",
+    "geography.backgroundLocation": "off",
     "profile.universalPassport": "test",
     "profile.accountSync": "off",
     "travel.mode": "off",
@@ -55,6 +60,10 @@
     "data.deduplication": "off",
     "data.providerContracts": "test",
     "data.migrations": "test",
+    "legal.jurisdictionRegistry": "test",
+    "legal.countryReleaseGate": "test",
+    "licenses.resourceRightsRegistry": "test",
+    "licenses.offlineRightsGate": "test",
     "tests.goldenCases": "test",
     "sync.conflictResolution": "off",
     "privacy.optionalTelemetry": "off",
@@ -71,6 +80,8 @@
     "phone-validation-when-needed",
     "user-data-preserved",
     "licenses-verified-when-third-party",
+    "rights-verified-before-bundling-or-offline-use",
+    "territory-legal-review-before-official-release",
     "migration-defined-when-persistent-data-changes"
   ]
 }
