@@ -1,0 +1,48 @@
+#libcomlairGlobalMenuPanel .technical-menu-panel .v224-tech-accordion{
+  margin:8px 0;
+}
+#libcomlairGlobalMenuPanel .technical-menu-panel .v224-tech-accordion-toggle{
+  width:100%;
+  text-align:left;
+}
+#libcomlairGlobalMenuPanel .technical-menu-panel .v224-tech-accordion-toggle::after{
+  content:" ▸";
+}
+#libcomlairGlobalMenuPanel .technical-menu-panel .v224-tech-accordion-toggle[aria-expanded="true"]::after{
+  content:" ▾";
+}
+#libcomlairGlobalMenuPanel .technical-menu-panel .v224-tech-accordion-content{
+  margin-top:6px;
+  padding:8px;
+  border:1px solid #c1c9cd;
+  border-radius:10px;
+  background:#f8fafb;
+}
+#libcomlairGlobalMenuPanel .technical-menu-panel .v224-tech-accordion-content[hidden],
+#libcomlairGlobalMenuPanel #v224AdvancedMaintenanceSection[hidden]{
+  display:none!important;
+}
+#libcomlairGlobalMenuPanel #v224AdvancedMaintenanceSection{
+  border-top:2px solid #9ca7ac;
+  padding-top:8px;
+  margin-top:12px;
+}
+#libcomlairGlobalMenuPanel #v224AdvancedMaintenanceToggle{
+  font-weight:700;
+}
+#libcomlairGlobalMenuPanel .v224-tech-readout{
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  max-height:220px;
+  overflow:auto;
+  padding:8px;
+  border-radius:8px;
+  background:#fff;
+  border:1px solid #c1c9cd;
+  font-size:.88rem;
+  line-height:1.35;
+}
+#libcomlairGlobalMenuPanel .v224-tech-future{
+  border-left:4px solid #9ca7ac;
+  padding-left:8px;
+}
