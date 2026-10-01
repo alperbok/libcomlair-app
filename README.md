@@ -11,7 +11,8 @@ Application d’accessibilité conçue pour aider les personnes en situation de 
 - diagnostic et réparation intégrés ;
 - données et licences traçables ;
 - validation finale sur téléphone réel ;
-- principe d’architecture : **1 fonction = 1 module responsable = 1 diagnostic = 1 réparation = 1 secours lorsque possible**.
+- principe d’architecture : **1 fonction = 1 module responsable = 1 diagnostic = 1 réparation = 1 secours lorsque possible** ;
+- une nouveauté à risque est d’abord isolée et testée avant de remplacer une fonction stable.
 
 ## Documents de référence
 
@@ -19,6 +20,13 @@ Application d’accessibilité conçue pour aider les personnes en situation de 
 - [`docs/ROADMAP-INDEPENDANCE-COMPLETE.md`](docs/ROADMAP-INDEPENDANCE-COMPLETE.md) — feuille de route générale vers l’indépendance complète.
 - [`docs/ARCHITECTURE-MODULES.md`](docs/ARCHITECTURE-MODULES.md) — carte des responsabilités : quel module possède quelle fonction et quelles dépendances.
 - [`docs/REGISTRE-DIAGNOSTIC-REPARATION.md`](docs/REGISTRE-DIAGNOSTIC-REPARATION.md) — point d’entrée en cas de panne : Module → Diagnostic → Réparation → Secours.
+- [`docs/MODE-SUR-ET-FEATURE-FLAGS.md`](docs/MODE-SUR-ET-FEATURE-FLAGS.md) — mode sûr et activation séparée des nouveautés.
+- [`config/libcomlair-feature-flags.json`](config/libcomlair-feature-flags.json) — configuration machine de référence des drapeaux, actuellement non branchée au runtime.
+- [`tests/reference-journeys.json`](tests/reference-journeys.json) — parcours fonctionnels à rejouer après les modifications importantes.
+- [`docs/RAPPORT-DIAGNOSTIC-EXPORT.md`](docs/RAPPORT-DIAGNOSTIC-EXPORT.md) — contenu et règles de confidentialité du futur rapport de diagnostic exportable.
+- [`diagnostics/diagnostic-report-schema-v1.json`](diagnostics/diagnostic-report-schema-v1.json) — schéma machine du rapport, actuellement non activé.
+- [`docs/DECISIONS-TECHNIQUES.md`](docs/DECISIONS-TECHNIQUES.md) — journal expliquant pourquoi les choix structurants ont été faits.
+- [`docs/VALIDATION-VERSION-STABLE.md`](docs/VALIDATION-VERSION-STABLE.md) — barrière obligatoire avant de considérer une version comme stable.
 - [`docs/voice-independence-legal-plan.md`](docs/voice-independence-legal-plan.md) — règles juridiques et licences pour la partie vocale.
 - [`docs/REGISTRE-COMPOSANTS-VOCAUX.md`](docs/REGISTRE-COMPOSANTS-VOCAUX.md) — moteurs, modèles, dictionnaires et statut d’audit.
 - [`docs/TEST-AUTONOMIE-TOTALE.md`](docs/TEST-AUTONOMIE-TOTALE.md) — protocole final en mode avion / services externes coupés.
@@ -28,6 +36,12 @@ Application d’accessibilité conçue pour aider les personnes en situation de 
 ## Règle de dépannage
 
 Lorsqu’un problème apparaît, commencer par `docs/REGISTRE-DIAGNOSTIC-REPARATION.md`, identifier le module propriétaire, vérifier sa chaîne de diagnostic, rechercher les conflits historiques éventuels, puis corriger la cause racine. Ne pas empiler des correctifs si une ancienne règle ou un ancien script entre en conflit.
+
+Si une nouveauté est suspectée, consulter ensuite `docs/MODE-SUR-ET-FEATURE-FLAGS.md` afin de l’isoler ou de revenir au secours prévu sans toucher aux autres modules.
+
+## Règle avant version stable
+
+Une version stable est la dernière version **réellement validée**, pas simplement la plus récente. Le protocole `docs/VALIDATION-VERSION-STABLE.md` impose : source vérifiée → diagnostic → tests ciblés → parcours de référence → validation téléphone lorsque nécessaire → conformité → promotion.
 
 ## Objectif d’indépendance
 
