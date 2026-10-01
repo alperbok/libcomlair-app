@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-for-test",
+  "required": ["photoId", "subjectId", "purpose", "source", "createdAt", "privacy", "rights", "moderation"],
+  "photo": {
+    "photoId": "",
+    "subjectId": "",
+    "subjectType": "place|transport|contribution|temporary-report",
+    "purpose": "overview|entrance|threshold|ramp|elevator|stairs|toilets|parking|signage|braille|hearing-loop|transport-access|temporary-condition|other",
+    "source": "user|venue|official-source|open-data|other",
+    "createdAt": "",
+    "updatedAt": "",
+    "expiresAt": null,
+    "file": {
+      "localRef": null,
+      "remoteRef": null,
+      "thumbnailRef": null,
+      "mime": null,
+      "bytes": null,
+      "sha256": null
+    },
+    "descriptions": {
+      "fr-FR": {
+        "alt": "",
+        "voiceDescription": ""
+      }
+    },
+    "accessibilityEvidence": [],
+    "privacy": {
+      "exifStripped": false,
+      "preciseGpsRemoved": false,
+      "facesReviewed": false,
+      "platesReviewed": false,
+      "containsPersonalData": "unknown"
+    },
+    "rights": {
+      "status": "unknown",
+      "license": null,
+      "authorOrSource": null,
+      "publicationConsent": null
+    },
+    "moderation": {
+      "status": "local-only",
+      "reviewedAt": null,
+      "reason": null
+    },
+    "sync": {
+      "status": "local-only",
+      "queuedAt": null,
+      "lastAttemptAt": null,
+      "lastError": null
+    }
+  },
+  "rules": {
+    "photoNeverRequiredForContribution": true,
+    "photoNeverSoleAccessibilityProofWhenStructuredDataExists": true,
+    "stripExifBeforeRemoteSync": true,
+    "doNotInferDisabilityOrIdentityFromImage": true,
+    "altTextRequiredBeforePublicPromotion": true
+  }
+}
