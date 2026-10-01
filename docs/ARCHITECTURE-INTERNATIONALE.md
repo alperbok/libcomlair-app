@@ -13,15 +13,31 @@ La France reste le premier territoire opérationnel. L’internationalisation es
 La langue de l’utilisateur et le pays des données sont deux choix différents.
 
 Exemples :
+- une personne espagnole vivant en France peut utiliser toute l’application en espagnol tout en consultant des lieux, transports et services français ;
+- une personne anglophone vivant en France peut utiliser Libcomlair en anglais sans changer le territoire de recherche ;
 - un utilisateur francophone peut chercher un lieu en Espagne ;
-- un utilisateur anglophone peut utiliser Libcomlair en France ;
 - la Belgique ou la Suisse peuvent utiliser plusieurs langues avec les mêmes données locales.
 
-Libcomlair doit donc gérer séparément :
+La langue choisie doit donc rester un choix personnel, indépendant du pays de résidence, de la position GPS et du pays dans lequel la recherche est effectuée.
+
+Libcomlair doit gérer séparément :
 1. `locale` — langue et conventions d’interface ;
 2. `country` — territoire de recherche et règles de données ;
 3. `voicePack` — audios fixes et voix locale ;
 4. `dataAdapter` — fournisseur ou source de données du pays.
+
+## Choix de langue utilisateur
+
+Comportement cible :
+- au premier lancement, Libcomlair peut proposer la langue du téléphone comme suggestion ;
+- l’utilisateur reste libre de choisir une autre langue ;
+- le choix est mémorisé localement dans son profil ou ses préférences ;
+- changer de langue ne change jamais automatiquement le pays de recherche ;
+- le changement de pays ne change jamais automatiquement la langue ;
+- l’interface, la voix, les commandes micro, les tutoriels, le diagnostic et les explications d’accessibilité suivent la langue choisie ;
+- les noms propres de lieux peuvent rester dans leur langue officielle, avec aide à la prononciation si nécessaire.
+
+Exemple : `locale = es-ES` et `country = FR` doit être un état parfaitement normal de Libcomlair.
 
 ## Identifiants internes stables
 
