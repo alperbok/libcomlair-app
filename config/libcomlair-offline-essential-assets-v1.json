@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-validation",
+  "purpose": "Liste de référence des ressources qui devront rester disponibles hors ligne. Ce manifeste n'active aucun service worker à lui seul.",
+  "entrypoints": [
+    "test-v224-master-frame-integration-v2.html",
+    "test-v224-master-frame-integration-v1.html",
+    "test-v224-profile-compact.html"
+  ],
+  "criticalAssets": [
+    "assets/libcomlair-welcome-v224.jpg",
+    "libcomlair-v224-global-assistance.css",
+    "libcomlair-v224-global-assistance.js",
+    "libcomlair-v224-master-frame-integration-v1.css",
+    "libcomlair-v224-master-frame-integration-v1.js",
+    "libcomlair-v224-welcome-local-first-v17.js",
+    "libcomlair-v224-welcome-transition-hotfix.js",
+    "libcomlair-v224-technical-menu-access-v1.css",
+    "libcomlair-v224-technical-menu-access-v1.js",
+    "libcomlair-v224-autonomy-dashboard-v1.js",
+    "libcomlair-v224-voice-local-coverage-v1.js",
+    "libcomlair-selftest-v189.js",
+    "config/libcomlair-feature-flags.json",
+    "data/voice/libcomlair-fixed-audio.json",
+    "data/voice/libcomlair-pronunciation-overrides.json"
+  ],
+  "futurePackagedAudioDirectory": "assets/audio/fr/",
+  "rules": {
+    "sameOriginOnlyForCoreCache": true,
+    "externalProvidersNeverRequiredForBoot": true,
+    "doNotCacheSecretsOrTokens": true,
+    "doNotCachePreciseLocation": true,
+    "validateOnSamsungBeforeActivation": true
+  }
+}
