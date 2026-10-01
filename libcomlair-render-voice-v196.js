@@ -4,6 +4,9 @@
   const API_BASE="https://libcomlair-backend.onrender.com";
   const STATUS_URL=API_BASE+"/api/tts/v181/status";
   const TTS_URL=API_BASE+"/api/tts/v181";
+  const VOICE_DB_NAME="libcomlair-voice-library-v1";
+  const VOICE_DB_VERSION=1;
+  const VOICE_STORE="audio";
 
   let audioContext=null;
   let currentSource=null;
@@ -14,6 +17,7 @@
   let preparePromise=null;
   let requestSerial=0;
   let activeRequestId="";
+  let dbPromise=null;
   const audioCache=new Map();
   const decodeCache=new Map();
   let last={state:"idle",error:"",time:0,provider:"render",requestId:""};
@@ -28,6 +32,88 @@
     if(typeof AC!=="function")return null;
     if(!audioContext)audioContext=new AC();
     return audioContext;
+  }
+
+  function openVoiceDb(){
+    if(dbPromise)return dbPromise;
+    dbPromise=new Promise((resolve,reject)=>{
+      if(!window.indexedDB){reject(new Error("indexeddb-unavailable"));return}
+      const req=indexedDB.open(VOICE_DB_NAME,VOICE_DB_VERSION);
+      req.onupgradeneeded=()=>{
+        const db=req.result;
+        if(!db.objectStoreNames.contains(VOICE_STORE))db.createObjectStore(VOICE_STORE,{keyPath:"text"});
+      };
+      req.onsuccess=()=>resolve(req.result);
+      req.onerror=()=>reject(req.error||new Error("voice-db-open-failed"));
+    }).catch(error=>{dbPromise=null;throw error});
+    return dbPromise;
+  }
+
+  async function persistentGet(text){
+    try{
+      const db=await openVoiceDb();
+      return await new Promise(resolve=>{
+        const tx=db.transaction(VOICE_STORE,"readonly");
+        const req=tx.objectStore(VOICE_STORE).get(text);
+        req.onsuccess=()=>resolve(req.result||null);
+        req.onerror=()=>resolve(null);
+      });
+    }catch(_){return null}
+  }
+
+  async function persistentPut(meta){
+    if(!meta?.cacheKey||!meta?.buffer)return false;
+    try{
+      const db=await openVoiceDb();
+      const record={
+        text:meta.cacheKey,
+        buffer:meta.buffer.slice(0),
+        bytes:Number(meta.buffer.byteLength)||0,
+        voice:String(meta.voice||"voix française"),
+        createdAt:Date.now(),
+        lastUsedAt:Date.now(),
+        source:"render-generated"
+      };
+      await new Promise((resolve,reject)=>{
+        const tx=db.transaction(VOICE_STORE,"readwrite");
+        tx.objectStore(VOICE_STORE).put(record);
+        tx.oncomplete=()=>resolve(true);
+        tx.onerror=()=>reject(tx.error||new Error("voice-db-write-failed"));
+        tx.onabort=()=>reject(tx.error||new Error("voice-db-write-aborted"));
+      });
+      try{window.dispatchEvent(new CustomEvent("libcomlair-voice-library-updated",{detail:{text:meta.cacheKey,bytes:record.bytes}}))}catch(_){}
+      return true;
+    }catch(_){return false}
+  }
+
+  async function persistentTouch(text){
+    const record=await persistentGet(text);
+    if(!record)return false;
+    record.lastUsedAt=Date.now();
+    try{
+      const db=await openVoiceDb();
+      await new Promise((resolve,reject)=>{
+        const tx=db.transaction(VOICE_STORE,"readwrite");
+        tx.objectStore(VOICE_STORE).put(record);
+        tx.oncomplete=()=>resolve(true);
+        tx.onerror=()=>reject(tx.error||new Error("voice-db-touch-failed"));
+      });
+      return true;
+    }catch(_){return false}
+  }
+
+  async function voiceLibraryStatus(){
+    try{
+      const db=await openVoiceDb();
+      const records=await new Promise(resolve=>{
+        const tx=db.transaction(VOICE_STORE,"readonly");
+        const req=tx.objectStore(VOICE_STORE).getAll();
+        req.onsuccess=()=>resolve(Array.isArray(req.result)?req.result:[]);
+        req.onerror=()=>resolve([]);
+      });
+      const bytes=records.reduce((sum,item)=>sum+(Number(item?.bytes)||Number(item?.buffer?.byteLength)||0),0);
+      return {available:true,entries:records.length,bytes,megabytes:Math.round(bytes/104857.6)/10,db:VOICE_DB_NAME};
+    }catch(error){return {available:false,entries:0,bytes:0,megabytes:0,db:VOICE_DB_NAME,error:String(error?.message||error||"")}}
   }
 
   async function unlockAudio(){
@@ -81,6 +167,13 @@
     const cacheKey=String(text||"").replace(/\s+/g," ").trim();
     if(audioCache.has(cacheKey))return audioCache.get(cacheKey);
     const task=(async()=>{
+      const saved=await persistentGet(cacheKey);
+      if(saved?.buffer&&saved.buffer.byteLength>500){
+        persistentTouch(cacheKey).catch(()=>{});
+        emit("local-cache-hit",{chars:cacheKey.length,bytes:saved.buffer.byteLength});
+        return {buffer:saved.buffer.slice(0),cacheKey,voice:saved.voice||"voix Libcomlair enregistrée",cache:"local-indexeddb",source:"local-library"};
+      }
+
       const controller=new AbortController();
       const timer=setTimeout(()=>controller.abort(),90000);
       try{
@@ -93,7 +186,9 @@
         }
         const buffer=await response.arrayBuffer();
         if(!buffer||buffer.byteLength<500)throw new Error("render_tts_empty_audio");
-        return {buffer,cacheKey,voice:response.headers.get("X-Libcomlair-TTS-Voice")||"voix française serveur",cache:response.headers.get("X-Libcomlair-TTS-Cache")||""};
+        const meta={buffer,cacheKey,voice:response.headers.get("X-Libcomlair-TTS-Voice")||"voix française serveur",cache:response.headers.get("X-Libcomlair-TTS-Cache")||"",source:"render"};
+        persistentPut(meta).catch(()=>{});
+        return meta;
       }finally{clearTimeout(timer)}
     })();
     audioCache.set(cacheKey,task);
@@ -112,9 +207,9 @@
       if(!ok)throw new Error("Audio Android verrouillé. Appuyez une fois sur l’écran puis réessayez.");
     }
     assertActive(requestId);
-    emit("decoding",{voice:meta.voice,requestId});
+    emit("decoding",{voice:meta.voice,requestId,source:meta.source||""});
     let decoded=decodeCache.get(meta.cacheKey);
-    if(!decoded){decoded=await ctx.decodeAudioData(meta.buffer.slice(0));decodeCache.set(meta.cacheKey,decoded)}
+    if(!decoded){decoded=await ctx.decodeAudioData(buffer.slice(0));decodeCache.set(meta.cacheKey,decoded)}
     assertActive(requestId);
 
     stopSource();
@@ -140,14 +235,14 @@
         try{source.disconnect()}catch(_){}
         if(activeRequestId!==requestId)return resolve({ok:false,cancelled:true,requestId});
         activeRequestId="";
-        emit("ended",{voice:meta.voice,cache:meta.cache,requestId});
-        try{opts.onend?.({voice:meta.voice,engine:"render",mode:"server",requestId})}catch(_){}
-        resolve({ok:true,voice:meta.voice,engine:"render",mode:"server",requestId});
+        emit("ended",{voice:meta.voice,cache:meta.cache,source:meta.source||"",requestId});
+        try{opts.onend?.({voice:meta.voice,engine:meta.source==="local-library"?"local-library":"render",mode:meta.source==="local-library"?"local-recorded":"server",requestId})}catch(_){}
+        resolve({ok:true,voice:meta.voice,engine:meta.source==="local-library"?"local-library":"render",mode:meta.source==="local-library"?"local-recorded":"server",requestId});
       };
       try{
         source.start(0);
-        emit("speaking",{voice:meta.voice,cache:meta.cache,audioState:ctx.state,requestId});
-        try{opts.onstart?.({voice:meta.voice,engine:"render",mode:"server",requestId})}catch(_){}
+        emit("speaking",{voice:meta.voice,cache:meta.cache,source:meta.source||"",audioState:ctx.state,requestId});
+        try{opts.onstart?.({voice:meta.voice,engine:meta.source==="local-library"?"local-library":"render",mode:meta.source==="local-library"?"local-recorded":"server",requestId})}catch(_){}
       }catch(error){
         settled=true;
         if(currentRejectRequestId===requestId){currentReject=null;currentRejectRequestId=""}
@@ -161,13 +256,14 @@
   async function prefetch(text){
     const clean=String(text||"").replace(/\s+/g," ").trim();
     if(!clean)return false;
-    await prepare();
+    const saved=await persistentGet(clean);
+    if(!saved?.buffer){await prepare()}
     const meta=await fetchAudio(clean);
     const ctx=getAudioContext();
     if(ctx&&!decodeCache.has(meta.cacheKey)){
       try{decodeCache.set(meta.cacheKey,await ctx.decodeAudioData(meta.buffer.slice(0)))}catch(_){}
     }
-    emit("prefetched",{chars:clean.length});
+    emit("prefetched",{chars:clean.length,source:meta.source||""});
     return true;
   }
 
@@ -214,9 +310,10 @@
 
   function status(){
     const ctx=getAudioContext();
-    return {version:"render-v196",ready:prepared,audioState:ctx?ctx.state:"none",endpoint:TTS_URL,activeRequestId,currentSourceRequestId,last:{...last}};
+    return {version:"render-v196.1-local-library",ready:prepared,audioState:ctx?ctx.state:"none",endpoint:TTS_URL,activeRequestId,currentSourceRequestId,last:{...last},persistentLibrary:true};
   }
 
-  window.LibcomlairRenderVoice=Object.freeze({version:"render-v196",prepare,prefetch,speak,stop,unlockAudio,status});
+  window.LibcomlairRenderVoice=Object.freeze({version:"render-v196.1-local-library",prepare,prefetch,speak,stop,unlockAudio,status,voiceLibraryStatus,persistentGet});
+  openVoiceDb().catch(()=>{});
   prepare().catch(()=>{});
 })();
