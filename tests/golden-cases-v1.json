@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-for-test",
+  "description": "Cas de référence stables à remplir avec des exemples validés physiquement avant automatisation.",
+  "cases": [
+    {
+      "caseId": "place-complete-accessibility",
+      "fixture": null,
+      "expected": ["stable-place-id", "source-metadata", "accessibility-fields", "detail-view", "voice-readable"]
+    },
+    {
+      "caseId": "place-unknown-accessibility",
+      "fixture": null,
+      "expected": ["unknown-remains-unknown", "no-inference"]
+    },
+    {
+      "caseId": "place-multiple-entrances",
+      "fixture": null,
+      "expected": ["entrances-kept-separate", "accessible-entrance-identifiable"]
+    },
+    {
+      "caseId": "transport-multiple-directions",
+      "fixture": null,
+      "expected": ["stop-id", "address", "multiple-lines", "multiple-directions", "alphabetical-behaviour"]
+    },
+    {
+      "caseId": "source-conflict",
+      "fixture": null,
+      "expected": ["conflict-visible", "no-silent-overwrite"]
+    },
+    {
+      "caseId": "temporary-condition-expired",
+      "fixture": null,
+      "expected": ["history-retained", "not-presented-as-current"]
+    },
+    {
+      "caseId": "foreign-proper-name-pronunciation",
+      "fixture": null,
+      "expected": ["official-name-unchanged", "native-pronunciation", "listener-friendly-pronunciation"]
+    },
+    {
+      "caseId": "legacy-profile-migration",
+      "fixture": "libcomlair-access-profile-v1",
+      "expected": ["needs-preserved", "old-profile-not-deleted-before-validation"]
+    }
+  ],
+  "rules": {
+    "fixtureMustBeValidatedBeforeBecomingGolden": true,
+    "goldenCasesMustNotDependOnLiveApiOnly": true,
+    "breakingChangeRequiresExplicitExpectedUpdate": true
+  }
+}
