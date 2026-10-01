@@ -56,10 +56,41 @@
     return cities.slice(0,12).map(([city,count])=>city+" : "+count).join(" • ");
   }
 
+  function searchNoteText(s){
+    if(!s.proximityStored)return "Aucun résultat de proximité enregistré sur cet appareil.";
+    return s.proximityStored+" résultat"+(s.proximityStored>1?"s":"")+" de proximité enregistré"+(s.proximityStored>1?"s":"")+" sur cet appareil (lieux + transports).";
+  }
+
+  function renderSearchNote(){
+    const note=document.getElementById("v224StoredResultsNote");
+    if(!note)return null;
+    const s=snapshot();
+    note.textContent=searchNoteText(s);
+    return s;
+  }
+
+  function installSearchNote(){
+    if(document.getElementById("v224StoredResultsNote"))return true;
+    const search=document.getElementById("search");
+    if(!search)return false;
+    const note=document.createElement("p");
+    note.id="v224StoredResultsNote";
+    note.className="data-note";
+    note.setAttribute("aria-live","polite");
+    note.style.margin="4px 0 0";
+    note.style.fontSize="0.78rem";
+    note.style.lineHeight="1.15";
+    note.style.opacity="0.82";
+    search.insertAdjacentElement("afterend",note);
+    renderSearchNote();
+    return true;
+  }
+
   function render(){
     const box=document.getElementById("v224DataCountersResult");
-    if(!box)return null;
     const s=snapshot();
+    renderSearchNote();
+    if(!box)return s;
     const lines=[
       "Lieux Geoapify enregistrés sur cet appareil : "+s.geo+".",
       "Transports / arrêts IDFM enregistrés : "+s.idfm+".",
@@ -119,12 +150,15 @@
 
   function init(){
     if(!install())setTimeout(install,250);
+    if(!installSearchNote())setTimeout(installSearchNote,250);
     document.addEventListener("click",event=>{
       if(event.target?.closest?.("#runSystemDiagnostic"))setTimeout(render,220);
+      if(event.target?.closest?.("#v224Page3Next"))setTimeout(renderSearchNote,120);
     });
-    window.addEventListener("libcomlair-nearme-result",()=>setTimeout(render,120));
+    window.addEventListener("libcomlair-nearme-result",()=>setTimeout(()=>{render();renderSearchNote()},120));
+    window.addEventListener("pageshow",()=>setTimeout(renderSearchNote,80));
   }
 
-  window.LibcomlairDataCountDiagnostic=Object.freeze({version:"v224-1",snapshot,render,install});
+  window.LibcomlairDataCountDiagnostic=Object.freeze({version:"v224-2-search-note",snapshot,render,install,installSearchNote,renderSearchNote});
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
