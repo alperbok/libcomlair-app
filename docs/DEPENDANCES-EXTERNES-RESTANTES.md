@@ -12,7 +12,7 @@ Une dépendance externe peut enrichir Libcomlair, mais elle ne doit pas devenir 
 
 | Fonction | Dépendance externe actuelle | Risque | Cible | Statut |
 |---|---|---|---|---|
-| Entrée dans l'application | aucune autorisée | critique | navigation toujours disponible | corrigé à valider sur Samsung |
+| Entrée dans l'application | aucune autorisée | critique | navigation toujours disponible | corrigé à valider sur Android réel |
 | Voix d'accueil | Render encore nécessaire si aucun audio local n'existe | élevé | fichier audio Libcomlair empaqueté | pack v1 en construction |
 | Phrases fixes | Render majoritaire | élevé | pack vocal local versionné | à migrer |
 | Informations dynamiques | Render | élevé | TTS local + dictionnaire | à construire |
@@ -40,7 +40,9 @@ Une fonction est considérée indépendante de Render lorsque :
 - son contenu local est versionné ;
 - son diagnostic identifie clairement la source locale active ;
 - son fonctionnement a été validé avec Render inaccessible ;
-- la validation physique a été faite sur le Samsung lorsque l'audio, le micro ou l'affichage sont concernés.
+- la validation physique a été faite sur smartphone Android réel lorsque l'audio, le micro ou l'affichage sont concernés.
+
+Le Samsung actuellement disponible sert de référence de développement, sans définir à lui seul la compatibilité Android.
 
 ## Ordre de migration recommandé
 
