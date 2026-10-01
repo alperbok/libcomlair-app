@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "record": {
+    "fixId": "",
+    "coordinates": {
+      "lat": null,
+      "lon": null,
+      "crs": "WGS84"
+    },
+    "accuracyMeters": null,
+    "altitudeMeters": null,
+    "headingDegrees": null,
+    "speedMetersPerSecond": null,
+    "measuredAt": null,
+    "receivedAt": null,
+    "source": "device|manual|cached|imported",
+    "precisionClass": "unknown|approximate|precise",
+    "permissionScope": "none|foreground|background",
+    "freshness": "current|stale|unknown",
+    "staleAfterSeconds": null,
+    "derived": {
+      "countryHint": null,
+      "regionHint": null,
+      "addressHint": null,
+      "derivedByProvider": null,
+      "derivedAt": null
+    },
+    "privacy": {
+      "persisted": false,
+      "synced": false,
+      "usedForHistory": false
+    }
+  },
+  "rules": {
+    "wgs84IsCanonical": true,
+    "languageIndependentFromPosition": true,
+    "searchCountryIndependentFromPosition": true,
+    "legalJurisdictionNotDerivedSolelyFromGps": true,
+    "manualLocationMustRemainPossible": true,
+    "permissionDenialMustNotBlockCoreApp": true,
+    "approximateLocationMustBeSupported": true,
+    "preciseLocationOnlyWhenNeeded": true,
+    "backgroundLocationOffByDefault": true,
+    "noPersistentLocationHistoryByDefault": true,
+    "staleLocationMustNotBePresentedAsCurrent": true,
+    "mapProviderIndependentFromDeviceLocation": true,
+    "schemaMigrationRequiredForBreakingChange": true
+  }
+}
