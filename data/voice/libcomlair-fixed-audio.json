@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "locale": "fr-FR",
+  "policy": {
+    "criticalStartupMustNotRequireNetwork": true,
+    "externalFallbackMayNeverBlockNavigation": true,
+    "autoplayPreferredButNotGuaranteedInBrowser": true
+  },
+  "entries": [
+    {
+      "id": "welcome.main",
+      "text": "Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver pour tous. Appuyez sur Suivant pour commencer.",
+      "critical": true,
+      "asset": null,
+      "status": "awaiting-recording",
+      "autoplayPreferred": true,
+      "fallback": "continue-without-blocking-navigation"
+    },
+    {
+      "id": "nav.next",
+      "text": "Suivant.",
+      "critical": true,
+      "asset": null,
+      "status": "awaiting-recording"
+    },
+    {
+      "id": "nav.back",
+      "text": "Retour.",
+      "critical": true,
+      "asset": null,
+      "status": "awaiting-recording"
+    },
+    {
+      "id": "presentation.main",
+      "text": "Présentation Libcomlair.",
+      "critical": true,
+      "asset": null,
+      "status": "awaiting-recording"
+    },
+    {
+      "id": "diagnostic.open",
+      "text": "Diagnostic de fonctionnement.",
+      "critical": true,
+      "asset": null,
+      "status": "awaiting-recording"
+    },
+    {
+      "id": "repair.start",
+      "text": "Réparation de Libcomlair en cours.",
+      "critical": true,
+      "asset": null,
+      "status": "awaiting-recording"
+    },
+    {
+      "id": "micro.confirmation",
+      "text": "Commande vocale prise en compte.",
+      "critical": true,
+      "asset": null,
+      "status": "awaiting-recording"
+    }
+  ]
+}
