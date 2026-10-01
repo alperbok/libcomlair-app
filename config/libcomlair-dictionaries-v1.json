@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "defaultLocale": "fr-FR",
+  "defaultCountry": "FR",
+  "resolutionOrder": ["libcomlair-overrides", "country-specialized", "locale-common", "tts-native"],
+  "entryTypes": ["common", "accessibility", "proper-person", "places", "streets", "transport", "organizations", "overrides"],
+  "locales": [
+    {
+      "locale": "fr-FR",
+      "state": "seed",
+      "common": "data/voice/dictionaries/fr-FR/common.json",
+      "accessibility": "data/voice/dictionaries/fr-FR/accessibility.json",
+      "countries": ["FR", "BE", "CH"]
+    },
+    {
+      "locale": "en-GB",
+      "state": "planned",
+      "common": "data/voice/dictionaries/en-GB/common.json",
+      "accessibility": "data/voice/dictionaries/en-GB/accessibility.json",
+      "countries": []
+    },
+    {
+      "locale": "es-ES",
+      "state": "planned",
+      "common": "data/voice/dictionaries/es-ES/common.json",
+      "accessibility": "data/voice/dictionaries/es-ES/accessibility.json",
+      "countries": []
+    },
+    {
+      "locale": "de-DE",
+      "state": "planned",
+      "common": "data/voice/dictionaries/de-DE/common.json",
+      "accessibility": "data/voice/dictionaries/de-DE/accessibility.json",
+      "countries": []
+    },
+    {
+      "locale": "it-IT",
+      "state": "planned",
+      "common": "data/voice/dictionaries/it-IT/common.json",
+      "accessibility": "data/voice/dictionaries/it-IT/accessibility.json",
+      "countries": []
+    },
+    {
+      "locale": "pt-PT",
+      "state": "planned",
+      "common": "data/voice/dictionaries/pt-PT/common.json",
+      "accessibility": "data/voice/dictionaries/pt-PT/accessibility.json",
+      "countries": []
+    }
+  ],
+  "countryPackPattern": "data/voice/dictionaries/{locale}/{country}/{type}.json",
+  "countryPackTypes": ["places", "streets", "transport", "organizations", "proper-person"],
+  "rules": {
+    "displayNameMustRemainAuthoritative": true,
+    "pronunciationMayVaryByListenerLocale": true,
+    "thirdPartyLicenseRequiredBeforeBundling": true,
+    "packAdditionDoesNotAutoEnableRuntime": true,
+    "offlinePacksMayBeDownloadedSeparately": true
+  }
+}
