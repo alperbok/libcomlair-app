@@ -27,6 +27,36 @@
       "mustRetest": ["common-noun-pronunciation","proper-name-pronunciation","cross-locale-place-name","micro-synonyms","search-aliases","dictionary-license-metadata","offline-dictionary-pack"]
     },
     {
+      "moduleId": "accessibility-passport",
+      "ownerFiles": ["data/profile/accessibility-passport-schema-v1.json","libcomlair-accessibility-engine-v173.js"],
+      "dependsOn": ["local-storage","i18n-registry","country-adapters","voice-preferences"],
+      "mustRetest": ["legacy-profile-read","legacy-profile-migration","functional-needs-preserved","language-country-independent","local-without-account","no-silent-sync-overwrite"]
+    },
+    {
+      "moduleId": "universal-place-record",
+      "ownerFiles": ["data/places/place-record-schema-v1.json","data/accessibility-model.json"],
+      "dependsOn": ["provider-adapters","photo-contributions","country-adapters"],
+      "mustRetest": ["unknown-remains-unknown","multiple-entrances","source-provenance","source-conflict","temporary-expiry","external-id-deduplication"]
+    },
+    {
+      "moduleId": "provider-contracts",
+      "ownerFiles": ["data/architecture/provider-contract-schema-v1.json"],
+      "dependsOn": ["provider-adapters","diagnostic"],
+      "mustRetest": ["required-fields","units-normalization","pagination","provider-schema-change","provider-failure-fallback","license-metadata"]
+    },
+    {
+      "moduleId": "data-migrations",
+      "ownerFiles": ["data/architecture/data-migrations-registry-v1.json"],
+      "dependsOn": ["local-storage","backup-restore","versioned-datasets"],
+      "mustRetest": ["old-format-readable","migration-copy","rollback","no-data-loss","restart-after-migration"]
+    },
+    {
+      "moduleId": "golden-reference-tests",
+      "ownerFiles": ["tests/golden-cases-v1.json","tests/reference-journeys.json"],
+      "dependsOn": ["stable-fixtures","module-tests"],
+      "mustRetest": ["place-complete","place-unknown","multi-entrance","transport-multi-direction","source-conflict","temporary-expiry","foreign-name-pronunciation","legacy-profile-migration"]
+    },
+    {
       "moduleId": "photo-contributions",
       "ownerFiles": ["docs/ARCHITECTURE-PHOTOS.md","data/media/photo-record-schema-v1.json"],
       "dependsOn": ["contributions","local-storage","offline-queue","privacy-pipeline","i18n-registry"],
