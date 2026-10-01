@@ -1,15 +1,18 @@
 (()=>{
 "use strict";
 
-const VERSION="v224-1";
-let last={time:0,measurablePercent:0,areas:[],externalDependencies:[],unknownAreas:[]};
+const VERSION="v224-2-honest-metrics";
+let last={time:0,confirmedAutonomyPercent:0,measurementCoveragePercent:0,areas:[],externalDependencies:[],unknownAreas:[],infrastructure:[]};
 
-function area(id,label,percent,status,detail){return {id,label,percent:Number.isFinite(percent)?Math.max(0,Math.min(100,Math.round(percent))):null,status:String(status||"unknown"),detail:String(detail||"")}}
+function area(id,label,percent,status,detail,kind="function"){
+  return {id,label,percent:Number.isFinite(percent)?Math.max(0,Math.min(100,Math.round(percent))):null,status:String(status||"unknown"),detail:String(detail||""),kind:String(kind||"function")};
+}
 
 async function inspect(){
   const areas=[];
   const external=[];
   const unknown=[];
+  const infrastructure=[];
 
   let welcome=null;
   try{welcome=window.LibcomlairWelcomeLocalFirst?.status?.()||null}catch(_){}
@@ -37,23 +40,46 @@ async function inspect(){
 
   let library=null;
   try{library=await window.LibcomlairRenderVoice?.voiceLibraryStatus?.()}catch(_){}
-  const localLibrary=library?.available===true;
-  areas.push(area("audio-library","Bibliothèque audio locale",localLibrary?100:0,localLibrary?"local":"a-verifier",localLibrary?(String(library.entries||0)+" enregistrement(s) local(aux)"):"bibliothèque locale non disponible"));
+  const libraryAvailable=library?.available===true;
+  const libraryEntries=Number(library?.entries)||0;
+  infrastructure.push({
+    id:"audio-library",
+    label:"Bibliothèque audio locale",
+    status:libraryAvailable?"infrastructure-disponible":"a-verifier",
+    detail:libraryAvailable
+      ?("infrastructure disponible — "+libraryEntries+" audio"+(libraryEntries>1?"s":"")+" enregistré"+(libraryEntries>1?"s":""))
+      :"infrastructure locale non confirmée"
+  });
 
   areas.push(area("data","Données essentielles hors ligne",null,"a-mesurer","la couverture locale des données sera calculée source par source"));
   unknown.push("données essentielles hors ligne");
 
-  const measurable=areas.filter(x=>Number.isFinite(x.percent));
-  const measurablePercent=measurable.length?Math.round(measurable.reduce((s,x)=>s+x.percent,0)/measurable.length):0;
-  last={time:Date.now(),measurablePercent,areas,externalDependencies:[...new Set(external)],unknownAreas:unknown};
+  const functional=areas.filter(x=>x.kind==="function");
+  const measurable=functional.filter(x=>Number.isFinite(x.percent));
+  const confirmedAutonomyPercent=measurable.length?Math.round(measurable.reduce((s,x)=>s+x.percent,0)/measurable.length):0;
+  const measurementCoveragePercent=functional.length?Math.round(measurable.length*100/functional.length):0;
+
+  last={
+    time:Date.now(),
+    confirmedAutonomyPercent,
+    measurementCoveragePercent,
+    areas,
+    externalDependencies:[...new Set(external)],
+    unknownAreas:unknown,
+    infrastructure
+  };
   try{window.dispatchEvent(new CustomEvent("libcomlair-autonomy-status",{detail:{...last}}))}catch(_){}
   return JSON.parse(JSON.stringify(last));
 }
 
 function text(snapshot){
   const s=snapshot||last;
-  const lines=["Autonomie mesurable : "+s.measurablePercent+" %"];
+  const lines=[
+    "Autonomie locale confirmée : "+s.confirmedAutonomyPercent+" % des fonctions actuellement mesurées",
+    "Couverture de mesure : "+s.measurementCoveragePercent+" % des domaines fonctionnels"
+  ];
   for(const a of s.areas)lines.push(a.label+" : "+(a.percent===null?"à mesurer":a.percent+" %")+" — "+a.detail);
+  for(const item of (s.infrastructure||[]))lines.push(item.label+" : "+item.detail);
   if(s.externalDependencies.length)lines.push("Dépendances restantes : "+s.externalDependencies.join(" ; "));
   if(s.unknownAreas.length)lines.push("À mesurer : "+s.unknownAreas.join(" ; "));
   return lines.join("\n");
