@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "seed-not-authorization",
+  "rules": {
+    "unknownRightsBlockBundling": true,
+    "unknownOfflineRightsBlockOfflinePack": true,
+    "attributionMustBePreserved": true,
+    "termsAndLicenseReviewedSeparately": true,
+    "providerContractMustReferenceResourceRights": true
+  },
+  "resources": [
+    {
+      "resourceId": "geoapify-api",
+      "displayName": "Geoapify",
+      "resourceType": "api",
+      "providerId": "geoapify",
+      "countryScope": ["GLOBAL"],
+      "licenseStatus": "not-reviewed",
+      "rightsStatus": "not-reviewed",
+      "usedFor": ["places", "geocoding", "nearby"],
+      "releaseAction": "audit-current-terms-before-offline-or-redistribution"
+    },
+    {
+      "resourceId": "idfm-data",
+      "displayName": "Île-de-France Mobilités data",
+      "resourceType": "transport",
+      "providerId": "idfm",
+      "countryScope": ["FR"],
+      "licenseStatus": "not-reviewed",
+      "rightsStatus": "not-reviewed",
+      "usedFor": ["transport", "stops", "directions", "accessibility"],
+      "releaseAction": "audit-datasets-and-each-license-before-bundling"
+    },
+    {
+      "resourceId": "sncf-data",
+      "displayName": "SNCF data",
+      "resourceType": "transport",
+      "providerId": "sncf",
+      "countryScope": ["FR"],
+      "licenseStatus": "not-reviewed",
+      "rightsStatus": "not-reviewed",
+      "usedFor": ["transport"],
+      "releaseAction": "audit-specific-source-before-integration"
+    },
+    {
+      "resourceId": "map-tiles-current-or-future",
+      "displayName": "Map tiles provider",
+      "resourceType": "map-tiles",
+      "providerId": null,
+      "countryScope": ["GLOBAL"],
+      "licenseStatus": "not-selected",
+      "rightsStatus": "not-reviewed",
+      "usedFor": ["map", "offline-travel-pack"],
+      "releaseAction": "select-provider-and-audit-cache-offline-redistribution-rights"
+    },
+    {
+      "resourceId": "routing-current-or-future",
+      "displayName": "Routing provider",
+      "resourceType": "routing",
+      "providerId": null,
+      "countryScope": ["GLOBAL"],
+      "licenseStatus": "not-selected",
+      "rightsStatus": "not-reviewed",
+      "usedFor": ["accessible-routes"],
+      "releaseAction": "select-provider-and-audit-terms"
+    },
+    {
+      "resourceId": "libcomlair-local-audio",
+      "displayName": "Libcomlair local audio library",
+      "resourceType": "audio",
+      "providerId": "libcomlair",
+      "countryScope": ["GLOBAL"],
+      "licenseStatus": "per-audio-origin-required",
+      "rightsStatus": "mixed",
+      "usedFor": ["fixed-voice", "offline-voice"],
+      "releaseAction": "track-each-generated-or-human-audio-origin-and-rights"
+    },
+    {
+      "resourceId": "libcomlair-dictionaries",
+      "displayName": "Libcomlair dictionaries and pronunciation data",
+      "resourceType": "dictionary",
+      "providerId": "libcomlair",
+      "countryScope": ["GLOBAL"],
+      "licenseStatus": "per-pack-required",
+      "rightsStatus": "mixed",
+      "usedFor": ["tts", "micro", "search", "pronunciation"],
+      "releaseAction": "audit-each-external-lexicon-and-pack-separately"
+    },
+    {
+      "resourceId": "user-contributed-photos",
+      "displayName": "User-contributed photos",
+      "resourceType": "photo",
+      "providerId": "users",
+      "countryScope": ["GLOBAL"],
+      "licenseStatus": "publication-terms-not-yet-defined",
+      "rightsStatus": "not-reviewed",
+      "usedFor": ["place-evidence", "temporary-reports"],
+      "releaseAction": "define-contributor-rights-and-removal-process-before-publication"
+    }
+  ]
+}
