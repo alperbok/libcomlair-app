@@ -87,7 +87,8 @@ Cette checklist doit être remplie avant de considérer l’architecture d’une
 - [ ] Parcours de référence identifié.
 - [ ] Test avec fournisseur externe indisponible lorsque pertinent.
 - [ ] Test hors ligne lorsque pertinent.
-- [ ] Validation Samsung prévue lorsqu’il y a UI, voix, micro, photo, GPS ou stockage utilisateur.
+- [ ] Validation sur smartphone Android réel prévue lorsqu’il y a UI, voix, micro, photo, GPS, permissions ou stockage utilisateur.
+- [ ] Avant diffusion stable large, compatibilité vérifiée sur un autre appareil Android d’un constructeur différent lorsque la fonction dépend du matériel, du navigateur, du WebView ou des permissions.
 
 ## 11. Promotion
 
