@@ -20,14 +20,14 @@
   function indicator(){
     const el=document.getElementById("voiceEngineMode");
     if(!el)return;
-    if(recognitionActive){el.textContent="Moteur vocal : microphone actif.";return}
-    if(lastStatus.state==="queued"){el.textContent="Moteur vocal : réponse en attente de la fin du microphone.";return}
-    if(lastStatus.state==="preparing-render"){el.textContent="Moteur vocal : connexion à la voix naturelle Render…";return}
-    if(lastStatus.state==="generating-render"){el.textContent="Moteur vocal : génération de la voix sur Render…";return}
-    if(lastStatus.state==="speaking"){el.textContent="Moteur vocal : voix naturelle Render active.";return}
-    if(lastOutcome.ok===true){el.textContent="Moteur vocal : voix naturelle Render validée.";return}
-    if(lastOutcome.ok===false){el.textContent="Moteur vocal : Render indisponible — aucune voix robotique utilisée.";return}
-    el.textContent=renderAvailable?"Moteur vocal : Render prêt.":"Moteur vocal : Render indisponible.";
+    if(recognitionActive){el.textContent="Voix Libcomlair : microphone actif.";return}
+    if(lastStatus.state==="queued"){el.textContent="Voix Libcomlair : réponse en attente de la fin du microphone.";return}
+    if(lastStatus.state==="preparing-render"){el.textContent="Voix dynamique externe : préparation en cours…";return}
+    if(lastStatus.state==="generating-render"){el.textContent="Voix dynamique externe : génération en cours…";return}
+    if(lastStatus.state==="speaking"){el.textContent="Voix Libcomlair : lecture en cours.";return}
+    if(lastOutcome.ok===true){el.textContent="Voix Libcomlair : dernière lecture réussie.";return}
+    if(lastOutcome.ok===false){el.textContent="Voix dynamique externe indisponible. Navigation locale disponible.";return}
+    el.textContent=renderAvailable?"Voix dynamique externe prête. Pack vocal local en cours d’intégration.":"Voix dynamique externe indisponible. Navigation locale disponible.";
   }
 
   function emit(state,extra){
@@ -50,7 +50,7 @@
     if(myGen!==generation)return;
     if(activeRequestId===requestId)activeRequestId="";
     activeEngine="none";
-    lastOutcome={ok:false,reason:String(reason||"render_failed"),engine:"render",time:Date.now(),requestId};
+    lastOutcome={ok:false,reason:String(reason||"external_voice_failed"),engine:"render",time:Date.now(),requestId};
     emit("error",{error:lastOutcome.reason,engine:"render",requestId});
     try{opts.onerror?.({error:lastOutcome.reason,engine:"render",requestId})}catch(_){}
   }
@@ -66,10 +66,6 @@
   async function runRender(text,opts,myGen,requestId){
     if(!renderAvailable||myGen!==generation){fail(opts,myGen,requestId,"render_unavailable");return}
     try{
-      // Le contrôle /status de Render reste utile au préchauffage et au diagnostic,
-      // mais il ne doit jamais bloquer une lecture demandée par l’utilisateur.
-      // Le moteur Render sait lire un audio local déjà enregistré ou tenter directement
-      // la génération TTS ; on lance donc prepare() en arrière-plan seulement.
       warmRenderInBackground();
       if(myGen!==generation||activeRequestId!==requestId)return;
 
@@ -78,19 +74,19 @@
         requestId,
         onstart:meta=>{
           if(myGen!==generation||activeRequestId!==requestId)return;
-          activeEngine="render";
+          activeEngine=meta?.engine||"render";
           lastOutcome={ok:true,reason:"started",engine:meta?.engine||"render",time:Date.now(),requestId};
-          emit("speaking",{voice:"voix naturelle Render",engine:meta?.engine||"render",mode:meta?.mode||"server",requestId});
-          try{opts.onstart?.({voice:"voix naturelle Render",engine:"render",mode:"server",requestId,...(meta||{})})}catch(_){}
+          emit("speaking",{voice:"voix Libcomlair",engine:meta?.engine||"render",mode:meta?.mode||"server",requestId});
+          try{opts.onstart?.({voice:"voix Libcomlair",engine:"render",mode:"server",requestId,...(meta||{})})}catch(_){}
         },
         onend:meta=>{
           if(myGen!==generation||activeRequestId!==requestId)return;
           lastOutcome={ok:true,reason:"ended",engine:meta?.engine||"render",time:Date.now(),requestId};
           activeRequestId="";
           activeEngine="none";
-          emit("idle",{voice:"voix naturelle Render",engine:meta?.engine||"render",mode:meta?.mode||"server",requestId});
+          emit("idle",{voice:"voix Libcomlair",engine:meta?.engine||"render",mode:meta?.mode||"server",requestId});
           indicator();
-          try{opts.onend?.({voice:"voix naturelle Render",engine:"render",mode:"server",requestId,...(meta||{})})}catch(_){}
+          try{opts.onend?.({voice:"voix Libcomlair",engine:"render",mode:"server",requestId,...(meta||{})})}catch(_){}
         }
       });
     }catch(error){
@@ -140,7 +136,7 @@
   function status(){
     let renderStatus=null;
     try{renderStatus=renderAvailable&&typeof renderVoice.status==="function"?renderVoice.status():null}catch(_){}
-    return {version:"v191.1-direct-speak",available:renderAvailable,renderAvailable,renderReady:!!renderStatus?.ready,prepareBlocksSpeak:false,activeEngine,activeRequestId,recognitionActive,queued:!!queued,voiceCount:0,frenchVoiceCount:0,localFrenchVoiceCount:0,pronunciationRules:{Libcomlair:"Lib comme l’air"},lastOutcome:{...lastOutcome},last:{...lastStatus},renderStatus};
+    return {version:"v191.2-local-first-status",available:renderAvailable,renderAvailable,renderReady:!!renderStatus?.ready,prepareBlocksSpeak:false,activeEngine,activeRequestId,recognitionActive,queued:!!queued,voiceCount:0,frenchVoiceCount:0,localFrenchVoiceCount:0,pronunciationRules:{Libcomlair:"Lib comme l’air"},lastOutcome:{...lastOutcome},last:{...lastStatus},renderStatus};
   }
 
   function testDetailed(timeoutMs){
@@ -157,5 +153,5 @@
   function test(){return speak("Assistance vocale Libcomlair activée.")}
 
   indicator();
-  window.LibcomlairVoice={version:"v191.1-direct-speak",available:renderAvailable,speak,cancel,test,testDetailed,setRecognitionActive,isRecognitionActive:()=>recognitionActive,status,prepareRender:()=>renderAvailable?renderVoice.prepare():Promise.reject(new Error("render_unavailable"))};
+  window.LibcomlairVoice={version:"v191.2-local-first-status",available:renderAvailable,speak,cancel,test,testDetailed,setRecognitionActive,isRecognitionActive:()=>recognitionActive,status,prepareRender:()=>renderAvailable?renderVoice.prepare():Promise.reject(new Error("render_unavailable"))};
 })();
