@@ -77,6 +77,22 @@ Chaque décision importante doit contenir :
 - Décision : les fonctions à risque ou expérimentales doivent être activables séparément avant promotion comme référence.
 - Raison : pouvoir désactiver une nouveauté sans casser le reste de l’application.
 
+### ADR-008 — photos facultatives et respectueuses de la vie privée
+
+- Date : 2026-10-01
+- Sujet : contributions photo.
+- Décision : une photo ne sera jamais obligatoire pour utiliser Libcomlair ou contribuer ; elle possède des métadonnées de droits, une description alternative et un traitement de confidentialité avant synchronisation.
+- Raison : préserver l’accessibilité, éviter d’exclure les personnes malvoyantes et prévenir la diffusion inutile de données personnelles ou de géolocalisation EXIF.
+- Conséquence : stockage local et file hors ligne séparés, suppression EXIF avant envoi, descriptions vocales et textuelles, validation Samsung avant activation.
+
+### ADR-009 — dictionnaires vocaux par langue, territoire et type de nom
+
+- Date : 2026-10-01
+- Sujet : TTS, microphone, recherche et internationalisation.
+- Décision : séparer noms communs, vocabulaire d’accessibilité et familles de noms propres ; conserver la forme officielle affichée et gérer la prononciation séparément selon la langue de l’utilisateur.
+- Raison : un même nom propre peut être écrit de la même manière mais nécessiter une prononciation différente selon la langue d’écoute ; les ressources de plusieurs pays auront aussi des licences différentes.
+- Conséquence : packs versionnés par locale/pays, provenance et licence par ressource, corrections Libcomlair prioritaires et téléchargement hors ligne possible.
+
 ## Règle
 
 Une décision peut être remplacée, mais elle ne doit pas être supprimée. Ajouter une nouvelle décision indiquant explicitement celle qu’elle remplace et pourquoi.
