@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.9</title>
+<title>Libcomlair — cadre maître v6.8.10</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
 <script>
 (async()=>{
   try{
-    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=21",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=22",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
-    html=html.replace("master-frame-source=3","master-frame-source=31");
+    html=html.replace("master-frame-source=3","master-frame-source=32");
     html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v196.js?v=196-10");
     html=html.replace("libcomlair-voice-engine-v191.js?v=191-1","libcomlair-voice-engine-v191.js?v=191-2");
     html=html.replace("libcomlair-v224-page4.css?v=master-7","libcomlair-v224-page4.css?v=master-9");
@@ -38,12 +38,12 @@
 
     html=html.replace(
       'libcomlair-v224-master-frame-integration-v1.js?v=2\"><\/script>',
-      'libcomlair-v224-master-frame-integration-v1.js?v=15\"><\/script><script src="libcomlair-v224-frame-fixes-v6.js?v=6\"><\/script><script src="libcomlair-v224-data-count-diagnostic.js?v=3\"><\/script><script src="libcomlair-v224-voice-independence-v1.js?v=1\"><\/script><script src="libcomlair-v224-technical-menu-access-v1.js?v=1\"><\/script>'
+      'libcomlair-v224-master-frame-integration-v1.js?v=15\"><\/script><script src="libcomlair-v224-frame-fixes-v6.js?v=6\"><\/script><script src="libcomlair-v224-data-count-diagnostic.js?v=3\"><\/script><script src="libcomlair-v224-voice-independence-v1.js?v=1\"><\/script><script src="libcomlair-v224-voice-local-coverage-v1.js?v=1\"><\/script><script src="libcomlair-v224-technical-menu-access-v1.js?v=1\"><\/script>'
     );
 
     html=html.replace(
       "v17-master-source-cleanup",
-      "v17-master-source-cleanup-6.8.9-welcome-local-first-nonblocking"
+      "v17-master-source-cleanup-6.8.10-welcome-local-first-coverage"
     );
 
     document.open();
