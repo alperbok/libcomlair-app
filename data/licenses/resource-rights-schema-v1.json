@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "resource": {
+    "resourceId": "",
+    "displayName": "",
+    "resourceType": "dataset|api|map-tiles|geocoding|routing|transport|photo|audio|voice-model|dictionary|software|other",
+    "providerId": null,
+    "countryScope": [],
+    "sourceUrl": "",
+    "termsUrl": null,
+    "license": {
+      "name": null,
+      "url": null,
+      "version": null,
+      "verifiedAt": null,
+      "status": "not-reviewed|reviewing|verified|restricted|revalidation-required|rejected"
+    },
+    "rights": {
+      "accessAllowed": null,
+      "cacheAllowed": null,
+      "offlineStorageAllowed": null,
+      "transformationAllowed": null,
+      "redistributionAllowed": null,
+      "commercialUseAllowed": null,
+      "derivativeDatabaseAllowed": null,
+      "attributionRequired": null,
+      "shareAlikeRequired": null,
+      "deletionOnTerminationRequired": null
+    },
+    "limits": {
+      "cacheDuration": null,
+      "offlineAreaLimit": null,
+      "requestQuota": null,
+      "attributionText": null,
+      "attributionPlacement": null,
+      "other": []
+    },
+    "review": {
+      "lastCheckedAt": null,
+      "nextReviewAt": null,
+      "reviewedBy": null,
+      "evidence": []
+    },
+    "integration": {
+      "ownerModule": null,
+      "bundled": false,
+      "downloadablePack": false,
+      "runtimeOnly": false,
+      "fallbackResourceId": null
+    }
+  },
+  "rules": {
+    "publicApiDoesNotImplyRedistributionRight": true,
+    "onlineAccessDoesNotImplyOfflineStorageRight": true,
+    "licenseMustBeVerifiedBeforeBundling": true,
+    "offlinePackRequiresOfflineStorageRight": true,
+    "redistributionRequiresExplicitRight": true,
+    "attributionMustTravelWithResource": true,
+    "termsChangesRequireRevalidation": true,
+    "unknownRightMeansNotAuthorizedForThatUse": true,
+    "schemaMigrationRequiredForBreakingChange": true
+  }
+}
