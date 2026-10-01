@@ -10,10 +10,10 @@ on:
       - "scripts/generate-fixed-voice-pack-pocket-tts.py"
       - "scripts/generate-welcome-voice-candidates-pocket-tts.py"
       - "data/voice/libcomlair-fixed-audio.json"
-      - "data/voice/pocket-tts-estelle-provenance-v1.json"
+      - "data/voice/libcomlair-fixed-voice-source-v1.json"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   generate-welcome:
@@ -64,6 +64,53 @@ jobs:
               assert entry['wav']['channels'] == 1
           print('Three voice candidates verified')
           PY
+
+      - name: Prepare direct Android listening page
+        run: |
+          mkdir -p voice-tests/fr-FR
+          cp voice-candidates-output/candidate-b-welcome.wav voice-tests/fr-FR/alba-welcome.wav
+          cp voice-candidates-output/candidate-c-welcome.wav voice-tests/fr-FR/vera-welcome.wav
+          cat > voice-tests/fr-FR/index.html <<'HTML'
+          <!doctype html>
+          <html lang="fr">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1">
+            <title>Libcomlair — test des voix françaises</title>
+            <style>
+              body{font-family:Arial,sans-serif;max-width:760px;margin:0 auto;padding:24px;line-height:1.5;background:#fff;color:#111}
+              h1{font-size:1.8rem}
+              section{border:1px solid #ccc;border-radius:16px;padding:18px;margin:18px 0}
+              audio{width:100%;margin-top:10px}
+              .note{background:#f4f6f8;border-radius:12px;padding:14px}
+            </style>
+          </head>
+          <body>
+            <h1>Test des voix françaises Libcomlair</h1>
+            <p class="note">Estelle a été écartée après écoute sur Android car sa voix a été jugée trop enfantine. Cette page sert uniquement à comparer les deux candidates restantes. Elle ne modifie pas la voix active de l’application.</p>
+            <section>
+              <h2>Voix B — Alba</h2>
+              <audio controls preload="metadata" src="alba-welcome.wav"></audio>
+            </section>
+            <section>
+              <h2>Voix C — Vera</h2>
+              <audio controls preload="metadata" src="vera-welcome.wav"></audio>
+            </section>
+          </body>
+          </html>
+          HTML
+
+      - name: Publish direct listening files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add voice-tests/fr-FR/alba-welcome.wav voice-tests/fr-FR/vera-welcome.wav voice-tests/fr-FR/index.html
+          if git diff --cached --quiet; then
+            echo "Direct listening files already up to date"
+          else
+            git commit -m "Publish Alba and Vera welcome voice tests [skip ci]"
+            git push
+          fi
 
       - name: Upload voice comparison artifact
         uses: actions/upload-artifact@v4
