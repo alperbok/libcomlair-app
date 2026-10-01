@@ -33,6 +33,12 @@
       "mustRetest": ["legacy-profile-read","legacy-profile-migration","functional-needs-preserved","language-country-independent","local-without-account","no-silent-sync-overwrite"]
     },
     {
+      "moduleId": "global-geolocation",
+      "ownerFiles": ["docs/ARCHITECTURE-GPS-MONDIAL.md","data/geography/location-fix-schema-v1.json"],
+      "dependsOn": ["android-location-permission","manual-location","diagnostic","country-adapters"],
+      "mustRetest": ["permission-denied-manual-fallback","approximate-location","precise-location","stale-location","country-change","border-crossing","map-provider-failure","reverse-geocode-failure","no-location-history-by-default","android-real-device"]
+    },
+    {
       "moduleId": "universal-place-record",
       "ownerFiles": ["data/places/place-record-schema-v1.json","data/accessibility-model.json"],
       "dependsOn": ["provider-adapters","photo-contributions","country-adapters"],
@@ -41,8 +47,8 @@
     {
       "moduleId": "accessible-routes",
       "ownerFiles": ["data/routes/accessibility-route-schema-v1.json"],
-      "dependsOn": ["accessibility-passport","universal-place-record","transport","temporary-conditions"],
-      "mustRetest": ["segment-unknown-preserved","multi-segment-accessibility","temporary-blockage","destination-entrance-selection","profile-not-mutated"]
+      "dependsOn": ["global-geolocation","accessibility-passport","universal-place-record","transport","temporary-conditions"],
+      "mustRetest": ["segment-unknown-preserved","multi-segment-accessibility","temporary-blockage","destination-entrance-selection","profile-not-mutated","border-crossing"]
     },
     {
       "moduleId": "sync-conflict-safety",
@@ -51,27 +57,39 @@
       "mustRetest": ["local-only-without-account","pending-upload-survives-restart","remote-conflict-visible","no-silent-overwrite","explicit-delete"]
     },
     {
+      "moduleId": "resource-rights-registry",
+      "ownerFiles": ["config/libcomlair-rights-registry-v1.json","data/licenses/resource-rights-schema-v1.json"],
+      "dependsOn": ["license-audit"],
+      "mustRetest": ["unknown-right-blocks-bundling","offline-right-required","attribution-preserved","terms-change-revalidation","per-resource-rights"]
+    },
+    {
       "moduleId": "provider-contracts",
       "ownerFiles": ["data/architecture/provider-contract-schema-v1.json"],
-      "dependsOn": ["provider-adapters","diagnostic"],
-      "mustRetest": ["required-fields","units-normalization","pagination","provider-schema-change","provider-failure-fallback","license-metadata"]
+      "dependsOn": ["provider-adapters","diagnostic","resource-rights-registry"],
+      "mustRetest": ["required-fields","units-normalization","pagination","provider-schema-change","provider-failure-fallback","license-metadata","offline-rights"]
+    },
+    {
+      "moduleId": "legal-compliance-registry",
+      "ownerFiles": ["config/libcomlair-legal-registry-v1.json","data/legal/jurisdiction-compliance-schema-v1.json"],
+      "dependsOn": ["resource-rights-registry","country-release-process"],
+      "mustRetest": ["gps-does-not-select-jurisdiction","regional-country-stacking","official-source-traceability","country-release-block-without-review","revalidation-date","no-cross-country-legal-inference"]
     },
     {
       "moduleId": "data-migrations",
       "ownerFiles": ["data/architecture/data-migrations-registry-v1.json"],
       "dependsOn": ["local-storage","backup-restore","versioned-datasets"],
-      "mustRetest": ["old-format-readable","migration-copy","rollback","no-data-loss","restart-after-migration"]
+      "mustRetest": ["old-format-readable","migration-copy","rollback","no-data-loss","restart-after-migration","ephemeral-location-remains-ephemeral","legal-rights-history-retained"]
     },
     {
       "moduleId": "golden-reference-tests",
       "ownerFiles": ["tests/golden-cases-v1.json","tests/reference-journeys.json"],
       "dependsOn": ["stable-fixtures","module-tests"],
-      "mustRetest": ["place-complete","place-unknown","multi-entrance","transport-multi-direction","source-conflict","temporary-expiry","foreign-name-pronunciation","legacy-profile-migration"]
+      "mustRetest": ["place-complete","place-unknown","multi-entrance","transport-multi-direction","source-conflict","temporary-expiry","foreign-name-pronunciation","legacy-profile-migration","gps-country-independence","offline-rights-gate","legal-release-gate"]
     },
     {
       "moduleId": "photo-contributions",
       "ownerFiles": ["docs/ARCHITECTURE-PHOTOS.md","data/media/photo-record-schema-v1.json"],
-      "dependsOn": ["contributions","local-storage","offline-queue","privacy-pipeline","i18n-registry"],
+      "dependsOn": ["contributions","local-storage","offline-queue","privacy-pipeline","i18n-registry","resource-rights-registry"],
       "mustRetest": ["camera-capture","gallery-import","contribution-without-photo","vision-alt-description","exif-removal","offline-photo-queue","resume-after-restart","photo-rights-metadata"]
     },
     {
@@ -89,20 +107,20 @@
     {
       "moduleId": "offline-shell",
       "ownerFiles": ["config/libcomlair-offline-essential-assets-v1.json"],
-      "dependsOn": ["master-frame","essential-assets"],
-      "mustRetest": ["cold-start-online","reload-offline","startup-with-render-blocked","local-diagnostic-offline"]
+      "dependsOn": ["master-frame","essential-assets","resource-rights-registry"],
+      "mustRetest": ["cold-start-online","reload-offline","startup-with-render-blocked","local-diagnostic-offline","offline-assets-authorized"]
     },
     {
       "moduleId": "around-me",
       "ownerFiles": ["libcomlair-v221-secure.js","libcomlair-v224-nearby-count-sync-v37.js"],
-      "dependsOn": ["geolocation","geoapify-nearby","idfm-nearby","local-nearby-cache"],
-      "mustRetest": ["nearby-online","nearby-provider-failure","nearby-counter","stale-cache-behaviour"]
+      "dependsOn": ["global-geolocation","geoapify-nearby","idfm-nearby","local-nearby-cache"],
+      "mustRetest": ["nearby-online","nearby-provider-failure","nearby-counter","stale-cache-behaviour","manual-location-without-gps"]
     },
     {
       "moduleId": "transport",
       "ownerFiles": ["libcomlair-transport-engine-v173.js","libcomlair-v157-directions.js"],
-      "dependsOn": ["idfm-nearby","local-transport-data"],
-      "mustRetest": ["transport-list","stop-identifiers","addresses","multiple-directions","alphabetical-order"]
+      "dependsOn": ["idfm-nearby","local-transport-data","provider-contracts"],
+      "mustRetest": ["transport-list","stop-identifiers","addresses","multiple-directions","alphabetical-order","source-rights-metadata"]
     }
   ]
 }
