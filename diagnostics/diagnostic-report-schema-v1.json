@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "privacy": {
+    "includePreciseLocation": false,
+    "includeUserText": false,
+    "includeAudioContent": false,
+    "includeSecrets": false,
+    "includeRawStorage": false
+  },
+  "report": {
+    "appVersion": null,
+    "generatedAt": null,
+    "mode": "normal",
+    "activeContext": null,
+    "networkState": null,
+    "storage": {
+      "available": null,
+      "estimatedBytes": null,
+      "usedBytes": null
+    },
+    "modules": [],
+    "voice": {
+      "provider": null,
+      "localAudioAvailable": null,
+      "dictionaryAvailable": null,
+      "localTtsAvailable": null,
+      "lastErrorCode": null
+    },
+    "microphone": {
+      "permissionState": null,
+      "captureAvailable": null,
+      "recognitionProvider": null,
+      "lastErrorCode": null
+    },
+    "gps": {
+      "permissionState": null,
+      "available": null,
+      "lastErrorCode": null
+    },
+    "data": {
+      "catalogueVersion": null,
+      "transportVersion": null,
+      "voiceDictionaryVersion": null,
+      "counts": {}
+    },
+    "lastRepair": null,
+    "lastReferenceJourney": null
+  },
+  "moduleShape": {
+    "moduleId": "",
+    "version": "",
+    "state": "non-teste",
+    "lastSuccessfulTest": null,
+    "lastErrorCode": null,
+    "dependencies": [],
+    "fallbackActive": null,
+    "featureFlag": null
+  }
+}
