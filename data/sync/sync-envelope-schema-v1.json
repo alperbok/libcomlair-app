@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "record": {
+    "recordId": "",
+    "recordType": "profile|favorite|contribution|photo|travel-pack|other",
+    "localRevision": 0,
+    "remoteRevision": null,
+    "updatedAt": "",
+    "lastSyncedAt": null,
+    "syncState": "local-only|pending-upload|synced|conflict|pending-delete",
+    "conflict": {
+      "detected": false,
+      "localVersion": null,
+      "remoteVersion": null,
+      "resolution": "unresolved|keep-local|keep-remote|merge"
+    },
+    "privacy": {
+      "containsSensitiveFunctionalPreferences": false,
+      "remoteAllowed": false
+    }
+  },
+  "rules": {
+    "localUseWithoutAccount": true,
+    "noSilentRemoteOverwrite": true,
+    "noSilentLocalOverwrite": true,
+    "conflictMustBeExplicit": true,
+    "deleteMustBePropagatedOnlyAfterExplicitUserAction": true,
+    "offlineQueueMustSurviveRestart": true,
+    "sensitiveFunctionalPreferencesRequireExplicitSyncChoice": true
+  }
+}
