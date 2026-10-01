@@ -42,11 +42,43 @@
       "caseId": "legacy-profile-migration",
       "fixture": "libcomlair-access-profile-v1",
       "expected": ["needs-preserved", "old-profile-not-deleted-before-validation"]
+    },
+    {
+      "caseId": "gps-country-language-independence",
+      "fixture": null,
+      "expected": ["gps-country-hint-only", "search-country-unchanged-without-user-action", "interface-locale-unchanged", "accessibility-profile-unchanged"]
+    },
+    {
+      "caseId": "gps-permission-denied",
+      "fixture": null,
+      "expected": ["manual-location-available", "core-navigation-not-blocked", "no-repeated-forced-permission"]
+    },
+    {
+      "caseId": "gps-stale-position",
+      "fixture": null,
+      "expected": ["stale-not-presented-as-current", "recalculation-or-warning"]
+    },
+    {
+      "caseId": "legal-jurisdiction-stacking",
+      "fixture": null,
+      "expected": ["regional-and-country-rules-separate", "gps-not-sole-jurisdiction-selector", "official-source-traceability"]
+    },
+    {
+      "caseId": "country-release-without-legal-review",
+      "fixture": null,
+      "expected": ["official-release-blocked", "prepared-or-test-state-only"]
+    },
+    {
+      "caseId": "offline-resource-with-unknown-rights",
+      "fixture": null,
+      "expected": ["offline-bundling-blocked", "online-use-not-treated-as-offline-right", "reason-visible-in-diagnostic"]
     }
   ],
   "rules": {
     "fixtureMustBeValidatedBeforeBecomingGolden": true,
     "goldenCasesMustNotDependOnLiveApiOnly": true,
-    "breakingChangeRequiresExplicitExpectedUpdate": true
+    "breakingChangeRequiresExplicitExpectedUpdate": true,
+    "legalCaseDoesNotReplaceQualifiedLegalReview": true,
+    "rightsCaseDoesNotAssumePermissionWhenUnknown": true
   }
 }
