@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "locale": "fr-FR",
+  "state": "seed",
+  "messages": {
+    "app.name": "Libcomlair",
+    "welcome.main": "Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver pour tous. Appuyez sur Suivant pour commencer.",
+    "nav.next": "Suivant",
+    "nav.back": "Retour",
+    "presentation.main": "Présentation Libcomlair",
+    "diagnostic.open": "Diagnostic de fonctionnement",
+    "repair.start": "Réparation de Libcomlair en cours",
+    "micro.confirmation": "Commande vocale prise en compte"
+  },
+  "notes": "Fichier de départ uniquement. Le runtime i18n n’est pas encore activé. Les prochaines migrations devront remplacer progressivement les textes codés en dur par des identifiants stables."
+}
