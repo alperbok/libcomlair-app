@@ -4,13 +4,15 @@ Application d’accessibilité conçue pour aider les personnes en situation de 
 
 ## Principes du projet
 
+- cible mobile actuelle : **smartphones Android** ; iPhone/iOS et les autres plateformes ne font pas partie du périmètre actuel ;
+- Samsung est l’appareil de référence de développement actuellement disponible, pas une exigence de compatibilité ;
 - accessibilité visuelle, vocale et micro ;
 - fonctionnement aussi autonome que possible ;
 - aucune dépendance critique à un fournisseur unique ;
 - conservation locale des fonctions essentielles ;
 - diagnostic et réparation intégrés ;
 - données et licences traçables ;
-- validation finale sur téléphone réel ;
+- validation finale sur smartphone Android réel ;
 - principe d’architecture : **1 fonction = 1 module responsable = 1 diagnostic = 1 réparation = 1 secours lorsque possible** ;
 - une nouveauté à risque est d’abord isolée et testée avant de remplacer une fonction stable ;
 - **la navigation essentielle ne doit jamais attendre une voix, un réseau ou un fournisseur externe** ;
@@ -25,6 +27,7 @@ Application d’accessibilité conçue pour aider les personnes en situation de 
 - [`docs/ARCHITECTURE-PHOTOS.md`](docs/ARCHITECTURE-PHOTOS.md) — photos, descriptions alternatives, droits, confidentialité et hors ligne.
 - [`docs/ARCHITECTURE-ANTI-REFONTE.md`](docs/ARCHITECTURE-ANTI-REFONTE.md) — règles pour éviter les futures reconstructions du cœur de l’application.
 - [`docs/CHECKLIST-NOUVELLE-FONCTION.md`](docs/CHECKLIST-NOUVELLE-FONCTION.md) — checklist obligatoire avant de commencer une nouvelle fonction.
+- [`docs/VALIDATION-ANDROID.md`](docs/VALIDATION-ANDROID.md) — cible Android, appareil de référence et validation multi-constructeurs.
 - [`docs/REGISTRE-DIAGNOSTIC-REPARATION.md`](docs/REGISTRE-DIAGNOSTIC-REPARATION.md) — point d’entrée en cas de panne : Module → Diagnostic → Réparation → Secours.
 - [`docs/MODE-SUR-ET-FEATURE-FLAGS.md`](docs/MODE-SUR-ET-FEATURE-FLAGS.md) — mode sûr et activation séparée des nouveautés.
 - [`docs/MAINTENANCE-AVANCEE.md`](docs/MAINTENANCE-AVANCEE.md) — séparation du menu utilisateur et de la maintenance réservée au développement.
@@ -61,10 +64,10 @@ Avant de coder, utiliser `docs/CHECKLIST-NOUVELLE-FONCTION.md`. Une case pertine
 
 ## Règle avant version stable
 
-Une version stable est la dernière version **réellement validée**, pas simplement la plus récente. Le protocole `docs/VALIDATION-VERSION-STABLE.md` impose : source vérifiée → diagnostic → tests ciblés → parcours de référence → validation téléphone lorsque nécessaire → conformité → promotion.
+Une version stable est la dernière version **réellement validée**, pas simplement la plus récente. Le protocole `docs/VALIDATION-VERSION-STABLE.md` impose : source vérifiée → diagnostic → tests ciblés → parcours de référence → validation Android réelle lorsque nécessaire → conformité → promotion.
 
 ## Objectif d’indépendance
 
 Le téléphone doit posséder tout ce qui est indispensable au fonctionnement essentiel de Libcomlair. Internet doit principalement servir à enrichir et actualiser les données.
 
-L’indépendance complète ne sera considérée comme atteinte que lorsque, téléphone en mode avion et Render indisponible, un utilisateur du profil Vision pourra encore ouvrir Libcomlair, entendre l’interface, naviguer au micro, entendre des informations dynamiques, consulter les données locales, utiliser le Diagnostic et enregistrer une contribution locale.
+L’indépendance complète ne sera considérée comme atteinte que lorsque, smartphone Android en mode avion et Render indisponible, un utilisateur du profil Vision pourra encore ouvrir Libcomlair, entendre l’interface, naviguer au micro, entendre des informations dynamiques, consulter les données locales, utiliser le Diagnostic et enregistrer une contribution locale.
