@@ -55,29 +55,40 @@
     try{opts.onerror?.({error:lastOutcome.reason,engine:"render",requestId})}catch(_){}
   }
 
+  function warmRenderInBackground(){
+    try{
+      const task=renderVoice.prepare();
+      Promise.resolve(task).catch(()=>{});
+      return true;
+    }catch(_){return false}
+  }
+
   async function runRender(text,opts,myGen,requestId){
     if(!renderAvailable||myGen!==generation){fail(opts,myGen,requestId,"render_unavailable");return}
     try{
-      emit("preparing-render",{requestId});
-      await renderVoice.prepare();
+      // Le contrôle /status de Render reste utile au préchauffage et au diagnostic,
+      // mais il ne doit jamais bloquer une lecture demandée par l’utilisateur.
+      // Le moteur Render sait lire un audio local déjà enregistré ou tenter directement
+      // la génération TTS ; on lance donc prepare() en arrière-plan seulement.
+      warmRenderInBackground();
       if(myGen!==generation||activeRequestId!==requestId)return;
 
-      emit("generating-render",{requestId});
+      emit("generating-render",{requestId,prepareMode:"background"});
       await renderVoice.speak(text,{
         requestId,
         onstart:meta=>{
           if(myGen!==generation||activeRequestId!==requestId)return;
           activeEngine="render";
-          lastOutcome={ok:true,reason:"started",engine:"render",time:Date.now(),requestId};
-          emit("speaking",{voice:"voix naturelle Render",engine:"render",requestId});
+          lastOutcome={ok:true,reason:"started",engine:meta?.engine||"render",time:Date.now(),requestId};
+          emit("speaking",{voice:"voix naturelle Render",engine:meta?.engine||"render",mode:meta?.mode||"server",requestId});
           try{opts.onstart?.({voice:"voix naturelle Render",engine:"render",mode:"server",requestId,...(meta||{})})}catch(_){}
         },
         onend:meta=>{
           if(myGen!==generation||activeRequestId!==requestId)return;
-          lastOutcome={ok:true,reason:"ended",engine:"render",time:Date.now(),requestId};
+          lastOutcome={ok:true,reason:"ended",engine:meta?.engine||"render",time:Date.now(),requestId};
           activeRequestId="";
           activeEngine="none";
-          emit("idle",{voice:"voix naturelle Render",engine:"render",requestId});
+          emit("idle",{voice:"voix naturelle Render",engine:meta?.engine||"render",mode:meta?.mode||"server",requestId});
           indicator();
           try{opts.onend?.({voice:"voix naturelle Render",engine:"render",mode:"server",requestId,...(meta||{})})}catch(_){}
         }
@@ -129,7 +140,7 @@
   function status(){
     let renderStatus=null;
     try{renderStatus=renderAvailable&&typeof renderVoice.status==="function"?renderVoice.status():null}catch(_){}
-    return {version:"v191",available:renderAvailable,renderAvailable,renderReady:!!renderStatus?.ready,activeEngine,activeRequestId,recognitionActive,queued:!!queued,voiceCount:0,frenchVoiceCount:0,localFrenchVoiceCount:0,pronunciationRules:{Libcomlair:"Lib comme l’air"},lastOutcome:{...lastOutcome},last:{...lastStatus},renderStatus};
+    return {version:"v191.1-direct-speak",available:renderAvailable,renderAvailable,renderReady:!!renderStatus?.ready,prepareBlocksSpeak:false,activeEngine,activeRequestId,recognitionActive,queued:!!queued,voiceCount:0,frenchVoiceCount:0,localFrenchVoiceCount:0,pronunciationRules:{Libcomlair:"Lib comme l’air"},lastOutcome:{...lastOutcome},last:{...lastStatus},renderStatus};
   }
 
   function testDetailed(timeoutMs){
@@ -146,5 +157,5 @@
   function test(){return speak("Assistance vocale Libcomlair activée.")}
 
   indicator();
-  window.LibcomlairVoice={version:"v191",available:renderAvailable,speak,cancel,test,testDetailed,setRecognitionActive,isRecognitionActive:()=>recognitionActive,status,prepareRender:()=>renderAvailable?renderVoice.prepare():Promise.reject(new Error("render_unavailable"))};
+  window.LibcomlairVoice={version:"v191.1-direct-speak",available:renderAvailable,speak,cancel,test,testDetailed,setRecognitionActive,isRecognitionActive:()=>recognitionActive,status,prepareRender:()=>renderAvailable?renderVoice.prepare():Promise.reject(new Error("render_unavailable"))};
 })();
