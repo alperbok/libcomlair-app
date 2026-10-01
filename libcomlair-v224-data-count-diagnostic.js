@@ -6,6 +6,8 @@
     idfm:"libcomlair-idfm-nearby-v138",
     proposals:"libcomlair-proposals-v13"
   });
+  const FIXED_SEARCH_RESULTS=3; // gares officielles actuellement intégrées directement au catalogue
+  const registeredSources=new Map();
 
   function readArray(key){
     try{
@@ -32,12 +34,59 @@
     return [...counts.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],"fr"));
   }
 
+  function normalize(value){
+    return String(value||"").toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+  }
+
+  function looksLikePlace(item){
+    if(!item||typeof item!=="object"||Array.isArray(item))return false;
+    const name=String(item.name||"").trim();
+    if(!name)return false;
+    return !!(item.city||item.commune||item.town||item.address||item.category||item.geoapify||item.idfm||Number.isFinite(Number(item.lat))||Number.isFinite(Number(item.lon)));
+  }
+
+  function placeKey(item){
+    const stable=String(item.id||item.place_id||item.placeId||item.osm_id||"").trim();
+    if(stable)return "id:"+stable;
+    const lat=Number(item.lat),lon=Number(item.lon);
+    return [normalize(item.name),normalize(item.city||item.commune||item.town),Number.isFinite(lat)?lat.toFixed(5):"",Number.isFinite(lon)?lon.toFixed(5):""].join("|");
+  }
+
+  function obsoleteNearbyKey(key){
+    return (/^libcomlair-geoapify-nearby-/.test(key)&&key!==KEYS.geo)||(/^libcomlair-idfm-nearby-/.test(key)&&key!==KEYS.idfm);
+  }
+
+  function storedCatalogue(){
+    const seen=new Set();
+    const sourceCounts=[];
+    try{
+      for(let i=0;i<localStorage.length;i++){
+        const key=localStorage.key(i);
+        if(!key||obsoleteNearbyKey(key))continue;
+        let value=null;
+        try{value=JSON.parse(localStorage.getItem(key)||"null")}catch(_){continue}
+        if(!Array.isArray(value))continue;
+        let added=0;
+        value.forEach(item=>{
+          if(!looksLikePlace(item))return;
+          const id=placeKey(item);
+          if(!id||seen.has(id))return;
+          seen.add(id);added++;
+        });
+        if(added)sourceCounts.push([key,added]);
+      }
+    }catch(_){}
+    const registered=[...registeredSources.entries()].filter(([,count])=>Number(count)>0);
+    const registeredTotal=registered.reduce((sum,[,count])=>sum+Number(count||0),0);
+    return {stored:seen.size,sourceCounts,registered,registeredTotal,total:FIXED_SEARCH_RESULTS+seen.size+registeredTotal};
+  }
+
   function snapshot(){
     const geo=readArray(KEYS.geo);
     const idfm=readArray(KEYS.idfm);
     const proposals=readArray(KEYS.proposals);
     const proximityStored=geo.length+idfm.length;
-    const localTotal=proximityStored+proposals.length;
+    const catalogue=storedCatalogue();
     const displayedText=String(document.getElementById("resultsCount")?.textContent||"").trim();
     const displayed=numberFromText(displayedText);
     const domCards=document.querySelectorAll("#places article.card").length;
@@ -48,7 +97,12 @@
       if(sync&&typeof sync.totalCount==="function")currentTotal=numberFromText(sync.totalCount());
     }catch(_){}
     const cities=cityBreakdown([...geo,...idfm]);
-    return {geo:geo.length,idfm:idfm.length,proposals:proposals.length,proximityStored,localTotal,displayed,displayedText,domCards,currentPlaces,currentTotal,cities};
+    return {
+      geo:geo.length,idfm:idfm.length,proposals:proposals.length,
+      proximityStored,catalogueStored:catalogue.stored,catalogueTotal:catalogue.total,
+      fixedSearchResults:FIXED_SEARCH_RESULTS,registeredSources:catalogue.registered,
+      displayed,displayedText,domCards,currentPlaces,currentTotal,cities
+    };
   }
 
   function formatCities(cities){
@@ -57,8 +111,7 @@
   }
 
   function searchNoteText(s){
-    if(!s.proximityStored)return "Aucun résultat de proximité enregistré sur cet appareil.";
-    return s.proximityStored+" résultat"+(s.proximityStored>1?"s":"")+" de proximité enregistré"+(s.proximityStored>1?"s":"")+" sur cet appareil (lieux + transports).";
+    return s.catalogueTotal+" résultat"+(s.catalogueTotal>1?"s":"")+" disponible"+(s.catalogueTotal>1?"s":"")+" dans Recherche — catalogue Libcomlair.";
   }
 
   function renderSearchNote(){
@@ -92,18 +145,20 @@
     renderSearchNote();
     if(!box)return s;
     const lines=[
-      "Lieux Geoapify enregistrés sur cet appareil : "+s.geo+".",
-      "Transports / arrêts IDFM enregistrés : "+s.idfm+".",
-      "Données de proximité enregistrées : "+s.proximityStored+".",
-      "Propositions personnelles enregistrées : "+s.proposals+".",
-      "Total local enregistré : "+s.localTotal+".",
-      "Répartition des données de proximité par ville : "+formatCities(s.cities)+"."
+      "Lieux Geoapify de la dernière zone enregistrée : "+s.geo+".",
+      "Transports / arrêts IDFM de la dernière zone enregistrée : "+s.idfm+".",
+      "Total de proximité enregistré (lieux + transports) : "+s.proximityStored+".",
+      "Propositions personnelles : "+s.proposals+".",
+      "Éléments fixes actuellement intégrés à Recherche : "+s.fixedSearchResults+".",
+      "Total du catalogue disponible dans Recherche : "+s.catalogueTotal+".",
+      "Répartition de la dernière zone par ville : "+formatCities(s.cities)+"."
     ];
+    if(s.registeredSources.length)lines.push("Listes supplémentaires enregistrées dans le compteur Recherche : "+s.registeredSources.map(([id,count])=>id+" : "+count).join(" • ")+".");
     if(s.currentPlaces!==null)lines.push("Dernière recherche autour de moi — lieux : "+s.currentPlaces+".");
-    if(s.currentTotal!==null)lines.push("Dernière recherche autour de moi — total affiché avec transports : "+s.currentTotal+".");
-    if(s.displayed!==null)lines.push("Compteur Résultats actuellement affiché : "+s.displayed+".");
+    if(s.currentTotal!==null)lines.push("Dernière recherche autour de moi — total de proximité avec transports : "+s.currentTotal+".");
+    if(s.displayed!==null)lines.push("Compteur de la liste Résultats actuellement affichée : "+s.displayed+".");
     else if(s.domCards)lines.push("Fiches actuellement visibles dans Résultats : "+s.domCards+".");
-    lines.push("Remarque : les données enregistrées sont des caches locaux. Une nouvelle recherche réussie doit remplacer les anciennes données Geoapify et IDFM ; la répartition par ville permet de vérifier immédiatement si plusieurs zones restent mélangées.");
+    lines.push("Règle : « Autour de moi » compte seulement la dernière recherche de proximité. « Recherche » compte tout le catalogue réellement disponible. Les futures listes téléchargées doivent être enregistrées dans le compteur lorsqu'elles sont intégrées à la recherche.");
     box.textContent=lines.join("\n");
     return s;
   }
@@ -111,40 +166,43 @@
   function install(){
     const diagnosticResult=document.getElementById("systemDiagnosticResult");
     if(!diagnosticResult||document.getElementById("v224DataCounters"))return false;
-
     const details=document.createElement("details");
     details.id="v224DataCounters";
     details.className="v219-info-card";
-
     const summary=document.createElement("summary");
     summary.className="details-btn";
     const strong=document.createElement("strong");
     strong.textContent="📊 Compteurs des données enregistrées";
     summary.appendChild(strong);
-
     const content=document.createElement("div");
     content.className="detail";
     const intro=document.createElement("p");
     intro.className="data-note";
-    intro.textContent="Affiche séparément les lieux, les transports et les données conservées sur cet appareil afin d’éviter de confondre recherche actuelle et résultats enregistrés.";
-
+    intro.textContent="Sépare la dernière recherche autour de moi du catalogue complet disponible dans Recherche.";
     const refresh=document.createElement("button");
     refresh.id="v224RefreshDataCounters";
     refresh.type="button";
     refresh.className="details-btn";
     refresh.textContent="Actualiser les compteurs";
-
     const result=document.createElement("p");
     result.id="v224DataCountersResult";
     result.className="data-note";
     result.setAttribute("aria-live","polite");
     result.style.whiteSpace="pre-line";
-
     refresh.addEventListener("click",render);
     details.addEventListener("toggle",()=>{if(details.open)render()});
     content.append(intro,refresh,result);
     details.append(summary,content);
     diagnosticResult.insertAdjacentElement("afterend",details);
+    return true;
+  }
+
+  function registerSource(id,count){
+    const key=String(id||"").trim();
+    const n=Math.max(0,Number(count)||0);
+    if(!key)return false;
+    if(n)registeredSources.set(key,n);else registeredSources.delete(key);
+    renderSearchNote();
     return true;
   }
 
@@ -159,6 +217,11 @@
     window.addEventListener("pageshow",()=>setTimeout(renderSearchNote,80));
   }
 
-  window.LibcomlairDataCountDiagnostic=Object.freeze({version:"v224-2-search-note",snapshot,render,install,installSearchNote,renderSearchNote});
+  window.LibcomlairDataCountDiagnostic=Object.freeze({
+    version:"v224-3-separate-nearby-catalogue",
+    snapshot,render,install,installSearchNote,renderSearchNote,registerSource,
+    nearbyTotal:()=>snapshot().proximityStored,
+    catalogueTotal:()=>snapshot().catalogueTotal
+  });
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
