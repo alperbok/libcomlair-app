@@ -93,6 +93,54 @@ Chaque décision importante doit contenir :
 - Raison : un même nom propre peut être écrit de la même manière mais nécessiter une prononciation différente selon la langue d’écoute ; les ressources de plusieurs pays auront aussi des licences différentes.
 - Conséquence : packs versionnés par locale/pays, provenance et licence par ressource, corrections Libcomlair prioritaires et téléchargement hors ligne possible.
 
+### ADR-010 — passeport fonctionnel local et compte facultatif
+
+- Date : 2026-10-01
+- Sujet : profil utilisateur.
+- Décision : le futur profil universel stocke des besoins fonctionnels et préférences, sans exiger de diagnostic médical ni de compte.
+- Raison : préserver la confidentialité et permettre l’utilisation hors ligne.
+- Conséquence : l’ancien profil `libcomlair-access-profile-v1` reste lisible jusqu’à validation de la migration ; toute synchronisation distante sera facultative.
+
+### ADR-011 — accessibilité par preuve, entrée et état temporaire
+
+- Date : 2026-10-01
+- Sujet : modèle des lieux.
+- Décision : l’accessibilité d’un lieu ne sera jamais réduite à un booléen unique ; les entrées, critères, preuves, dates, conflits et états temporaires sont séparés.
+- Raison : une entrée principale peut être inaccessible alors qu’une autre entrée est adaptée ; les conditions peuvent aussi changer temporairement.
+- Conséquence : identifiant stable Libcomlair, plusieurs entrées, provenance explicite et expiration des observations temporaires.
+
+### ADR-012 — migrations avant modification incompatible
+
+- Date : 2026-10-01
+- Sujet : données persistantes.
+- Décision : toute modification incompatible d’un schéma persistant exige une migration documentée avant activation.
+- Raison : empêcher la perte de profils, favoris, photos, dictionnaires ou contributions après une mise à jour.
+- Conséquence : ancien format lisible jusqu’à validation, sauvegarde avant migration destructive et test de retour arrière.
+
+### ADR-013 — contrats fournisseurs et cas de référence
+
+- Date : 2026-10-01
+- Sujet : qualité des API et données.
+- Décision : chaque fournisseur externe possède un contrat d’adaptation et les comportements critiques sont protégés par des cas de référence stables.
+- Raison : détecter une modification d’API ou une régression avant qu’elle fasse disparaître adresses, directions ou critères dans l’interface.
+- Conséquence : tests de champs, unités, pagination, licences, panne fournisseur et fixtures indépendantes des API en direct.
+
+### ADR-014 — synchronisation sans écrasement silencieux
+
+- Date : 2026-10-01
+- Sujet : futur compte et multi-appareils.
+- Décision : une version distante ne peut jamais écraser silencieusement une version locale, et inversement.
+- Raison : le fonctionnement local doit rester souverain et les conflits doivent être compréhensibles.
+- Conséquence : révisions, statut de conflit, file hors ligne persistante et choix explicite avant synchronisation de préférences sensibles.
+
+### ADR-015 — accessibilité d’un trajet calculée par segments
+
+- Date : 2026-10-01
+- Sujet : itinéraires.
+- Décision : un lieu accessible ne suffit pas à déclarer un trajet accessible ; le futur moteur examine les segments entre l’utilisateur et l’entrée choisie.
+- Raison : trottoir, pente, traversée, travaux, ascenseur, quai ou correspondance peuvent rendre le parcours impraticable.
+- Conséquence : modèle segmenté, inconnues conservées et prise en compte des conditions temporaires sans modifier le passeport utilisateur.
+
 ## Règle
 
 Une décision peut être remplacée, mais elle ne doit pas être supprimée. Ajouter une nouvelle décision indiquant explicitement celle qu’elle remplace et pourquoi.
