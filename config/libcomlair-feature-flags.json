@@ -20,6 +20,8 @@
     "voice.localRecognition": "off",
     "voice.dictionaryV1": "test",
     "voice.localAudioLibrary": "test",
+    "voice.fixedAudioPack": "test",
+    "voice.welcomeNetworkFallback": "off",
     "diagnostic.exportReport": "test",
     "data.universalModel": "off",
     "offline.fullMode": "off",
