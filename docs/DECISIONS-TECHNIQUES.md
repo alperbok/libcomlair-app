@@ -83,7 +83,7 @@ Chaque décision importante doit contenir :
 - Sujet : contributions photo.
 - Décision : une photo ne sera jamais obligatoire pour utiliser Libcomlair ou contribuer ; elle possède des métadonnées de droits, une description alternative et un traitement de confidentialité avant synchronisation.
 - Raison : préserver l’accessibilité, éviter d’exclure les personnes malvoyantes et prévenir la diffusion inutile de données personnelles ou de géolocalisation EXIF.
-- Conséquence : stockage local et file hors ligne séparés, suppression EXIF avant envoi, descriptions vocales et textuelles, validation Samsung avant activation.
+- Conséquence : stockage local et file hors ligne séparés, suppression EXIF avant envoi, descriptions vocales et textuelles, validation sur smartphone Android réel avant activation.
 
 ### ADR-009 — dictionnaires vocaux par langue, territoire et type de nom
 
@@ -140,6 +140,14 @@ Chaque décision importante doit contenir :
 - Décision : un lieu accessible ne suffit pas à déclarer un trajet accessible ; le futur moteur examine les segments entre l’utilisateur et l’entrée choisie.
 - Raison : trottoir, pente, traversée, travaux, ascenseur, quai ou correspondance peuvent rendre le parcours impraticable.
 - Conséquence : modèle segmenté, inconnues conservées et prise en compte des conditions temporaires sans modifier le passeport utilisateur.
+
+### ADR-016 — Android comme plateforme mobile cible, Samsung comme appareil de référence
+
+- Date : 2026-10-01
+- Sujet : compatibilité appareils.
+- Décision : Libcomlair cible les smartphones Android ; Samsung est seulement l’appareil réel actuellement disponible pour le développement et les validations courantes.
+- Raison : les utilisateurs Android emploient de nombreux constructeurs et une particularité Samsung ne doit jamais devenir une hypothèse générale de l’application.
+- Conséquence : validation physique Android, vérification multi-constructeurs avant diffusion large lorsque pertinent, correctifs constructeur isolés et documentation dans `docs/VALIDATION-ANDROID.md`. iOS et les autres plateformes restent hors périmètre actuel.
 
 ## Règle
 
