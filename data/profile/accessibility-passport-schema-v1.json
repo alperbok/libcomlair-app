@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "record": {
+    "profileId": "",
+    "createdAt": "",
+    "updatedAt": "",
+    "functionalNeeds": [],
+    "preferredCriteria": [],
+    "interfaceLocale": "fr-FR",
+    "searchCountry": "FR",
+    "guidanceMode": "discovery|assisted|fast",
+    "voice": {
+      "enabled": true,
+      "preferredVoicePack": null,
+      "properNamePronunciation": "listener-help|native|ask",
+      "speechRate": null
+    },
+    "microphone": {
+      "enabled": true,
+      "preferredRecognitionLocale": null
+    },
+    "offline": {
+      "installedLanguagePacks": [],
+      "installedCountryPacks": [],
+      "installedTravelAreas": []
+    },
+    "privacy": {
+      "localOnly": true,
+      "syncEnabled": false,
+      "analyticsOptIn": false,
+      "photoContributionDefault": "ask"
+    },
+    "sync": {
+      "accountLinked": false,
+      "remoteRevision": null,
+      "lastSyncedAt": null,
+      "conflictStatus": "none|local-newer|remote-newer|conflict"
+    }
+  },
+  "rules": {
+    "medicalDiagnosisNotRequired": true,
+    "functionalNeedsOnlyByDefault": true,
+    "accountOptional": true,
+    "localOperationMustRemainAvailable": true,
+    "languageIndependentFromCountry": true,
+    "countryIndependentFromGps": true,
+    "noSilentRemoteOverwrite": true,
+    "schemaMigrationRequiredForBreakingChange": true
+  },
+  "legacyMigration": {
+    "sourceKey": "libcomlair-access-profile-v1",
+    "sourceOwner": "libcomlair-accessibility-engine-v173.js",
+    "strategy": "read-old-then-map-without-deleting-old-until-validation",
+    "validated": false
+  }
+}
