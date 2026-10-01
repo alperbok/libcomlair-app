@@ -1,13 +1,24 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "status": "prepared-for-test",
   "entry": {
     "id": "",
     "display": "",
+    "officialDisplay": "",
+    "localizedDisplay": {},
     "type": "common|accessibility|proper-person|places|streets|transport|organizations|overrides",
     "originLocale": null,
     "country": null,
     "writtenVariants": [],
+    "pronunciation": {
+      "native": {
+        "locale": null,
+        "ttsText": null,
+        "ipa": null,
+        "source": null
+      },
+      "forListenerLocale": {}
+    },
     "tts": {},
     "ipa": {},
     "microSynonyms": {},
@@ -22,9 +33,31 @@
     "confidence": "unknown|imported|reviewed|verified",
     "updatedAt": ""
   },
+  "listenerPronunciationExample": {
+    "forListenerLocale": {
+      "fr-FR": {
+        "mode": "listener-help",
+        "ttsText": null,
+        "phoneticHint": null,
+        "keepsOfficialNameVisible": true
+      },
+      "de-DE": {
+        "mode": "native",
+        "ttsText": null,
+        "phoneticHint": null,
+        "keepsOfficialNameVisible": true
+      }
+    }
+  },
   "rules": {
     "displayValueNeverChangedOnlyForPronunciation": true,
+    "officialNameRemainsAuthoritative": true,
+    "localizedDisplayIsOptionalAndMustBeEstablishedUsage": true,
+    "nativePronunciationMustRemainAvailable": true,
     "pronunciationCanDifferByListenerLocale": true,
+    "listenerHelpMustNotPretendToBeNativePronunciation": true,
+    "userCanRequestNativePronunciation": true,
+    "userCanRequestListenerFriendlyPronunciation": true,
     "microSynonymsCanDifferByLocale": true,
     "thirdPartySourceMustDeclareLicense": true,
     "properNamesMayHaveCountryScope": true
