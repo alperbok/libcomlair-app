@@ -1,20 +1,14 @@
 /* Libcomlair V224 — étape Mes besoins d’accessibilité */
 @media (max-width:540px){
-  /* Ancien comportement : uniquement hors cadre maître. */
+  /* Hors cadre maître, conserver le comportement historique. */
   body.v224-onboarding-needs:not(.v224-master-frame-active) #mainContent{
     height:auto!important;
     min-height:calc(100dvh - 2px)!important;
     overflow:visible!important;
   }
 
-  /* Nouveau cadre : le centre reste fixe et devient défilant si le contenu grandit. */
-  body.v224-onboarding-needs.v224-master-frame-active #mainContent{
-    height:100%!important;
-    min-height:0!important;
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
-  }
-
+  /* Sous le cadre maître, la hauteur et le défilement sont pilotés uniquement
+     par le cadre maître. Ne plus imposer height:100% ni overflow-y:auto ici. */
   body.v224-onboarding-needs #accessNeedsSection{
     display:block!important;
     width:100%!important;
