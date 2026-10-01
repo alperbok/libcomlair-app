@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "status": "generator-prepared-audio-not-yet-generated",
+  "checkedAt": "2026-10-01",
+  "locale": "fr-FR",
+  "engine": {
+    "name": "Pocket TTS",
+    "package": "pocket-tts",
+    "pinnedVersion": "3.3.0",
+    "repository": "https://github.com/kyutai-labs/pocket-tts",
+    "codeLicense": "MIT",
+    "licenseStatus": "verified-for-generator-source"
+  },
+  "model": {
+    "id": "kyutai/pocket-tts",
+    "source": "https://huggingface.co/kyutai/pocket-tts",
+    "license": "CC BY 4.0",
+    "licenseStatus": "verified-on-model-card",
+    "accessNote": "Model files may require accepting Hugging Face access conditions before download. No credential is stored in Libcomlair."
+  },
+  "voice": {
+    "name": "estelle",
+    "language": "french",
+    "origin": "hf://kyutai/tts-voices/unmute-prod-website/developpeuse-3.wav",
+    "source": "https://huggingface.co/kyutai/tts-voices/tree/main/unmute-prod-website",
+    "license": "CC0",
+    "licenseBasis": "Kyutai states that the other recordings in unmute-prod-website, excluding the specifically listed exceptions, are their own recordings and may be used as CC0.",
+    "licenseStatus": "verified-for-source-recording"
+  },
+  "generation": {
+    "script": "scripts/generate-fixed-voice-pack-pocket-tts.py",
+    "manifest": "data/voice/libcomlair-fixed-audio.json",
+    "targetDirectory": "assets/audio/fr-FR/",
+    "format": "WAV",
+    "sampleRateHz": 24000,
+    "channels": 1,
+    "bitDepth": 16,
+    "firstValidationTarget": "welcome.main"
+  },
+  "approval": {
+    "audioGenerated": false,
+    "listenedOnAndroid": false,
+    "voiceApprovedForLibcomlair": false,
+    "sevenFixedMessagesGenerated": false,
+    "manifestPromotedToReady": false
+  },
+  "rules": {
+    "engineModelAndVoiceLicensesTrackedSeparately": true,
+    "generatedAudioMustBeListenedBeforePromotion": true,
+    "androidPhysicalValidationRequired": true,
+    "noRuntimeManifestPromotionWithoutApproval": true,
+    "doNotReplaceVoiceSourceWithoutNewRightsReview": true
+  }
+}
