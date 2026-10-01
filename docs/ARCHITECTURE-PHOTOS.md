@@ -91,7 +91,7 @@ Le futur module photo devra exposer au minimum :
 
 ## Validation avant activation
 
-- prise de photo sur Samsung ;
+- prise de photo sur smartphone Android réel ;
 - import depuis galerie ;
 - contribution sans photo ;
 - description vocale ;
@@ -99,4 +99,7 @@ Le futur module photo devra exposer au minimum :
 - suppression EXIF ;
 - reprise après fermeture de l’application ;
 - synchronisation ultérieure ;
-- affichage de la description alternative dans le profil Vision.
+- affichage de la description alternative dans le profil Vision ;
+- avant diffusion stable large, contrôle sur au moins un second appareil Android d’un constructeur différent lorsque possible.
+
+Le Samsung utilisé aujourd’hui reste l’appareil de référence de développement, mais il ne définit pas à lui seul la compatibilité Android.
