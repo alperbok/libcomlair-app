@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "route": {
+    "routeId": "",
+    "country": "",
+    "origin": {},
+    "destination": {},
+    "profileSnapshotId": null,
+    "calculatedAt": null,
+    "segments": [
+      {
+        "segmentId": "",
+        "type": "walk|crossing|sidewalk|ramp|stairs|elevator|station|platform|vehicle|entrance|indoor|other",
+        "from": {},
+        "to": {},
+        "distanceMeters": null,
+        "durationSeconds": null,
+        "accessibility": {},
+        "temporaryStatus": null,
+        "evidenceIds": [],
+        "source": null
+      }
+    ],
+    "warnings": [],
+    "confidence": "unknown|low|medium|high|verified"
+  },
+  "rules": {
+    "routeAccessibilityDerivedFromSegments": true,
+    "profileNeverModifiedByRouteCalculation": true,
+    "unknownSegmentMustRemainUnknown": true,
+    "temporaryConditionsCanInvalidateRoute": true,
+    "accessibleDestinationDoesNotGuaranteeAccessibleRoute": true
+  }
+}
