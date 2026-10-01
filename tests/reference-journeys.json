@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "description": "Parcours fonctionnels de référence à rejouer après une modification importante. La validation physique reste obligatoire pour audio, micro, GPS, tactile et rendu téléphone.",
+  "journeys": [
+    {
+      "id": "vision-first-entry",
+      "title": "Entrée profil Vision",
+      "protects": ["profile", "voice", "navigation"],
+      "steps": [
+        "ouvrir Libcomlair",
+        "atteindre la sélection de profil",
+        "choisir Vision",
+        "vérifier l'ouverture de l'accueil",
+        "vérifier la Présentation Libcomlair",
+        "vérifier les commandes vocales essentielles"
+      ],
+      "phoneValidation": true
+    },
+    {
+      "id": "restaurant-search-detail-return",
+      "title": "Restaurant, critère, résultat, fiche et retour",
+      "protects": ["search", "filters", "results", "detail", "navigation", "voice"],
+      "steps": [
+        "ouvrir Recherche",
+        "choisir Restaurant",
+        "sélectionner un critère d'accessibilité",
+        "lancer Utiliser mes choix",
+        "ouvrir un résultat",
+        "lire la fiche",
+        "revenir à la liste",
+        "revenir aux catégories"
+      ],
+      "phoneValidation": true
+    },
+    {
+      "id": "criteria-add-remove-by-voice",
+      "title": "Ajouter et retirer un critère au micro",
+      "protects": ["microphone", "voice", "filters"],
+      "steps": [
+        "ajouter un critère par commande vocale",
+        "vérifier la confirmation vocale",
+        "retirer le même critère par commande vocale",
+        "vérifier la confirmation vocale"
+      ],
+      "phoneValidation": true
+    },
+    {
+      "id": "transport-stop-directions",
+      "title": "Transport, arrêt, lignes et directions",
+      "protects": ["transport", "data", "results", "detail", "voice"],
+      "steps": [
+        "ouvrir Transport",
+        "ouvrir la liste des arrêts",
+        "vérifier nom, identifiant et adresse",
+        "ouvrir un arrêt avec plusieurs lignes si disponible",
+        "vérifier les directions",
+        "vérifier la lecture vocale de la fiche"
+      ],
+      "phoneValidation": true
+    },
+    {
+      "id": "around-me",
+      "title": "Autour de moi",
+      "protects": ["gps", "nearby", "map", "data"],
+      "steps": [
+        "ouvrir Autour de moi",
+        "autoriser ou confirmer la géolocalisation",
+        "vérifier la position",
+        "vérifier le compteur dédié Autour de moi",
+        "vérifier la liste",
+        "ouvrir la carte sans modifier ses dimensions validées"
+      ],
+      "phoneValidation": true
+    },
+    {
+      "id": "diagnostic-repair",
+      "title": "Diagnostic et réparation ciblée",
+      "protects": ["diagnostic", "repair"],
+      "steps": [
+        "ouvrir le menu technique",
+        "ouvrir Diagnostic",
+        "vérifier que les modules connus sont recensés",
+        "vérifier qu'aucune réparation ne supprime les données utilisateur",
+        "fermer puis rouvrir le diagnostic"
+      ],
+      "phoneValidation": false
+    },
+    {
+      "id": "offline-essential",
+      "title": "Fonctions essentielles hors connexion",
+      "protects": ["offline", "voice", "storage", "diagnostic"],
+      "steps": [
+        "activer le mode avion lorsque le prototype hors ligne sera prêt",
+        "ouvrir ou redémarrer Libcomlair",
+        "accéder au profil et à l'accueil",
+        "lire une phrase locale connue",
+        "consulter une donnée locale",
+        "ouvrir le Diagnostic"
+      ],
+      "phoneValidation": true,
+      "status": "future"
+    }
+  ]
+}
