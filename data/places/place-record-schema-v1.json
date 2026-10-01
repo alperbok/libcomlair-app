@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "record": {
+    "placeId": "",
+    "officialName": "",
+    "localizedNames": {},
+    "categoryId": "",
+    "subcategoryId": null,
+    "country": "",
+    "address": {
+      "formatted": "",
+      "components": {},
+      "coordinates": {"lat": null, "lon": null, "crs": "WGS84"}
+    },
+    "externalIds": [],
+    "accessibility": {},
+    "entrances": [
+      {
+        "entranceId": "",
+        "label": "",
+        "coordinates": {"lat": null, "lon": null},
+        "accessibility": {},
+        "openingHours": null,
+        "temporaryStatus": null,
+        "photoIds": [],
+        "evidenceIds": []
+      }
+    ],
+    "evidence": [
+      {
+        "evidenceId": "",
+        "criterionId": "",
+        "value": "yes|no|partial|unknown",
+        "sourceType": "official|venue|open-data|user|libcomlair",
+        "sourceName": "",
+        "sourceId": null,
+        "observedAt": null,
+        "lastConfirmedAt": null,
+        "validFrom": null,
+        "validUntil": null,
+        "confidence": "unknown|low|medium|high|verified",
+        "conflictsWith": [],
+        "proof": []
+      }
+    ],
+    "temporaryConditions": [],
+    "history": [],
+    "createdAt": "",
+    "updatedAt": ""
+  },
+  "rules": {
+    "unknownNeverInferred": true,
+    "placeAccessibilityNotSingleBoolean": true,
+    "multipleEntrancesSupported": true,
+    "sourceConflictMustRemainVisible": true,
+    "expiredEvidenceNotCurrent": true,
+    "externalIdsDoNotReplacePlaceId": true,
+    "mergeMustBeReversible": true,
+    "schemaMigrationRequiredForBreakingChange": true
+  }
+}
