@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "generator-prepared-audio-not-yet-generated",
-  "checkedAt": "2026-10-01",
+  "status": "estelle-rejected-after-android-listening-test",
+  "checkedAt": "2026-10-02",
   "locale": "fr-FR",
   "engine": {
     "name": "Pocket TTS",
@@ -38,17 +38,24 @@
     "firstValidationTarget": "welcome.main"
   },
   "approval": {
-    "audioGenerated": false,
-    "listenedOnAndroid": false,
+    "audioGenerated": true,
+    "listenedOnAndroid": true,
     "voiceApprovedForLibcomlair": false,
+    "decision": "rejected",
+    "decisionReason": "Voix perçue comme trop enfantine lors du test d'écoute Android.",
     "sevenFixedMessagesGenerated": false,
     "manifestPromotedToReady": false
   },
+  "nextCandidates": [
+    "alba",
+    "vera"
+  ],
   "rules": {
     "engineModelAndVoiceLicensesTrackedSeparately": true,
     "generatedAudioMustBeListenedBeforePromotion": true,
     "androidPhysicalValidationRequired": true,
     "noRuntimeManifestPromotionWithoutApproval": true,
-    "doNotReplaceVoiceSourceWithoutNewRightsReview": true
+    "doNotReplaceVoiceSourceWithoutNewRightsReview": true,
+    "doNotRetestRejectedVoiceWithoutExplicitReason": true
   }
 }
