@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-01",
+  "policy": {
+    "essentialBootMayDependOnExternalService": false,
+    "externalFailureMustNotBlockNavigation": true,
+    "externalProvidersAreEnrichmentOrTemporaryFallback": true
+  },
+  "dependencies": [
+    {
+      "id": "render-tts",
+      "label": "Render TTS",
+      "type": "voice-provider",
+      "host": "libcomlair-backend.onrender.com",
+      "currentRole": "temporary-dynamic-voice-provider",
+      "criticalForBoot": false,
+      "targetState": "remove-from-critical-path",
+      "replacement": "packaged fixed audio + persistent local library + local TTS",
+      "status": "degraded-not-blocking-navigation"
+    },
+    {
+      "id": "geoapify-nearby",
+      "label": "Geoapify",
+      "type": "nearby-data-provider",
+      "currentRole": "fresh nearby places",
+      "criticalForBoot": false,
+      "targetState": "network-enrichment-only",
+      "replacement": "local persisted catalogue for offline use",
+      "status": "external-enrichment"
+    },
+    {
+      "id": "idfm-nearby",
+      "label": "Île-de-France Mobilités",
+      "type": "transport-data-provider",
+      "currentRole": "fresh nearby transport data",
+      "criticalForBoot": false,
+      "targetState": "network-enrichment-only",
+      "replacement": "versioned local transport snapshot + refresh when online",
+      "status": "external-enrichment"
+    },
+    {
+      "id": "github-pages-hosting",
+      "label": "GitHub Pages",
+      "type": "web-hosting",
+      "currentRole": "delivery of the current web build",
+      "criticalForBoot": true,
+      "targetState": "offline-installed-app-can-start-without-network",
+      "replacement": "service-worker/app-shell cache and later installed application package",
+      "status": "critical-until-offline-shell-validated"
+    }
+  ]
+}
