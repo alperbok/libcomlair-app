@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-01",
+  "modules": [
+    {
+      "moduleId": "welcome-navigation",
+      "ownerFiles": ["libcomlair-v224-welcome-local-first-v17.js","libcomlair-v224-welcome-transition-hotfix.js"],
+      "dependsOn": ["master-frame","profile-step"],
+      "mustRetest": ["startup","profile-entry","welcome-audio-nonblocking"]
+    },
+    {
+      "moduleId": "voice-fixed-local",
+      "ownerFiles": ["data/voice/libcomlair-fixed-audio.json","libcomlair-v224-voice-local-coverage-v1.js"],
+      "dependsOn": ["welcome-navigation","local-audio-library"],
+      "mustRetest": ["welcome-audio","presentation-audio","diagnostic-audio","offline-voice"]
+    },
+    {
+      "moduleId": "voice-dynamic",
+      "ownerFiles": ["libcomlair-voice-engine-v191.js","libcomlair-render-voice-v196.js"],
+      "dependsOn": ["local-audio-library","future-local-tts"],
+      "mustRetest": ["dynamic-name","dynamic-address","voice-error-path","external-provider-failure"]
+    },
+    {
+      "moduleId": "diagnostic",
+      "ownerFiles": ["libcomlair-selftest-v189.js","libcomlair-v224-autonomy-dashboard-v1.js"],
+      "dependsOn": ["module-status-interfaces"],
+      "mustRetest": ["diagnostic-online","diagnostic-external-services-blocked","diagnostic-no-render"]
+    },
+    {
+      "moduleId": "maintenance-advanced",
+      "ownerFiles": ["libcomlair-v224-technical-menu-access-v1.js","libcomlair-v224-external-services-test-v1.js"],
+      "dependsOn": ["global-assistance-menu","diagnostic","feature-flags"],
+      "mustRetest": ["developer-mode-hidden-normal","developer-mode-visible","external-test-enable-disable","developer-mode-exit"]
+    },
+    {
+      "moduleId": "offline-shell",
+      "ownerFiles": ["config/libcomlair-offline-essential-assets-v1.json"],
+      "dependsOn": ["master-frame","essential-assets"],
+      "mustRetest": ["cold-start-online","reload-offline","startup-with-render-blocked","local-diagnostic-offline"]
+    },
+    {
+      "moduleId": "around-me",
+      "ownerFiles": ["libcomlair-v221-secure.js","libcomlair-v224-nearby-count-sync-v37.js"],
+      "dependsOn": ["geolocation","geoapify-nearby","idfm-nearby","local-nearby-cache"],
+      "mustRetest": ["nearby-online","nearby-provider-failure","nearby-counter","stale-cache-behaviour"]
+    },
+    {
+      "moduleId": "transport",
+      "ownerFiles": ["libcomlair-transport-engine-v173.js","libcomlair-v157-directions.js"],
+      "dependsOn": ["idfm-nearby","local-transport-data"],
+      "mustRetest": ["transport-list","stop-identifiers","addresses","multiple-directions","alphabetical-order"]
+    }
+  ]
+}
