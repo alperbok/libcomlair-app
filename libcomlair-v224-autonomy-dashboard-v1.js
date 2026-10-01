@@ -1,7 +1,7 @@
 (()=>{
 "use strict";
 
-const VERSION="v224-2-honest-metrics";
+const VERSION="v224-3-independent-local-library";
 let last={time:0,confirmedAutonomyPercent:0,measurementCoveragePercent:0,areas:[],externalDependencies:[],unknownAreas:[],infrastructure:[]};
 
 function area(id,label,percent,status,detail,kind="function"){
@@ -22,8 +22,11 @@ async function inspect(){
   let coverage=null;
   try{coverage=await window.LibcomlairVoiceLocalCoverage?.inspect?.()}catch(_){}
   const fixedPercent=Number.isFinite(coverage?.criticalCoveragePercent)?coverage.criticalCoveragePercent:0;
-  areas.push(area("fixed-voice","Voix fixe locale",fixedPercent,coverage?.available?"mesure":"indisponible",coverage?.available?(coverage.criticalReady+" / "+coverage.critical+" messages critiques locaux"):"manifeste non mesuré"));
-  if(fixedPercent<100)external.push("voix fixe non encore totalement empaquetée");
+  const fixedDetail=coverage?.available
+    ?(coverage.criticalReady+" / "+coverage.critical+" messages critiques locaux — empaquetés : "+(coverage.packagedReady||0)+", bibliothèque locale : "+(coverage.libraryReady||0))
+    :"manifeste non mesuré";
+  areas.push(area("fixed-voice","Voix fixe locale",fixedPercent,coverage?.available?"mesure":"indisponible",fixedDetail));
+  if(fixedPercent<100)external.push("voix fixe non encore totalement locale");
 
   let diag=null;
   try{diag=window.LibcomlairDiagnostics?.status?.()||null}catch(_){}
@@ -39,7 +42,7 @@ async function inspect(){
   if(!localRecognition)external.push("reconnaissance micro locale à construire");
 
   let library=null;
-  try{library=await window.LibcomlairRenderVoice?.voiceLibraryStatus?.()}catch(_){}
+  try{library=await window.LibcomlairLocalAudioLibrary?.status?.()}catch(_){}
   const libraryAvailable=library?.available===true;
   const libraryEntries=Number(library?.entries)||0;
   infrastructure.push({
@@ -47,7 +50,7 @@ async function inspect(){
     label:"Bibliothèque audio locale",
     status:libraryAvailable?"infrastructure-disponible":"a-verifier",
     detail:libraryAvailable
-      ?("infrastructure disponible — "+libraryEntries+" audio"+(libraryEntries>1?"s":"")+" enregistré"+(libraryEntries>1?"s":""))
+      ?("infrastructure indépendante disponible — "+libraryEntries+" audio"+(libraryEntries>1?"s":"")+" enregistré"+(libraryEntries>1?"s":""))
       :"infrastructure locale non confirmée"
   });
 
@@ -86,5 +89,6 @@ function text(snapshot){
 }
 
 window.LibcomlairAutonomyDashboard=Object.freeze({version:VERSION,inspect,status:()=>JSON.parse(JSON.stringify(last)),text});
+window.addEventListener("libcomlair-local-audio-updated",()=>inspect().catch(()=>{}));
 setTimeout(()=>inspect().catch(()=>{}),900);
 })();
