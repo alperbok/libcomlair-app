@@ -39,6 +39,18 @@
       "mustRetest": ["unknown-remains-unknown","multiple-entrances","source-provenance","source-conflict","temporary-expiry","external-id-deduplication"]
     },
     {
+      "moduleId": "accessible-routes",
+      "ownerFiles": ["data/routes/accessibility-route-schema-v1.json"],
+      "dependsOn": ["accessibility-passport","universal-place-record","transport","temporary-conditions"],
+      "mustRetest": ["segment-unknown-preserved","multi-segment-accessibility","temporary-blockage","destination-entrance-selection","profile-not-mutated"]
+    },
+    {
+      "moduleId": "sync-conflict-safety",
+      "ownerFiles": ["data/sync/sync-envelope-schema-v1.json"],
+      "dependsOn": ["local-storage","account-optional","offline-queue","data-migrations"],
+      "mustRetest": ["local-only-without-account","pending-upload-survives-restart","remote-conflict-visible","no-silent-overwrite","explicit-delete"]
+    },
+    {
       "moduleId": "provider-contracts",
       "ownerFiles": ["data/architecture/provider-contract-schema-v1.json"],
       "dependsOn": ["provider-adapters","diagnostic"],
