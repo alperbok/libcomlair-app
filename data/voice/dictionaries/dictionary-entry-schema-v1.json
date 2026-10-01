@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-for-test",
+  "entry": {
+    "id": "",
+    "display": "",
+    "type": "common|accessibility|proper-person|places|streets|transport|organizations|overrides",
+    "originLocale": null,
+    "country": null,
+    "writtenVariants": [],
+    "tts": {},
+    "ipa": {},
+    "microSynonyms": {},
+    "searchAliases": {},
+    "source": {
+      "name": "",
+      "url": "",
+      "license": "",
+      "attribution": null,
+      "verifiedAt": null
+    },
+    "confidence": "unknown|imported|reviewed|verified",
+    "updatedAt": ""
+  },
+  "rules": {
+    "displayValueNeverChangedOnlyForPronunciation": true,
+    "pronunciationCanDifferByListenerLocale": true,
+    "microSynonymsCanDifferByLocale": true,
+    "thirdPartySourceMustDeclareLicense": true,
+    "properNamesMayHaveCountryScope": true
+  }
+}
