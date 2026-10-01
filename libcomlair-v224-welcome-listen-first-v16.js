@@ -2,6 +2,7 @@
   "use strict";
 
   const WELCOME_MESSAGE="Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver pour tous. Appuyez sur Suivant pour commencer.";
+  const PREFETCH_MESSAGE=WELCOME_MESSAGE.replace(/\bLibcomlair\b/gi,"Lib comme l’air");
 
   let stage="listen";
   let boundButton=null;
@@ -39,7 +40,7 @@
     b.setAttribute("aria-busy","true");
     b.textContent="Chargement de la voix…";
     b.setAttribute("aria-label","Chargement du message de bienvenue");
-    remember("unlocking-audio");
+    remember("starting-welcome-audio");
   }
 
   function setNext(){
@@ -53,7 +54,26 @@
     remember("welcome-speaking-original-green-next-restored");
   }
 
-  async function activate(event){
+  function primeAudio(){
+    const render=window.LibcomlairRenderVoice;
+    if(!render?.unlockAudio)return false;
+    try{
+      const attempt=render.unlockAudio();
+      Promise.resolve(attempt).then(ok=>remember(ok?"audio-gesture-ready":"audio-gesture-pending")).catch(()=>{});
+      return true;
+    }catch(_){return false}
+  }
+
+  function warmWelcome(){
+    const render=window.LibcomlairRenderVoice;
+    if(!render?.prefetch)return false;
+    try{
+      Promise.resolve(render.prefetch(PREFETCH_MESSAGE)).then(()=>remember("welcome-prefetched")).catch(()=>{});
+      return true;
+    }catch(_){return false}
+  }
+
+  function activate(event){
     if(stage==="next"||!isWelcome())return;
 
     event?.preventDefault?.();
@@ -63,18 +83,21 @@
 
     setLoading();
     try{
-      const render=window.LibcomlairRenderVoice;
       const engine=window.LibcomlairVoice;
-      if(!render?.unlockAudio)throw new Error("render-unavailable");
-      const unlocked=await render.unlockAudio();
-      if(!unlocked)throw new Error("audio-still-locked");
       if(!engine?.speak)throw new Error("voice-engine-unavailable");
 
+      // Le geste utilisateur amorce Web Audio, mais son état intermédiaire ne doit
+      // jamais empêcher le moteur Render de tenter sa propre lecture.
+      primeAudio();
       try{window.LibcomlairGuidedPresenter?.cancelCurrent?.()}catch(_){}
+
       const accepted=engine.speak(WELCOME_MESSAGE,{
         rate:.9,
         onstart:()=>setNext(),
-        onerror:()=>setListen()
+        onerror:error=>{
+          remember(error?.error||error?.message||"welcome-voice-error");
+          setListen();
+        }
       });
       if(!accepted)throw new Error("welcome-not-accepted");
       remember("welcome-accepted");
@@ -94,10 +117,15 @@
   function bind(){
     const b=button();
     if(!b||b===boundButton)return;
-    if(boundButton)try{boundButton.removeEventListener("click",activate,true)}catch(_){}
+    if(boundButton){
+      try{boundButton.removeEventListener("click",activate,true)}catch(_){}
+      try{boundButton.removeEventListener("pointerdown",primeAudio,true)}catch(_){}
+    }
     boundButton=b;
+    b.addEventListener("pointerdown",primeAudio,true);
     b.addEventListener("click",activate,true);
     setListen();
+    warmWelcome();
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind,{once:true});
@@ -106,11 +134,13 @@
   window.addEventListener("libcomlair-voice-status",onVoiceStatus);
 
   window.LibcomlairWelcomeListenFirst=Object.freeze({
-    version:"v224-16-2",
+    version:"v224-16-3-single-owner-android",
     message:WELCOME_MESSAGE,
     bind,
     stage:()=>stage,
     status:()=>({...last}),
-    reset:setListen
+    reset:setListen,
+    primeAudio,
+    warmWelcome
   });
 })();
