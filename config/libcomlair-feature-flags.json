@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "description": "Configuration de référence. Ne pas charger en production avant validation de l'intégration.",
+  "safeMode": {
+    "enabled": false,
+    "autoActivation": false,
+    "preserveUserData": true,
+    "essentialModules": [
+      "master-frame",
+      "navigation",
+      "profile",
+      "diagnostic",
+      "local-storage",
+      "local-essential-voice"
+    ]
+  },
+  "flags": {
+    "voice.localTts": "off",
+    "voice.localRecognition": "off",
+    "voice.dictionaryV1": "test",
+    "voice.localAudioLibrary": "test",
+    "diagnostic.exportReport": "test",
+    "data.universalModel": "off",
+    "offline.fullMode": "off",
+    "updates.rollback": "off",
+    "contributions.offlineQueue": "off"
+  },
+  "allowedStates": ["off", "test", "on", "fallback"],
+  "promotionRequirements": [
+    "source-verified",
+    "owner-module-known",
+    "diagnostic-available",
+    "fallback-defined-when-needed",
+    "reference-journeys-pass",
+    "phone-validation-when-needed",
+    "user-data-preserved",
+    "licenses-verified-when-third-party"
+  ]
+}
