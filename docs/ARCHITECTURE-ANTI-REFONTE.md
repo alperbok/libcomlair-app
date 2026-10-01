@@ -21,6 +21,9 @@ Cette architecture est préparatoire. Elle ne doit pas activer de comportement u
 9. **Adaptateurs fournisseurs** : aucune API externe ne définit directement le modèle interne ou l’interface.
 10. **Diagnostic par module** : toute fonction nouvelle doit exposer état, version, dépendances, dernière erreur et tests requis.
 11. **Android, pas une marque** : Samsung est l’appareil de référence actuel, mais aucune fonction ne doit dépendre d’un constructeur Android particulier.
+12. **GPS ≠ carte ≠ pays ≠ juridiction** : la position appareil reste indépendante du fournisseur de carte, du pays de recherche et de la règle juridique applicable.
+13. **Juridiction versionnée** : un nouveau territoire ne devient pas officiellement disponible sans revue de ses règles propres et des éventuelles règles régionales supérieures.
+14. **Droits explicites** : accès public ou API accessible ne signifie jamais automatiquement droit de cache, stockage hors ligne, transformation ou redistribution.
 
 ## Profil / passeport fonctionnel
 
@@ -36,6 +39,24 @@ Le futur passeport Libcomlair doit conserver séparément :
 - informations de synchronisation si un compte existe un jour.
 
 Le compte ne doit jamais être obligatoire pour utiliser le passeport local.
+
+## GPS mondial
+
+Le propriétaire architectural est `global-geolocation`.
+
+Règles :
+- coordonnées internes WGS84 ;
+- saisie manuelle disponible si la permission GPS est refusée ;
+- position approximative acceptée lorsqu’elle suffit ;
+- position précise demandée seulement si nécessaire ;
+- localisation en arrière-plan désactivée par défaut ;
+- aucun historique permanent de déplacements créé implicitement ;
+- précision et ancienneté de la mesure conservées ;
+- une position périmée n’est pas présentée comme actuelle ;
+- carte, géocodage, POI, itinéraire et transport restent des services séparés ;
+- franchir une frontière ne change pas automatiquement la langue ou le profil.
+
+Référence : `docs/ARCHITECTURE-GPS-MONDIAL.md` et `data/geography/location-fix-schema-v1.json`.
 
 ## Lieux et accès multiples
 
@@ -122,6 +143,39 @@ Préparer sans activer nécessairement :
 
 Les valeurs internes doivent rester neutres ; la locale ne sert qu’à présenter ou interpréter.
 
+## Juridiction et conformité territoriale
+
+La juridiction applicable n’est jamais choisie uniquement à partir du GPS.
+
+Le registre juridique doit pouvoir empiler :
+- règles régionales/supranationales ;
+- règles nationales ;
+- règles locales ou sectorielles si nécessaire.
+
+Chaque obligation doit conserver sa source officielle, sa date de vérification, son domaine, son état et son éventuel caractère bloquant pour une sortie officielle.
+
+Un statut `prepared` ou `test` ne signifie pas « juridiquement conforme ».
+
+Référence : `data/legal/jurisdiction-compliance-schema-v1.json` et `config/libcomlair-legal-registry-v1.json`.
+
+## Droits, licences et conditions d’utilisation
+
+Chaque ressource externe doit distinguer au minimum :
+- droit d’accès ;
+- droit de cache ;
+- droit de stockage hors ligne ;
+- droit de transformation ;
+- droit de redistribution ;
+- attribution ;
+- éventuelles obligations de partage à l’identique ;
+- date de vérification des conditions.
+
+Un droit inconnu est traité comme non autorisé pour l’usage concerné jusqu’à vérification.
+
+Un pack Voyage/hors ligne ne peut pas embarquer une ressource dont le droit hors ligne n’est pas vérifié.
+
+Référence : `data/licenses/resource-rights-schema-v1.json` et `config/libcomlair-rights-registry-v1.json`.
+
 ## Synchronisation future
 
 Si un compte est ajouté :
@@ -154,7 +208,8 @@ Chaque fournisseur doit avoir un contrat d’adaptation documentant :
 - quotas ;
 - erreurs ;
 - version ou date de schéma ;
-- licence ;
+- licence et conditions ;
+- droits de cache/hors ligne/redistribution ;
 - comportement si un champ disparaît.
 
 Une modification de contrat fournisseur doit être détectée par test avant d’atteindre l’interface.
@@ -168,13 +223,18 @@ Créer des cas de référence stables servant de vérité de test :
 - arrêt avec plusieurs lignes/directions ;
 - conflit de sources ;
 - donnée temporaire expirée ;
-- nom propre étranger avec prononciations native et adaptée.
+- nom propre étranger avec prononciations native et adaptée ;
+- GPS refusé avec mode manuel ;
+- position GPS périmée ;
+- GPS dans un pays différent sans changement automatique de langue/pays de recherche ;
+- pays non audité juridiquement ;
+- ressource sans droit hors ligne vérifié.
 
 Après une modification importante, ces cas doivent être rejoués.
 
 ## Versionnement et migrations
 
-Le code, les données, les dictionnaires, les packs vocaux et les profils doivent pouvoir avoir des versions distinctes.
+Le code, les données, les dictionnaires, les packs vocaux, les profils, les schémas GPS, les registres juridiques et les registres de droits doivent pouvoir avoir des versions distinctes.
 
 Avant toute évolution incompatible :
 1. écrire la migration ;
@@ -188,6 +248,7 @@ Avant toute évolution incompatible :
 - aucune clé secrète dans un fichier public ;
 - minimisation des données personnelles ;
 - aucune déduction de handicap depuis une photo ou une position ;
+- pas d’historique GPS permanent implicite ;
 - pas de collecte analytique indispensable au fonctionnement ;
 - toute future télémétrie doit être optionnelle, documentée et désactivable ;
 - export/suppression des données personnelles prévus avant synchronisation distante.
@@ -197,7 +258,11 @@ Avant toute évolution incompatible :
 Avant de coder une fonction, vérifier obligatoirement :
 - plusieurs langues ?
 - plusieurs pays ?
+- GPS ou mode manuel ?
+- position approximative/précise ?
 - hors ligne ?
+- droits de cache/hors ligne/redistribution ?
+- juridiction applicable ?
 - profil Vision ?
 - micro ?
 - voix ?
