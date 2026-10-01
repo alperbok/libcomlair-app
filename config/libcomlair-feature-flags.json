@@ -28,6 +28,7 @@
     "maintenance.externalServiceFailureTest": "test",
     "maintenance.externalDependencyInventory": "test",
     "maintenance.moduleDependencyMatrix": "test",
+    "maintenance.localWelcomeRecorder": "test",
     "offline.readinessInspector": "test",
     "offline.essentialAssetManifest": "test",
     "data.universalModel": "off",
