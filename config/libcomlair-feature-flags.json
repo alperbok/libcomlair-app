@@ -36,14 +36,30 @@
     "i18n.registry": "test",
     "i18n.runtime": "off",
     "i18n.languageSelector": "off",
+    "i18n.transliteration": "test",
+    "i18n.rtlSupport": "off",
     "geography.countryAdapters": "test",
+    "profile.universalPassport": "test",
+    "profile.accountSync": "off",
+    "travel.mode": "off",
+    "places.multiEntrance": "test",
+    "routes.accessibility": "off",
     "media.photoMetadata": "test",
     "media.photoPrivacyPipeline": "off",
     "contributions.photo": "off",
+    "contributions.offlineQueue": "off",
+    "contributions.moderation": "off",
     "data.universalModel": "off",
+    "data.provenanceConfidence": "test",
+    "data.history": "test",
+    "data.deduplication": "off",
+    "data.providerContracts": "test",
+    "data.migrations": "test",
+    "tests.goldenCases": "test",
+    "sync.conflictResolution": "off",
+    "privacy.optionalTelemetry": "off",
     "offline.fullMode": "off",
-    "updates.rollback": "off",
-    "contributions.offlineQueue": "off"
+    "updates.rollback": "off"
   },
   "allowedStates": ["off", "test", "on", "fallback"],
   "promotionRequirements": [
@@ -54,6 +70,7 @@
     "reference-journeys-pass",
     "phone-validation-when-needed",
     "user-data-preserved",
-    "licenses-verified-when-third-party"
+    "licenses-verified-when-third-party",
+    "migration-defined-when-persistent-data-changes"
   ]
 }
