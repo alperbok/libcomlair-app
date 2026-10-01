@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "defaultLocale": "fr-FR",
+  "defaultCountry": "FR",
+  "runtimeActive": false,
+  "principles": {
+    "languageIndependentFromCountry": true,
+    "internalIdsMustNotDependOnDisplayLanguage": true,
+    "voicePackSeparatedByLocale": true,
+    "countryDataProvidersAreAdapters": true,
+    "fallbackLocale": "fr-FR"
+  },
+  "locales": [
+    {"locale":"fr-FR","language":"fr","label":"Français","state":"active","voicePack":"fr-FR"},
+    {"locale":"en-GB","language":"en","label":"English","state":"planned","voicePack":"en-GB"},
+    {"locale":"es-ES","language":"es","label":"Español","state":"planned","voicePack":"es-ES"},
+    {"locale":"de-DE","language":"de","label":"Deutsch","state":"planned","voicePack":"de-DE"},
+    {"locale":"it-IT","language":"it","label":"Italiano","state":"planned","voicePack":"it-IT"},
+    {"locale":"pt-PT","language":"pt","label":"Português","state":"planned","voicePack":"pt-PT"}
+  ],
+  "countries": [
+    {"country":"FR","label":"France","state":"active","dataAdapters":["geoapify","idfm","sncf","local-catalogue"]},
+    {"country":"BE","label":"Belgique","state":"planned","dataAdapters":[]},
+    {"country":"CH","label":"Suisse","state":"planned","dataAdapters":[]},
+    {"country":"ES","label":"Espagne","state":"planned","dataAdapters":[]},
+    {"country":"DE","label":"Allemagne","state":"planned","dataAdapters":[]},
+    {"country":"IT","label":"Italie","state":"planned","dataAdapters":[]},
+    {"country":"PT","label":"Portugal","state":"planned","dataAdapters":[]}
+  ]
+}
