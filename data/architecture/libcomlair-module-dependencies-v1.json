@@ -4,9 +4,9 @@
   "modules": [
     {
       "moduleId": "welcome-navigation",
-      "ownerFiles": ["libcomlair-v224-welcome-local-first-v17.js","libcomlair-v224-welcome-transition-hotfix.js"],
-      "dependsOn": ["master-frame","profile-step"],
-      "mustRetest": ["startup","profile-entry","welcome-audio-nonblocking"]
+      "ownerFiles": ["libcomlair-v224-welcome-local-first-v20.js","libcomlair-v224-welcome-transition-hotfix.js"],
+      "dependsOn": ["master-frame","profile-step","local-audio-library"],
+      "mustRetest": ["startup","profile-entry","welcome-audio-nonblocking","welcome-first-gesture-browser-fallback"]
     },
     {
       "moduleId": "voice-fixed-local",
@@ -17,8 +17,20 @@
     {
       "moduleId": "voice-dynamic",
       "ownerFiles": ["libcomlair-voice-engine-v191.js","libcomlair-render-voice-v196.js"],
-      "dependsOn": ["local-audio-library","future-local-tts"],
+      "dependsOn": ["local-audio-library","future-local-tts","international-dictionaries"],
       "mustRetest": ["dynamic-name","dynamic-address","voice-error-path","external-provider-failure"]
+    },
+    {
+      "moduleId": "international-dictionaries",
+      "ownerFiles": ["config/libcomlair-dictionaries-v1.json","data/voice/dictionaries/dictionary-entry-schema-v1.json","data/voice/libcomlair-pronunciation-overrides.json"],
+      "dependsOn": ["i18n-registry","country-adapters","voice-dynamic","voice-recognition"],
+      "mustRetest": ["common-noun-pronunciation","proper-name-pronunciation","cross-locale-place-name","micro-synonyms","search-aliases","dictionary-license-metadata","offline-dictionary-pack"]
+    },
+    {
+      "moduleId": "photo-contributions",
+      "ownerFiles": ["docs/ARCHITECTURE-PHOTOS.md","data/media/photo-record-schema-v1.json"],
+      "dependsOn": ["contributions","local-storage","offline-queue","privacy-pipeline","i18n-registry"],
+      "mustRetest": ["camera-capture","gallery-import","contribution-without-photo","vision-alt-description","exif-removal","offline-photo-queue","resume-after-restart","photo-rights-metadata"]
     },
     {
       "moduleId": "diagnostic",
