@@ -74,6 +74,34 @@
       "phoneValidation": true
     },
     {
+      "id": "global-gps-manual-fallback",
+      "title": "GPS mondial refusé puis localisation manuelle",
+      "protects": ["global-geolocation", "privacy", "country-independence", "navigation"],
+      "steps": [
+        "refuser l'autorisation de localisation",
+        "vérifier que Libcomlair reste utilisable",
+        "choisir une ville ou une adresse manuellement",
+        "vérifier que la langue et le profil ne changent pas",
+        "vérifier que le pays de recherche ne change qu'après action explicite"
+      ],
+      "phoneValidation": true,
+      "status": "future"
+    },
+    {
+      "id": "global-gps-border-crossing",
+      "title": "Passage de frontière sans perte de préférences",
+      "protects": ["global-geolocation", "travel", "country-adapters", "accessibility-passport"],
+      "steps": [
+        "partir d'une position dans un premier pays",
+        "franchir ou simuler une frontière",
+        "conserver langue, profil et préférences vocales",
+        "charger l'adaptateur de données du nouveau territoire si disponible",
+        "conserver la continuité du trajet ou afficher un mode dégradé explicite"
+      ],
+      "phoneValidation": true,
+      "status": "future"
+    },
+    {
       "id": "diagnostic-repair",
       "title": "Diagnostic et réparation ciblée",
       "protects": ["diagnostic", "repair"],
@@ -89,8 +117,9 @@
     {
       "id": "offline-essential",
       "title": "Fonctions essentielles hors connexion",
-      "protects": ["offline", "voice", "storage", "diagnostic"],
+      "protects": ["offline", "voice", "storage", "diagnostic", "resource-rights"],
       "steps": [
+        "vérifier que chaque ressource embarquée possède un droit hors ligne validé",
         "activer le mode avion lorsque le prototype hors ligne sera prêt",
         "ouvrir ou redémarrer Libcomlair",
         "accéder au profil et à l'accueil",
