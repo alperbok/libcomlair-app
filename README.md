@@ -12,7 +12,8 @@ Application d’accessibilité conçue pour aider les personnes en situation de 
 - données et licences traçables ;
 - validation finale sur téléphone réel ;
 - principe d’architecture : **1 fonction = 1 module responsable = 1 diagnostic = 1 réparation = 1 secours lorsque possible** ;
-- une nouveauté à risque est d’abord isolée et testée avant de remplacer une fonction stable.
+- une nouveauté à risque est d’abord isolée et testée avant de remplacer une fonction stable ;
+- **la navigation essentielle ne doit jamais attendre une voix, un réseau ou un fournisseur externe**.
 
 ## Documents de référence
 
@@ -22,6 +23,7 @@ Application d’accessibilité conçue pour aider les personnes en situation de 
 - [`docs/REGISTRE-DIAGNOSTIC-REPARATION.md`](docs/REGISTRE-DIAGNOSTIC-REPARATION.md) — point d’entrée en cas de panne : Module → Diagnostic → Réparation → Secours.
 - [`docs/MODE-SUR-ET-FEATURE-FLAGS.md`](docs/MODE-SUR-ET-FEATURE-FLAGS.md) — mode sûr et activation séparée des nouveautés.
 - [`docs/MAINTENANCE-AVANCEE.md`](docs/MAINTENANCE-AVANCEE.md) — séparation du menu utilisateur et de la maintenance réservée au développement.
+- [`docs/DEPENDANCES-EXTERNES-RESTANTES.md`](docs/DEPENDANCES-EXTERNES-RESTANTES.md) — suivi des fonctions qui dépendent encore d’un fournisseur ou du réseau.
 - [`config/libcomlair-feature-flags.json`](config/libcomlair-feature-flags.json) — configuration machine de référence des drapeaux, actuellement non branchée au runtime.
 - [`tests/reference-journeys.json`](tests/reference-journeys.json) — parcours fonctionnels à rejouer après les modifications importantes.
 - [`docs/RAPPORT-DIAGNOSTIC-EXPORT.md`](docs/RAPPORT-DIAGNOSTIC-EXPORT.md) — contenu et règles de confidentialité du futur rapport de diagnostic exportable.
@@ -32,6 +34,7 @@ Application d’accessibilité conçue pour aider les personnes en situation de 
 - [`docs/REGISTRE-COMPOSANTS-VOCAUX.md`](docs/REGISTRE-COMPOSANTS-VOCAUX.md) — moteurs, modèles, dictionnaires et statut d’audit.
 - [`docs/TEST-AUTONOMIE-TOTALE.md`](docs/TEST-AUTONOMIE-TOTALE.md) — protocole final en mode avion / services externes coupés.
 - [`data/voice/README.md`](data/voice/README.md) — organisation des données vocales locales.
+- [`data/voice/libcomlair-fixed-audio.json`](data/voice/libcomlair-fixed-audio.json) — manifeste versionné du futur pack vocal fixe local.
 - [`data/voice/libcomlair-pronunciation-overrides.json`](data/voice/libcomlair-pronunciation-overrides.json) — dictionnaire de prononciation propre à Libcomlair.
 
 ## Règle de dépannage
