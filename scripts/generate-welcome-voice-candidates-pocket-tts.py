@@ -25,38 +25,32 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data/voice/libcomlair-fixed-audio.json"
 OUTPUT_DIR = ROOT / "voice-candidates-output"
 
-# Listening-only candidates. We deliberately use source audio prompts instead of
-# precomputed .safetensors voice states because the latter may not match the state
-# serialization format expected by the installed Pocket TTS release.
-#
-# All three files come from Kyutai's unmute-prod-website collection. Kyutai's
-# repository states that, apart from explicitly listed exceptions, these are their
-# own recordings and may be used as CC0. None of these three is one of the listed
-# exceptions.
-VOICE_BASE = "hf://kyutai/tts-voices/unmute-prod-website"
+# Listening-only candidates from Pocket TTS' built-in predefined voice catalog.
+# Using catalog voice names is intentional: the public no-voice-cloning model can
+# load their precomputed states without requiring gated voice-cloning weights or
+# a Hugging Face login. The selected voice's provenance/licence must still be
+# audited separately before any runtime promotion.
 CANDIDATES = [
     {
         "id": "A",
         "label": "candidate-a",
-        "voiceSource": VOICE_BASE + "/default_voice.wav",
-        "provenance": "Kyutai tts-voices / unmute-prod-website / default_voice.wav",
-        "rightsNote": "Kyutai tts-voices documentation: own recording / CC0",
+        "voiceSource": "estelle",
+        "provenance": "Pocket TTS predefined voice catalog: estelle",
+        "rightsNote": "Listening test only; audit selected voice before promotion",
     },
     {
         "id": "B",
         "label": "candidate-b",
-        "voiceSource": VOICE_BASE + "/developer-1.mp3",
-        "provenance": "Kyutai tts-voices / unmute-prod-website / developer-1.mp3",
-        "rightsNote": "Kyutai tts-voices documentation: own recording / CC0",
+        "voiceSource": "alba",
+        "provenance": "Pocket TTS predefined voice catalog: alba",
+        "rightsNote": "Listening test only; audit selected voice before promotion",
     },
     {
         "id": "C",
         "label": "candidate-c",
-        "voiceSource": VOICE_BASE + "/fabieng-enhanced-v2.wav",
-        "provenance": (
-            "Kyutai tts-voices / unmute-prod-website / fabieng-enhanced-v2.wav"
-        ),
-        "rightsNote": "Kyutai tts-voices documentation: own recording / CC0",
+        "voiceSource": "vera",
+        "provenance": "Pocket TTS predefined voice catalog: vera",
+        "rightsNote": "Listening test only; audit selected voice before promotion",
     },
 ]
 
@@ -133,7 +127,10 @@ def main() -> int:
     report_entries = []
     for candidate in CANDIDATES:
         output = OUTPUT_DIR / f"{candidate['label']}-welcome.wav"
-        print(f"Generating candidate {candidate['id']}")
+        print(
+            f"Generating candidate {candidate['id']} "
+            f"with predefined voice {candidate['voiceSource']}"
+        )
         state = model.get_state_for_audio_prompt(candidate["voiceSource"])
         audio = model.generate_audio(state, text)
         audio_np = audio.detach().cpu().numpy() if hasattr(audio, "detach") else np.asarray(audio)
@@ -144,6 +141,7 @@ def main() -> int:
         report_entries.append(
             {
                 "candidate": candidate["id"],
+                "catalogVoice": candidate["voiceSource"],
                 "file": output.name,
                 "text": text,
                 "provenance": candidate["provenance"],
@@ -167,8 +165,9 @@ def main() -> int:
             "doesNotModifyRuntime": True,
             "androidListeningRequired": True,
             "candidateNameMustNotImplyApproval": True,
-            "usesSourceAudioPrompts": True,
-            "finalSelectedVoiceMustBePinnedBeforePromotion": True,
+            "usesOnlyPredefinedCatalogVoices": True,
+            "requiresNoVoiceCloningWeights": True,
+            "finalSelectedVoiceMustBePinnedAndRightsAuditedBeforePromotion": True,
         },
         "entries": report_entries,
     }
