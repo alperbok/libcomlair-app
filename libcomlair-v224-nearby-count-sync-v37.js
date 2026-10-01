@@ -28,13 +28,20 @@
     return lastPlaceCount;
   }
 
-  function canonicalMessage(){
+  function writtenMessage(){
+    const total=totalCount();
+    if(total)return total+" résultats au total autour de vous, lieux et transports compris.";
+    if(lastPlaceCount)return lastPlaceCount+" lieux trouvés autour de vous.";
+    return "Recherche autour de vous terminée.";
+  }
+
+  function voiceMessage(){
     const total=totalCount();
     const places=lastPlaceCount;
     if(places&&total&&places!==total){
       return places+" lieux trouvés autour de vous. "+total+" résultats au total, transports compris.";
     }
-    if(total)return total+" résultats trouvés autour de vous, transports compris.";
+    if(total)return total+" résultats au total autour de vous, lieux et transports compris.";
     if(places)return places+" lieux trouvés autour de vous.";
     return "Recherche autour de vous terminée.";
   }
@@ -46,12 +53,13 @@
     rememberPlaceCount(event?.detail?.message);
     if(!lastPlaceCount)rememberPlaceCount(text(locationStatus));
     if(!lastPlaceCount)rememberPlaceCount(text(globalStatus));
-    const message=canonicalMessage();
-    if(globalStatus)globalStatus.textContent=message;
-    if(locationStatus)locationStatus.textContent=message;
+    const written=writtenMessage();
+    const spoken=voiceMessage();
+    if(globalStatus)globalStatus.textContent=written;
+    if(locationStatus)locationStatus.textContent=written;
     if(event.detail&&typeof event.detail==="object"){
       try{
-        event.detail.message=message;
+        event.detail.message=spoken;
         event.detail.canonicalNearbyCount=true;
         event.detail.placeCount=lastPlaceCount||null;
         event.detail.totalCount=totalCount()||null;
@@ -67,7 +75,7 @@
     const mentionsCount=/\b\d+\b/.test(raw)&&(lower.includes("lieu")||lower.includes("résultat")||lower.includes("resultat"));
     if(mentionsNearby&&mentionsCount){
       rememberPlaceCount(raw);
-      return canonicalMessage();
+      return voiceMessage();
     }
     return raw;
   }
@@ -104,9 +112,10 @@
   setTimeout(patchVoice,900);
 
   window.LibcomlairNearbyCountSync=Object.freeze({
-    version:"v224-37.2-places-plus-total",
+    version:"v224-37.3-written-total-spoken-detail",
     sync:()=>synchronize({detail:{ok:true}}),
-    message:canonicalMessage,
+    writtenMessage,
+    voiceMessage,
     placeCount:()=>lastPlaceCount,
     totalCount,
     rewriteSpeech:rewriteNearbySpeech,
