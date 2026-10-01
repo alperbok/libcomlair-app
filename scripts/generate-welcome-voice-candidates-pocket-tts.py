@@ -26,9 +26,11 @@ MANIFEST = ROOT / "data/voice/libcomlair-fixed-audio.json"
 OUTPUT_DIR = ROOT / "voice-candidates-output"
 
 # Candidate A remains the current Pocket TTS French default for comparison.
-# B and C use Kyutai-owned recordings from unmute-prod-website. Kyutai's
-# repository documentation states that the recordings in that folder other than
-# the explicitly listed exceptions are Kyutai's own recordings usable as CC0.
+# B and C use Kyutai-provided precomputed voice-state safetensors. This matters
+# in GitHub Actions because public CI runs can use exported voice states even
+# when raw-audio voice cloning is unavailable.
+# The URLs are pinned to the Kyutai tts-voices revision used during review.
+VOICE_REVISION = "1fc7395b7e012e2bbebfca14b942a4ef62ccc899"
 CANDIDATES = [
     {
         "id": "A",
@@ -40,15 +42,29 @@ CANDIDATES = [
     {
         "id": "B",
         "label": "candidate-b",
-        "voiceSource": "hf://kyutai/tts-voices/unmute-prod-website/developer-1.mp3@1fc7395b7e012e2bbebfca14b942a4ef62ccc899",
-        "provenance": "Kyutai tts-voices / unmute-prod-website / developer-1.mp3",
+        "voiceSource": (
+            "https://huggingface.co/kyutai/tts-voices/resolve/"
+            + VOICE_REVISION
+            + "/unmute-prod-website/developer-1.mp3.1e68beda%40240.safetensors"
+        ),
+        "provenance": (
+            "Kyutai tts-voices / unmute-prod-website / developer-1.mp3 / "
+            "precomputed voice state"
+        ),
         "rightsNote": "Kyutai tts-voices documentation: own recording / CC0",
     },
     {
         "id": "C",
         "label": "candidate-c",
-        "voiceSource": "hf://kyutai/tts-voices/unmute-prod-website/fabieng-enhanced-v2.wav@1fc7395b7e012e2bbebfca14b942a4ef62ccc899",
-        "provenance": "Kyutai tts-voices / unmute-prod-website / fabieng-enhanced-v2.wav",
+        "voiceSource": (
+            "https://huggingface.co/kyutai/tts-voices/resolve/"
+            + VOICE_REVISION
+            + "/unmute-prod-website/fabieng-enhanced-v2.wav.1e68beda%40240.safetensors"
+        ),
+        "provenance": (
+            "Kyutai tts-voices / unmute-prod-website / fabieng-enhanced-v2.wav / "
+            "precomputed voice state"
+        ),
         "rightsNote": "Kyutai tts-voices documentation: own recording / CC0",
     },
 ]
@@ -160,6 +176,7 @@ def main() -> int:
             "doesNotModifyRuntime": True,
             "androidListeningRequired": True,
             "candidateNameMustNotImplyApproval": True,
+            "ciUsesPrecomputedVoiceStatesInsteadOfRawAudioCloning": True,
         },
         "entries": report_entries,
     }
