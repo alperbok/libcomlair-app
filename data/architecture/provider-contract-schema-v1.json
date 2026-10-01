@@ -6,14 +6,20 @@
     "providerId": "",
     "displayName": "",
     "countryScope": [],
-    "purpose": "places|transport|accessibility|geocoding|other",
+    "purpose": "places|transport|accessibility|geocoding|map|routing|other",
     "endpointFamily": "",
     "license": {
       "name": "",
       "url": "",
+      "termsUrl": null,
+      "resourceRightsId": null,
       "redistributionAllowed": null,
       "attributionRequired": null,
-      "verifiedAt": null
+      "cachingAllowed": null,
+      "offlineStorageAllowed": null,
+      "transformationAllowed": null,
+      "verifiedAt": null,
+      "nextReviewAt": null
     },
     "schema": {
       "versionOrDate": null,
@@ -24,6 +30,12 @@
       "rateLimits": {},
       "knownNullSemantics": {},
       "breakingChangeSignals": []
+    },
+    "geography": {
+      "coordinateSystem": null,
+      "worldwide": null,
+      "supportedCountries": [],
+      "borderBehaviour": null
     },
     "adapter": {
       "moduleId": "",
@@ -38,15 +50,20 @@
         "pagination-terminates",
         "unknown-values-not-inferred",
         "source-metadata-preserved",
-        "provider-failure-does-not-break-core-navigation"
+        "provider-failure-does-not-break-core-navigation",
+        "rights-metadata-present-before-bundling",
+        "offline-use-not-enabled-without-offline-right"
       ]
     }
   },
   "rules": {
     "providerNeverDefinesUiDirectly": true,
     "providerNeverDefinesInternalIds": true,
+    "providerNeverDefinesDeviceLocation": true,
     "breakingChangeMustFailContractTest": true,
     "licenseMustBeVerifiedBeforeBundling": true,
+    "offlineUseRequiresVerifiedOfflineRight": true,
+    "unknownRightMeansNotAuthorizedForBundling": true,
     "adapterMustOwnNormalization": true
   }
 }
