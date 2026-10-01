@@ -8,9 +8,13 @@ Libcomlair doit continuer à assurer ses fonctions essentielles même si Render,
 
 Principe directeur : **le téléphone doit posséder tout ce qui est indispensable ; Internet sert surtout à enrichir et actualiser les données.**
 
+Principe d’architecture : **1 fonction = 1 module responsable = 1 diagnostic = 1 réparation = 1 secours lorsque possible.**
+
 ## Documents de référence
 
 - `LIBCOMLAIR-SECURITE-INDEPENDANCE.md` : règle générale d’indépendance, sauvegardes et restauration.
+- `docs/ARCHITECTURE-MODULES.md` : carte des modules, responsabilités, dépendances et interfaces.
+- `docs/REGISTRE-DIAGNOSTIC-REPARATION.md` : point d’entrée en cas de panne et chaîne Module → Diagnostic → Réparation → Secours.
 - `docs/voice-independence-legal-plan.md` : règles de licence et de conformité pour la voix.
 - `docs/REGISTRE-COMPOSANTS-VOCAUX.md` : statut des moteurs, modèles, dictionnaires et voix étudiés.
 - `docs/TEST-AUTONOMIE-TOTALE.md` : protocole qui décidera si l’indépendance est réellement atteinte.
@@ -27,7 +31,10 @@ Principe directeur : **le téléphone doit posséder tout ce qui est indispensab
 - bibliothèque audio locale IndexedDB ajoutée au moteur Render : les audios déjà générés peuvent être réutilisés localement ;
 - inventaire vocal `LibcomlairVoiceIndependence` : recense phrases fixes, textes visibles et structures dynamiques rencontrées ;
 - rubrique Diagnostic « Autonomie vocale » ;
-- plan légal pour l’indépendance vocale.
+- plan légal pour l’indépendance vocale ;
+- carte d’architecture des modules ;
+- registre Diagnostic / Réparation / Secours ;
+- emplacement versionné du dictionnaire vocal Libcomlair.
 
 ### Encore dépendant de services externes
 
@@ -180,13 +187,21 @@ Contrôler au minimum :
 - intégrité des fichiers ;
 - état des services externes sans les considérer indispensables.
 
+Chaque module doit progressivement exposer son propre état, sa version, son dernier test, sa dernière erreur, ses dépendances et son mode de secours. Le Diagnostic central agrège ces informations au lieu de deviner l’état des autres modules.
+
 ### C2. Réparation ciblée
 
 Chaque anomalie doit correspondre à une réparation précise, sans réinitialiser inutilement les données utilisateur.
 
+La procédure de référence est décrite dans `docs/REGISTRE-DIAGNOSTIC-REPARATION.md`.
+
 ### C3. Retour arrière après mise à jour
 
 Conserver une version fonctionnelle précédente afin de pouvoir restaurer rapidement si une mise à jour casse l’affichage, le micro ou la voix.
+
+### C4. Règle anti-boucle
+
+Avant un nouveau correctif : identifier le module propriétaire, consulter les anciennes réparations, rechercher CSS/JS historiques, `!important`, MutationObserver, événements concurrents et ordre de chargement. Si une première modification a peu ou pas d’effet, rechercher un conflit au lieu de continuer à modifier des valeurs.
 
 ## Chantier D — accessibilité et expérience utilisateur
 
@@ -214,7 +229,8 @@ Une nouvelle fonction n’est pas considérée terminée tant qu’elle n’est 
 2. utilisable vocalement ;
 3. navigable au micro lorsque nécessaire ;
 4. testable par le Diagnostic ;
-5. compatible avec les profils concernés.
+5. compatible avec les profils concernés ;
+6. rattachée à un module responsable et une procédure de diagnostic.
 
 ## Chantier E — qualité et fiabilité des données
 
@@ -248,10 +264,11 @@ Pour les enregistrements humains : consentement explicite, finalité, conservati
 ### Phase 1 — maintenant
 
 1. continuer à collecter les phrases et audios pendant que Render fonctionne ;
-2. créer le dictionnaire Libcomlair ;
+2. créer et alimenter le dictionnaire Libcomlair ;
 3. commencer la bibliothèque d’audios fixes ;
 4. tenir le registre des licences ;
-5. préparer le test d’autonomie totale.
+5. préparer le test d’autonomie totale ;
+6. rattacher progressivement chaque fonction existante à la carte des modules et au registre de diagnostic.
 
 ### Phase 2 — prototype local
 
@@ -280,7 +297,8 @@ Pour le microphone :
 - fonctionnement hors connexion ;
 - contributions hors ligne ;
 - restauration de version ;
-- diagnostic complet.
+- diagnostic complet ;
+- export/import et migrations de données.
 
 ### Phase 5 — suppression des dépendances critiques
 
