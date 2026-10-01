@@ -42,6 +42,7 @@
   }
   function key(ctx){return [ctx?.pageId||ctx?.id||"",ctx?.id||"",ctx?.title||"",ctx?.categoryId||"",ctx?.subcategoryLabel||"",mode(),hasVision()?"vision":"standard"].join("|")}
   function mark(ctx,result,reason){lastAttempt={time:Date.now(),contextId:ctx?.id||"",pageId:ctx?.pageId||"",result:String(result||""),reason:String(reason||"")}}
+  function welcomeOwnedByListenButton(ctx){return ctx?.id==="welcome"&&!!window.LibcomlairWelcomeListenFirst}
 
   function ending(ctx){
     const id=ctx?.id||"";
@@ -113,6 +114,10 @@
 
   function present(ctx,force=false){
     if(!ctx){mark(null,"failed","no-context");return false}
+    if(welcomeOwnedByListenButton(ctx)){
+      mark(ctx,"skipped","welcome-owned-by-listen-button");
+      return false;
+    }
     const k=key(ctx);
     if(!force&&k===lastAutoKey){mark(ctx,"skipped","same-page-already-presented");return false}
     if(!force&&presenting&&k===activeKey){mark(ctx,"skipped","same-page-speaking");return false}
@@ -136,5 +141,5 @@
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>schedule("initial",true,600),{once:true});else schedule("initial",true,600);
 
-  window.LibcomlairGuidedPresenter=Object.freeze({version:"v224-10",presentCurrent:(force=false)=>present(current(),force),cancelCurrent,restartCurrent:()=>{cancelCurrent();return present(current(),true)},resetVisited:()=>{lastAutoKey="";history.length=0},visited:()=>[...new Set(history)],profileMode:()=>hasVision()?"vision-complete":"standard-guided",isPresenting:()=>presenting,currentMode:mode,lastAttempt:()=>({...lastAttempt}),currentKey:()=>activeKey,lastAutoKey:()=>lastAutoKey});
+  window.LibcomlairGuidedPresenter=Object.freeze({version:"v224-10.1-welcome-listen-owner",presentCurrent:(force=false)=>present(current(),force),cancelCurrent,restartCurrent:()=>{cancelCurrent();return present(current(),true)},resetVisited:()=>{lastAutoKey="";history.length=0},visited:()=>[...new Set(history)],profileMode:()=>hasVision()?"vision-complete":"standard-guided",isPresenting:()=>presenting,currentMode:mode,lastAttempt:()=>({...lastAttempt}),currentKey:()=>activeKey,lastAutoKey:()=>lastAutoKey});
 })();
