@@ -8,6 +8,7 @@ on:
     paths:
       - ".github/workflows/generate-welcome-voice.yml"
       - "scripts/generate-fixed-voice-pack-pocket-tts.py"
+      - "scripts/generate-welcome-voice-candidates-pocket-tts.py"
       - "data/voice/libcomlair-fixed-audio.json"
       - "data/voice/pocket-tts-estelle-provenance-v1.json"
 
@@ -16,7 +17,7 @@ permissions:
 
 jobs:
   generate-welcome:
-    name: Generate Estelle welcome WAV
+    name: Generate French welcome voice candidates
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -43,35 +44,35 @@ jobs:
           python --version
           python -m pip show pocket-tts tokenizers torch
 
-      - name: Generate only welcome.main
-        run: |
-          python scripts/generate-fixed-voice-pack-pocket-tts.py \
-            --single welcome.main \
-            --output-dir voice-test-output \
-            --overwrite
+      - name: Generate three welcome candidates
+        run: python scripts/generate-welcome-voice-candidates-pocket-tts.py
 
       - name: Verify generated files
         run: |
-          test -s voice-test-output/welcome-main.wav
-          test -s voice-test-output/generated-pack-v1.json
+          test -s voice-candidates-output/candidate-a-welcome.wav
+          test -s voice-candidates-output/candidate-b-welcome.wav
+          test -s voice-candidates-output/candidate-c-welcome.wav
+          test -s voice-candidates-output/welcome-candidates-report-v1.json
           python - <<'PY'
           import json
           from pathlib import Path
-          report = json.loads(Path('voice-test-output/generated-pack-v1.json').read_text(encoding='utf-8'))
-          assert report['status'] == 'generated-not-approved'
-          assert len(report['entries']) == 1
-          assert report['entries'][0]['id'] == 'welcome.main'
-          assert report['entries'][0]['wav']['sampleRate'] == 24000
-          assert report['entries'][0]['wav']['channels'] == 1
-          print('Voice artifact verified:', report['entries'][0]['sha256'])
+          report = json.loads(Path('voice-candidates-output/welcome-candidates-report-v1.json').read_text(encoding='utf-8'))
+          assert report['status'] == 'comparison-only-not-approved'
+          assert [entry['candidate'] for entry in report['entries']] == ['A', 'B', 'C']
+          for entry in report['entries']:
+              assert entry['wav']['sampleRate'] == 24000
+              assert entry['wav']['channels'] == 1
+          print('Three voice candidates verified')
           PY
 
-      - name: Upload voice test artifact
+      - name: Upload voice comparison artifact
         uses: actions/upload-artifact@v4
         with:
-          name: libcomlair-estelle-welcome-test
+          name: libcomlair-french-welcome-voice-candidates
           path: |
-            voice-test-output/welcome-main.wav
-            voice-test-output/generated-pack-v1.json
+            voice-candidates-output/candidate-a-welcome.wav
+            voice-candidates-output/candidate-b-welcome.wav
+            voice-candidates-output/candidate-c-welcome.wav
+            voice-candidates-output/welcome-candidates-report-v1.json
           if-no-files-found: error
           retention-days: 7
