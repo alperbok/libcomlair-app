@@ -1,7 +1,7 @@
 (()=>{
 "use strict";
 
-const VERSION="v224-2-autonomy-tools";
+const VERSION="v224-3-maintenance-inspector";
 const SESSION_KEY="libcomlair-developer-mode-v1";
 const QUERY_KEY="libcomlair-dev";
 const STRUCTURED_ATTR="v224MaintenanceStructured";
@@ -68,6 +68,7 @@ function moduleSnapshot(){
     "welcome-local-first":"LibcomlairWelcomeLocalFirst",
     "voice-local-coverage":"LibcomlairVoiceLocalCoverage",
     "autonomy-dashboard":"LibcomlairAutonomyDashboard",
+    "maintenance-inspector":"LibcomlairMaintenanceInspector",
     "external-service-test":"LibcomlairExternalServiceTestMode",
     "voice-independence":"LibcomlairVoiceIndependence",
     "voice-context":"LibcomlairVoiceContext",
@@ -126,6 +127,34 @@ async function showAutonomy(target){
   }catch(error){renderPre(target,"Impossible de mesurer l’autonomie : "+String(error?.message||error||"erreur"))}
 }
 
+async function showExternalDependencies(target){
+  const engine=window.LibcomlairMaintenanceInspector;
+  if(!engine?.inspectExternalDependencies){renderPre(target,"Inspecteur des dépendances non chargé.");return}
+  try{
+    const snapshot=await engine.inspectExternalDependencies();
+    renderPre(target,engine.textExternal?.(snapshot)||JSON.stringify(snapshot,null,2));
+  }catch(error){renderPre(target,"Impossible de lire les dépendances externes : "+String(error?.message||error||"erreur"))}
+}
+
+async function showDependencyMatrix(target){
+  const engine=window.LibcomlairMaintenanceInspector;
+  if(!engine?.dependencyMatrix){renderPre(target,"Matrice des dépendances non chargée.");return}
+  try{
+    const snapshot=await engine.dependencyMatrix();
+    renderPre(target,engine.textMatrix?.(snapshot)||JSON.stringify(snapshot,null,2));
+  }catch(error){renderPre(target,"Impossible de lire la matrice : "+String(error?.message||error||"erreur"))}
+}
+
+async function showOfflineReadiness(target){
+  const engine=window.LibcomlairMaintenanceInspector;
+  if(!engine?.offlineReadiness){renderPre(target,"Contrôle hors ligne non chargé.");return}
+  target.textContent="Vérification des ressources essentielles…";
+  try{
+    const snapshot=await engine.offlineReadiness();
+    renderPre(target,engine.textOffline?.(snapshot)||JSON.stringify(snapshot,null,2));
+  }catch(error){renderPre(target,"Impossible de vérifier la préparation hors ligne : "+String(error?.message||error||"erreur"))}
+}
+
 function updateExternalTestButton(button,status){
   const engine=window.LibcomlairExternalServiceTestMode;
   const state=engine?.status?.()||{active:false};
@@ -155,6 +184,10 @@ async function buildTechnicalReport(){
   try{localDiagnostic=window.LibcomlairDiagnostics?.status?.()||null}catch(_){}
   let externalTest=null;
   try{externalTest=window.LibcomlairExternalServiceTestMode?.status?.()||null}catch(_){}
+  let externalDependencies=null;
+  try{externalDependencies=await window.LibcomlairMaintenanceInspector?.inspectExternalDependencies?.()}catch(_){}
+  let offlineReadiness=null;
+  try{offlineReadiness=await window.LibcomlairMaintenanceInspector?.offlineReadiness?.()}catch(_){}
   const report={
     schemaVersion:1,
     appVersion:document.documentElement.dataset.libcomlairTestBuild||null,
@@ -171,6 +204,8 @@ async function buildTechnicalReport(){
     autonomy,
     localDiagnostic,
     externalTest,
+    externalDependencies,
+    offlineReadiness,
     lastRepair:null,
     lastReferenceJourney:null,
     featureFlags:flags&&flags.flags?flags.flags:null,
@@ -231,6 +266,33 @@ function buildAdvancedContent(content){
   externalButton.addEventListener("click",()=>toggleExternalTest(externalButton,externalStatus));
   setTimeout(()=>updateExternalTestButton(externalButton,externalStatus),0);
 
+  const dependenciesButton=document.createElement("button");
+  dependenciesButton.type="button";
+  dependenciesButton.className="details-btn";
+  dependenciesButton.textContent="🔗 Voir les dépendances externes";
+  const dependenciesResult=document.createElement("div");
+  dependenciesResult.className="data-note";
+  dependenciesResult.setAttribute("aria-live","polite");
+  dependenciesButton.addEventListener("click",()=>showExternalDependencies(dependenciesResult));
+
+  const matrixButton=document.createElement("button");
+  matrixButton.type="button";
+  matrixButton.className="details-btn";
+  matrixButton.textContent="🧭 Voir quoi retester après une modification";
+  const matrixResult=document.createElement("div");
+  matrixResult.className="data-note";
+  matrixResult.setAttribute("aria-live","polite");
+  matrixButton.addEventListener("click",()=>showDependencyMatrix(matrixResult));
+
+  const offlineButton=document.createElement("button");
+  offlineButton.type="button";
+  offlineButton.className="details-btn";
+  offlineButton.textContent="📦 Vérifier la préparation hors ligne";
+  const offlineResult=document.createElement("div");
+  offlineResult.className="data-note";
+  offlineResult.setAttribute("aria-live","polite");
+  offlineButton.addEventListener("click",()=>showOfflineReadiness(offlineResult));
+
   const flagButton=document.createElement("button");
   flagButton.type="button";
   flagButton.className="details-btn";
@@ -251,7 +313,7 @@ function buildAdvancedContent(content){
 
   const future=document.createElement("p");
   future.className="data-note v224-tech-future";
-  future.textContent="Prochaines extensions prévues : matrice automatique des dépendances, migrations de données, contrôle des licences, performance et retour arrière.";
+  future.textContent="Prochaines extensions : migrations de données, contrôle des licences, performance, restauration et retour arrière.";
 
   const exitButton=document.createElement("button");
   exitButton.type="button";
@@ -259,7 +321,17 @@ function buildAdvancedContent(content){
   exitButton.textContent="🔒 Quitter la maintenance avancée";
   exitButton.addEventListener("click",()=>setDeveloperMode(false));
 
-  content.append(note,autonomyButton,autonomyResult,externalButton,externalStatus,flagButton,flagResult,reportButton,reportStatus,future,exitButton);
+  content.append(
+    note,
+    autonomyButton,autonomyResult,
+    externalButton,externalStatus,
+    dependenciesButton,dependenciesResult,
+    matrixButton,matrixResult,
+    offlineButton,offlineResult,
+    flagButton,flagResult,
+    reportButton,reportStatus,
+    future,exitButton
+  );
 }
 
 function refreshDeveloperVisibility(){
