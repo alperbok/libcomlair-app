@@ -29,14 +29,18 @@ Empêcher qu’une expérimentation ou une correction partielle devienne la nouv
    - exécuter les parcours concernés dans `tests/reference-journeys.json` ;
    - noter les échecs avant toute promotion.
 
-5. **Validation téléphone réel**
+5. **Validation smartphone Android réel**
    Obligatoire lorsque sont concernés :
    - rendu visuel ;
    - tactile ;
    - audio ;
    - microphone ;
+   - caméra ;
    - GPS ;
+   - permissions ;
    - performance ou stockage local.
+
+   Le Samsung actuellement disponible sert d’appareil de référence de développement. Avant une diffusion stable large d’une fonction sensible au matériel, au navigateur, au WebView ou aux permissions, une vérification sur au moins un autre appareil Android d’un constructeur différent est requise lorsque possible. La politique détaillée est dans `docs/VALIDATION-ANDROID.md`.
 
 6. **Conformité**
    - licence/source/version documentées pour tout nouveau composant tiers ;
@@ -52,7 +56,7 @@ Empêcher qu’une expérimentation ou une correction partielle devienne la nouv
 
 Une version ne doit pas être promue si :
 
-- la validation téléphone nécessaire manque ;
+- la validation Android réelle nécessaire manque ;
 - un parcours essentiel échoue ;
 - une panne connue est contournée sans cause racine comprise ;
 - une nouvelle dépendance externe devient indispensable sans secours ;
