@@ -1,6 +1,14 @@
 {
   "schemaVersion": 1,
   "locale": "fr-FR",
+  "voiceProfile": {
+    "selectedVoice": "vera",
+    "engine": "Pocket TTS",
+    "engineVersion": "3.3.0",
+    "source": "VCTK p229 via kyutai/tts-voices",
+    "license": "CC BY 4.0",
+    "rollout": "approved-messages-only"
+  },
   "policy": {
     "criticalStartupMustNotRequireNetwork": true,
     "externalFallbackMayNeverBlockNavigation": true,
@@ -11,8 +19,11 @@
       "id": "welcome.main",
       "text": "Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver pour tous. Appuyez sur Suivant pour commencer.",
       "critical": true,
-      "asset": null,
-      "status": "awaiting-recording",
+      "asset": "voice-tests/fr-FR/vera-welcome.wav",
+      "status": "ready",
+      "voice": "vera",
+      "validatedOn": "Android",
+      "validatedAt": "2026-10-02",
       "autoplayPreferred": true,
       "fallback": "continue-without-blocking-navigation"
     },
