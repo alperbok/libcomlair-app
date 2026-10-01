@@ -1,4 +1,4 @@
-/* Libcomlair V224 — cadre maître, finition systématique v6.6.
+/* Libcomlair V224 — cadre maître, finition systématique v6.7.
    Pages courtes fixes. Les pages accordéon peuvent faire défiler leur contenu réel. */
 
 @media (max-width:540px){
@@ -211,10 +211,10 @@
     border:0!important;
   }
 
-  /* Mes besoins : contrairement aux pages fixes, le footer suit la fin de la liste.
-     Le cadre extérieur reste la zone de défilement et l'en-tête reste disponible. */
+  /* Mes besoins : le footer suit réellement la hauteur cumulée des accordéons.
+     Le cadre extérieur reste la seule zone de défilement de cette page. */
   body.v224-onboarding-needs.v224-master-frame-active #v224MasterShell{
-    grid-template-rows:82px auto auto!important;
+    grid-template-rows:82px max-content max-content!important;
     overflow-y:auto!important;
     overflow-x:hidden!important;
     align-content:start!important;
@@ -229,7 +229,7 @@
 
   body.v224-onboarding-needs.v224-master-frame-active #v224MasterShell > #mainContent{
     height:auto!important;
-    min-height:0!important;
+    min-height:max-content!important;
     overflow:visible!important;
     overscroll-behavior:auto!important;
   }
@@ -239,7 +239,8 @@
     margin-top:6px!important;
   }
 
-  /* Recherche / Catégories : cases légèrement plus compactes et intervalles visibles. */
+  /* Recherche / Catégories : cases plus compactes, espaces plus visibles,
+     en conservant quasiment la même occupation verticale totale. */
   body.v224-page4-step.v224-master-frame-active #mainContent{
     display:flex!important;
     flex-direction:column!important;
@@ -255,9 +256,9 @@
     min-height:0!important;
     display:grid!important;
     grid-template-columns:1fr 1fr!important;
-    grid-template-rows:auto repeat(4,70px)!important;
+    grid-template-rows:auto repeat(4,66px)!important;
     column-gap:8px!important;
-    row-gap:14px!important;
+    row-gap:18px!important;
     align-content:start!important;
     padding-bottom:6px!important;
   }
@@ -269,16 +270,16 @@
   }
 
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details{
-    height:70px!important;
-    min-height:70px!important;
-    max-height:70px!important;
+    height:66px!important;
+    min-height:66px!important;
+    max-height:66px!important;
     margin:0!important;
   }
 
   body.v224-page4-step.v224-master-frame-active #v224Page4Categories > details > summary.category{
-    height:70px!important;
-    min-height:70px!important;
-    max-height:70px!important;
+    height:66px!important;
+    min-height:66px!important;
+    max-height:66px!important;
     display:flex!important;
     align-items:center!important;
   }
