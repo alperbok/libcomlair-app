@@ -7,7 +7,7 @@ must happen before manifest promotion.
 
 Pinned generator: pocket-tts==3.3.0
 Pinned language: french
-Pinned predefined voice: estelle
+Pinned predefined voice: vera
 Target format: WAV, 24 kHz, mono, 16-bit PCM
 """
 
@@ -23,7 +23,7 @@ from pathlib import Path
 
 EXPECTED_POCKET_TTS_VERSION = "3.3.0"
 LANGUAGE = "french"
-VOICE = "estelle"
+VOICE = "vera"
 EXPECTED_SAMPLE_RATE = 24000
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "data/voice/libcomlair-fixed-audio.json"
