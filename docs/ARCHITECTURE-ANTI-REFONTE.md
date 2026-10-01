@@ -20,6 +20,7 @@ Cette architecture est préparatoire. Elle ne doit pas activer de comportement u
 8. **Historique plutôt qu’écrasement silencieux** : les corrections de données doivent pouvoir être retracées.
 9. **Adaptateurs fournisseurs** : aucune API externe ne définit directement le modèle interne ou l’interface.
 10. **Diagnostic par module** : toute fonction nouvelle doit exposer état, version, dépendances, dernière erreur et tests requis.
+11. **Android, pas une marque** : Samsung est l’appareil de référence actuel, mais aucune fonction ne doit dépendre d’un constructeur Android particulier.
 
 ## Profil / passeport fonctionnel
 
@@ -206,6 +207,7 @@ Avant de coder une fonction, vérifier obligatoirement :
 - diagnostic ?
 - migration ?
 - retour arrière ?
-- test Samsung ?
+- test sur smartphone Android réel ?
+- comportement dépendant d’un constructeur Android ? Si oui, est-il isolé et justifié ?
 
 Si une réponse est pertinente et non traitée, l’architecture de la fonction n’est pas encore terminée.
