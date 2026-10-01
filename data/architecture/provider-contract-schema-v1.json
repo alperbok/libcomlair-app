@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "runtimeActive": false,
+  "status": "prepared-for-test",
+  "provider": {
+    "providerId": "",
+    "displayName": "",
+    "countryScope": [],
+    "purpose": "places|transport|accessibility|geocoding|other",
+    "endpointFamily": "",
+    "license": {
+      "name": "",
+      "url": "",
+      "redistributionAllowed": null,
+      "attributionRequired": null,
+      "verifiedAt": null
+    },
+    "schema": {
+      "versionOrDate": null,
+      "requiredFields": [],
+      "optionalFields": [],
+      "units": {},
+      "pagination": {},
+      "rateLimits": {},
+      "knownNullSemantics": {},
+      "breakingChangeSignals": []
+    },
+    "adapter": {
+      "moduleId": "",
+      "targetSchema": "",
+      "fallback": null
+    },
+    "tests": {
+      "contractFixtures": [],
+      "requiredAssertions": [
+        "required-fields-present-or-explicitly-missing",
+        "units-normalized",
+        "pagination-terminates",
+        "unknown-values-not-inferred",
+        "source-metadata-preserved",
+        "provider-failure-does-not-break-core-navigation"
+      ]
+    }
+  },
+  "rules": {
+    "providerNeverDefinesUiDirectly": true,
+    "providerNeverDefinesInternalIds": true,
+    "breakingChangeMustFailContractTest": true,
+    "licenseMustBeVerifiedBeforeBundling": true,
+    "adapterMustOwnNormalization": true
+  }
+}
