@@ -28,7 +28,7 @@ Aucun composant n’est `approuve` tant que son code, son modèle, ses données,
 | Pocket-TTS / Kyutai | TTS local | MIT annoncée | CC BY 4.0 annoncée pour poids examinés | sous conditions | à tester | a-etudier | conditions d’accès, redistribution des poids, performance Android |
 | Piper historique | TTS local | MIT historique | varie selon voix | variable | oui selon version | prototype-seulement | dépôt archivé, dépendances phonémisation, licences voix |
 | eSpeak-NG | phonémisation / TTS | GPL | données associées à vérifier | obligations GPL | oui | a-etudier | compatibilité avec architecture finale |
-| Vosk | reconnaissance vocale | Apache-2.0 annoncée | modèles à vérifier séparément | à vérifier modèle par modèle | oui | a-etudier | licence du modèle français, taille, précision Samsung |
+| Vosk | reconnaissance vocale | Apache-2.0 annoncée | modèles à vérifier séparément | à vérifier modèle par modèle | oui | a-etudier | licence du modèle français, taille, précision sur Android réel et différences entre appareils |
 
 ## Fiche obligatoire avant passage à `approuve`
 
@@ -48,7 +48,9 @@ Pour chaque composant :
 - fichiers intégrés à Libcomlair ;
 - taille ;
 - fonctionnement Android hors ligne ;
-- résultat des tests Samsung ;
+- résultat des tests sur smartphone Android réel ;
+- appareil/version Android utilisés pour le test ;
+- résultat sur un second constructeur lorsque le composant dépend du matériel ou des services du téléphone et que ce test est disponible ;
 - date de vérification ;
 - décision et motif.
 
