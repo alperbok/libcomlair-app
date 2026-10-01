@@ -149,6 +149,30 @@ Chaque décision importante doit contenir :
 - Raison : les utilisateurs Android emploient de nombreux constructeurs et une particularité Samsung ne doit jamais devenir une hypothèse générale de l’application.
 - Conséquence : validation physique Android, vérification multi-constructeurs avant diffusion large lorsque pertinent, correctifs constructeur isolés et documentation dans `docs/VALIDATION-ANDROID.md`. iOS et les autres plateformes restent hors périmètre actuel.
 
+### ADR-017 — GPS mondial indépendant du pays, de la langue et des fournisseurs
+
+- Date : 2026-10-01
+- Sujet : géolocalisation.
+- Décision : le GPS produit une position WGS84 avec précision et fraîcheur ; il ne change jamais automatiquement la langue, le pays de recherche, le profil ou la juridiction. Carte, géocodage, itinéraire et transports restent des couches séparées.
+- Raison : permettre l’utilisation dans n’importe quel pays et le remplacement d’un fournisseur sans reconstruire la géolocalisation.
+- Conséquence : propriétaire `global-geolocation`, mode manuel obligatoire si permission refusée, position approximative supportée, arrière-plan désactivé par défaut, aucun historique permanent implicite.
+
+### ADR-018 — conformité juridique versionnée par juridiction
+
+- Date : 2026-10-01
+- Sujet : ouverture internationale.
+- Décision : chaque territoire possède un registre de conformité séparant règles régionales, nationales et éventuellement locales/sectorielles ; aucun pays ne devient officiellement disponible sans revue de ses obligations pertinentes.
+- Raison : les règles de protection des données, accessibilité numérique, contributions, photos, open data et services peuvent varier selon la juridiction et dans le temps.
+- Conséquence : sources officielles datées, statut de revue, révalidation et blocage de promotion lorsqu’une incertitude importante subsiste. Le registre seed ne constitue jamais une déclaration de conformité.
+
+### ADR-019 — droits d’utilisation séparés de la simple licence
+
+- Date : 2026-10-01
+- Sujet : données, cartes, transports, voix et mode hors ligne.
+- Décision : pour chaque ressource, Libcomlair suit séparément accès, cache, stockage hors ligne, transformation, redistribution et attribution.
+- Raison : une API publique ou une licence identifiée ne signifie pas automatiquement que tous les usages techniques sont autorisés.
+- Conséquence : un droit inconnu bloque l’usage concerné ; un pack hors ligne exige un droit hors ligne vérifié ; les conditions doivent être réévaluées lorsqu’elles changent.
+
 ## Règle
 
 Une décision peut être remplacée, mais elle ne doit pas être supprimée. Ajouter une nouvelle décision indiquant explicitement celle qu’elle remplace et pourquoi.
