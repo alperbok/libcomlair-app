@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "estelle-rejected-after-android-listening-test",
+  "status": "vera-selected-welcome-approved-after-android-listening-test",
   "checkedAt": "2026-10-02",
   "locale": "fr-FR",
   "engine": {
@@ -19,12 +19,14 @@
     "accessNote": "Model files may require accepting Hugging Face access conditions before download. No credential is stored in Libcomlair."
   },
   "voice": {
-    "name": "estelle",
-    "language": "french",
-    "origin": "hf://kyutai/tts-voices/unmute-prod-website/developpeuse-3.wav",
-    "source": "https://huggingface.co/kyutai/tts-voices/tree/main/unmute-prod-website",
-    "license": "CC0",
-    "licenseBasis": "Kyutai states that the other recordings in unmute-prod-website, excluding the specifically listed exceptions, are their own recordings and may be used as CC0.",
+    "name": "vera",
+    "languageModel": "french",
+    "originLanguage": "english",
+    "origin": "hf://kyutai/tts-voices/vctk/p229_023_enhanced.wav",
+    "source": "https://huggingface.co/kyutai/tts-voices/tree/main/vctk",
+    "license": "CC BY 4.0",
+    "licenseBasis": "Kyutai documents the VCTK voice sources in tts-voices as Creative Commons Attribution 4.0 International.",
+    "attribution": "VCTK speaker p229, source distributed by Kyutai in kyutai/tts-voices.",
     "licenseStatus": "verified-for-source-recording"
   },
   "generation": {
@@ -40,15 +42,24 @@
   "approval": {
     "audioGenerated": true,
     "listenedOnAndroid": true,
-    "voiceApprovedForLibcomlair": false,
-    "decision": "rejected",
-    "decisionReason": "Voix perçue comme trop enfantine lors du test d'écoute Android.",
+    "voiceApprovedForLibcomlair": true,
+    "decision": "approved",
+    "decisionReason": "Vera a été jugée parfaite lors du test d'écoute Android du message d'accueil.",
+    "approvedFixedMessageIds": [
+      "welcome.main"
+    ],
     "sevenFixedMessagesGenerated": false,
-    "manifestPromotedToReady": false
+    "welcomeManifestPromotedToReady": true,
+    "fullFixedPackPromotedToReady": false
   },
-  "nextCandidates": [
-    "alba",
-    "vera"
+  "rejectedCandidates": [
+    {
+      "name": "estelle",
+      "reason": "Voix perçue comme trop enfantine lors du test d'écoute Android."
+    }
+  ],
+  "remainingComparisonCandidates": [
+    "alba"
   ],
   "rules": {
     "engineModelAndVoiceLicensesTrackedSeparately": true,
@@ -56,6 +67,7 @@
     "androidPhysicalValidationRequired": true,
     "noRuntimeManifestPromotionWithoutApproval": true,
     "doNotReplaceVoiceSourceWithoutNewRightsReview": true,
-    "doNotRetestRejectedVoiceWithoutExplicitReason": true
+    "doNotRetestRejectedVoiceWithoutExplicitReason": true,
+    "dynamicTtsFallbackMustRemainAvailableDuringVeraRollout": true
   }
 }
