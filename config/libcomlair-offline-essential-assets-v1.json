@@ -14,7 +14,7 @@
     "libcomlair-v224-global-assistance.js",
     "libcomlair-v224-master-frame-integration-v1.css",
     "libcomlair-v224-master-frame-integration-v1.js",
-    "libcomlair-v224-welcome-local-first-v17.js",
+    "libcomlair-v224-welcome-local-first-v20.js",
     "libcomlair-v224-welcome-transition-hotfix.js",
     "libcomlair-v224-technical-menu-access-v1.css",
     "libcomlair-v224-technical-menu-access-v1.js",
@@ -23,14 +23,16 @@
     "libcomlair-selftest-v189.js",
     "config/libcomlair-feature-flags.json",
     "data/voice/libcomlair-fixed-audio.json",
+    "data/voice/libcomlair-fixed-voice-source-v1.json",
     "data/voice/libcomlair-pronunciation-overrides.json"
   ],
-  "futurePackagedAudioDirectory": "assets/audio/fr/",
+  "futurePackagedAudioDirectory": "assets/audio/fr-FR/",
   "rules": {
     "sameOriginOnlyForCoreCache": true,
     "externalProvidersNeverRequiredForBoot": true,
     "doNotCacheSecretsOrTokens": true,
     "doNotCachePreciseLocation": true,
-    "validateOnSamsungBeforeActivation": true
+    "validateOnAndroidRealDeviceBeforeActivation": true,
+    "audioRightsMustBeVerifiedBeforePackaging": true
   }
 }
