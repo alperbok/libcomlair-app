@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — réglages vocaux V11 figés</title>
+<style>
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,sans-serif;background:#fff;color:#111}
+main{max-width:720px;margin:0 auto;padding:18px}
+.card{border:1px solid #d6d6d6;border-radius:18px;overflow:hidden;background:#fff}
+.hero{width:100%;display:block;max-height:48vh;object-fit:cover}
+.content{padding:20px}
+h1{margin:.2rem 0 1rem;font-size:2rem}
+button{display:block;width:100%;padding:16px;border:0;border-radius:12px;font-size:1.15rem;font-weight:700;background:#136b63;color:#fff}
+#voiceEngineMode,#diagnostic{margin-top:14px;padding:14px;border-radius:12px;background:#f3f5f5;font-weight:650}
+.note{margin-top:14px;font-size:.96rem}
+</style>
+</head>
+<body>
+<main>
+<section id="libcomlairSplash" class="card" aria-labelledby="libcomlairSplashTitle">
+<img class="hero" src="assets/libcomlair-photo-v223.jpg" alt="Accueil Libcomlair">
+<div class="content">
+<h1 id="libcomlairSplashTitle">Bienvenue dans Libcomlair</h1>
+<p>Test avec les réglages vocaux exacts de la V11 du 29 septembre.</p>
+<button id="libcomlairSplashNext" type="button">Suivant →</button>
+<div id="voiceEngineMode" aria-live="polite">Moteur vocal : initialisation V11…</div>
+<div id="diagnostic" aria-live="polite">Le présentateur V11 doit lancer automatiquement la lecture environ 600 ms après le chargement.</div>
+<p class="note">Aucun module Écouter, aucun moteur vocal récent et aucun script d’accueil ajouté après V11 n’est chargé sur cette page.</p>
+</div>
+</section>
+</main>
+<script>
+window.LibcomlairVoiceContext=Object.freeze({
+  current:()=>({id:"welcome",pageId:"welcome",title:"Bienvenue dans Libcomlair"}),
+  getMode:()=>"simplified"
+});
+window.LibcomlairVoiceGuide=Object.freeze({
+  describe:()=>({
+    text:"Bienvenue dans Libcomlair. Libcomlair vous aide à trouver des lieux et des services avec des informations d’accessibilité.",
+    controls:[{label:"Suivant"}]
+  })
+});
+window.addEventListener("libcomlair-render-voice-status",e=>{
+  const d=e.detail||{};
+  const el=document.getElementById("diagnostic");
+  if(el)el.textContent="Render V11 : "+String(d.state||"inconnu")+(d.audioState?" — AudioContext : "+d.audioState:"")+(d.error?" — "+d.error:"");
+});
+window.addEventListener("libcomlair-voice-status",e=>{
+  const d=e.detail||{};
+  const el=document.getElementById("diagnostic");
+  if(el)el.textContent="Lecteur V11 : "+String(d.state||"inconnu")+(d.error?" — "+d.error:"");
+});
+setTimeout(()=>{
+  try{
+    const v=window.LibcomlairVoice?.status?.()||{};
+    const r=window.LibcomlairRenderVoice?.status?.()||{};
+    const p=window.LibcomlairGuidedPresenter?.lastAttempt?.()||{};
+    const el=document.getElementById("diagnostic");
+    if(el&&v.last?.state!=="speaking")el.textContent="Après 10 s — présentateur : "+String(p.result||"?")+" / "+String(p.reason||"")+" — moteur : "+String(v.last?.state||"?")+" — AudioContext : "+String(r.audioState||"?");
+  }catch(_){}
+},10000);
+</script>
+<script src="archive-v11/libcomlair-render-voice-v196-v11-frozen.js?v=1"></script>
+<script src="archive-v11/libcomlair-voice-engine-v190-v11-frozen.js?v=1"></script>
+<script src="archive-v11/libcomlair-v224-guided-presenter-v9-v11-frozen.js?v=1"></script>
+</body>
+</html>
