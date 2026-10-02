@@ -26,7 +26,17 @@
     try{window.dispatchEvent(new CustomEvent("libcomlair-render-voice-status",{detail:{...last}}))}catch(_){}
   }
 
+  function welcomeVisible(){
+    const el=document.getElementById("libcomlairSplash");
+    if(!el||el.hidden||el.hasAttribute("hidden")||el.getAttribute("aria-hidden")==="true")return false;
+    try{const s=getComputedStyle(el),r=el.getBoundingClientRect();return s.display!=="none"&&s.visibility!=="hidden"&&r.width>0&&r.height>0}catch(_){return true}
+  }
+
   function getAudioContext(){
+    if(welcomeVisible()){
+      emit("audio-deferred-welcome",{audioState:"none",adoptedEarlyContext:false});
+      return null;
+    }
     const AC=window.AudioContext||window.webkitAudioContext;
     if(typeof AC!=="function")return null;
     if(!audioContext){
@@ -44,7 +54,10 @@
 
   async function unlockAudio(){
     const ctx=getAudioContext();
-    if(!ctx)throw new Error("Web Audio indisponible.");
+    if(!ctx){
+      if(welcomeVisible())return false;
+      throw new Error("Web Audio indisponible.");
+    }
     try{if(ctx.state!=="running")await ctx.resume()}catch(_){}
     const ok=ctx.state==="running";
     emit(ok?"audio-ready":"audio-locked",{audioState:ctx.state,adoptedEarlyContext});
@@ -52,6 +65,7 @@
   }
 
   function gestureUnlock(){
+    if(welcomeVisible())return;
     unlockAudio().then(ok=>{
       if(ok)["pointerdown","touchstart","keydown","click"].forEach(type=>document.removeEventListener(type,gestureUnlock,true));
     }).catch(()=>{});
@@ -139,7 +153,7 @@
 
   async function playBuffer(buffer,meta,opts,requestId){
     const ctx=getAudioContext();
-    if(!ctx)throw new Error("Web Audio indisponible.");
+    if(!ctx)throw new Error(welcomeVisible()?"Web Audio désactivé sur l’accueil.":"Web Audio indisponible.");
     if(ctx.state!=="running"){
       const ok=await unlockAudio();
       if(!ok)throw new Error("Audio Android verrouillé. Appuyez une fois sur l’écran puis réessayez.");
@@ -212,7 +226,11 @@
     activeRequestId=requestId;
 
     const ctx=getAudioContext();
-    if(!ctx||ctx.state!=="running"){
+    if(!ctx){
+      if(welcomeVisible())throw new Error("Web Audio désactivé sur l’accueil.");
+      throw new Error("Web Audio indisponible.");
+    }
+    if(ctx.state!=="running"){
       const ok=await unlockAudio();
       if(!ok)throw new Error("Audio Android verrouillé. Appuyez sur un bouton de l’application puis réessayez.");
     }
@@ -248,10 +266,10 @@
   function status(){
     const ctx=audioContext;
     const early=window.__libcomlairEarlyAudioStatus||{};
-    return {version:"azure-first-v199-lazy",ready:prepared,audioState:ctx?ctx.state:"none",endpoint:PRIMARY_TTS_URL,fallbackEndpoint:FALLBACK_TTS_URL,activeRequestId,currentSourceRequestId,adoptedEarlyContext,earlyAudio:{...early},last:{...last}};
+    return {version:"azure-first-v199-lazy-welcome-blocked",ready:prepared,audioState:ctx?ctx.state:"none",welcomeBlocked:welcomeVisible(),endpoint:PRIMARY_TTS_URL,fallbackEndpoint:FALLBACK_TTS_URL,activeRequestId,currentSourceRequestId,adoptedEarlyContext,earlyAudio:{...early},last:{...last}};
   }
 
-  window.LibcomlairRenderVoice=Object.freeze({version:"azure-first-v199-lazy",prepare,prefetch,speak,stop,unlockAudio,status});
-  // v199 : aucune création d'AudioContext ni préparation Render au chargement.
-  // Web Audio ne sera créé qu'au premier usage explicite du moteur naturel après l'accueil.
+  window.LibcomlairRenderVoice=Object.freeze({version:"azure-first-v199-lazy-welcome-blocked",prepare,prefetch,speak,stop,unlockAudio,status});
+  // Aucune création d'AudioContext ni préparation Render au chargement.
+  // Tant que l'écran Bienvenue est visible, Web Audio reste explicitement désactivé.
 })();
