@@ -1,0 +1,57 @@
+name: Diagnose Render live TTS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-render-live.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check V181 status
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '--- V181 STATUS ---'
+          code=$(curl -sS --max-time 30 -o /tmp/v181-status.json -w '%{http_code}' 'https://libcomlair-backend.onrender.com/api/tts/v181/status?verify=1')
+          echo "HTTP=$code"
+          cat /tmp/v181-status.json
+          echo
+          test "$code" = "200"
+
+      - name: Generate V181 sample
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '--- V181 AUDIO ---'
+          code=$(curl -sS --max-time 60 \
+            -D /tmp/v181-headers.txt \
+            -o /tmp/v181-test.mp3 \
+            -w '%{http_code}' \
+            -X POST \
+            -H 'Origin: https://alperbok.github.io' \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: audio/mpeg' \
+            --data '{"text":"Bienvenue dans Libcomlair. Test technique Render."}' \
+            'https://libcomlair-backend.onrender.com/api/tts/v181')
+          echo "HTTP=$code"
+          grep -Ei '^(content-type|content-length|x-libcomlair-tts-voice|x-libcomlair-tts-cache):' /tmp/v181-headers.txt || true
+          bytes=$(wc -c < /tmp/v181-test.mp3)
+          echo "BYTES=$bytes"
+          file /tmp/v181-test.mp3 || true
+          test "$code" = "200"
+          test "$bytes" -gt 500
+
+      - name: Check Azure route separately
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '--- AZURE STATUS ---'
+          code=$(curl -sS --max-time 30 -o /tmp/azure-status.json -w '%{http_code}' 'https://libcomlair-backend.onrender.com/api/tts/azure-v1/status?verify=1' || true)
+          echo "HTTP=${code:-curl-error}"
+          cat /tmp/azure-status.json 2>/dev/null || true
+          echo
