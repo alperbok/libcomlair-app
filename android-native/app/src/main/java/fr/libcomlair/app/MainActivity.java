@@ -2,32 +2,27 @@ package fr.libcomlair.app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
+
+import org.json.JSONObject;
 
 public final class MainActivity extends Activity {
-    private static final String LIBCOMLAIR_URL = "file:///android_asset/www/test-v224-master-frame-integration-v2.html?android-app=0.4";
-    private static final int MAX_AUTOMATIC_ATTEMPTS = 4;
-
-    private final Handler handler = new Handler(Looper.getMainLooper());
+    private static final String LIBCOMLAIR_URL = "file:///android_asset/www/test-v224-master-frame-integration-v2.html?android-app=0.5";
 
     private WebView webView;
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private AudioFocusRequest audioFocusRequest;
-    private boolean playbackStarted = false;
-    private boolean attemptInProgress = false;
-    private int automaticAttempts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +32,9 @@ public final class MainActivity extends Activity {
 
         webView = new WebView(this);
         configureWebView(webView);
+        webView.addJavascriptInterface(new SupportAudioBridge(), "LibcomlairSupportAudio");
         setContentView(webView);
         webView.loadUrl(LIBCOMLAIR_URL);
-
-        // Vera fait partie de Libcomlair et est lue depuis l'APK de Libcomlair.
-        // Aucun navigateur externe et aucun service vocal distant ne sont requis pour l'accueil.
-        scheduleAutomaticPlayback(180);
     }
 
     @SuppressWarnings("deprecation")
@@ -58,106 +50,84 @@ public final class MainActivity extends Activity {
         settings.setAllowContentAccess(true);
         settings.setAllowFileAccessFromFileURLs(true);
         settings.setAllowUniversalAccessFromFileURLs(true);
+        view.setWebViewClient(new WebViewClient());
+    }
 
-        view.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                // La voix d'accueil est gérée par l'application Libcomlair elle-même.
-                // On neutralise uniquement l'ancien lecteur d'accueil HTML afin d'éviter une double lecture.
-                String script = "(function(){" +
-                        "window.__LIBCOMLAIR_NATIVE_WELCOME__=true;" +
-                        "function stopOldWelcome(){" +
-                        "var a=document.getElementById('libcomlairWelcomeAutoplay');" +
-                        "if(a){try{a.pause();}catch(e){} a.removeAttribute('autoplay');}" +
-                        "}" +
-                        "stopOldWelcome();setTimeout(stopOldWelcome,500);setTimeout(stopOldWelcome,1500);" +
-                        "})();";
-                view.evaluateJavascript(script, null);
+    private final class SupportAudioBridge {
+        @JavascriptInterface
+        public String playFixed(String messageId, String assetPath, String voice) {
+            final String id = messageId == null ? "" : messageId;
+            final String path = assetPath == null ? "" : assetPath;
+
+            if (!isAllowedLibcomlairAudioPath(path)) {
+                runOnUiThread(() -> notifyLibcomlair(id, "error", "invalid-audio-path"));
+                return "rejected";
             }
-        });
+
+            runOnUiThread(() -> playLibcomlairAsset(id, path));
+            return "accepted";
+        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (webView != null) webView.onResume();
-        if (!playbackStarted) scheduleAutomaticPlayback(320);
+    private boolean isAllowedLibcomlairAudioPath(String path) {
+        return path.startsWith("voice-tests/") && !path.contains("..") && path.endsWith(".wav");
     }
 
-    private void scheduleAutomaticPlayback(long delayMs) {
-        handler.postDelayed(() -> {
-            if (!playbackStarted && !attemptInProgress && automaticAttempts < MAX_AUTOMATIC_ATTEMPTS) {
-                startVera();
-            }
-        }, delayMs);
-    }
-
-    private void startVera() {
-        if (attemptInProgress || playbackStarted) return;
-        attemptInProgress = true;
-        automaticAttempts++;
-
-        releasePlayer(false);
+    private void playLibcomlairAsset(String messageId, String relativeAssetPath) {
+        releasePlayer(true);
         requestAudioFocus();
 
-        AudioAttributes attributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                .build();
-
         try {
-            MediaPlayer player = MediaPlayer.create(this, R.raw.vera_welcome, attributes, 0);
-            if (player == null) {
-                attemptInProgress = false;
-                retryAutomatically("Vera n'a pas pu être chargée dans Libcomlair.");
-                return;
-            }
-
+            AssetFileDescriptor afd = getAssets().openFd("www/" + relativeAssetPath);
+            MediaPlayer player = new MediaPlayer();
             mediaPlayer = player;
+
+            AudioAttributes attributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build();
+
+            player.setAudioAttributes(attributes);
+            player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            afd.close();
             player.setVolume(1.0f, 1.0f);
-            player.setOnCompletionListener(mp -> releasePlayer(true));
-            player.setOnErrorListener((mp, what, extra) -> {
-                playbackStarted = false;
-                attemptInProgress = false;
+
+            player.setOnPreparedListener(mp -> {
+                try {
+                    mp.start();
+                    notifyLibcomlair(messageId, "speaking", "android-audio-adapter");
+                } catch (RuntimeException error) {
+                    notifyLibcomlair(messageId, "error", error.getClass().getSimpleName());
+                    releasePlayer(true);
+                }
+            });
+
+            player.setOnCompletionListener(mp -> {
+                notifyLibcomlair(messageId, "ended", "android-audio-adapter");
                 releasePlayer(true);
-                retryAutomatically("Erreur audio Libcomlair (" + what + "/" + extra + ").");
+            });
+
+            player.setOnErrorListener((mp, what, extra) -> {
+                notifyLibcomlair(messageId, "error", what + "/" + extra);
+                releasePlayer(true);
                 return true;
             });
 
-            player.start();
-            playbackStarted = true;
-            attemptInProgress = false;
-
-            handler.postDelayed(() -> {
-                MediaPlayer activePlayer = mediaPlayer;
-                if (activePlayer != null && playbackStarted) {
-                    try {
-                        if (!activePlayer.isPlaying() && activePlayer.getCurrentPosition() < activePlayer.getDuration() - 150) {
-                            playbackStarted = false;
-                            releasePlayer(true);
-                            retryAutomatically("Le système a interrompu la voix intégrée à Libcomlair.");
-                        }
-                    } catch (IllegalStateException ignored) {
-                        playbackStarted = false;
-                        retryAutomatically("La lecture intégrée à Libcomlair a été interrompue.");
-                    }
-                }
-            }, 700);
-        } catch (RuntimeException error) {
-            playbackStarted = false;
-            attemptInProgress = false;
+            player.prepareAsync();
+        } catch (Exception error) {
+            notifyLibcomlair(messageId, "error", error.getClass().getSimpleName());
             releasePlayer(true);
-            retryAutomatically("Impossible de démarrer la voix intégrée à Libcomlair : " + error.getClass().getSimpleName());
         }
     }
 
-    private void retryAutomatically(String message) {
-        if (automaticAttempts < MAX_AUTOMATIC_ATTEMPTS) {
-            scheduleAutomaticPlayback(650L * Math.max(1, automaticAttempts));
-        } else {
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-        }
+    private void notifyLibcomlair(String messageId, String state, String detail) {
+        WebView view = webView;
+        if (view == null) return;
+
+        String script = "(function(){var c=window.LibcomlairAudioCore;" +
+                "if(c&&typeof c.supportEvent==='function'){c.supportEvent(" +
+                JSONObject.quote(messageId) + "," + JSONObject.quote(state) + "," + JSONObject.quote(detail) + ");}})();";
+        view.evaluateJavascript(script, null);
     }
 
     private void requestAudioFocus() {
@@ -220,7 +190,6 @@ public final class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        handler.removeCallbacksAndMessages(null);
         releasePlayer(true);
         if (webView != null) {
             webView.stopLoading();
