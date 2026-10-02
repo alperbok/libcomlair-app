@@ -39,6 +39,13 @@ Ces règles passent avant toute autre modification.
    - En cas de panne, réparer ou utiliser une autre solution de voix naturelle validée.
    - Renvoie vers : indépendance des fournisseurs, déverrouillage audio Android, contexte vocal.
 
+5 bis. **Toute panne de voix est une panne de Libcomlair et doit être réparée dans Libcomlair.**
+   - Si Vera ou une autre voix de Libcomlair ne fonctionne pas sur un support, on ne déplace pas la voix vers une application séparée et on ne demande pas à l'utilisateur d'installer une solution parallèle.
+   - Le diagnostic doit identifier dans Libcomlair le symptôme, la cause probable, le support concerné, la correction appliquée et le résultat du test.
+   - Une adaptation Android, iOS ou autre peut servir de couche technique, mais elle ne devient jamais propriétaire de la voix ni de la réparation.
+   - Toute panne vocale résolue doit être répertoriée dans Diagnostic et pannes avec suffisamment d'informations pour qu'elle puisse être reconnue et réparée plus rapidement si elle réapparaît sur le même support ou un autre.
+   - Renvoie vers : principe de la valise Libcomlair, pannes connues, voix naturelle, diagnostic avant correction, validation après correction, documentation des nouvelles pannes.
+
 6. **Aucun fournisseur unique ne doit être indispensable.**
    - Libcomlair doit rester restaurable et migrable sans dépendre d'un seul hébergeur, fournisseur de données ou moteur vocal.
 
@@ -55,6 +62,7 @@ Ces règles indiquent comment travailler sans casser les règles P0.
 5. **Le micro et l'assistance vocale doivent suivre le contexte de chaque page.**
 6. **Sur Android, vérifier le verrouillage audio avant de changer de moteur vocal.**
 7. **Les données importées ne doivent jamais piloter la logique de l'application.**
+8. **Pour une panne de voix, conserver toute la chaîne de réparation dans Libcomlair : détection → diagnostic → correction → validation → répertoire Diagnostic et pannes.**
 
 ## P2 — règles d'amélioration
 Les améliorations d'ergonomie, de présentation, de renommage ou les nouvelles fonctions viennent après la stabilité, l'accessibilité, la sécurité et les pannes prioritaires.
@@ -69,10 +77,11 @@ Exemple :
 1. P0 — principe de la valise Libcomlair ;
 2. P0 — consulter les pannes connues ;
 3. P0 — voix naturelle uniquement ;
-4. P1 — vérifier le verrouillage audio Android ;
-5. P0 — préserver les fonctions déjà validées ;
-6. P1 — valider après correction ;
-7. si la panne est nouvelle : P1 — l'ajouter à Diagnostic et pannes.
+4. P0 — toute panne de voix est une panne de Libcomlair ;
+5. P1 — vérifier le verrouillage audio Android ;
+6. P0 — préserver les fonctions déjà validées ;
+7. P1 — valider après correction ;
+8. si la panne est nouvelle : P1 — l'ajouter à Diagnostic et pannes.
 
 La conséquence est importante : si la correction proposée consiste à créer une voix ou une fonction uniquement dans Android, elle doit être refusée ou réorganisée. La voix appartient à Libcomlair ; Android ne fait que fournir le canal technique permettant à Libcomlair de la restituer sur ce support.
 
