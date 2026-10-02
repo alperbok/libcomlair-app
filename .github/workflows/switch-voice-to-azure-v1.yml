@@ -1,0 +1,65 @@
+name: Switch Libcomlair voice to Azure first
+
+on:
+  push:
+    paths:
+      - '.github/workflows/switch-voice-to-azure-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create Azure-first voice adapter
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const src=fs.readFileSync('libcomlair-render-voice-v197.js','utf8');
+          let out=src;
+          out=out.replace(
+            '  const STATUS_URL=API_BASE+"/api/tts/v181/status";\n  const TTS_URL=API_BASE+"/api/tts/v181";',
+            '  const PRIMARY_STATUS_URL=API_BASE+"/api/tts/azure-v1/status";\n  const PRIMARY_TTS_URL=API_BASE+"/api/tts/azure-v1";\n  const FALLBACK_STATUS_URL=API_BASE+"/api/tts/v181/status";\n  const FALLBACK_TTS_URL=API_BASE+"/api/tts/v181";'
+          );
+          const oldStatus=`  async function checkStatus(){\n    const controller=new AbortController();\n    const timer=setTimeout(()=>controller.abort(),75000);\n    try{\n      const response=await fetch(STATUS_URL,{method:"GET",headers:{Accept:"application/json"},signal:controller.signal,cache:"no-store"});\n      const data=await response.json().catch(()=>({}));\n      if(!response.ok||!data.configured)throw new Error(data?.error?String(data.error):"render_tts_unavailable_"+response.status);\n      prepared=true;\n      emit("ready",{voice:data.voice||"voix française serveur",audioState:getAudioContext()?.state||"none",adoptedEarlyContext});\n      return data;\n    }finally{clearTimeout(timer)}\n  }`;
+          const newStatus=`  async function fetchStatus(url,provider){\n    const controller=new AbortController();\n    const timer=setTimeout(()=>controller.abort(),75000);\n    try{\n      const response=await fetch(url,{method:"GET",headers:{Accept:"application/json"},signal:controller.signal,cache:"no-store"});\n      const data=await response.json().catch(()=>({}));\n      if(!response.ok||!data.configured)throw new Error(data?.error?String(data.error):provider+"_tts_unavailable_"+response.status);\n      return {...data,provider:data.provider||provider};\n    }finally{clearTimeout(timer)}\n  }\n\n  async function checkStatus(){\n    let data;\n    try{\n      data=await fetchStatus(PRIMARY_STATUS_URL,"azure-speech");\n    }catch(primaryError){\n      emit("primary-unavailable",{error:String(primaryError?.message||primaryError),provider:"azure-speech"});\n      data=await fetchStatus(FALLBACK_STATUS_URL,"render-fallback");\n    }\n    prepared=true;\n    emit("ready",{voice:data.voice||"voix française serveur",provider:data.provider||"unknown",audioState:getAudioContext()?.state||"none",adoptedEarlyContext});\n    return data;\n  }`;
+          if(!out.includes(oldStatus)) throw new Error('checkStatus block not found');
+          out=out.replace(oldStatus,newStatus);
+          const start=out.indexOf('  async function fetchAudio(text){');
+          const end=out.indexOf('\n\n  function assertActive',start);
+          if(start<0||end<0) throw new Error('fetchAudio block not found');
+          const newFetch=`  async function requestAudio(url,provider,cacheKey){\n    const controller=new AbortController();\n    const timer=setTimeout(()=>controller.abort(),90000);\n    try{\n      emit("requesting",{chars:cacheKey.length,provider,adoptedEarlyContext});\n      const response=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json",Accept:"audio/mpeg"},body:JSON.stringify({text:cacheKey}),signal:controller.signal,cache:"no-store"});\n      if(!response.ok){\n        let reason=provider+"_tts_http_"+response.status;\n        try{const data=await response.json();if(data?.error)reason=String(data.error)}catch(_){}\n        throw new Error(reason);\n      }\n      const buffer=await response.arrayBuffer();\n      if(!buffer||buffer.byteLength<500)throw new Error(provider+"_tts_empty_audio");\n      return {buffer,cacheKey,provider:response.headers.get("X-Libcomlair-TTS-Provider")||provider,voice:response.headers.get("X-Libcomlair-TTS-Voice")||"voix française serveur",cache:response.headers.get("X-Libcomlair-TTS-Cache")||""};\n    }finally{clearTimeout(timer)}\n  }\n\n  async function fetchAudio(text){\n    const cacheKey=String(text||"").replace(/\\s+/g," ").trim();\n    if(audioCache.has(cacheKey))return audioCache.get(cacheKey);\n    const task=(async()=>{\n      try{\n        return await requestAudio(PRIMARY_TTS_URL,"azure-speech",cacheKey);\n      }catch(primaryError){\n        emit("fallback",{error:String(primaryError?.message||primaryError),from:"azure-speech",to:"render-fallback",chars:cacheKey.length,adoptedEarlyContext});\n        return await requestAudio(FALLBACK_TTS_URL,"render-fallback",cacheKey);\n      }\n    })();\n    audioCache.set(cacheKey,task);\n    try{return await task}catch(error){audioCache.delete(cacheKey);throw error}\n  }`;
+          out=out.slice(0,start)+newFetch+out.slice(end);
+          out=out.replaceAll('engine:"render",mode:"server",requestId','engine:meta.provider||"server",mode:"server",requestId');
+          out=out.replace('endpoint:TTS_URL,activeRequestId','endpoint:PRIMARY_TTS_URL,fallbackEndpoint:FALLBACK_TTS_URL,activeRequestId');
+          out=out.replace('version:"render-v197"','version:"azure-first-v198"');
+          out=out.replace('window.LibcomlairRenderVoice=Object.freeze({version:"render-v197"','window.LibcomlairRenderVoice=Object.freeze({version:"azure-first-v198"');
+          fs.writeFileSync('libcomlair-render-voice-v198.js',out);
+
+          let html=fs.readFileSync('test-v224-voice-contextual-v14.html','utf8');
+          const before='<script src="libcomlair-render-voice-v197.js?v=197-1"><\\/script>';
+          const after='<script src="libcomlair-render-voice-v198.js?v=198-1"><\\/script>';
+          if(!html.includes(before)) throw new Error('v197 script reference not found');
+          html=html.replace(before,after);
+          fs.writeFileSync('test-v224-voice-contextual-v14.html',html);
+          NODE
+      - name: Verify generated adapter
+        run: |
+          node --check libcomlair-render-voice-v198.js
+          grep -q '/api/tts/azure-v1' libcomlair-render-voice-v198.js
+          grep -q '/api/tts/v181' libcomlair-render-voice-v198.js
+          grep -q 'libcomlair-render-voice-v198.js' test-v224-voice-contextual-v14.html
+      - name: Commit Azure-first voice
+        run: |
+          git config user.name 'libcomlair-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add libcomlair-render-voice-v198.js test-v224-voice-contextual-v14.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Use Azure Speech first with Render voice fallback'
+          git push
