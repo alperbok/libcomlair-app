@@ -1,7 +1,7 @@
 (()=>{
 "use strict";
 
-const VERSION="v224-welcome-autoplay-diagnostic-v1";
+const VERSION="v224-welcome-autoplay-diagnostic-v2-auto-only";
 const enabled=new URLSearchParams(location.search).get("voiceDiag")==="1";
 let lastEvent=null;
 
@@ -33,7 +33,6 @@ function render(){
     "source="+(s?.source||""),
     "speaking="+String(!!s?.speaking),
     "playPending="+String(!!s?.playPending),
-    "gestureFallbackArmed="+String(!!s?.gestureFallbackArmed),
     "userActivation.isActive="+String(a.isActive),
     "userActivation.hasBeenActive="+String(a.hasBeenActive),
     "visibility="+document.visibilityState,
