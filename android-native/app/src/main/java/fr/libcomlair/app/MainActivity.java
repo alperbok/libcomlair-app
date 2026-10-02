@@ -2,7 +2,6 @@ package fr.libcomlair.app;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -11,22 +10,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 public final class MainActivity extends Activity {
+    private static final String LIBCOMLAIR_URL = "https://alperbok.github.io/libcomlair-app/test-v224-master-frame-integration-v2.html?android-app=0.3";
     private static final int MAX_AUTOMATIC_ATTEMPTS = 4;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
+    private WebView webView;
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private AudioFocusRequest audioFocusRequest;
-    private TextView statusView;
-
     private boolean playbackStarted = false;
     private boolean attemptInProgress = false;
     private int automaticAttempts = 0;
@@ -36,109 +34,65 @@ public final class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        setContentView(buildContent());
 
-        // Android natif : aucune WebView, aucun navigateur et aucun geste utilisateur.
-        scheduleAutomaticPlayback(120);
+        webView = new WebView(this);
+        configureWebView(webView);
+        setContentView(webView);
+        webView.loadUrl(LIBCOMLAIR_URL);
+
+        // Vera fait partie de Libcomlair : lecture depuis l'APK de l'application,
+        // indépendante de l'autoplay de la page web et sans geste utilisateur.
+        scheduleAutomaticPlayback(180);
+    }
+
+    private void configureWebView(WebView view) {
+        WebSettings settings = view.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setDatabaseEnabled(true);
+        settings.setMediaPlaybackRequiresUserGesture(false);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+
+        view.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                // La voix d'accueil est maintenant gérée par Libcomlair Android.
+                // On neutralise uniquement l'ancien audio d'accueil de la page
+                // afin d'éviter une double lecture après un toucher utilisateur.
+                String script = "(function(){" +
+                        "window.__LIBCOMLAIR_NATIVE_WELCOME__=true;" +
+                        "function stopOldWelcome(){" +
+                        "var a=document.getElementById('libcomlairWelcomeAutoplay');" +
+                        "if(a){try{a.pause();}catch(e){} a.removeAttribute('autoplay');}" +
+                        "}" +
+                        "stopOldWelcome();setTimeout(stopOldWelcome,500);setTimeout(stopOldWelcome,1500);" +
+                        "})();";
+                view.evaluateJavascript(script, null);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!playbackStarted) {
-            scheduleAutomaticPlayback(280);
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && !playbackStarted) {
-            scheduleAutomaticPlayback(450);
-        }
-    }
-
-    private View buildContent() {
-        int padding = dp(24);
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setGravity(Gravity.CENTER_HORIZONTAL);
-        root.setPadding(padding, padding, padding, padding);
-
-        TextView title = new TextView(this);
-        title.setText("Libcomlair");
-        title.setTextSize(32f);
-        title.setTypeface(Typeface.DEFAULT_BOLD);
-        title.setGravity(Gravity.CENTER);
-        root.addView(title, matchWrap());
-
-        TextView version = new TextView(this);
-        version.setText("Test Android natif Vera — version 0.2");
-        version.setTextSize(20f);
-        version.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams versionParams = matchWrap();
-        versionParams.topMargin = dp(16);
-        root.addView(version, versionParams);
-
-        TextView explanation = new TextView(this);
-        explanation.setText("Vera doit démarrer automatiquement dès l'ouverture de l'application, sans toucher l'écran et sans connexion Internet.");
-        explanation.setTextSize(18f);
-        explanation.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams explanationParams = matchWrap();
-        explanationParams.topMargin = dp(24);
-        root.addView(explanation, explanationParams);
-
-        statusView = new TextView(this);
-        statusView.setText("Préparation automatique de Vera…");
-        statusView.setTextSize(18f);
-        statusView.setGravity(Gravity.CENTER);
-        statusView.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
-        LinearLayout.LayoutParams statusParams = matchWrap();
-        statusParams.topMargin = dp(28);
-        root.addView(statusView, statusParams);
-
-        Button replay = new Button(this);
-        replay.setText("Réécouter Vera");
-        replay.setTextSize(18f);
-        replay.setOnClickListener(v -> {
-            playbackStarted = false;
-            attemptInProgress = false;
-            automaticAttempts = 0;
-            startVera(false);
-        });
-        LinearLayout.LayoutParams replayParams = matchWrap();
-        replayParams.topMargin = dp(32);
-        root.addView(replay, replayParams);
-
-        TextView independence = new TextView(this);
-        independence.setText("Aucune permission Internet. Vera est une ressource audio Android intégrée directement dans cette application.");
-        independence.setTextSize(16f);
-        independence.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams independenceParams = matchWrap();
-        independenceParams.topMargin = dp(28);
-        root.addView(independence, independenceParams);
-
-        return root;
+        if (webView != null) webView.onResume();
+        if (!playbackStarted) scheduleAutomaticPlayback(320);
     }
 
     private void scheduleAutomaticPlayback(long delayMs) {
         handler.postDelayed(() -> {
             if (!playbackStarted && !attemptInProgress && automaticAttempts < MAX_AUTOMATIC_ATTEMPTS) {
-                startVera(true);
+                startVera();
             }
         }, delayMs);
     }
 
-    private void startVera(boolean automatic) {
+    private void startVera() {
         if (attemptInProgress || playbackStarted) return;
-
         attemptInProgress = true;
-        if (automatic) {
-            automaticAttempts++;
-            statusView.setText("Démarrage automatique de Vera — tentative " + automaticAttempts + "…");
-        } else {
-            statusView.setText("Lecture de Vera…");
-        }
+        automaticAttempts++;
 
         releasePlayer(false);
         requestAudioFocus();
@@ -152,62 +106,53 @@ public final class MainActivity extends Activity {
             MediaPlayer player = MediaPlayer.create(this, R.raw.vera_welcome, attributes, 0);
             if (player == null) {
                 attemptInProgress = false;
-                statusView.setText("Vera n'a pas pu être chargée par Android.");
-                retryAutomatically();
+                retryAutomatically("Vera n'a pas pu être chargée dans Libcomlair.");
                 return;
             }
 
             mediaPlayer = player;
             player.setVolume(1.0f, 1.0f);
-            player.setOnCompletionListener(mp -> {
-                statusView.setText("Lecture Vera terminée — audio Android natif opérationnel.");
-                releasePlayer(true);
-            });
+            player.setOnCompletionListener(mp -> releasePlayer(true));
             player.setOnErrorListener((mp, what, extra) -> {
                 playbackStarted = false;
                 attemptInProgress = false;
-                statusView.setText("Erreur audio Vera (" + what + "/" + extra + "). Nouvelle tentative automatique…");
                 releasePlayer(true);
-                retryAutomatically();
+                retryAutomatically("Erreur audio Libcomlair (" + what + "/" + extra + ").");
                 return true;
             });
 
             player.start();
             playbackStarted = true;
             attemptInProgress = false;
-            statusView.setText(automatic
-                    ? "Vera a été lancée automatiquement par Android."
-                    : "Vera est en cours de lecture.");
 
-            // Vérification automatique : si Android a arrêté le lecteur au démarrage, on retente sans geste.
             handler.postDelayed(() -> {
                 MediaPlayer activePlayer = mediaPlayer;
                 if (activePlayer != null && playbackStarted) {
                     try {
                         if (!activePlayer.isPlaying() && activePlayer.getCurrentPosition() < activePlayer.getDuration() - 150) {
                             playbackStarted = false;
-                            statusView.setText("Android a interrompu Vera. Nouvelle tentative automatique…");
                             releasePlayer(true);
-                            retryAutomatically();
+                            retryAutomatically("Android a interrompu la voix intégrée à Libcomlair.");
                         }
                     } catch (IllegalStateException ignored) {
                         playbackStarted = false;
-                        retryAutomatically();
+                        retryAutomatically("La lecture intégrée à Libcomlair a été interrompue.");
                     }
                 }
             }, 700);
         } catch (RuntimeException error) {
             playbackStarted = false;
             attemptInProgress = false;
-            statusView.setText("Erreur de démarrage Vera : " + error.getClass().getSimpleName() + ". Nouvelle tentative automatique…");
             releasePlayer(true);
-            retryAutomatically();
+            retryAutomatically("Impossible de démarrer la voix intégrée à Libcomlair : " + error.getClass().getSimpleName());
         }
     }
 
-    private void retryAutomatically() {
+    private void retryAutomatically(String message) {
         if (automaticAttempts < MAX_AUTOMATIC_ATTEMPTS) {
             scheduleAutomaticPlayback(650L * Math.max(1, automaticAttempts));
+        } else {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -248,27 +193,36 @@ public final class MainActivity extends Activity {
             try {
                 if (player.isPlaying()) player.stop();
             } catch (IllegalStateException ignored) { }
-            player.reset();
+            try { player.reset(); } catch (IllegalStateException ignored) { }
             player.release();
         }
         if (abandonFocus) abandonAudioFocus();
     }
 
     @Override
+    public void onBackPressed() {
+        if (webView != null && webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (webView != null) webView.onPause();
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         handler.removeCallbacksAndMessages(null);
         releasePlayer(true);
+        if (webView != null) {
+            webView.stopLoading();
+            webView.destroy();
+            webView = null;
+        }
         super.onDestroy();
-    }
-
-    private LinearLayout.LayoutParams matchWrap() {
-        return new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-    }
-
-    private int dp(int value) {
-        return Math.round(value * getResources().getDisplayMetrics().density);
     }
 }
