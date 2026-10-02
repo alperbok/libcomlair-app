@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.29</title>
+<title>Libcomlair — cadre maître v6.8.30</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
@@ -12,7 +12,7 @@
   try{
     let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=31",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
-    html=html.replace("master-frame-source=3","master-frame-source=41");
+    html=html.replace("master-frame-source=3","master-frame-source=42");
     html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v198.js?v=198-1");
     html=html.replace("libcomlair-voice-engine-v191.js?v=191-1","libcomlair-voice-engine-v191.js?v=191-3");
     html=html.replace("libcomlair-v224-page4.css?v=master-7","libcomlair-v224-page4.css?v=master-9");
@@ -21,10 +21,11 @@
     html=html.replace("libcomlair-v224-nearby-count-sync-v37.js?v=1","libcomlair-v224-nearby-count-sync-v37.js?v=5");
     html=html.replace("libcomlair-v224-guided-presenter-v10.js?v=1","libcomlair-v224-guided-presenter-v10.js?v=2");
 
-    // Restaurer le module d'accueil qui tente l'autoplay puis garde le premier toucher en secours.
+    // Accueil v6.8.30 : restaurer le mécanisme V162/V177 pour la toute première annonce.
+    // Cette annonce utilise speechSynthesis directement et ne dépend pas d'AudioContext.
     html=html.replace(
       '<script src="libcomlair-v224-welcome-listen-first-v16.js?v=3"><\\/script>',
-      '<script src="libcomlair-v224-welcome-local-first-v21.js?v=2"><\\/script>'
+      '<script src="libcomlair-v224-welcome-system-autostart-v1.js?v=1"><\\/script>'
     );
 
     html=html.replace(
@@ -34,7 +35,7 @@
 
     html=html.replace(
       'libcomlair-v224-master-frame-integration-v1.css?v=2"></head>',
-      'libcomlair-v224-master-frame-integration-v1.css?v=21"><link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=16"><link rel="stylesheet" href="libcomlair-v224-frame-fixes-v6.css?v=10"><link rel="stylesheet" href="libcomlair-v224-technical-menu-access-v1.css?v=2"><link rel="preload" href="voice-tests/fr-FR/vera-welcome.wav?v=20261002-6" as="audio" type="audio/wav"></head>'
+      'libcomlair-v224-master-frame-integration-v1.css?v=21"><link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=16"><link rel="stylesheet" href="libcomlair-v224-frame-fixes-v6.css?v=10"><link rel="stylesheet" href="libcomlair-v224-technical-menu-access-v1.css?v=2"></head>'
     );
 
     html=html.replace(
@@ -49,7 +50,7 @@
 
     html=html.replace(
       "v17-master-source-cleanup",
-      "v17-master-source-cleanup-6.8.29-welcome-fallback-plus-diagnostic"
+      "v17-master-source-cleanup-6.8.30-v162-system-welcome"
     );
 
     document.open();
