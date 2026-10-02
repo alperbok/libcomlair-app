@@ -3,11 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.26</title>
+<title>Libcomlair — cadre maître v6.8.27</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
 <script>
+// Restauré depuis le mécanisme historique : créer et reprendre Web Audio
+// immédiatement à l'ouverture du lien, avant tout fetch et avant le chargement
+// du cadre. Le moteur v198 adoptera ensuite ce même contexte pour Denise/Azure.
+(()=>{
+  const state={createdAt:Date.now(),created:false,initialState:"none",currentState:"none",userActivation:!!navigator.userActivation?.isActive,resumeRequested:false,resumeResolved:false,resumeOk:false,error:""};
+  window.__libcomlairEarlyAudioStatus=state;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(typeof AC!=="function"){state.error="audio-context-unavailable";return}
+    const ctx=new AC();
+    window.__libcomlairEarlyAudioContext=ctx;
+    state.created=true;
+    state.initialState=ctx.state;
+    state.currentState=ctx.state;
+    state.resumeRequested=true;
+    window.__libcomlairEarlyAudioResumePromise=Promise.resolve(ctx.resume()).then(()=>{
+      state.resumeResolved=true;
+      state.currentState=ctx.state;
+      state.resumeOk=ctx.state==="running";
+      return state.resumeOk;
+    }).catch(error=>{
+      state.resumeResolved=true;
+      state.currentState=ctx.state;
+      state.error=String(error?.message||error||"");
+      return false;
+    });
+  }catch(error){state.error=String(error?.message||error||"")}
+})();
+
 (async()=>{
   try{
     let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=31",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
@@ -21,9 +50,7 @@
     html=html.replace("libcomlair-v224-nearby-count-sync-v37.js?v=1","libcomlair-v224-nearby-count-sync-v37.js?v=5");
     html=html.replace("libcomlair-v224-guided-presenter-v10.js?v=1","libcomlair-v224-guided-presenter-v10.js?v=2");
 
-    // Le cadre v1 contient encore l'ancien contrôleur dans sa chaîne "extras".
-    // On retire sa référence AVANT d'exécuter ce cadre imbriqué, afin qu'il ne
-    // transforme plus le bouton Suivant en « Écouter » et n'intercepte plus le clic.
+    // L'ancien contrôleur Écouter ne doit plus reprendre la main.
     html=html.replace(
       '<script src="libcomlair-v224-welcome-listen-first-v16.js?v=3"><\\/script>',
       ''
@@ -46,12 +73,12 @@
 
     html=html.replace(
       'libcomlair-v224-master-frame-integration-v1.js?v=2"><\\/script>',
-      'libcomlair-v224-master-frame-integration-v1.js?v=15"><\\/script><script src="libcomlair-v224-frame-fixes-v6.js?v=6"><\\/script><script src="libcomlair-v224-data-count-diagnostic.js?v=3"><\\/script><script src="libcomlair-v224-voice-independence-v1.js?v=1"><\\/script><script src="libcomlair-local-audio-library-v1.js?v=1"><\\/script><script src="libcomlair-v224-welcome-local-recorder-v1.js?v=1"><\\/script><script src="libcomlair-v224-voice-local-coverage-v1.js?v=2"><\\/script><script src="libcomlair-v224-autonomy-dashboard-v1.js?v=3"><\\/script><script src="libcomlair-v224-maintenance-inspector-v1.js?v=1"><\\/script><script src="libcomlair-v224-technical-menu-access-v1.js?v=4"><\\/script><script src="libcomlair-v224-welcome-audio-maintenance-ui-v1.js?v=1"><\\/script><script src="libcomlair-v224-external-services-test-v1.js?v=1"><\\/script><script src="libcomlair-v224-welcome-azure-autoplay-v2.js?v=1"><\\/script>'
+      'libcomlair-v224-master-frame-integration-v1.js?v=15"><\\/script><script src="libcomlair-v224-frame-fixes-v6.js?v=6"><\\/script><script src="libcomlair-v224-data-count-diagnostic.js?v=3"><\\/script><script src="libcomlair-v224-voice-independence-v1.js?v=1"><\\/script><script src="libcomlair-local-audio-library-v1.js?v=1"><\\/script><script src="libcomlair-v224-welcome-local-recorder-v1.js?v=1"><\\/script><script src="libcomlair-v224-voice-local-coverage-v1.js?v=2"><\\/script><script src="libcomlair-v224-autonomy-dashboard-v1.js?v=3"><\\/script><script src="libcomlair-v224-maintenance-inspector-v1.js?v=1"><\\/script><script src="libcomlair-v224-technical-menu-access-v1.js?v=4"><\\/script><script src="libcomlair-v224-welcome-audio-maintenance-ui-v1.js?v=1"><\\/script><script src="libcomlair-v224-external-services-test-v1.js?v=1"><\\/script><script src="libcomlair-v224-welcome-azure-autoplay-v3.js?v=1"><\\/script>'
     );
 
     html=html.replace(
       "v17-master-source-cleanup",
-      "v17-master-source-cleanup-6.8.26-android-native-azure-autostart"
+      "v17-master-source-cleanup-6.8.27-early-audio-prime-restored"
     );
 
     document.open();
