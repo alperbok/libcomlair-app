@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.22</title>
+<title>Libcomlair — cadre maître v6.8.23</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
@@ -13,7 +13,7 @@
     let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=31",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
     html=html.replace("master-frame-source=3","master-frame-source=41");
-    html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v196.js?v=196-10");
+    html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v198.js?v=198-1");
     html=html.replace("libcomlair-voice-engine-v191.js?v=191-1","libcomlair-voice-engine-v191.js?v=191-3");
     html=html.replace("libcomlair-v224-page4.css?v=master-7","libcomlair-v224-page4.css?v=master-9");
     html=html.replace("libcomlair-v224-needs-profile-sync.js?v=5","libcomlair-v224-needs-profile-sync.js?v=7");
@@ -21,9 +21,8 @@
     html=html.replace("libcomlair-v224-nearby-count-sync-v37.js?v=1","libcomlair-v224-nearby-count-sync-v37.js?v=5");
     html=html.replace("libcomlair-v224-guided-presenter-v10.js?v=1","libcomlair-v224-guided-presenter-v10.js?v=2");
 
-    // Jusqu'au 19 octobre 2026, l'accueil repasse par le moteur vocal Libcomlair -> Render.
-    // On supprime le contrôleur "Écouter d'abord" afin que le présentateur Libcomlair
-    // puisse annoncer automatiquement la page Bienvenue avec le moteur vocal principal.
+    // Azure Speech devient le moteur vocal principal via le backend Libcomlair.
+    // L'ancien moteur reste disponible automatiquement comme secours.
     html=html.replace(/<script src="libcomlair-v224-welcome-listen-first-v16\.js\?v=3"><\/script>/,'');
 
     html=html.replace(
@@ -48,7 +47,7 @@
 
     html=html.replace(
       "v17-master-source-cleanup",
-      "v17-master-source-cleanup-6.8.22-render-recovery"
+      "v17-master-source-cleanup-6.8.23-azure-first"
     );
 
     document.open();
