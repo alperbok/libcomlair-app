@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.36</title>
+<title>Libcomlair — cadre maître v6.8.37</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
 <script>
 (async()=>{
   try{
-    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=36",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=37",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
-    html=html.replace("master-frame-source=3","master-frame-source=48");
-    html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v198.js?v=198-open-1");
+    html=html.replace("master-frame-source=3","master-frame-source=49");
+    html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v200.js?v=200-historical-gesture-1");
     html=html.replace("libcomlair-voice-engine-v191.js?v=191-1","libcomlair-voice-engine-v191.js?v=191-3");
     html=html.replace("libcomlair-v224-page4.css?v=master-7","libcomlair-v224-page4.css?v=master-9");
     html=html.replace("libcomlair-v224-needs-profile-sync.js?v=5","libcomlair-v224-needs-profile-sync.js?v=7");
@@ -21,10 +21,10 @@
     html=html.replace("libcomlair-v224-nearby-count-sync-v37.js?v=1","libcomlair-v224-nearby-count-sync-v37.js?v=5");
     html=html.replace("libcomlair-v224-guided-presenter-v10.js?v=1","libcomlair-v224-guided-presenter-v10.js?v=2");
 
-    // Accueil : le premier appui sur Ouvrir déverrouille Web Audio et lance Azure.
-    // Dès que la voix démarre, le bouton redevient Suivant.
-    html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.js\?v=[^"'\\]+/g,"libcomlair-v224-welcome-listen-first-v16.js?v=open-azure-1");
-    html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.css\?v=[^"'\\]+/g,"libcomlair-v224-welcome-listen-first-v16.css?v=open-1");
+    // Accueil : réglages historiques restaurés.
+    // Ouvrir -> pointerdown déverrouille Web Audio -> Azure parle -> Suivant.
+    html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.js\?v=[^"'\\]+/g,"libcomlair-v224-welcome-listen-first-v16.js?v=open-historical-2");
+    html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.css\?v=[^"'\\]+/g,"libcomlair-v224-welcome-listen-first-v16.css?v=open-2");
 
     html=html.replace(
       '<script src="libcomlair-repair-catalog-extra21-v224.js?v=1"><\\/script>',
@@ -43,7 +43,7 @@
       'libcomlair-v224-master-frame-integration-v1.js?v=15"><\\/script><script src="libcomlair-v224-frame-fixes-v6.js?v=6"><\\/script><script src="libcomlair-v224-data-count-diagnostic.js?v=3"><\\/script><script src="libcomlair-v224-voice-independence-v1.js?v=1"><\\/script><script src="libcomlair-local-audio-library-v1.js?v=1"><\\/script><script src="libcomlair-v224-welcome-local-recorder-v1.js?v=1"><\\/script><script src="libcomlair-v224-voice-local-coverage-v1.js?v=2"><\\/script><script src="libcomlair-v224-autonomy-dashboard-v1.js?v=3"><\\/script><script src="libcomlair-v224-maintenance-inspector-v1.js?v=1"><\\/script><script src="libcomlair-v224-technical-menu-access-v1.js?v=4"><\\/script><script src="libcomlair-v224-welcome-audio-maintenance-ui-v1.js?v=1"><\\/script><script src="libcomlair-v224-external-services-test-v1.js?v=1"><\\/script><script src="libcomlair-v224-welcome-autoplay-diagnostic-v1.js?v=2"><\\/script>'
     );
 
-    html=html.replace("v17-master-source-cleanup","v17-master-source-cleanup-6.8.36-open-azure");
+    html=html.replace("v17-master-source-cleanup","v17-master-source-cleanup-6.8.37-historical-gesture-azure");
 
     document.open();
     document.write(html);
