@@ -1,7 +1,7 @@
 (()=>{
 "use strict";
 
-const VERSION="v1-libcomlair-owned-audio";
+const VERSION="v1.1-libcomlair-owned-audio";
 const MESSAGES=Object.freeze({
   "welcome.main":Object.freeze({
     id:"welcome.main",
@@ -84,7 +84,7 @@ async function playFixed(id,options={}){
   const adapter=support();
   if(adapter){
     try{
-      const accepted=adapter.playFixed(item.id);
+      const accepted=adapter.playFixed(item.id,item.asset,item.voice);
       emit(item.id,"delegated","support",String(accepted??"accepted"));
       return {ok:true,source:"support",accepted};
     }catch(error){
