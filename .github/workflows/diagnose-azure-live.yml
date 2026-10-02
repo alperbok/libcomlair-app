@@ -1,0 +1,45 @@
+name: Diagnose Azure live TTS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-azure-live.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check Azure status
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS --max-time 30 -o /tmp/azure-status.json -w '%{http_code}' 'https://libcomlair-backend.onrender.com/api/tts/azure-v1/status?verify=1')
+          echo "HTTP=$code"
+          cat /tmp/azure-status.json
+          echo
+          test "$code" = "200"
+
+      - name: Generate Azure sample
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS --max-time 60 \
+            -D /tmp/azure-headers.txt \
+            -o /tmp/azure-test.mp3 \
+            -w '%{http_code}' \
+            -X POST \
+            -H 'Origin: https://alperbok.github.io' \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: audio/mpeg' \
+            --data '{"text":"Bienvenue dans Libcomlair. Test technique Azure."}' \
+            'https://libcomlair-backend.onrender.com/api/tts/azure-v1')
+          echo "HTTP=$code"
+          grep -Ei '^(content-type|content-length|x-libcomlair-tts-provider|x-libcomlair-tts-voice|x-libcomlair-tts-cache):' /tmp/azure-headers.txt || true
+          bytes=$(wc -c < /tmp/azure-test.mp3)
+          echo "BYTES=$bytes"
+          file /tmp/azure-test.mp3 || true
+          test "$code" = "200"
+          test "$bytes" -gt 500
