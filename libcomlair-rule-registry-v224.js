@@ -3,13 +3,22 @@
 
   const RULES=Object.freeze([
     Object.freeze({
+      id:"P0-libcomlair-suitcase",
+      priority:"P0",
+      domain:"architecture",
+      title:"Tout ce qui est essentiel appartient à Libcomlair, jamais au support",
+      rule:"Libcomlair est la valise qui contient les fonctions, règles, données essentielles, voix, ressources d'accessibilité, diagnostics, réparations et logique métier. Android, iPhone, tablette, ordinateur, navigateur ou autre support ne sont que des porteurs/adaptateurs. Une fonction essentielle ne doit jamais exister uniquement dans une couche spécifique au support ou chez un fournisseur externe.",
+      triggers:["android","iphone","ios","support","plateforme","navigateur","chrome","webview","apk","application mobile","voix","données","diagnostic","réparation","migration","portage","adapter","adaptation"],
+      links:["P0-provider-independence","P0-protect-data","P0-no-regression","P0-accessibility-continuity","P0-natural-voice-only","P1-diagnose-before-fix"]
+    }),
+    Object.freeze({
       id:"P0-known-issues-first",
       priority:"P0",
       domain:"diagnostic",
       title:"Consulter les pannes connues avant toute nouvelle correction",
       rule:"Lorsqu'un problème est signalé, vérifier d'abord Diagnostic et pannes, l'historique des réparations et les correctifs déjà validés avant de modifier le code.",
       triggers:["panne","bug","silence","régression","ne fonctionne plus","404","page blanche","micro","voix"],
-      links:["P0-protect-data","P0-no-regression","P1-diagnose-before-fix","P1-record-new-issue"]
+      links:["P0-protect-data","P0-no-regression","P1-diagnose-before-fix","P1-record-new-issue","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P0-protect-data",
@@ -18,7 +27,7 @@
       title:"Ne perdre aucune donnée",
       rule:"Aucune correction, migration ou réparation ne doit supprimer ou rendre irrécupérables les données utilisateur, les données métier ou l'historique du projet.",
       triggers:["réparation","migration","base de données","sauvegarde","cache","stockage","compte"],
-      links:["P0-provider-independence","P1-backup-before-risk","P0-secrets-outside-code"]
+      links:["P0-provider-independence","P1-backup-before-risk","P0-secrets-outside-code","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P0-no-regression",
@@ -27,7 +36,7 @@
       title:"Préserver les fonctions déjà validées",
       rule:"Une correction ciblée ne doit pas casser une fonction déjà validée. Toute modification structurelle doit vérifier les comportements précédemment approuvés.",
       triggers:["modification","refonte","correctif","nouvelle version","déploiement","régression"],
-      links:["P0-logical-regression-path","P1-diagnose-before-fix","P1-validate-after-fix","P1-backup-before-risk"]
+      links:["P0-logical-regression-path","P1-diagnose-before-fix","P1-validate-after-fix","P1-backup-before-risk","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P0-logical-regression-path",
@@ -45,7 +54,7 @@
       title:"L'accessibilité reste prioritaire sur chaque page",
       rule:"Tout élément visible, sélectionnable ou explicatif important doit rester utilisable ou lisible par l'assistance adaptée, notamment pour le profil Vision.",
       triggers:["page","case","bouton","explication","navigation","vision","accessibilité"],
-      links:["P0-natural-voice-only","P1-voice-context-every-page","P0-no-regression","P0-logical-regression-path"]
+      links:["P0-natural-voice-only","P1-voice-context-every-page","P0-no-regression","P0-logical-regression-path","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P0-natural-voice-only",
@@ -54,7 +63,7 @@
       title:"Voix naturelle uniquement",
       rule:"Ne jamais utiliser une voix robotique comme solution de secours. En cas de panne, réparer ou basculer vers une autre solution de voix naturelle validée.",
       triggers:["voix","tts","render","audio","android","synthèse vocale","silence"],
-      links:["P0-provider-independence","P1-android-audio-unlock","P1-voice-context-every-page"]
+      links:["P0-provider-independence","P1-android-audio-unlock","P1-voice-context-every-page","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P0-provider-independence",
@@ -63,7 +72,7 @@
       title:"Aucun fournisseur unique ne doit être indispensable",
       rule:"Libcomlair ne doit dépendre d'aucun hébergeur, fournisseur de données, moteur vocal ou service unique pour continuer à fonctionner et être restauré.",
       triggers:["render","github","google","api","hébergeur","fournisseur","migration"],
-      links:["P0-protect-data","P1-backup-before-risk","P0-secrets-outside-code"]
+      links:["P0-protect-data","P1-backup-before-risk","P0-secrets-outside-code","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P0-secrets-outside-code",
@@ -81,7 +90,7 @@
       title:"Diagnostiquer avant de modifier",
       rule:"Reproduire le symptôme, identifier le contexte, consulter les règles et pannes liées, puis appliquer la correction la plus ciblée avant toute refonte.",
       triggers:["panne","bug","diagnostic","réparation"],
-      links:["P0-known-issues-first","P0-no-regression","P1-validate-after-fix"]
+      links:["P0-known-issues-first","P0-no-regression","P1-validate-after-fix","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P1-validate-after-fix",
@@ -117,16 +126,16 @@
       title:"Le micro et l'assistance vocale doivent suivre le contexte de chaque page",
       rule:"Chaque page doit annoncer ses éléments utiles et proposer uniquement les commandes correspondant au contexte visible, avec synchronisation entre voix et interface.",
       triggers:["voix","micro","page","navigation","commande"],
-      links:["P0-accessibility-continuity","P0-natural-voice-only","P0-logical-regression-path","P1-validate-after-fix"]
+      links:["P0-accessibility-continuity","P0-natural-voice-only","P0-logical-regression-path","P1-validate-after-fix","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P1-android-audio-unlock",
       priority:"P1",
       domain:"voix",
       title:"Vérifier le verrouillage audio Android avant de changer de moteur vocal",
-      rule:"Si la première lecture naturelle est silencieuse sur Android, vérifier d'abord l'état Web Audio et le déverrouillage par geste utilisateur avant de conclure à une panne du fournisseur vocal.",
+      rule:"Si la première lecture naturelle est silencieuse sur Android, vérifier d'abord l'état Web Audio et le déverrouillage par geste utilisateur avant de conclure à une panne du fournisseur vocal. Toute correction reste une correction de Libcomlair ; Android n'est qu'un support d'exécution.",
       triggers:["android","première page","silence","audio-locked","suspended"],
-      links:["P0-natural-voice-only","P0-known-issues-first"]
+      links:["P0-natural-voice-only","P0-known-issues-first","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P1-external-data-isolated",
@@ -135,7 +144,7 @@
       title:"Les données importées ne pilotent pas la logique de l'application",
       rule:"Les sources externes sont importées, normalisées et isolées. Une source défaillante ne doit pas casser la navigation ni les règles fonctionnelles de Libcomlair.",
       triggers:["acceslibre","idfm","sncf","vitalis","geoapify","ban","osm","import"],
-      links:["P0-provider-independence","P0-no-regression"]
+      links:["P0-provider-independence","P0-no-regression","P0-libcomlair-suitcase"]
     }),
     Object.freeze({
       id:"P2-improvement-after-stability",
@@ -144,7 +153,7 @@
       title:"Améliorer après stabilisation",
       rule:"Les améliorations d'ergonomie, de présentation, de renommage ou de nouvelles fonctions passent après la stabilité, l'accessibilité, la sécurité et la correction des pannes prioritaires.",
       triggers:["amélioration","design","renommer","nouvelle fonction","présentation"],
-      links:["P0-no-regression","P0-accessibility-continuity"]
+      links:["P0-no-regression","P0-accessibility-continuity","P0-libcomlair-suitcase"]
     })
   ]);
 
@@ -183,5 +192,5 @@
     };
   }
 
-  window.LibcomlairRuleRegistry=Object.freeze({version:"v224-2",all,byId,byPriority,linked,forText,resolve,preflight});
+  window.LibcomlairRuleRegistry=Object.freeze({version:"v224-3",all,byId,byPriority,linked,forText,resolve,preflight});
 })();
