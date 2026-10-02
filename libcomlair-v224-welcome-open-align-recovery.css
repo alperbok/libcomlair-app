@@ -1,6 +1,8 @@
-/* Récupération historique : conserver l'apparence validée et descendre durablement le bouton Ouvrir.
-   Cette feuille doit être injectée dans la page finale, après les styles V224. */
+/* Récupération historique : conserver la position validée et harmoniser Ouvrir avec la case Suivant de l'image. */
 body.v221-onboarding:not(.v221-profile-step) #libcomlairSplashNext.v224-next-hotspot.v224-welcome-listen-first{
   box-sizing:border-box!important;
   bottom:3.55%!important;
+  background:#ffffff!important;
+  border:4px solid #14292e!important;
+  box-shadow:0 8px 0 #17636d,0 10px 14px rgba(20,41,46,.18)!important;
 }
