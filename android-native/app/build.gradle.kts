@@ -7,16 +7,14 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        // Identifiant distinct pour ce prototype afin qu'il puisse être installé à côté de la v0.1.
-        applicationId = "fr.libcomlair.app.verav02"
+        applicationId = "fr.libcomlair.app.mobile"
         minSdk = 24
         targetSdk = 37
-        versionCode = 2
-        versionName = "0.2-native-voice"
+        versionCode = 3
+        versionName = "0.3-libcomlair-integrated-voice"
     }
 
     androidResources {
-        // MediaPlayer doit pouvoir ouvrir directement la ressource WAV native.
         noCompress += "wav"
     }
 
