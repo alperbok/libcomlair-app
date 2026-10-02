@@ -8,6 +8,15 @@ on:
     paths:
       - "android-native/**"
       - "voice-tests/fr-FR/vera-welcome.wav"
+      - "*.html"
+      - "*.css"
+      - "*.js"
+      - "*.json"
+      - "data/**"
+      - "assets/**"
+      - "images/**"
+      - "img/**"
+      - "icons/**"
       - ".github/workflows/build-android-native.yml"
 
 permissions:
@@ -53,18 +62,36 @@ jobs:
           cp voice-tests/fr-FR/vera-welcome.wav android-native/app/src/main/res/raw/vera_welcome.wav
           test -s android-native/app/src/main/res/raw/vera_welcome.wav
 
+      - name: Package Libcomlair interface inside APK
+        run: |
+          rm -rf android-native/app/src/main/assets/www
+          mkdir -p android-native/app/src/main/assets/www
+          rsync -a ./ android-native/app/src/main/assets/www/ \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude 'android-native/' \
+            --exclude 'node_modules/' \
+            --exclude 'docs/' \
+            --exclude 'scripts/' \
+            --exclude '*.md' \
+            --exclude '*.py'
+          test -s android-native/app/src/main/assets/www/test-v224-master-frame-integration-v2.html
+          test -s android-native/app/src/main/assets/www/test-v224-master-frame-integration-v1.html
+          test -s android-native/app/src/main/assets/www/voice-tests/fr-FR/vera-welcome.wav
+
       - name: Build Libcomlair APK
         run: gradle -p android-native :app:assembleDebug --stacktrace
 
       - name: Verify Libcomlair APK
         run: |
-          test -s android-native/app/build/outputs/apk/debug/app-debug.apk
-          unzip -l android-native/app/build/outputs/apk/debug/app-debug.apk | grep -E "res/raw/vera_welcome.wav|res/[A-Za-z0-9._-]+" >/dev/null
+          APK=android-native/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          unzip -l "$APK" | grep -E "res/raw/vera_welcome.wav|assets/www/test-v224-master-frame-integration-v2.html" >/dev/null
 
       - name: Upload Libcomlair APK
         uses: actions/upload-artifact@v4
         with:
-          name: libcomlair-android-v03-integrated-voice
+          name: libcomlair-android-v04-local-core-vera
           path: android-native/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
