@@ -34,19 +34,37 @@ jobs:
         with:
           gradle-version: "9.6.0"
 
-      - name: Verify Vera is bundled source
-        run: test -s voice-tests/fr-FR/vera-welcome.wav
+      - name: Verify Vera PCM audio
+        run: |
+          python3 - <<'PY'
+          import wave
+          path = "voice-tests/fr-FR/vera-welcome.wav"
+          with wave.open(path, "rb") as wav:
+              assert wav.getnchannels() == 1, wav.getnchannels()
+              assert wav.getsampwidth() == 2, wav.getsampwidth()
+              assert wav.getframerate() == 24000, wav.getframerate()
+              assert wav.getnframes() > 0, wav.getnframes()
+              print("Vera WAV OK: PCM16 mono 24000 Hz")
+          PY
+
+      - name: Package Vera as Android raw resource
+        run: |
+          mkdir -p android-native/app/src/main/res/raw
+          cp voice-tests/fr-FR/vera-welcome.wav android-native/app/src/main/res/raw/vera_welcome.wav
+          test -s android-native/app/src/main/res/raw/vera_welcome.wav
 
       - name: Build debug APK
         run: gradle -p android-native :app:assembleDebug --stacktrace
 
       - name: Verify APK
-        run: test -s android-native/app/build/outputs/apk/debug/app-debug.apk
+        run: |
+          test -s android-native/app/build/outputs/apk/debug/app-debug.apk
+          unzip -l android-native/app/build/outputs/apk/debug/app-debug.apk | grep -E "res/raw/vera_welcome.wav|res/[A-Za-z0-9._-]+" >/dev/null
 
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
         with:
-          name: libcomlair-android-native-vera
+          name: libcomlair-android-native-vera-v02
           path: android-native/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
