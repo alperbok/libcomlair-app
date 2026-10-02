@@ -4,7 +4,7 @@
     <!-- Prototype volontairement sans permission INTERNET : la voix d'accueil doit fonctionner localement. -->
     <application
         android:allowBackup="true"
-        android:label="Libcomlair"
+        android:label="Libcomlair Vera 0.2"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:usesCleartextTraffic="false">
