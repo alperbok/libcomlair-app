@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — test autoplay audio Samsung</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;padding:24px;line-height:1.5;background:#fff;color:#111}
+#status,#detail{padding:16px;border:2px solid #111;border-radius:12px;margin-top:18px;font-weight:700;white-space:pre-wrap}
+#detail{font-weight:500;border-width:1px}
+</style>
+</head>
+<body>
+<h1>Test autoplay audio Samsung</h1>
+<p>Ne touchez pas l’écran pendant 10 secondes.</p>
+<div id="status" role="status" aria-live="polite">Chargement…</div>
+<div id="detail">Diagnostic en cours…</div>
+<audio id="vera" preload="auto" autoplay src="voice-tests/fr-FR/vera-welcome.wav"></audio>
+<script>
+(()=>{
+  "use strict";
+  const a=document.getElementById("vera");
+  const status=document.getElementById("status");
+  const detail=document.getElementById("detail");
+  const log=[];
+  const snap=(label)=>{
+    const row=`${label} — paused:${a.paused} ended:${a.ended} readyState:${a.readyState} networkState:${a.networkState} currentTime:${a.currentTime.toFixed(2)}`;
+    log.push(row);
+    detail.textContent=log.slice(-12).join("\n");
+  };
+  ["loadstart","loadedmetadata","loadeddata","canplay","canplaythrough","play","playing","pause","ended","error","stalled","suspend"].forEach(ev=>{
+    a.addEventListener(ev,()=>{
+      if(ev==="playing")status.textContent="VERA A DÉMARRÉ automatiquement";
+      if(ev==="ended")status.textContent="Vera terminée";
+      if(ev==="error")status.textContent="Erreur audio : "+String(a.error?.code||"inconnue");
+      snap(ev);
+    });
+  });
+  const attempt=(label)=>{
+    try{
+      const p=a.play();
+      status.textContent=`play() envoyé — ${label}`;
+      snap(label+" play() envoyé");
+      if(p&&typeof p.catch==="function")p.catch(err=>{
+        status.textContent="Lecture refusée : "+String(err?.name||err?.message||err);
+        snap(label+" rejet:"+String(err?.name||err?.message||err));
+      });
+    }catch(err){
+      status.textContent="Exception : "+String(err?.name||err?.message||err);
+      snap(label+" exception");
+    }
+  };
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",()=>attempt("DOMContentLoaded"),{once:true});
+  }else attempt("ready");
+  setTimeout(()=>{if(a.paused)attempt("+700ms")},700);
+  setTimeout(()=>{if(a.paused)attempt("+2000ms")},2000);
+  setTimeout(()=>{if(a.paused){status.textContent="Aucun démarrage après 8 secondes";snap("fin 8s")}},8000);
+})();
+</script>
+</body>
+</html>
