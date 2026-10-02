@@ -4,9 +4,9 @@
   const WELCOME_MESSAGE="Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver pour tous. Appuyez sur Suivant pour commencer.";
   const PREFETCH_MESSAGE=WELCOME_MESSAGE.replace(/\bLibcomlair\b/gi,"Lib comme l’air");
 
-  let stage="listen";
+  let stage="open";
   let boundButton=null;
-  let last={time:0,stage:"listen",result:"idle",audioState:""};
+  let last={time:0,stage:"open",result:"idle",audioState:""};
 
   function visible(el){
     if(!el||el.hidden||el.hasAttribute?.("hidden")||el.getAttribute?.("aria-hidden")==="true")return false;
@@ -21,15 +21,15 @@
     last={time:Date.now(),stage,result:String(result||""),audioState};
   }
 
-  function setListen(){
+  function setOpen(){
     const b=button();if(!b)return;
-    stage="listen";
-    b.dataset.v224WelcomeStage="listen";
+    stage="open";
+    b.dataset.v224WelcomeStage="open";
     b.classList.add("v224-welcome-listen-first");
     b.removeAttribute("aria-busy");
-    b.textContent="Écouter";
-    b.setAttribute("aria-label","Écouter le message de bienvenue dans Libcomlair");
-    remember("ready-to-listen");
+    b.textContent="Ouvrir";
+    b.setAttribute("aria-label","Ouvrir Libcomlair et lancer le message de bienvenue");
+    remember("ready-to-open");
   }
 
   function setLoading(){
@@ -38,8 +38,8 @@
     b.dataset.v224WelcomeStage="loading";
     b.classList.add("v224-welcome-listen-first");
     b.setAttribute("aria-busy","true");
-    b.textContent="Chargement de la voix…";
-    b.setAttribute("aria-label","Chargement du message de bienvenue");
+    b.textContent="Ouverture de Libcomlair…";
+    b.setAttribute("aria-label","Ouverture de Libcomlair et chargement du message de bienvenue");
     remember("starting-welcome-audio");
   }
 
@@ -94,14 +94,14 @@
         onstart:()=>setNext(),
         onerror:error=>{
           remember(error?.error||error?.message||"welcome-voice-error");
-          setListen();
+          setOpen();
         }
       });
       if(!accepted)throw new Error("welcome-not-accepted");
       remember("welcome-accepted");
     }catch(error){
       remember(error?.message||error||"welcome-start-failed");
-      setListen();
+      setOpen();
     }
   }
 
@@ -109,7 +109,7 @@
     if(stage!=="loading"||!isWelcome())return;
     const state=String(event?.detail?.state||"");
     if(state==="speaking")setNext();
-    else if(state==="error")setListen();
+    else if(state==="error")setOpen();
   }
 
   function bind(){
@@ -122,7 +122,7 @@
     boundButton=b;
     b.addEventListener("pointerdown",primeAudio,true);
     b.addEventListener("click",activate,true);
-    setListen();
+    setOpen();
     warmWelcome();
   }
 
@@ -132,12 +132,12 @@
   window.addEventListener("libcomlair-voice-status",onVoiceStatus);
 
   window.LibcomlairWelcomeListenFirst=Object.freeze({
-    version:"v224-16-4-listen-first-azure",
+    version:"v224-16-5-open-first-azure",
     message:WELCOME_MESSAGE,
     bind,
     stage:()=>stage,
     status:()=>({...last}),
-    reset:setListen,
+    reset:setOpen,
     primeAudio,
     warmWelcome
   });
