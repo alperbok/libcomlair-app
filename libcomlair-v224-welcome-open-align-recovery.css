@@ -1,4 +1,5 @@
-/* Récupération historique : Ouvrir doit occuper exactement la boîte du bouton Suivant. */
+/* Récupération historique : Ouvrir reprend la boîte de Suivant et est descendu pour se superposer au bouton dessiné. */
 body.v221-onboarding:not(.v221-profile-step) #libcomlairSplashNext.v224-next-hotspot.v224-welcome-listen-first{
   box-sizing:border-box!important;
+  bottom:3.55%!important;
 }
