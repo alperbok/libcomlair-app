@@ -10,6 +10,14 @@ Le registre classe les règles par priorité et relie chaque règle aux autres r
 ### P0 — règles absolues
 Ces règles passent avant toute autre modification.
 
+0. **Principe de la valise Libcomlair : tout ce qui est essentiel appartient à Libcomlair, jamais au support.**
+   - Libcomlair est la valise qui contient les fonctions, règles, données essentielles, voix, ressources d'accessibilité, diagnostics, réparations et logique métier.
+   - Android, iPhone, tablette, ordinateur ou tout autre support ne sont que des porteurs/adaptateurs de cette même valise.
+   - Une fonction essentielle ne doit jamais exister uniquement dans une couche Android, iOS, navigateur, hébergeur ou fournisseur externe.
+   - Lorsqu'un support impose une adaptation technique, cette adaptation doit seulement permettre à Libcomlair d'utiliser les capacités du support ; elle ne doit pas devenir propriétaire de la fonction.
+   - Avant toute nouvelle modification, vérifier : « Est-ce que cette fonction est rangée dans Libcomlair ou dans le support ? » Si elle est rangée dans le support, l'architecture doit être corrigée.
+   - Renvoie vers : indépendance des fournisseurs, protection des données, absence de régression, accessibilité continue, voix naturelle, diagnostic avant correction.
+
 1. **Consulter les pannes connues avant toute nouvelle correction.**
    - Vérifier Diagnostic et pannes, l'historique des réparations et les correctifs déjà validés.
    - Renvoie vers : protection des données, absence de régression, diagnostic avant correction, documentation des nouvelles pannes.
@@ -58,12 +66,15 @@ Exemple :
 
 **Problème : première page silencieuse sur Android**
 
-1. P0 — consulter les pannes connues ;
-2. P0 — voix naturelle uniquement ;
-3. P1 — vérifier le verrouillage audio Android ;
-4. P0 — préserver les fonctions déjà validées ;
-5. P1 — valider après correction ;
-6. si la panne est nouvelle : P1 — l'ajouter à Diagnostic et pannes.
+1. P0 — principe de la valise Libcomlair ;
+2. P0 — consulter les pannes connues ;
+3. P0 — voix naturelle uniquement ;
+4. P1 — vérifier le verrouillage audio Android ;
+5. P0 — préserver les fonctions déjà validées ;
+6. P1 — valider après correction ;
+7. si la panne est nouvelle : P1 — l'ajouter à Diagnostic et pannes.
+
+La conséquence est importante : si la correction proposée consiste à créer une voix ou une fonction uniquement dans Android, elle doit être refusée ou réorganisée. La voix appartient à Libcomlair ; Android ne fait que fournir le canal technique permettant à Libcomlair de la restituer sur ce support.
 
 ## Registre exploitable par l'application
 Le fichier `libcomlair-rule-registry-v224.js` expose `window.LibcomlairRuleRegistry` avec :
@@ -78,4 +89,4 @@ Le fichier `libcomlair-rule-registry-v224.js` expose `window.LibcomlairRuleRegis
 ## Principe général
 Avant toute correction importante :
 
-**Problème → règles P0 → pannes connues → règles liées → diagnostic → correction ciblée → validation → documentation si nouvelle panne.**
+**Problème → principe de la valise Libcomlair → règles P0 → pannes connues → règles liées → diagnostic → correction ciblée → validation → documentation si nouvelle panne.**
