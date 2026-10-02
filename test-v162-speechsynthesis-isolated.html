@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — test V162 isolé</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;padding:24px;line-height:1.5;background:#fff;color:#111}
+#status{padding:16px;border:2px solid #111;border-radius:12px;margin-top:18px;font-weight:700}
+.small{font-size:.95rem;font-weight:400;margin-top:12px}
+</style>
+</head>
+<body>
+<h1>Test V162 isolé</h1>
+<p>Ne touchez pas l’écran pendant 10 secondes.</p>
+<div id="status" role="status" aria-live="polite">Chargement…</div>
+<p class="small">Cette page ne charge aucun autre script Libcomlair, aucun AudioContext et aucun secours au toucher.</p>
+<script>
+(()=>{
+  "use strict";
+  const status=document.getElementById("status");
+  const setStatus=(text)=>{status.textContent=text;};
+
+  function startV162Speech(){
+    if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance!=="function"){
+      setStatus("speechSynthesis indisponible");
+      return false;
+    }
+    try{
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance("Bienvenue sur Libcomlair. Ceci est le test isolé du démarrage vocal automatique V162.");
+      u.lang="fr-FR";
+      u.rate=0.9;
+      u.onstart=()=>setStatus("VOIX DÉMARRÉE automatiquement");
+      u.onend=()=>setStatus("Voix terminée");
+      u.onerror=(e)=>setStatus("Erreur speechSynthesis : "+(e.error||"inconnue"));
+      window.speechSynthesis.speak(u);
+      setStatus("Commande speak() envoyée automatiquement à 700 ms — attente du démarrage vocal…");
+      return true;
+    }catch(e){
+      setStatus("Exception : "+(e&&e.message?e.message:String(e)));
+      return false;
+    }
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",()=>setTimeout(startV162Speech,700),{once:true});
+  }else{
+    setTimeout(startV162Speech,700);
+  }
+})();
+</script>
+</body>
+</html>
