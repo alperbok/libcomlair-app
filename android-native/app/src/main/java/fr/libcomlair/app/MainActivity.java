@@ -2,7 +2,6 @@ package fr.libcomlair.app;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
@@ -10,22 +9,27 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.IOException;
-
 public final class MainActivity extends Activity {
-    private static final String VERA_ASSET = "vera-welcome.wav";
+    private static final int MAX_AUTOMATIC_ATTEMPTS = 4;
+
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private AudioFocusRequest audioFocusRequest;
     private TextView statusView;
-    private boolean firstLaunchPlaybackAttempted = false;
+
+    private boolean playbackStarted = false;
+    private boolean attemptInProgress = false;
+    private int automaticAttempts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +38,24 @@ public final class MainActivity extends Activity {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         setContentView(buildContent());
 
-        // Lecture Android native : aucun navigateur, aucune WebView et aucun geste utilisateur.
-        playVeraAtLaunch();
+        // Android natif : aucune WebView, aucun navigateur et aucun geste utilisateur.
+        scheduleAutomaticPlayback(120);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!playbackStarted) {
+            scheduleAutomaticPlayback(280);
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && !playbackStarted) {
+            scheduleAutomaticPlayback(450);
+        }
     }
 
     private View buildContent() {
@@ -52,13 +72,13 @@ public final class MainActivity extends Activity {
         title.setGravity(Gravity.CENTER);
         root.addView(title, matchWrap());
 
-        TextView subtitle = new TextView(this);
-        subtitle.setText("Prototype Android natif — autonomie vocale");
-        subtitle.setTextSize(20f);
-        subtitle.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams subtitleParams = matchWrap();
-        subtitleParams.topMargin = dp(16);
-        root.addView(subtitle, subtitleParams);
+        TextView version = new TextView(this);
+        version.setText("Test Android natif Vera — version 0.2");
+        version.setTextSize(20f);
+        version.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams versionParams = matchWrap();
+        versionParams.topMargin = dp(16);
+        root.addView(version, versionParams);
 
         TextView explanation = new TextView(this);
         explanation.setText("Vera doit démarrer automatiquement dès l'ouverture de l'application, sans toucher l'écran et sans connexion Internet.");
@@ -69,7 +89,7 @@ public final class MainActivity extends Activity {
         root.addView(explanation, explanationParams);
 
         statusView = new TextView(this);
-        statusView.setText("Initialisation de la voix locale…");
+        statusView.setText("Préparation automatique de Vera…");
         statusView.setTextSize(18f);
         statusView.setGravity(Gravity.CENTER);
         statusView.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
@@ -80,13 +100,18 @@ public final class MainActivity extends Activity {
         Button replay = new Button(this);
         replay.setText("Réécouter Vera");
         replay.setTextSize(18f);
-        replay.setOnClickListener(v -> playVera(false));
+        replay.setOnClickListener(v -> {
+            playbackStarted = false;
+            attemptInProgress = false;
+            automaticAttempts = 0;
+            startVera(false);
+        });
         LinearLayout.LayoutParams replayParams = matchWrap();
         replayParams.topMargin = dp(32);
         root.addView(replay, replayParams);
 
         TextView independence = new TextView(this);
-        independence.setText("Test d'indépendance : cet écran ne demande aucune permission Internet et l'audio Vera est inclus dans l'APK.");
+        independence.setText("Aucune permission Internet. Vera est une ressource audio Android intégrée directement dans cette application.");
         independence.setTextSize(16f);
         independence.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams independenceParams = matchWrap();
@@ -96,66 +121,114 @@ public final class MainActivity extends Activity {
         return root;
     }
 
-    private void playVeraAtLaunch() {
-        if (firstLaunchPlaybackAttempted) return;
-        firstLaunchPlaybackAttempted = true;
-        // post() laisse Android terminer l'affichage de l'Activity sans attendre un geste utilisateur.
-        statusView.post(() -> playVera(true));
+    private void scheduleAutomaticPlayback(long delayMs) {
+        handler.postDelayed(() -> {
+            if (!playbackStarted && !attemptInProgress && automaticAttempts < MAX_AUTOMATIC_ATTEMPTS) {
+                startVera(true);
+            }
+        }, delayMs);
     }
 
-    private void playVera(boolean automatic) {
-        releasePlayer();
+    private void startVera(boolean automatic) {
+        if (attemptInProgress || playbackStarted) return;
+
+        attemptInProgress = true;
+        if (automatic) {
+            automaticAttempts++;
+            statusView.setText("Démarrage automatique de Vera — tentative " + automaticAttempts + "…");
+        } else {
+            statusView.setText("Lecture de Vera…");
+        }
+
+        releasePlayer(false);
         requestAudioFocus();
 
-        MediaPlayer player = new MediaPlayer();
-        mediaPlayer = player;
-        player.setAudioAttributes(new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                .build());
+                .build();
 
-        try (AssetFileDescriptor afd = getAssets().openFd(VERA_ASSET)) {
-            player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            player.setOnPreparedListener(mp -> {
-                statusView.setText(automatic
-                        ? "Vera démarre automatiquement depuis l'APK."
-                        : "Lecture de Vera.");
-                mp.start();
-            });
+        try {
+            MediaPlayer player = MediaPlayer.create(this, R.raw.vera_welcome, attributes, 0);
+            if (player == null) {
+                attemptInProgress = false;
+                statusView.setText("Vera n'a pas pu être chargée par Android.");
+                retryAutomatically();
+                return;
+            }
+
+            mediaPlayer = player;
+            player.setVolume(1.0f, 1.0f);
             player.setOnCompletionListener(mp -> {
                 statusView.setText("Lecture Vera terminée — audio Android natif opérationnel.");
-                releasePlayer();
+                releasePlayer(true);
             });
             player.setOnErrorListener((mp, what, extra) -> {
-                statusView.setText("Erreur de lecture locale Vera (" + what + "/" + extra + ").");
-                releasePlayer();
+                playbackStarted = false;
+                attemptInProgress = false;
+                statusView.setText("Erreur audio Vera (" + what + "/" + extra + "). Nouvelle tentative automatique…");
+                releasePlayer(true);
+                retryAutomatically();
                 return true;
             });
-            player.prepareAsync();
-        } catch (IOException error) {
-            statusView.setText("Impossible d'ouvrir l'audio Vera embarqué : " + error.getClass().getSimpleName());
-            releasePlayer();
+
+            player.start();
+            playbackStarted = true;
+            attemptInProgress = false;
+            statusView.setText(automatic
+                    ? "Vera a été lancée automatiquement par Android."
+                    : "Vera est en cours de lecture.");
+
+            // Vérification automatique : si Android a arrêté le lecteur au démarrage, on retente sans geste.
+            handler.postDelayed(() -> {
+                MediaPlayer activePlayer = mediaPlayer;
+                if (activePlayer != null && playbackStarted) {
+                    try {
+                        if (!activePlayer.isPlaying() && activePlayer.getCurrentPosition() < activePlayer.getDuration() - 150) {
+                            playbackStarted = false;
+                            statusView.setText("Android a interrompu Vera. Nouvelle tentative automatique…");
+                            releasePlayer(true);
+                            retryAutomatically();
+                        }
+                    } catch (IllegalStateException ignored) {
+                        playbackStarted = false;
+                        retryAutomatically();
+                    }
+                }
+            }, 700);
+        } catch (RuntimeException error) {
+            playbackStarted = false;
+            attemptInProgress = false;
+            statusView.setText("Erreur de démarrage Vera : " + error.getClass().getSimpleName() + ". Nouvelle tentative automatique…");
+            releasePlayer(true);
+            retryAutomatically();
+        }
+    }
+
+    private void retryAutomatically() {
+        if (automaticAttempts < MAX_AUTOMATIC_ATTEMPTS) {
+            scheduleAutomaticPlayback(650L * Math.max(1, automaticAttempts));
         }
     }
 
     private void requestAudioFocus() {
         if (audioManager == null) return;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             AudioAttributes attributes = new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                     .build();
-            audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+            audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
                     .setAudioAttributes(attributes)
                     .setOnAudioFocusChangeListener(focusChange -> { })
                     .build();
             audioManager.requestAudioFocus(audioFocusRequest);
         } else {
-            // Compatibilité Android 7.x ; l'application cible reste Android au sens large.
             audioManager.requestAudioFocus(
                     focusChange -> { },
                     AudioManager.STREAM_MUSIC,
-                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK
+                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
             );
         }
     }
@@ -168,20 +241,23 @@ public final class MainActivity extends Activity {
         }
     }
 
-    private void releasePlayer() {
+    private void releasePlayer(boolean abandonFocus) {
         MediaPlayer player = mediaPlayer;
         mediaPlayer = null;
         if (player != null) {
-            try { player.stop(); } catch (IllegalStateException ignored) { }
+            try {
+                if (player.isPlaying()) player.stop();
+            } catch (IllegalStateException ignored) { }
             player.reset();
             player.release();
         }
-        abandonAudioFocus();
+        if (abandonFocus) abandonAudioFocus();
     }
 
     @Override
     protected void onDestroy() {
-        releasePlayer();
+        handler.removeCallbacksAndMessages(null);
+        releasePlayer(true);
         super.onDestroy();
     }
 
