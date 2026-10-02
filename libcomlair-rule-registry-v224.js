@@ -9,7 +9,7 @@
       title:"Tout ce qui est essentiel appartient à Libcomlair, jamais au support",
       rule:"Libcomlair est la valise qui contient les fonctions, règles, données essentielles, voix, ressources d'accessibilité, diagnostics, réparations et logique métier. Android, iPhone, tablette, ordinateur, navigateur ou autre support ne sont que des porteurs/adaptateurs. Une fonction essentielle ne doit jamais exister uniquement dans une couche spécifique au support ou chez un fournisseur externe.",
       triggers:["android","iphone","ios","support","plateforme","navigateur","chrome","webview","apk","application mobile","voix","données","diagnostic","réparation","migration","portage","adapter","adaptation"],
-      links:["P0-provider-independence","P0-protect-data","P0-no-regression","P0-accessibility-continuity","P0-natural-voice-only","P1-diagnose-before-fix"]
+      links:["P0-provider-independence","P0-protect-data","P0-no-regression","P0-accessibility-continuity","P0-natural-voice-only","P0-voice-failure-owned-by-libcomlair","P1-diagnose-before-fix"]
     }),
     Object.freeze({
       id:"P0-known-issues-first",
@@ -18,7 +18,7 @@
       title:"Consulter les pannes connues avant toute nouvelle correction",
       rule:"Lorsqu'un problème est signalé, vérifier d'abord Diagnostic et pannes, l'historique des réparations et les correctifs déjà validés avant de modifier le code.",
       triggers:["panne","bug","silence","régression","ne fonctionne plus","404","page blanche","micro","voix"],
-      links:["P0-protect-data","P0-no-regression","P1-diagnose-before-fix","P1-record-new-issue","P0-libcomlair-suitcase"]
+      links:["P0-protect-data","P0-no-regression","P1-diagnose-before-fix","P1-record-new-issue","P0-libcomlair-suitcase","P0-voice-failure-owned-by-libcomlair"]
     }),
     Object.freeze({
       id:"P0-protect-data",
@@ -63,7 +63,16 @@
       title:"Voix naturelle uniquement",
       rule:"Ne jamais utiliser une voix robotique comme solution de secours. En cas de panne, réparer ou basculer vers une autre solution de voix naturelle validée.",
       triggers:["voix","tts","render","audio","android","synthèse vocale","silence"],
-      links:["P0-provider-independence","P1-android-audio-unlock","P1-voice-context-every-page","P0-libcomlair-suitcase"]
+      links:["P0-provider-independence","P1-android-audio-unlock","P1-voice-context-every-page","P0-libcomlair-suitcase","P0-voice-failure-owned-by-libcomlair"]
+    }),
+    Object.freeze({
+      id:"P0-voice-failure-owned-by-libcomlair",
+      priority:"P0",
+      domain:"voix",
+      title:"Toute panne de voix est une panne de Libcomlair et se répare dans Libcomlair",
+      rule:"Si Vera ou une autre voix de Libcomlair ne fonctionne pas sur un support, le diagnostic, la correction, la validation et l'historique de la panne restent dans Libcomlair. Une adaptation Android, iOS ou autre peut fournir un canal technique, mais la voix et sa réparation ne doivent jamais être déplacées dans une application séparée ni dépendre d'une installation parallèle par l'utilisateur.",
+      triggers:["vera","voix","silence","accueil silencieux","pas de voix","audio","panne vocale","tts","lecture automatique"],
+      links:["P0-libcomlair-suitcase","P0-known-issues-first","P0-natural-voice-only","P1-diagnose-before-fix","P1-validate-after-fix","P1-record-new-issue"]
     }),
     Object.freeze({
       id:"P0-provider-independence",
@@ -107,8 +116,8 @@
       domain:"diagnostic",
       title:"Documenter toute nouvelle panne résolue",
       rule:"Si une panne n'existe pas encore dans Diagnostic et pannes, l'ajouter après résolution avec symptôme, cause, détection, réparation, fichiers, commits et état de validation.",
-      triggers:["nouvelle panne","cause nouvelle","correctif inédit"],
-      links:["P0-known-issues-first","P1-validate-after-fix"]
+      triggers:["nouvelle panne","cause nouvelle","correctif inédit","panne vocale","vera"],
+      links:["P0-known-issues-first","P1-validate-after-fix","P0-voice-failure-owned-by-libcomlair"]
     }),
     Object.freeze({
       id:"P1-backup-before-risk",
@@ -135,7 +144,7 @@
       title:"Vérifier le verrouillage audio Android avant de changer de moteur vocal",
       rule:"Si la première lecture naturelle est silencieuse sur Android, vérifier d'abord l'état Web Audio et le déverrouillage par geste utilisateur avant de conclure à une panne du fournisseur vocal. Toute correction reste une correction de Libcomlair ; Android n'est qu'un support d'exécution.",
       triggers:["android","première page","silence","audio-locked","suspended"],
-      links:["P0-natural-voice-only","P0-known-issues-first","P0-libcomlair-suitcase"]
+      links:["P0-natural-voice-only","P0-known-issues-first","P0-libcomlair-suitcase","P0-voice-failure-owned-by-libcomlair"]
     }),
     Object.freeze({
       id:"P1-external-data-isolated",
@@ -192,5 +201,5 @@
     };
   }
 
-  window.LibcomlairRuleRegistry=Object.freeze({version:"v224-3",all,byId,byPriority,linked,forText,resolve,preflight});
+  window.LibcomlairRuleRegistry=Object.freeze({version:"v224-4",all,byId,byPriority,linked,forText,resolve,preflight});
 })();
