@@ -1,7 +1,7 @@
 (()=>{
 "use strict";
 
-const VERSION="v224-welcome-system-autostart-v2-no-touch-fallback";
+const VERSION="v224-welcome-system-autostart-v3-auto-only";
 const WELCOME_ID="welcome.main";
 const WELCOME_MESSAGE="Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver pour tous. Appuyez sur Suivant pour commencer.";
 
@@ -11,10 +11,10 @@ let speaking=false;
 let playPending=false;
 let started=false;
 let utterance=null;
-let last={time:0,state:"idle",source:"speechSynthesis-v162-style-no-touch",detail:""};
+let last={time:0,state:"idle",source:"speechSynthesis-v162-style-auto-only",detail:""};
 
 function remember(state,detail=""){
-  last={time:Date.now(),state:String(state||""),source:"speechSynthesis-v162-style-no-touch",detail:String(detail||"")};
+  last={time:Date.now(),state:String(state||""),source:"speechSynthesis-v162-style-auto-only",detail:String(detail||"")};
   try{window.dispatchEvent(new CustomEvent("libcomlair-welcome-audio-status",{detail:{...last}}))}catch(_){}
 }
 
@@ -111,10 +111,9 @@ const api=Object.freeze({
   bind,
   tryAutomatic:playNow,
   stop,
-  status:()=>({...last,navigationBlocked:false,networkFallback:false,renderDependency:false,systemSpeechAvailable:available,gestureFallbackArmed:false,speaking,playPending,started})
+  status:()=>({...last,navigationBlocked:false,networkFallback:false,renderDependency:false,systemSpeechAvailable:available,speaking,playPending,started})
 });
 
-// Compatibilité avec le présentateur général : l'accueil possède sa propre lecture.
 window.LibcomlairWelcomeListenFirst=api;
 window.LibcomlairWelcomeSystemAutostart=api;
 window.LibcomlairWelcomeLocalFirst=api;
