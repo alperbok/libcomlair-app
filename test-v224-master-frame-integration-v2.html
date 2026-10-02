@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.21</title>
+<title>Libcomlair — cadre maître v6.8.22</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
@@ -20,10 +20,12 @@
     html=html.replace("libcomlair-v224-map-gps-page-v33.css?v=3","libcomlair-v224-map-gps-page-v33.css?v=6");
     html=html.replace("libcomlair-v224-nearby-count-sync-v37.js?v=1","libcomlair-v224-nearby-count-sync-v37.js?v=5");
     html=html.replace("libcomlair-v224-guided-presenter-v10.js?v=1","libcomlair-v224-guided-presenter-v10.js?v=2");
-    html=html.replace(
-      "libcomlair-v224-welcome-listen-first-v16.js?v=3",
-      "libcomlair-audio-core-v1.js?v=2\"><\\/script><script src=\"libcomlair-welcome-controller-v1.js?v=1"
-    );
+
+    // Jusqu'au 19 octobre 2026, l'accueil repasse par le moteur vocal Libcomlair -> Render.
+    // On supprime le contrôleur "Écouter d'abord" afin que le présentateur Libcomlair
+    // puisse annoncer automatiquement la page Bienvenue avec le moteur vocal principal.
+    html=html.replace(/<script src="libcomlair-v224-welcome-listen-first-v16\.js\?v=3"><\/script>/,'');
+
     html=html.replace(
       '<script src="libcomlair-repair-catalog-extra21-v224.js?v=1"><\\/script>',
       '<script src="libcomlair-repair-catalog-extra21-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra22-v224.js?v=2"><\\/script><script src="libcomlair-repair-catalog-extra23-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra24-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra25-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra26-v224.js?v=2"><\\/script><script src="libcomlair-repair-catalog-extra27-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra28-v224.js?v=1"><\\/script>'
@@ -46,7 +48,7 @@
 
     html=html.replace(
       "v17-master-source-cleanup",
-      "v17-master-source-cleanup-6.8.21-libcomlair-audio-core"
+      "v17-master-source-cleanup-6.8.22-render-recovery"
     );
 
     document.open();
