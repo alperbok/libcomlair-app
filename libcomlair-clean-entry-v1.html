@@ -74,6 +74,7 @@
   function enterApp(){
     if(entering)return;
     entering=true;
+    try{window.LibcomlairVoice?.cancel?.()}catch(_){}
     const reveal=()=>{
       try{
         const doc=frame.contentDocument;
