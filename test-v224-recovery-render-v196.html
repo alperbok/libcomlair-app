@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — récupération vocale historique</title>
+</head>
+<body>
+<p>Chargement de Libcomlair…</p>
+<script>
+(async()=>{
+  try{
+    let html=await fetch("test-v224-master-frame-integration-v1.html?historical-recovery=1",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+
+    // Restaurer les trois composants exacts de la période validée.
+    html=html.replace(/libcomlair-render-voice-v196\.js\?v=[^"']+/g,"libcomlair-render-voice-v196-historical.js?v=1");
+    html=html.replace(/libcomlair-voice-engine-v191\.js\?v=[^"']+/g,"libcomlair-voice-engine-v191-historical.js?v=1");
+    html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.js\?v=[^"']+/g,"libcomlair-v224-welcome-open-historical.js?v=1");
+
+    // Marqueur de diagnostic visible dans le DOM uniquement.
+    html=html.replace("v17-master-source-cleanup","v17-master-source-cleanup-historical-render-recovery");
+
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    document.body.innerHTML="<h1>Libcomlair</h1><p>Impossible de charger la récupération historique.</p><pre></pre>";
+    document.querySelector("pre").textContent=String(err&&err.message||err);
+  }
+})();
+</script>
+</body>
+</html>
