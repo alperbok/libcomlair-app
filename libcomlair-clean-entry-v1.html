@@ -19,21 +19,19 @@
     height:8.5%;
     box-sizing:border-box;
     margin:0;
-    padding:0 12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#fff;
-    color:#101820;
-    border:4px solid #13272d;
+    padding:0;
+    display:block;
+    appearance:none;
+    -webkit-appearance:none;
+    background:transparent;
+    color:transparent;
+    border:0;
     border-radius:26px;
-    box-shadow:0 4px 12px rgba(0,0,0,.18);
-    font:800 clamp(24px,5.5vw,40px)/1.1 Arial,sans-serif;
-    text-align:center;
+    box-shadow:none;
     cursor:pointer;
     z-index:30;
+    -webkit-tap-highlight-color:transparent;
   }
-  #libcomlairSplashNext[aria-busy="true"]{font-size:clamp(18px,4.2vw,28px)}
   #libcomlairSplashNext:focus-visible{outline:5px solid #ffca3a;outline-offset:3px}
   .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 </style>
@@ -45,7 +43,7 @@
   <div class="clean-welcome-screen">
     <h1 id="libcomlairSplashTitle" class="sr-only">Bienvenue dans Libcomlair</h1>
     <img class="clean-welcome-image" src="assets/libcomlair-welcome-v224.jpg?v=clean-entry-v1" alt="Bienvenue dans Libcomlair. Une personne en fauteuil roulant et une femme malvoyante avec une canne blanche et son chien guide se déplacent dans une ville accessible.">
-    <button id="libcomlairSplashNext" type="button" aria-label="Ouvrir Libcomlair et écouter le message de bienvenue">Ouvrir</button>
+    <button id="libcomlairSplashNext" type="button" aria-label="Suivant"><span class="sr-only">Suivant</span></button>
   </div>
 </section>
 
