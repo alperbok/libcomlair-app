@@ -10,15 +10,15 @@
 <script>
 (async()=>{
   try{
-    let html=await fetch("test-v224-master-frame-integration-v1.html?historical-recovery=3",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+    let html=await fetch("test-v224-master-frame-integration-v1.html?historical-recovery=4",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
     // Restaurer les trois composants exacts de la période validée.
     html=html.replace(/libcomlair-render-voice-v196\.js\?v=[^"']+/g,"libcomlair-render-voice-v196-historical.js?v=1");
     html=html.replace(/libcomlair-voice-engine-v191\.js\?v=[^"']+/g,"libcomlair-voice-engine-v191-historical.js?v=1");
     html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.js\?v=[^"']+/g,"libcomlair-v224-welcome-open-historical.js?v=1");
 
-    // Géométrie : Ouvrir est descendu pour se superposer au bouton Suivant dessiné dans l'image.
-    html=html.replace("</head>",'<link rel="stylesheet" href="libcomlair-v224-welcome-open-align-recovery.css?v=2"></head>');
+    // Ouvrir utilise directement la case Suivant déjà dessinée dans l'image.
+    html=html.replace("</head>",'<link rel="stylesheet" href="libcomlair-v224-welcome-open-align-recovery.css?v=4"></head>');
 
     // Marqueur de diagnostic visible dans le DOM uniquement.
     html=html.replace("v17-master-source-cleanup","v17-master-source-cleanup-historical-render-recovery");
