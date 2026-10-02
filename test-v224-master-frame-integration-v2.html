@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.20</title>
+<title>Libcomlair — cadre maître v6.8.21</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
@@ -20,7 +20,10 @@
     html=html.replace("libcomlair-v224-map-gps-page-v33.css?v=3","libcomlair-v224-map-gps-page-v33.css?v=6");
     html=html.replace("libcomlair-v224-nearby-count-sync-v37.js?v=1","libcomlair-v224-nearby-count-sync-v37.js?v=5");
     html=html.replace("libcomlair-v224-guided-presenter-v10.js?v=1","libcomlair-v224-guided-presenter-v10.js?v=2");
-    html=html.replace("libcomlair-v224-welcome-listen-first-v16.js?v=3","libcomlair-v224-welcome-autoplay-v21.js?v=1");
+    html=html.replace(
+      "libcomlair-v224-welcome-listen-first-v16.js?v=3",
+      "libcomlair-audio-core-v1.js?v=2\"><\\/script><script src=\"libcomlair-welcome-controller-v1.js?v=1"
+    );
     html=html.replace(
       '<script src="libcomlair-repair-catalog-extra21-v224.js?v=1"><\\/script>',
       '<script src="libcomlair-repair-catalog-extra21-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra22-v224.js?v=2"><\\/script><script src="libcomlair-repair-catalog-extra23-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra24-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra25-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra26-v224.js?v=2"><\\/script><script src="libcomlair-repair-catalog-extra27-v224.js?v=1"><\\/script><script src="libcomlair-repair-catalog-extra28-v224.js?v=1"><\\/script>'
@@ -28,12 +31,7 @@
 
     html=html.replace(
       'libcomlair-v224-master-frame-integration-v1.css?v=2"></head>',
-      'libcomlair-v224-master-frame-integration-v1.css?v=21"><link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=16"><link rel="stylesheet" href="libcomlair-v224-frame-fixes-v6.css?v=10"><link rel="stylesheet" href="libcomlair-v224-technical-menu-access-v1.css?v=2"><link rel="preload" href="voice-tests/fr-FR/vera-welcome.wav?autoplay=20261002-4" as="audio" type="audio/wav"></head>'
-    );
-
-    html=html.replace(
-      /<body([^>]*)>/i,
-      '<body$1><audio id="libcomlairWelcomeAutoplay" src="voice-tests/fr-FR/vera-welcome.wav?autoplay=20261002-4" autoplay preload="auto" style="display:none" aria-hidden="true"></audio>'
+      'libcomlair-v224-master-frame-integration-v1.css?v=21"><link rel="stylesheet" href="libcomlair-v224-master-frame-onboarding-v2.css?v=16"><link rel="stylesheet" href="libcomlair-v224-frame-fixes-v6.css?v=10"><link rel="stylesheet" href="libcomlair-v224-technical-menu-access-v1.css?v=2"></head>'
     );
 
     html=html.replace(
@@ -48,7 +46,7 @@
 
     html=html.replace(
       "v17-master-source-cleanup",
-      "v17-master-source-cleanup-6.8.20-vera-native-autoplay"
+      "v17-master-source-cleanup-6.8.21-libcomlair-audio-core"
     );
 
     document.open();
