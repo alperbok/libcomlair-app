@@ -16,7 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 public final class MainActivity extends Activity {
-    private static final String LIBCOMLAIR_URL = "https://alperbok.github.io/libcomlair-app/test-v224-master-frame-integration-v2.html?android-app=0.3";
+    private static final String LIBCOMLAIR_URL = "file:///android_asset/www/test-v224-master-frame-integration-v2.html?android-app=0.4";
     private static final int MAX_AUTOMATIC_ATTEMPTS = 4;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -40,11 +40,12 @@ public final class MainActivity extends Activity {
         setContentView(webView);
         webView.loadUrl(LIBCOMLAIR_URL);
 
-        // Vera fait partie de Libcomlair : lecture depuis l'APK de l'application,
-        // indépendante de l'autoplay de la page web et sans geste utilisateur.
+        // Vera fait partie de Libcomlair et est lue depuis l'APK de Libcomlair.
+        // Aucun navigateur externe et aucun service vocal distant ne sont requis pour l'accueil.
         scheduleAutomaticPlayback(180);
     }
 
+    @SuppressWarnings("deprecation")
     private void configureWebView(WebView view) {
         WebSettings settings = view.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -53,14 +54,17 @@ public final class MainActivity extends Activity {
         settings.setMediaPlaybackRequiresUserGesture(false);
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
+        settings.setAllowFileAccessFromFileURLs(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
 
         view.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                // La voix d'accueil est maintenant gérée par Libcomlair Android.
-                // On neutralise uniquement l'ancien audio d'accueil de la page
-                // afin d'éviter une double lecture après un toucher utilisateur.
+                // La voix d'accueil est gérée par l'application Libcomlair elle-même.
+                // On neutralise uniquement l'ancien lecteur d'accueil HTML afin d'éviter une double lecture.
                 String script = "(function(){" +
                         "window.__LIBCOMLAIR_NATIVE_WELCOME__=true;" +
                         "function stopOldWelcome(){" +
@@ -132,7 +136,7 @@ public final class MainActivity extends Activity {
                         if (!activePlayer.isPlaying() && activePlayer.getCurrentPosition() < activePlayer.getDuration() - 150) {
                             playbackStarted = false;
                             releasePlayer(true);
-                            retryAutomatically("Android a interrompu la voix intégrée à Libcomlair.");
+                            retryAutomatically("Le système a interrompu la voix intégrée à Libcomlair.");
                         }
                     } catch (IllegalStateException ignored) {
                         playbackStarted = false;
