@@ -64,13 +64,8 @@
     return ok;
   }
 
-  function gestureUnlock(){
-    if(welcomeVisible())return;
-    unlockAudio().then(ok=>{
-      if(ok)["pointerdown","touchstart","keydown","click"].forEach(type=>document.removeEventListener(type,gestureUnlock,true));
-    }).catch(()=>{});
-  }
-  ["pointerdown","touchstart","keydown","click"].forEach(type=>document.addEventListener(type,gestureUnlock,true));
+  // Aucun écouteur global pointerdown/touchstart/click/keydown.
+  // Le moteur n'utilise plus de secours tactile pour déverrouiller la voix.
 
   async function fetchStatus(url,provider){
     const controller=new AbortController();
@@ -85,9 +80,8 @@
 
   async function checkStatus(){
     let data;
-    try{
-      data=await fetchStatus(PRIMARY_STATUS_URL,"azure-speech");
-    }catch(primaryError){
+    try{data=await fetchStatus(PRIMARY_STATUS_URL,"azure-speech")}
+    catch(primaryError){
       emit("primary-unavailable",{error:String(primaryError?.message||primaryError),provider:"azure-speech"});
       data=await fetchStatus(FALLBACK_STATUS_URL,"render-fallback");
     }
@@ -136,9 +130,8 @@
     const cacheKey=String(text||"").replace(/\s+/g," ").trim();
     if(audioCache.has(cacheKey))return audioCache.get(cacheKey);
     const task=(async()=>{
-      try{
-        return await requestAudio(PRIMARY_TTS_URL,"azure-speech",cacheKey);
-      }catch(primaryError){
+      try{return await requestAudio(PRIMARY_TTS_URL,"azure-speech",cacheKey)}
+      catch(primaryError){
         emit("fallback",{error:String(primaryError?.message||primaryError),from:"azure-speech",to:"render-fallback",chars:cacheKey.length,adoptedEarlyContext});
         return await requestAudio(FALLBACK_TTS_URL,"render-fallback",cacheKey);
       }
@@ -147,41 +140,32 @@
     try{return await task}catch(error){audioCache.delete(cacheKey);throw error}
   }
 
-  function assertActive(requestId){
-    if(!requestId||activeRequestId!==requestId)throw new Error("Lecture annulée.");
-  }
+  function assertActive(requestId){if(!requestId||activeRequestId!==requestId)throw new Error("Lecture annulée.")}
 
   async function playBuffer(buffer,meta,opts,requestId){
     const ctx=getAudioContext();
     if(!ctx)throw new Error(welcomeVisible()?"Web Audio désactivé sur l’accueil.":"Web Audio indisponible.");
     if(ctx.state!=="running"){
       const ok=await unlockAudio();
-      if(!ok)throw new Error("Audio Android verrouillé. Appuyez une fois sur l’écran puis réessayez.");
+      if(!ok)throw new Error("Audio Android verrouillé.");
     }
     assertActive(requestId);
     emit("decoding",{voice:meta.voice,requestId,adoptedEarlyContext});
     let decoded=decodeCache.get(meta.cacheKey);
     if(!decoded){decoded=await ctx.decodeAudioData(meta.buffer.slice(0));decodeCache.set(meta.cacheKey,decoded)}
     assertActive(requestId);
-
     stopSource();
     const source=ctx.createBufferSource();
     currentSource=source;
     currentSourceRequestId=requestId;
     source.buffer=decoded;
     source.connect(ctx.destination);
-
     return await new Promise((resolve,reject)=>{
       let settled=false;
       currentRejectRequestId=requestId;
-      currentReject=reason=>{
-        if(settled)return;
-        settled=true;
-        reject(reason instanceof Error?reason:new Error(String(reason||"Lecture annulée.")));
-      };
+      currentReject=reason=>{if(settled)return;settled=true;reject(reason instanceof Error?reason:new Error(String(reason||"Lecture annulée.")))};
       source.onended=()=>{
-        if(settled)return;
-        settled=true;
+        if(settled)return;settled=true;
         if(currentRejectRequestId===requestId){currentReject=null;currentRejectRequestId=""}
         if(currentSource===source){currentSource=null;currentSourceRequestId=""}
         try{source.disconnect()}catch(_){}
@@ -224,17 +208,12 @@
     const opts=options||{};
     const requestId=String(opts.requestId||("render-"+(++requestSerial)));
     activeRequestId=requestId;
-
     const ctx=getAudioContext();
-    if(!ctx){
-      if(welcomeVisible())throw new Error("Web Audio désactivé sur l’accueil.");
-      throw new Error("Web Audio indisponible.");
-    }
+    if(!ctx){if(welcomeVisible())throw new Error("Web Audio désactivé sur l’accueil.");throw new Error("Web Audio indisponible.")}
     if(ctx.state!=="running"){
       const ok=await unlockAudio();
-      if(!ok)throw new Error("Audio Android verrouillé. Appuyez sur un bouton de l’application puis réessayez.");
+      if(!ok)throw new Error("Audio Android verrouillé.");
     }
-
     try{
       const meta=await fetchAudio(clean);
       assertActive(requestId);
@@ -250,10 +229,7 @@
 
   function stop(options){
     const requested=typeof options==="string"?options:String(options?.requestId||activeRequestId||currentSourceRequestId||"");
-    if(requested&&activeRequestId&&requested!==activeRequestId){
-      emit("stale-stop-ignored",{requestId:requested,activeRequestId,adoptedEarlyContext});
-      return false;
-    }
+    if(requested&&activeRequestId&&requested!==activeRequestId){emit("stale-stop-ignored",{requestId:requested,activeRequestId,adoptedEarlyContext});return false}
     const reject=(currentRejectRequestId&&(!requested||currentRejectRequestId===requested))?currentReject:null;
     if(reject){currentReject=null;currentRejectRequestId=""}
     stopSource(requested);
@@ -266,10 +242,8 @@
   function status(){
     const ctx=audioContext;
     const early=window.__libcomlairEarlyAudioStatus||{};
-    return {version:"azure-first-v199-lazy-welcome-blocked",ready:prepared,audioState:ctx?ctx.state:"none",welcomeBlocked:welcomeVisible(),endpoint:PRIMARY_TTS_URL,fallbackEndpoint:FALLBACK_TTS_URL,activeRequestId,currentSourceRequestId,adoptedEarlyContext,earlyAudio:{...early},last:{...last}};
+    return {version:"azure-first-v199-no-gesture-fallback",ready:prepared,audioState:ctx?ctx.state:"none",welcomeBlocked:welcomeVisible(),endpoint:PRIMARY_TTS_URL,fallbackEndpoint:FALLBACK_TTS_URL,activeRequestId,currentSourceRequestId,adoptedEarlyContext,earlyAudio:{...early},last:{...last}};
   }
 
-  window.LibcomlairRenderVoice=Object.freeze({version:"azure-first-v199-lazy-welcome-blocked",prepare,prefetch,speak,stop,unlockAudio,status});
-  // Aucune création d'AudioContext ni préparation Render au chargement.
-  // Tant que l'écran Bienvenue est visible, Web Audio reste explicitement désactivé.
+  window.LibcomlairRenderVoice=Object.freeze({version:"azure-first-v199-no-gesture-fallback",prepare,prefetch,speak,stop,unlockAudio,status});
 })();
