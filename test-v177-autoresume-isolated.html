@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libcomlair — test V177 auto-resume</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;padding:24px;line-height:1.5;background:#fff;color:#111}
+#status,#detail{padding:16px;border:2px solid #111;border-radius:12px;margin-top:18px;font-weight:700;white-space:pre-wrap}
+#detail{font-weight:500;border-width:1px}
+</style>
+</head>
+<body>
+<h1>Test V177 auto-resume</h1>
+<p>Ne touchez pas l’écran pendant 10 secondes.</p>
+<div id="status" role="status" aria-live="polite">Chargement…</div>
+<div id="detail">Diagnostic en cours…</div>
+<p>Cette page utilise uniquement la synthèse vocale système Android. Aucun AudioContext, aucun fichier audio, aucun bouton de secours et aucun événement tactile.</p>
+<script>
+(()=>{
+  "use strict";
+  const status=document.getElementById("status");
+  const detail=document.getElementById("detail");
+  const synth=window.speechSynthesis;
+  let utterance=null;
+  let started=false;
+  const events=[];
+
+  function snapshot(label){
+    let voices=0;
+    try{voices=typeof synth?.getVoices==="function"?synth.getVoices().length:0}catch(_){}
+    const state={
+      label,
+      speaking:!!synth?.speaking,
+      pending:!!synth?.pending,
+      paused:!!synth?.paused,
+      voices
+    };
+    events.push(state);
+    detail.textContent=events.slice(-8).map(x=>`${x.label} — speaking:${x.speaking} pending:${x.pending} paused:${x.paused} voices:${x.voices}`).join("\n");
+  }
+
+  function tryResume(label){
+    try{
+      if(typeof synth?.resume==="function")synth.resume();
+      snapshot(label+" → resume() envoyé");
+    }catch(e){
+      events.push({label:label+" → resume exception "+String(e?.message||e)});
+    }
+  }
+
+  function start(){
+    if(!synth||typeof SpeechSynthesisUtterance!=="function"){
+      status.textContent="speechSynthesis indisponible";
+      return;
+    }
+    try{
+      utterance=new SpeechSynthesisUtterance("Bienvenue dans Libcomlair. Ceci est le test automatique V177 avec reprise Samsung, sans aucun toucher de l’écran.");
+      window.__libcomlairV177AutoResumeUtterance=utterance;
+      utterance.lang="fr-FR";
+      utterance.rate=.9;
+      utterance.volume=1;
+      utterance.pitch=1;
+      utterance.onstart=()=>{
+        started=true;
+        status.textContent="VOIX DÉMARRÉE automatiquement";
+        snapshot("onstart");
+      };
+      utterance.onend=()=>{
+        status.textContent="Voix terminée";
+        snapshot("onend");
+      };
+      utterance.onerror=e=>{
+        status.textContent="Erreur speechSynthesis : "+String(e?.error||"inconnue");
+        snapshot("onerror:"+String(e?.error||"inconnue"));
+      };
+      synth.speak(utterance);
+      status.textContent="speak() envoyé à 700 ms — tentative automatique de reprise Samsung…";
+      snapshot("après speak");
+
+      setTimeout(()=>{if(!started)tryResume("+650 ms")},650);
+      setTimeout(()=>{if(!started)tryResume("+1300 ms")},1300);
+      setTimeout(()=>{if(!started)tryResume("+2300 ms")},2300);
+      setTimeout(()=>{if(!started)tryResume("+3800 ms")},3800);
+      setTimeout(()=>{
+        if(!started){
+          status.textContent="Aucun démarrage après 8 secondes";
+          snapshot("fin 8 s");
+        }
+      },8000);
+    }catch(e){
+      status.textContent="Exception : "+String(e?.message||e);
+    }
+  }
+
+  try{
+    synth?.addEventListener?.("voiceschanged",()=>{
+      snapshot("voiceschanged");
+      if(!started&&synth?.pending)tryResume("voiceschanged");
+    });
+  }catch(_){}
+
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(start,700),{once:true});
+  else setTimeout(start,700);
+})();
+</script>
+</body>
+</html>
