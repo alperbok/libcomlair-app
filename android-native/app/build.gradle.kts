@@ -10,8 +10,8 @@ android {
         applicationId = "fr.libcomlair.app.mobile"
         minSdk = 24
         targetSdk = 37
-        versionCode = 3
-        versionName = "0.3-libcomlair-integrated-voice"
+        versionCode = 4
+        versionName = "0.4-local-core-integrated-voice"
     }
 
     androidResources {
