@@ -7,21 +7,16 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "fr.libcomlair.app"
+        // Identifiant distinct pour ce prototype afin qu'il puisse être installé à côté de la v0.1.
+        applicationId = "fr.libcomlair.app.verav02"
         minSdk = 24
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1-native-voice"
-    }
-
-    sourceSets {
-        getByName("main") {
-            // Réutilise la source Vera déjà validée dans le dépôt et l'embarque dans l'APK.
-            assets.srcDir("../../voice-tests/fr-FR")
-        }
+        versionCode = 2
+        versionName = "0.2-native-voice"
     }
 
     androidResources {
+        // MediaPlayer doit pouvoir ouvrir directement la ressource WAV native.
         noCompress += "wav"
     }
 
