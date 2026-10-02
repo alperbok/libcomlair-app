@@ -1,22 +1,20 @@
 (()=>{
 "use strict";
 
-const VERSION="v224-welcome-system-autostart-v1";
+const VERSION="v224-welcome-system-autostart-v2-no-touch-fallback";
 const WELCOME_ID="welcome.main";
 const WELCOME_MESSAGE="Bienvenue dans Libcomlair. Ensemble, rendons les lieux accessibles plus faciles à trouver pour tous. Appuyez sur Suivant pour commencer.";
-const GESTURE_EVENTS=["pointerdown","touchstart","click","keydown"];
 
 const synth=window.speechSynthesis;
 const available=!!synth&&typeof window.SpeechSynthesisUtterance==="function";
 let speaking=false;
 let playPending=false;
-let gestureArmed=false;
 let started=false;
 let utterance=null;
-let last={time:0,state:"idle",source:"speechSynthesis-v162-style",detail:""};
+let last={time:0,state:"idle",source:"speechSynthesis-v162-style-no-touch",detail:""};
 
 function remember(state,detail=""){
-  last={time:Date.now(),state:String(state||""),source:"speechSynthesis-v162-style",detail:String(detail||"")};
+  last={time:Date.now(),state:String(state||""),source:"speechSynthesis-v162-style-no-touch",detail:String(detail||"")};
   try{window.dispatchEvent(new CustomEvent("libcomlair-welcome-audio-status",{detail:{...last}}))}catch(_){}
 }
 
@@ -36,25 +34,7 @@ function keepNavigationReady(){
   return true;
 }
 
-function disarmGestureFallback(){
-  if(!gestureArmed)return;
-  gestureArmed=false;
-  for(const type of GESTURE_EVENTS){
-    try{document.removeEventListener(type,globalGestureHandler,true)}catch(_){}
-  }
-}
-
-function armGestureFallback(){
-  if(gestureArmed||started)return;
-  gestureArmed=true;
-  for(const type of GESTURE_EVENTS){
-    try{document.addEventListener(type,globalGestureHandler,{capture:true,passive:type!=="keydown"})}catch(_){document.addEventListener(type,globalGestureHandler,true)}
-  }
-  remember("waiting-first-gesture","automatic-system-voice-did-not-start");
-}
-
 function stop(){
-  disarmGestureFallback();
   playPending=false;
   speaking=false;
   started=false;
@@ -62,7 +42,7 @@ function stop(){
   try{if(available&&(synth.speaking||synth.pending))synth.cancel()}catch(_){}
 }
 
-function makeUtterance(fromGesture){
+function makeUtterance(){
   const u=new SpeechSynthesisUtterance(WELCOME_MESSAGE);
   utterance=u;
   window.__libcomlairWelcomeSystemUtterance=u;
@@ -75,8 +55,7 @@ function makeUtterance(fromGesture){
     started=true;
     speaking=true;
     playPending=false;
-    disarmGestureFallback();
-    remember("speaking",fromGesture?"gesture-fallback":"automatic-v162-style");
+    remember("speaking","automatic-v162-style");
   };
   u.onend=()=>{
     if(utterance!==u)return;
@@ -89,50 +68,33 @@ function makeUtterance(fromGesture){
     speaking=false;
     playPending=false;
     remember("speech-error",e?.error||"speech_error");
-    if(!fromGesture)armGestureFallback();
   };
   return u;
 }
 
-function playNow(fromGesture=false){
+function playNow(){
   keepNavigationReady();
   if(!available){remember("unavailable","speechSynthesis-missing");return false}
   if(!isWelcome()||speaking||playPending||started)return false;
   playPending=true;
-  remember(fromGesture?"gesture-speech-attempt":"automatic-speech-attempt",WELCOME_ID);
+  remember("automatic-speech-attempt",WELCOME_ID);
   try{
-    if(fromGesture&&synth&&(synth.speaking||synth.pending)){
-      try{synth.cancel()}catch(_){}
-    }
-    const u=makeUtterance(fromGesture);
+    const u=makeUtterance();
     synth.speak(u);
-    if(!fromGesture){
-      setTimeout(()=>{
-        if(utterance!==u||started)return;
-        playPending=false;
-        armGestureFallback();
-      },1400);
-    }
     return true;
   }catch(error){
     playPending=false;
     remember("speech-exception",error?.message||String(error||"speech_exception"));
-    if(!fromGesture)armGestureFallback();
     return false;
   }
-}
-
-function globalGestureHandler(){
-  if(!isWelcome()){disarmGestureFallback();return}
-  playNow(true);
 }
 
 function scheduleAutomatic(){
   keepNavigationReady();
   setTimeout(()=>{
     if(started||speaking||playPending)return;
-    if(isWelcome())playNow(false);
-    else setTimeout(()=>{if(!started&&!speaking&&!playPending&&isWelcome())playNow(false)},500);
+    if(isWelcome())playNow();
+    else setTimeout(()=>{if(!started&&!speaking&&!playPending&&isWelcome())playNow()},500);
   },700);
 }
 
@@ -147,16 +109,14 @@ const api=Object.freeze({
   welcomeId:WELCOME_ID,
   message:WELCOME_MESSAGE,
   bind,
-  tryAutomatic:()=>playNow(false),
-  tryFromGesture:()=>playNow(true),
+  tryAutomatic:playNow,
   stop,
-  status:()=>({...last,navigationBlocked:false,networkFallback:false,renderDependency:false,systemSpeechAvailable:available,gestureFallbackArmed:gestureArmed,speaking,playPending,started})
+  status:()=>({...last,navigationBlocked:false,networkFallback:false,renderDependency:false,systemSpeechAvailable:available,gestureFallbackArmed:false,speaking,playPending,started})
 });
 
 // Compatibilité avec le présentateur général : l'accueil possède sa propre lecture.
 window.LibcomlairWelcomeListenFirst=api;
 window.LibcomlairWelcomeSystemAutostart=api;
-// Alias conservé pour le diagnostic existant.
 window.LibcomlairWelcomeLocalFirst=api;
 
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind,{once:true});
