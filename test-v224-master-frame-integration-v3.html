@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Libcomlair — cadre maître v6.8.32</title>
+<title>Libcomlair — cadre maître v6.8.33</title>
 </head>
 <body>
 <p>Chargement de Libcomlair…</p>
 <script>
 (async()=>{
   try{
-    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=32",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+    let html=await fetch("test-v224-master-frame-integration-v1.html?stable-wrapper=33",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
 
-    html=html.replace("master-frame-source=3","master-frame-source=44");
-    html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v198.js?v=198-1");
+    html=html.replace("master-frame-source=3","master-frame-source=45");
+    html=html.replace("libcomlair-render-voice-v196.js?v=196-9","libcomlair-render-voice-v199.js?v=199-1");
     html=html.replace("libcomlair-voice-engine-v191.js?v=191-1","libcomlair-voice-engine-v191.js?v=191-3");
     html=html.replace("libcomlair-v224-page4.css?v=master-7","libcomlair-v224-page4.css?v=master-9");
     html=html.replace("libcomlair-v224-needs-profile-sync.js?v=5","libcomlair-v224-needs-profile-sync.js?v=7");
@@ -21,10 +21,8 @@
     html=html.replace("libcomlair-v224-nearby-count-sync-v37.js?v=1","libcomlair-v224-nearby-count-sync-v37.js?v=5");
     html=html.replace("libcomlair-v224-guided-presenter-v10.js?v=1","libcomlair-v224-guided-presenter-v10.js?v=2");
 
-    // Retrait robuste de l'ancien parcours « Écouter » : on remplace le nom de fichier,
-    // indépendamment de la façon dont </script> est échappé dans le wrapper historique.
-    html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.js\?v=[^"'\\]+/g,"libcomlair-v224-welcome-system-autostart-v1.js?v=3");
-    // Le CSS historique n'est plus nécessaire : on le neutralise avec la feuille du cadre.
+    // Retrait complet de l'ancien parcours « Écouter » sur l'accueil.
+    html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.js\?v=[^"'\\]+/g,"libcomlair-v224-welcome-system-autostart-v1.js?v=4");
     html=html.replace(/libcomlair-v224-welcome-listen-first-v16\.css\?v=[^"'\\]+/g,"libcomlair-v224-master-frame-integration-v1.css?v=21");
 
     html=html.replace(
@@ -44,7 +42,7 @@
       'libcomlair-v224-master-frame-integration-v1.js?v=15"><\\/script><script src="libcomlair-v224-frame-fixes-v6.js?v=6"><\\/script><script src="libcomlair-v224-data-count-diagnostic.js?v=3"><\\/script><script src="libcomlair-v224-voice-independence-v1.js?v=1"><\\/script><script src="libcomlair-local-audio-library-v1.js?v=1"><\\/script><script src="libcomlair-v224-welcome-local-recorder-v1.js?v=1"><\\/script><script src="libcomlair-v224-voice-local-coverage-v1.js?v=2"><\\/script><script src="libcomlair-v224-autonomy-dashboard-v1.js?v=3"><\\/script><script src="libcomlair-v224-maintenance-inspector-v1.js?v=1"><\\/script><script src="libcomlair-v224-technical-menu-access-v1.js?v=4"><\\/script><script src="libcomlair-v224-welcome-audio-maintenance-ui-v1.js?v=1"><\\/script><script src="libcomlair-v224-external-services-test-v1.js?v=1"><\\/script><script src="libcomlair-v224-welcome-autoplay-diagnostic-v1.js?v=1"><\\/script>'
     );
 
-    html=html.replace("v17-master-source-cleanup","v17-master-source-cleanup-6.8.32-no-listen-first");
+    html=html.replace("v17-master-source-cleanup","v17-master-source-cleanup-6.8.33-no-eager-audiocontext");
 
     document.open();
     document.write(html);
