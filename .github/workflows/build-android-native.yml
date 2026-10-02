@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build-debug-apk:
-    name: Build native debug APK
+    name: Build Libcomlair Android APK
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -47,24 +47,24 @@ jobs:
               print("Vera WAV OK: PCM16 mono 24000 Hz")
           PY
 
-      - name: Package Vera as Android raw resource
+      - name: Package Vera inside Libcomlair
         run: |
           mkdir -p android-native/app/src/main/res/raw
           cp voice-tests/fr-FR/vera-welcome.wav android-native/app/src/main/res/raw/vera_welcome.wav
           test -s android-native/app/src/main/res/raw/vera_welcome.wav
 
-      - name: Build debug APK
+      - name: Build Libcomlair APK
         run: gradle -p android-native :app:assembleDebug --stacktrace
 
-      - name: Verify APK
+      - name: Verify Libcomlair APK
         run: |
           test -s android-native/app/build/outputs/apk/debug/app-debug.apk
           unzip -l android-native/app/build/outputs/apk/debug/app-debug.apk | grep -E "res/raw/vera_welcome.wav|res/[A-Za-z0-9._-]+" >/dev/null
 
-      - name: Upload installable APK
+      - name: Upload Libcomlair APK
         uses: actions/upload-artifact@v4
         with:
-          name: libcomlair-android-native-vera-v02
+          name: libcomlair-android-v03-integrated-voice
           path: android-native/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
