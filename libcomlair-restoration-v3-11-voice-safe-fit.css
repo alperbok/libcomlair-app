@@ -1,0 +1,133 @@
+/* Libcomlair — validation v3.11
+   Objectif: restaurer tout le contenu Navigation vocale et le faire tenir sans depassement.
+   Reprend les reglages v3.9 valides pour Categories et Mes besoins.
+   Ne touche ni au Micro ni au logo.
+*/
+@media (max-width:540px){
+  /* Mes besoins : conserver le reglage v3.9. */
+  body.v224-onboarding-needs.v224-master-frame-active #v224MasterShell > #mainContent{
+    min-height:calc(100dvh - 183px)!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active #accessNeedsSection > h2{
+    margin-top:3px!important;
+    margin-bottom:1px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active #activeAccessProfile{
+    margin-bottom:5px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folders{
+    gap:3px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder > summary{
+    min-height:45px!important;
+    padding-top:7px!important;
+    padding-bottom:7px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder-body{
+    padding-top:5px!important;
+    padding-bottom:5px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder-body .data-note{
+    margin-bottom:3px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-criterion{
+    min-height:35px!important;
+    padding-top:3px!important;
+    padding-bottom:3px!important;
+  }
+
+  /* Recherche / Categories : conserver le reglage v3.9 valide Samsung. */
+  body.v224-page4-step:not(.v224-page5-step).v224-master-frame-active #mainContent > #v224Page4Categories{
+    row-gap:8px!important;
+  }
+  body.v224-page4-step:not(.v224-page5-step).v224-master-frame-active #v224Page4Categories > h2{
+    margin-top:0!important;
+    margin-bottom:2px!important;
+  }
+
+  /* Navigation vocale : contenu toujours visible, sans compression destructive. */
+  body.v224-onboarding-voice.v224-master-frame-active #v224VoiceScreenFresh{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    padding:0 6px 2px!important;
+    gap:3px!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-title{
+    flex:0 0 auto!important;
+    margin:1px 0 3px!important;
+    line-height:1.05!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-fieldset{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:8px 8px 6px!important;
+    gap:4px!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-card{
+    display:grid!important;
+    grid-template-columns:42px 1fr!important;
+    gap:7px!important;
+    align-items:center!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    min-height:108px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:6px 8px!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-content{
+    display:flex!important;
+    flex-direction:column!important;
+    min-height:0!important;
+    gap:3px!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-boxed{
+    margin:0!important;
+    padding-top:5px!important;
+    padding-bottom:5px!important;
+    line-height:1.05!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-help{
+    display:block!important;
+    visibility:visible!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:0!important;
+    font-size:.94rem!important;
+    line-height:1.08!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-note{
+    display:block!important;
+    visibility:visible!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:2px 0 0!important;
+    padding:0 3px!important;
+    font-size:.86rem!important;
+    line-height:1.08!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-status{
+    display:block!important;
+    visibility:visible!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:2px 0 0!important;
+    padding:0 3px!important;
+    font-size:.86rem!important;
+    line-height:1.06!important;
+  }
+}
