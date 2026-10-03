@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Libcomlair — test restauration v3.11</title>
+<meta name="theme-color" content="#165f70">
+<style>
+html,body{margin:0;padding:0;width:100%;min-height:100%;background:#eef7f8;overflow-x:hidden}
+#cleanAppFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff;visibility:hidden;z-index:1}
+#libcomlairSplash{position:relative;z-index:20;width:100%;min-height:100vh;background:#eef7f8}
+.clean-welcome-screen{position:relative;width:100vw;max-width:941px;margin:0 auto;line-height:0;background:#eef7f8}
+.clean-welcome-image{display:block;width:100%;height:auto;border:0;margin:0;padding:0}
+/* Accueil v3.4 valide : ne pas modifier. */
+#libcomlairSplashNext{position:absolute;left:6.15%;right:6.15%;bottom:3.75%;height:6.9%;box-sizing:border-box;margin:0;padding:0 12px;display:flex;align-items:center;justify-content:center;appearance:none;-webkit-appearance:none;background:#027280;color:#fff;border:0;border-radius:26px;box-shadow:none;font:800 clamp(23px,5.2vw,38px)/1.1 Arial,sans-serif;text-align:center;cursor:pointer;z-index:30;-webkit-tap-highlight-color:transparent}
+#libcomlairSplashNext[data-v224-welcome-stage="listen"]{padding-bottom:0}
+#libcomlairSplashNext[data-v224-welcome-stage="loading"]{font-size:clamp(17px,4vw,27px);padding-bottom:0}
+#libcomlairSplashNext[data-v224-welcome-stage="next"]{background:transparent;color:transparent;padding-bottom:0}
+#libcomlairSplashNext:focus-visible{outline:5px solid #ffca3a;outline-offset:3px}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+</style>
+</head>
+<body>
+<iframe id="cleanAppFrame" title="Application Libcomlair — restauration v3.11" src="libcomlair-restoration-inner-v3-clean.html?restoration-test-v3-11=1"></iframe>
+<section id="libcomlairSplash" aria-labelledby="libcomlairSplashTitle">
+  <div class="clean-welcome-screen">
+    <h1 id="libcomlairSplashTitle" class="sr-only">Bienvenue dans Libcomlair</h1>
+    <img class="clean-welcome-image" src="assets/libcomlair-welcome-v224.jpg?v=clean-entry-v1" alt="Bienvenue dans Libcomlair. Une personne en fauteuil roulant et une femme malvoyante avec une canne blanche et son chien guide se déplacent dans une ville accessible.">
+    <button id="libcomlairSplashNext" type="button" aria-label="Ouvrir Libcomlair et écouter le message de bienvenue">Ouvrir</button>
+  </div>
+</section>
+<script src="libcomlair-render-voice-v196-historical.js?v=clean1"></script>
+<script src="libcomlair-voice-engine-v191-historical.js?v=clean1"></script>
+<script src="libcomlair-v224-welcome-open-historical.js?v=clean1"></script>
+<script>
+(()=>{
+  const splash=document.getElementById('libcomlairSplash');
+  const button=document.getElementById('libcomlairSplashNext');
+  const frame=document.getElementById('cleanAppFrame');
+  let frameReady=false,entering=false;
+
+  function injectV311(){
+    try{
+      const doc=frame.contentDocument;
+      if(!doc||!doc.head)return false;
+      if(!doc.getElementById('libcomlairV311VoiceSafeFit')){
+        const link=doc.createElement('link');
+        link.id='libcomlairV311VoiceSafeFit';
+        link.rel='stylesheet';
+        link.href='libcomlair-restoration-v3-11-voice-safe-fit.css?v=311';
+        doc.head.appendChild(link);
+      }
+      return true;
+    }catch(_){return false}
+  }
+
+  frame.addEventListener('load',()=>{frameReady=true;injectV311();setTimeout(injectV311,100)});
+
+  function openInnerProfile(){
+    try{
+      const win=frame.contentWindow,doc=frame.contentDocument;
+      if(!doc)return false;
+      injectV311();
+      try{win.LibcomlairVoice?.cancel?.()}catch(_){}
+      const innerSplash=doc.getElementById('libcomlairSplash');
+      const welcome=doc.getElementById('accessWelcome');
+      const title=doc.getElementById('accessWelcomeTitle');
+      if(innerSplash){innerSplash.hidden=true;innerSplash.setAttribute('aria-hidden','true');innerSplash.style.setProperty('display','none','important')}
+      doc.body.classList.remove('v221-onboarding');
+      doc.body.classList.add('v221-profile-step');
+      if(welcome){welcome.hidden=false;welcome.removeAttribute('aria-hidden')}
+      requestAnimationFrame(()=>{try{(title||welcome)?.scrollIntoView({block:'start'});(title||welcome)?.focus?.()}catch(_){}});
+      return !!welcome;
+    }catch(_){return false}
+  }
+
+  function enterApp(){
+    if(entering)return;
+    entering=true;
+    try{window.LibcomlairVoice?.cancel?.()}catch(_){}
+    const reveal=()=>{openInnerProfile();frame.style.visibility='visible';splash.hidden=true;document.body.style.overflow='hidden'};
+    if(frameReady)reveal();else frame.addEventListener('load',reveal,{once:true});
+  }
+
+  button.addEventListener('click',()=>{if(window.LibcomlairWelcomeListenFirst?.stage?.()==='next')enterApp()},false);
+})();
+</script>
+</body>
+</html>
