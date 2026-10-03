@@ -397,3 +397,152 @@ Avant publication :
 16. tester sur smartphone Android réel.
 
 Une restauration ou une refonte n’est pas considérée terminée avant cette revue complète.
+
+---
+
+# 12. Addendum — dernière passe de contrôle de la valise
+
+## 12.1 Sources nationales de données à conserver
+
+La valise ne se limite pas à IDFM. Les chaînes nationales/régionales préparées ou actives à conserver comprennent :
+
+- Île-de-France Mobilités / IDFM ;
+- Acceslibre ;
+- gares SNCF ;
+- Vitalis / Grand Poitiers ;
+- leurs workflows de mise à jour et contrôles de fraîcheur ;
+- les alertes techniques de données trop anciennes doivent rester séparées des diagnostics d’interface.
+
+Références :
+- `.github/workflows/update-acceslibre.yml`
+- `.github/workflows/update-arrets-vitalis.yml`
+- `.github/workflows/update-gares.yml`
+- `.github/workflows/watch-data-updates.yml`
+- workflows IDFM présents dans le dépôt.
+
+## 12.2 Carte officielle des dépendances entre modules
+
+Conserver `data/architecture/libcomlair-module-dependencies-v1.json` comme référence avant modification d’un module.
+
+Cette carte relie chaque fonction à :
+- ses fichiers propriétaires ;
+- ses dépendances ;
+- les tests obligatoires à rejouer.
+
+Exemples protégés : accueil, voix fixe/dynamique, dictionnaires internationaux, passeport d’accessibilité, géolocalisation, lieux universels, itinéraires accessibles, synchronisation, droits, fournisseurs de données, diagnostic, maintenance, Autour de moi et Transport.
+
+## 12.3 Tests de référence / golden cases
+
+Conserver et utiliser :
+- `tests/golden-cases-v1.json`
+- `tests/reference-journeys.json`.
+
+Les parcours actuels à rejouer après une grosse modification comprennent au minimum :
+- première entrée Vision ;
+- Restaurant → critère → résultat → fiche → retours ;
+- ajout/retrait d’un critère au Micro avec confirmation vocale ;
+- Transport → arrêt → identifiant/adresse → lignes/directions → lecture vocale ;
+- Autour de moi → position → compteur → liste → carte ;
+- Diagnostic/Réparation.
+
+Les parcours GPS mondial, passage de frontière et hors ligne restent **futurs** tant qu’ils ne sont pas activés et validés.
+
+## 12.4 Intégrité des données et migrations
+
+Référence : `data/architecture/data-migrations-registry-v1.json`.
+
+Règles :
+- perte de données interdite par défaut ;
+- sauvegarde avant migration destructive ;
+- ancien format encore lisible jusqu’à validation ;
+- stratégie de retour arrière obligatoire ;
+- validation sur téléphone si des données utilisateur sont affectées ;
+- une position GPS éphémère ne doit jamais devenir persistante par migration ;
+- historique légal et droits/licences traçables.
+
+## 12.5 Passeport d’accessibilité futur
+
+Référence : `data/profile/accessibility-passport-schema-v1.json`.
+
+Règles :
+- besoins fonctionnels plutôt que diagnostic médical ;
+- compte facultatif ;
+- fonctionnement local toujours disponible ;
+- langue indépendante du pays ;
+- pays de recherche indépendant du GPS ;
+- aucune synchronisation distante ne doit écraser silencieusement le profil local ;
+- migration depuis `libcomlair-access-profile-v1` sans supprimer l’ancien profil avant validation.
+
+## 12.6 Modèle universel des lieux
+
+Référence : `data/places/place-record-schema-v1.json`.
+
+Règles :
+- l’accessibilité d’un lieu n’est jamais un simple oui/non global ;
+- une valeur inconnue reste inconnue ;
+- plusieurs entrées d’un même lieu peuvent avoir des accessibilités différentes ;
+- provenance et preuve restent attachées aux critères ;
+- conflits de sources conservés et visibles ;
+- conditions temporaires et dates de validité ;
+- identifiants externes ne remplacent pas l’identifiant interne Libcomlair ;
+- fusion de données réversible.
+
+## 12.7 Itinéraires accessibles futurs
+
+Référence : `data/routes/accessibility-route-schema-v1.json`.
+
+Règles :
+- accessibilité calculée segment par segment ;
+- segment inconnu reste inconnu ;
+- condition temporaire peut invalider un trajet ;
+- calculer un trajet ne modifie jamais le profil ;
+- un lieu accessible ne garantit pas un trajet accessible jusqu’à lui.
+
+## 12.8 Synchronisation future
+
+Référence : `data/sync/sync-envelope-schema-v1.json`.
+
+Règles :
+- usage local possible sans compte ;
+- file hors ligne conservée après redémarrage ;
+- aucun écrasement silencieux local ou distant ;
+- conflits visibles et explicitement résolus ;
+- suppression distante uniquement après action explicite de l’utilisateur ;
+- préférences fonctionnelles sensibles synchronisées uniquement avec choix explicite.
+
+## 12.9 Contrats fournisseurs de données
+
+Référence : `data/architecture/provider-contract-schema-v1.json`.
+
+Un fournisseur externe ne doit jamais définir directement :
+- l’interface ;
+- les identifiants internes Libcomlair ;
+- la position de l’appareil.
+
+Chaque adaptateur doit gérer normalisation, unités, pagination, valeurs manquantes, panne du fournisseur et métadonnées de provenance. Les droits/licences doivent être vérifiés avant intégration hors ligne ; un droit inconnu signifie **pas d’autorisation d’embarquer la ressource**.
+
+## 12.10 Sauvegardes et surveillance
+
+Conserver l’infrastructure de sauvegarde :
+- bundle Git complet ;
+- archive ;
+- SHA et SHA-256 ;
+- vérification `git fsck` ;
+- surveillance des sauvegardes trop anciennes ou en échec.
+
+Références :
+- `BACKUP-MANIFEST-2026-09-25.md`
+- `.github/workflows/backup-repository.yml`
+- `.github/workflows/watch-backups.yml`.
+
+## 12.11 Périmètre explicite de la « valise Libcomlair »
+
+**EXCLUSION DÉCIDÉE : APK / application Android native / emballage destiné au téléchargement téléphone.**
+
+Ces anciens prototypes peuvent rester dans le dépôt à titre historique mais :
+- ne guident pas l’architecture de la valise ;
+- ne doivent pas être utilisés pour restaurer l’application actuelle ;
+- ne doivent pas réintroduire d’anciens moteurs vocaux ou comportements ;
+- ne sont à réexaminer que si une décision future explicite les remet dans le périmètre.
+
+La valise concerne l’application et ses capacités propres : interface, cadre, voix, Micro, profils, données, recherche, GPS/carte, transports, menus, diagnostic/réparation, sauvegardes, fonctionnement local/hors ligne et projets France/international préparés.
