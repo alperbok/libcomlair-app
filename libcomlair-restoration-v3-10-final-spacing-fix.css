@@ -1,0 +1,99 @@
+/* Libcomlair — correctif de validation v3.10 consolidé
+   TEMPORAIRE : remplace le patch v3.9 dans le test v3.10.
+   Ne touche ni au Micro, ni au logo.
+   Reprend les espacements v3.9 deja bons et compacte uniquement Navigation vocale.
+*/
+@media (max-width:540px){
+  /* Mes besoins : conserver le reglage v3.9. */
+  body.v224-onboarding-needs.v224-master-frame-active #v224MasterShell > #mainContent{
+    min-height:calc(100dvh - 183px)!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active #accessNeedsSection > h2{
+    margin-top:3px!important;
+    margin-bottom:1px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active #activeAccessProfile{
+    margin-bottom:5px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folders{
+    gap:3px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder > summary{
+    min-height:45px!important;
+    padding-top:7px!important;
+    padding-bottom:7px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder-body{
+    padding-top:5px!important;
+    padding-bottom:5px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder-body .data-note{
+    margin-bottom:3px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-criterion{
+    min-height:35px!important;
+    padding-top:3px!important;
+    padding-bottom:3px!important;
+  }
+
+  /* Recherche / Categories : reglage v3.9 valide sur Samsung. */
+  body.v224-page4-step:not(.v224-page5-step).v224-master-frame-active #mainContent > #v224Page4Categories{
+    row-gap:8px!important;
+  }
+  body.v224-page4-step:not(.v224-page5-step).v224-master-frame-active #v224Page4Categories > h2{
+    margin-top:0!important;
+    margin-bottom:2px!important;
+  }
+
+  /* Navigation vocale : gagner de la hauteur sans supprimer de contenu. */
+  body.v224-onboarding-voice.v224-master-frame-active #v224VoiceScreenFresh{
+    height:100%!important;
+    min-height:0!important;
+    padding:0 6px 2px!important;
+    gap:3px!important;
+    overflow:hidden!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-title{
+    margin:1px 0 3px!important;
+    line-height:1.05!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-fieldset{
+    flex:1 1 0!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:10px 8px 7px!important;
+    gap:5px!important;
+    overflow:hidden!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-card{
+    min-height:116px!important;
+    padding:7px 8px!important;
+    gap:7px!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-content{
+    gap:4px!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-boxed{
+    margin-top:0!important;
+    margin-bottom:0!important;
+    padding-top:6px!important;
+    padding-bottom:6px!important;
+    line-height:1.05!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-help{
+    margin:0!important;
+    line-height:1.12!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-note{
+    margin:4px 0 0!important;
+    padding:0 4px!important;
+    font-size:.91rem!important;
+    line-height:1.12!important;
+  }
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-status{
+    margin:3px 0 0!important;
+    padding:0 4px!important;
+    font-size:.91rem!important;
+    line-height:1.08!important;
+  }
+}
