@@ -1,4 +1,4 @@
-# Libcomlair — Corrections cadre v3.7
+# Libcomlair — Corrections cadre v3.7 / v3.8 clean
 
 Date : 2026-10-03
 Statut global : À REVALIDER SUR TÉLÉPHONE
@@ -7,61 +7,82 @@ Ce document complète l’audit Diagnostic/Réparation du 03/10/2026. Il ne tran
 
 ## 1. Logo d’en-tête décentré
 
-Statut : correctif candidat v3.7 — à revalider.
+Statut : v3.7 non validé ; nouvelle correction intégrée au socle clean v3.8 — à revalider.
 
 Symptôme : sur toutes les pages utilisant le cadre de référence, le logo Libcomlair apparaît décalé vers la droite alors que Menu et Micro sont correctement positionnés.
 
-Cause trouvée : `libcomlair-v224-clean-logo.js` applique `transform:none!important` directement sur les logos. Le cadre de référence v2 utilisait `translateX(-50%)` pour centrer le logo ; cette translation était donc neutralisée.
+Cause trouvée : `libcomlair-v224-clean-logo.js` applique `transform:none!important` directement aux logos. Le cadre de référence v2 utilisait `translateX(-50%)` pour centrer le logo ; cette translation était donc neutralisée.
 
-Correctif candidat : ne plus dépendre d’un transform. Centrer le logo par la géométrie du header : padding gauche/droite symétrique, conteneur flex centré, logo en position relative avec marges automatiques.
+Résultat du test v3.7 : le logo reste trop à droite.
 
-Fichier test : `libcomlair-restoration-frame-reference-v3-fixes.css`.
+Correctif v3.8 clean : ne plus centrer le logo sur toute la largeur de l’écran et ne plus utiliser de transform. Le logo est positionné dans l’espace réellement disponible entre le bord droit du Menu et le bord gauche du Micro. Le Micro validé reste inchangé.
 
-Test attendu : logo centré de façon identique sur Profil, Navigation vocale, Présentation, Mes besoins, Accueil/Recherche, Carte/GPS, Catégories, Sous-catégories et pages profondes.
+Fichier canonique de test : `libcomlair-restoration-frame-reference-v4-clean.css`.
 
-## 2. Navigation vocale — contenu central disparu
+Test attendu : logo visuellement centré entre Menu et Micro de façon identique sur Profil, Navigation vocale, Présentation, Mes besoins, Accueil/Recherche, Carte/GPS, Catégories, Sous-catégories et pages profondes.
 
-Statut : correctif candidat v3.7 — à revalider.
+## 2. Navigation vocale — contenu central / hauteur du cadre
 
-Symptôme : titre « Navigation vocale » et légende visibles, mais les cartes « Découverte guidée » et « Simplifié » disparaissent.
+Statut : contenu restauré en v3.7 ; hauteur à revalider en v3.8 clean.
 
-Cause probable confirmée par l’historique : combinaison `flex:1 1 0`, hauteur minimale nulle et overflow masqué qui permet aux cartes de s’effondrer. Le même défaut avait déjà été réparé dans la restauration v3.2.
+Symptôme initial : titre « Navigation vocale » et légende visibles, mais les cartes « Découverte guidée » et « Simplifié » disparaissaient.
 
-Correctif candidat : restaurer des cartes non compressibles avec hauteur minimale, contenu/help explicitement visibles et fieldset en colonne.
+Cause : combinaison de règles flex/overflow permettant aux cartes de s’effondrer.
 
-Fichier test : `libcomlair-restoration-frame-reference-v3-fixes.css`.
+Résultat du test v3.7 : les deux cartes sont revenues, mais le cadre « Niveau d’assistance vocale » descend trop bas sous le contenu.
 
-Test attendu : les deux cartes, leurs explications, la note et le statut sont visibles sans scroll fantôme.
+Correctif v3.8 clean : fieldset en hauteur naturelle (`flex:0 0 auto`, `height:auto`) ; cartes visibles et non compressibles ; pas de grande traîne vide en bas du cadre interne.
+
+Fichier canonique de test : `libcomlair-restoration-frame-reference-v4-clean.css`.
+
+Test attendu : les deux cartes, leurs explications, la note et le statut sont visibles ; le cadre s’arrête après le contenu utile ; pas de scroll fantôme.
 
 ## 3. Recherche / Catégories — Transports sort en bas du cadre
 
-Statut : correctif candidat v3.7 — à revalider.
+Statut : v3.7 non validé ; nouvelle valeur intégrée au socle clean v3.8 — à revalider.
 
 Symptôme : la case Transports descend sous la limite basse du cadre central.
 
-Cause : l’addition des espacements verticaux dans la grille consomme quelques pixels de trop après l’agrandissement de l’en-tête de référence.
+Cause : l’addition des espacements verticaux entre les quatre rangées consomme trop de hauteur après l’agrandissement de l’en-tête.
 
-Correctif candidat : réduire légèrement `row-gap` et supprimer le padding bas résiduel, sans modifier la taille ou le style des cases.
+Résultat du test v3.7 : Transports dépasse encore légèrement.
 
-Fichier test : `libcomlair-restoration-frame-reference-v3-fixes.css`.
+Correctif v3.8 clean : conserver la hauteur des cases et réduire uniquement l’espacement vertical canonique entre les rangées (`row-gap` de 17px à 12px), sans modifier le Micro ni le style des catégories.
+
+Fichier canonique de test : `libcomlair-restoration-frame-reference-v4-clean.css`.
 
 Test attendu : les sept catégories, y compris Transports, restent entièrement dans le cadre central.
 
 ## 4. Retour depuis une sous-catégorie
 
-Statut : correctif candidat v3.7 — à revalider.
+Statut : correctif candidat — encore à revalider sur le parcours complet.
 
-Symptôme : après ouverture d’une grande catégorie puis affichage de ses sous-catégories, Retour ramène vers un écran « Catégories » partiel, sans le haut complet de la page Recherche.
+Symptôme : après ouverture d’une grande catégorie puis affichage de ses sous-catégories, Retour ramenait vers un écran « Catégories » partiel, sans le haut complet de la page Recherche.
 
-Cause trouvée : `handlePage5Back()` appelle historiquement `showPage4("categories")`, ce qui force le retour directement sur la zone Catégories.
+Cause trouvée : `handlePage5Back()` appelait historiquement `showPage4("categories")`, ce qui force le retour directement sur la zone Catégories.
 
-Correctif candidat de validation : intercepter uniquement le bouton Retour du cadre maître sur une page Sous-catégories simple et appeler `LibcomlairPageFlow.showSearch()`. Les retours depuis Résultats, Carte, Favoris, Filtres, Contribuer ou Fiche détaillée restent inchangés.
+Correctif candidat : intercepter uniquement le Retour du cadre maître sur une page Sous-catégories simple et appeler `LibcomlairPageFlow.showSearch()`. Les retours depuis Résultats, Carte, Favoris, Filtres, Contribuer ou Fiche détaillée restent inchangés.
 
-Fichier test : `libcomlair-restoration-return-fix-v1.js`.
+Fichier : `libcomlair-restoration-return-fix-v1.js`.
 
 Test attendu : Retour depuis une sous-catégorie restaure la page Recherche/Catégories complète, avec recherche, compteur et sept catégories.
 
-## 5. Règle Diagnostic / Réparation à conserver
+## 5. Consolidation anti-régression — socle v3.8 clean
+
+Statut : architecture de test préparée ; à valider sur Samsung avant remplacement du chemin stable.
+
+Décision : ne plus empiler les anciens propriétaires du cadre.
+
+Dans `libcomlair-restoration-inner-v3-clean.html` :
+- `libcomlair-v224-master-frame-integration-v1.css` n’est plus chargé ;
+- `libcomlair-v224-frame-fixes-v6.css` n’est plus chargé ;
+- `libcomlair-v224-frame-fixes-v6.js` est volontairement retiré pour éviter un `MutationObserver` redondant ;
+- `libcomlair-restoration-frame-reference-v4-clean.css` devient l’unique propriétaire CSS du cadre ;
+- les modules encore utiles sont conservés uniquement pour leur fonction propre (voix, données, menu, diagnostic, nettoyage visuel, etc.).
+
+Règle : les anciens fichiers restent dans GitHub pour historique, Diagnostic et Réparation. Ils ne sont supprimés physiquement qu’après validation du chemin clean et vérification qu’aucune fonction utile ne dépend encore d’eux.
+
+## 6. Règle Diagnostic / Réparation à conserver
 
 Une panne passe dans le catalogue de Réparation uniquement après :
 1. symptôme reproduit ;
@@ -70,8 +91,8 @@ Une panne passe dans le catalogue de Réparation uniquement après :
 4. test Samsung Browser réussi ;
 5. absence de régression sur les pages voisines.
 
-Après validation v3.7 :
-- fusionner les règles CSS validées dans le cadre de référence canonique ;
-- intégrer les quatre entrées dans Diagnostic/Réparation ;
+Après validation v3.8 clean :
+- passer les entrées validées dans Diagnostic/Réparation ;
 - mettre à jour le registre des corrections ;
-- créer un point de sauvegarde intermédiaire avant les améliorations de la page Carte / Favoris / Filtres et tri / Contribuer / Résultats.
+- créer un point de sauvegarde intermédiaire ;
+- seulement ensuite travailler les améliorations de la page Carte / Favoris / Filtres et tri / Contribuer / Résultats.
