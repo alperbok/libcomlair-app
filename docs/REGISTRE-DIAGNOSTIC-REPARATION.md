@@ -41,6 +41,35 @@ Ce registre sert de point d’entrée lorsqu’un problème apparaît. Il compl�
 | Licences / conformité | en cours | registre, version, licence moteur/modèle/données | bloquer intégration non conforme | composant alternatif autorisé | audit documentaire |
 | Sauvegarde / restauration projet | ok, à tester périodiquement | bundle, archive, SHA-256, reconstruction | restaurer depuis sauvegarde indépendante | copie externe | reconstruction complète |
 
+## Validation restauration — 03/10/2026
+
+### Navigation vocale — réparée et validée Samsung
+
+- Symptôme : contenu de `Navigation vocale` partiellement ou totalement masqué après compactage ; dans la tentative v3.10, seules le titre et la légende pouvaient rester visibles.
+- Cause : combinaison de `flex` compressible et `overflow:hidden` sur le contenu, puis compactage trop agressif des zones inférieures.
+- Réparation validée : hauteurs naturelles non compressibles, contenu en `overflow:visible`, réduction uniquement des marges/paddings, maintien des deux cartes et des textes du bas, plus restauration de la consigne guidée `Valider / Retour` sous le fieldset.
+- Validation physique : Samsung Browser, 03/10/2026, restauration v3.12.
+- À ne pas réutiliser : stratégie v3.10 avec compression destructive.
+- Fichiers de référence : `libcomlair-restoration-frame-reference-v5-validated.css`, `libcomlair-restoration-v3-12-voice-hint.js`.
+
+### Recherche / Catégories — réparée et validée Samsung
+
+- Symptôme : la case `Transports` et le footer `Retour / Suivant` dépassaient du cadre en bas.
+- Cause : somme des espacements verticaux trop importante après agrandissement de l’en-tête commun.
+- Réparation validée : conserver la hauteur des cartes et réduire le `row-gap` canonique à `8px`, avec marge basse du titre Catégories réduite.
+- Validation physique : Samsung Browser, 03/10/2026 ; page déclarée parfaite par l’utilisateur.
+- Fichier de référence : `libcomlair-restoration-frame-reference-v5-validated.css`.
+
+### Consolidation anti-régression — cadre canonique v5
+
+- But : ne plus charger les patches temporaires v3.9, v3.10, v3.11 et v3.12 comme couches successives.
+- Nouveau propriétaire CSS du cadre : `libcomlair-restoration-frame-reference-v5-validated.css`.
+- Nouveau chemin interne : `libcomlair-restoration-inner-v4-validated.html`.
+- Nouveau test consolidé : `libcomlair-restoration-test-v3-13.html`.
+- Sauvegarde avant consolidation : branche `backup-v3-12-samsung-valide-2026-10-03`, pointée sur le commit `4ed2978797f56acf0686c7bd9fd235fee2c9a3d5`.
+- État : comportements sources validés en v3.12 ; le chemin consolidé v3.13 doit encore recevoir un contrôle rapide Samsung avant d’être déclaré définitivement validé.
+- Catalogue de réparation préparé : `libcomlair-repair-catalog-extra29-v224.js`. Il reste volontairement non activé tant que le test v3.13 n’a pas confirmé l’absence de régression.
+
 ## Procédure standard lorsqu’une panne est signalée
 
 ### Étape 1 — classer le symptôme
