@@ -1,4 +1,4 @@
-# Libcomlair — Corrections cadre v3.7 / v3.8 clean
+# Libcomlair — Corrections cadre v3.7 / v3.8 clean / v3.9
 
 Date : 2026-10-03
 Statut global : À REVALIDER SUR TÉLÉPHONE
@@ -39,19 +39,19 @@ Test attendu : les deux cartes, leurs explications, la note et le statut sont vi
 
 ## 3. Recherche / Catégories — Transports sort en bas du cadre
 
-Statut : v3.7 non validé ; nouvelle valeur intégrée au socle clean v3.8 — à revalider.
+Statut : v3.8 encore trop serré en bas ; ajustement v3.9 à revalider.
 
-Symptôme : la case Transports descend sous la limite basse du cadre central.
+Symptôme : la case Transports descend sous la limite basse du cadre central, puis le footer Retour / Suivant se retrouve trop bas.
 
-Cause : l’addition des espacements verticaux entre les quatre rangées consomme trop de hauteur après l’agrandissement de l’en-tête.
+Cause : l’addition des espacements verticaux entre les quatre rangées consomme encore trop de hauteur après l’agrandissement de l’en-tête.
 
-Résultat du test v3.7 : Transports dépasse encore légèrement.
+Résultat du test v3.8 : Transports reste encore légèrement trop bas et le footer touche le bas du cadre extérieur.
 
-Correctif v3.8 clean : conserver la hauteur des cases et réduire uniquement l’espacement vertical canonique entre les rangées (`row-gap` de 17px à 12px), sans modifier le Micro ni le style des catégories.
+Correctif candidat v3.9 : conserver la hauteur et le style des cases, réduire encore uniquement l’espacement vertical canonique entre les rangées (`row-gap` de 12px à 8px) et réduire légèrement la marge du titre Catégories.
 
-Fichier canonique de test : `libcomlair-restoration-frame-reference-v4-clean.css`.
+Fichier de validation temporaire : `libcomlair-restoration-v3-9-spacing-fix.css`.
 
-Test attendu : les sept catégories, y compris Transports, restent entièrement dans le cadre central.
+Test attendu : les sept catégories, y compris Transports, restent entièrement dans le cadre central et Retour / Suivant restent entièrement dans le cadre extérieur.
 
 ## 4. Retour depuis une sous-catégorie
 
@@ -82,7 +82,21 @@ Dans `libcomlair-restoration-inner-v3-clean.html` :
 
 Règle : les anciens fichiers restent dans GitHub pour historique, Diagnostic et Réparation. Ils ne sont supprimés physiquement qu’après validation du chemin clean et vérification qu’aucune fonction utile ne dépend encore d’eux.
 
-## 6. Règle Diagnostic / Réparation à conserver
+## 6. Mes besoins — cadre intérieur trop long
+
+Statut : ajustement v3.9 à revalider.
+
+Symptôme : avec un dossier comme Vision ouvert, le cadre intérieur descend trop bas et donne l’impression de dépasser la hauteur utile de la page.
+
+Cause probable : addition de la hauteur minimale du cadre central, des gaps entre dossiers et des marges internes de chaque critère.
+
+Correctif candidat v3.9 : réduire très légèrement la hauteur minimale du cadre central, les gaps entre dossiers, les marges du titre/profil et les espacements internes des critères, sans supprimer le défilement utile quand plusieurs dossiers sont ouverts.
+
+Fichier de validation temporaire : `libcomlair-restoration-v3-9-spacing-fix.css`.
+
+Test attendu : avec Vision ouvert, le cadre intérieur s’arrête plus haut ; avec plusieurs dossiers ouverts, le défilement historique reste disponible.
+
+## 7. Règle Diagnostic / Réparation à conserver
 
 Une panne passe dans le catalogue de Réparation uniquement après :
 1. symptôme reproduit ;
@@ -91,7 +105,9 @@ Une panne passe dans le catalogue de Réparation uniquement après :
 4. test Samsung Browser réussi ;
 5. absence de régression sur les pages voisines.
 
-Après validation v3.8 clean :
+Après validation v3.9 :
+- fusionner les deux ajustements d’espacement dans `libcomlair-restoration-frame-reference-v4-clean.css` ou sa prochaine version canonique ;
+- supprimer le patch temporaire du chemin actif ;
 - passer les entrées validées dans Diagnostic/Réparation ;
 - mettre à jour le registre des corrections ;
 - créer un point de sauvegarde intermédiaire ;
