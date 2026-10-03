@@ -1,0 +1,46 @@
+/* Libcomlair — correctif de validation v3.9
+   TEMPORAIRE : a fusionner dans le cadre canonique apres validation Samsung.
+   Ne touche ni au Micro, ni au logo, ni au fonctionnement du defilement utile.
+*/
+@media (max-width:540px){
+  /* Mes besoins : raccourcir legerement le cadre interieur sans supprimer le defilement. */
+  body.v224-onboarding-needs.v224-master-frame-active #v224MasterShell > #mainContent{
+    min-height:calc(100dvh - 183px)!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active #accessNeedsSection > h2{
+    margin-top:3px!important;
+    margin-bottom:1px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active #activeAccessProfile{
+    margin-bottom:5px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folders{
+    gap:3px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder > summary{
+    min-height:45px!important;
+    padding-top:7px!important;
+    padding-bottom:7px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder-body{
+    padding-top:5px!important;
+    padding-bottom:5px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-folder-body .data-note{
+    margin-bottom:3px!important;
+  }
+  body.v224-onboarding-needs.v224-master-frame-active .v224-needs-criterion{
+    min-height:35px!important;
+    padding-top:3px!important;
+    padding-bottom:3px!important;
+  }
+
+  /* Recherche / Categories : conserver les cases, reduire seulement l'espace vertical. */
+  body.v224-page4-step:not(.v224-page5-step).v224-master-frame-active #mainContent > #v224Page4Categories{
+    row-gap:8px!important;
+  }
+  body.v224-page4-step:not(.v224-page5-step).v224-master-frame-active #v224Page4Categories > h2{
+    margin-top:0!important;
+    margin-bottom:2px!important;
+  }
+}
