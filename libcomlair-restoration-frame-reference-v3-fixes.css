@@ -1,0 +1,117 @@
+/* Libcomlair — correctifs de validation v3.7 du cadre de référence
+   A fusionner dans la référence canonique après validation téléphone.
+   - centrage du logo sans transform (compatible avec clean-logo.js)
+   - restauration du contenu Navigation vocale
+   - léger resserrement vertical des catégories
+*/
+
+@media (max-width:540px){
+  /* ============================================================
+     EN-TÊTE : centrage robuste du logo sans transform
+     clean-logo.js impose transform:none!important, donc le centrage
+     doit venir de la géométrie du conteneur.
+     ============================================================ */
+  body.v224-master-frame-active #v224MasterHeader,
+  body.v221-profile-step:not(.v224-master-frame-active) .v222-profile-brand{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+    padding-left:104px!important;
+    padding-right:104px!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-master-frame-active #v224MasterHeader > .v222-brand-logo,
+  body.v221-profile-step:not(.v224-master-frame-active) .v222-profile-brand .v222-brand-logo{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:1px!important;
+    bottom:auto!important;
+    display:block!important;
+    width:auto!important;
+    max-width:var(--lc-frame-logo-max)!important;
+    height:var(--lc-frame-logo-h)!important;
+    max-height:var(--lc-frame-logo-h)!important;
+    margin:0 auto!important;
+    object-fit:contain!important;
+    transform:none!important;
+  }
+
+  /* ============================================================
+     NAVIGATION VOCALE : empêcher l'effondrement des deux cartes
+     ============================================================ */
+  body.v224-onboarding-voice.v224-master-frame-active #v224VoiceScreenFresh{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    padding:0 8px 5px!important;
+    gap:6px!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-title{
+    flex:0 0 auto!important;
+    margin:3px 0 6px!important;
+  }
+
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-fieldset{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:14px 10px 11px!important;
+    gap:8px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-card{
+    display:grid!important;
+    grid-template-columns:44px 1fr!important;
+    gap:9px!important;
+    align-items:center!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    min-height:126px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:10px 9px!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-content{
+    display:flex!important;
+    flex-direction:column!important;
+    min-height:0!important;
+    gap:6px!important;
+  }
+
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-boxed,
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-help,
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-note,
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-status{
+    display:block!important;
+    visibility:visible!important;
+    height:auto!important;
+    max-height:none!important;
+  }
+
+  body.v224-onboarding-voice.v224-master-frame-active .v224-voice-fresh-help{
+    overflow:visible!important;
+  }
+
+  /* ============================================================
+     RECHERCHE / CATÉGORIES : garder Transports dans le cadre
+     ============================================================ */
+  body.v224-page4-step:not(.v224-page5-step).v224-master-frame-active #v224Page4Categories{
+    row-gap:6px!important;
+    padding-bottom:0!important;
+  }
+}
