@@ -143,11 +143,6 @@
     z-index:72!important;
   }
 
-  /* Évite deux boutons si le bouton global finit par devenir visible. */
-  html body.v221-profile-step:not(.v224-master-frame-active):has(#libcomlairGlobalMenuButton[data-visible="true"]) #libcomlairProfileMenuProxy{
-    display:none!important;
-  }
-
   /* Cadre pointillé aligné sur la zone centrale des autres écrans. */
   body.v221-profile-step:not(.v224-master-frame-active) #accessWelcome::before{
     left:10px!important;
